@@ -1,0 +1,122 @@
+/* ═══════════════════════════════════════
+   FOOTER
+   Structured three-column layout.
+   Dark atmospheric surface.
+   ═══════════════════════════════════════ */
+
+.footer {
+  background: radial-gradient(
+    ellipse 70% 60% at 50% 0%,
+    #1E1E1E 0%,
+    #1A1A1A 40%,
+    #151515 100%
+  );
+  border-top: var(--border-subtle);
+  margin-top: auto;
+}
+
+.inner {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-12) var(--gutter) var(--space-8);
+}
+
+/* ── Column grid ── */
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--space-10);
+  margin-bottom: var(--space-10);
+  padding-bottom: var(--space-8);
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.06);
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.colTitle {
+  font-family: var(--font-mono);
+  font-weight: var(--weight-regular);
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  margin-bottom: var(--space-4);
+}
+
+.colLink {
+  display: block;
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  padding: 3px 0;
+  transition: color var(--transition-fast);
+}
+
+.colLink:hover {
+  color: var(--color-white);
+}
+
+/* ── Company info ── */
+
+.companyInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.companyName {
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.5);
+  padding: 3px 0;
+}
+
+.companyMeta {
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.25);
+  padding: 3px 0;
+}
+
+/* ── Bottom bar ── */
+
+.bottom {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.copy {
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════ */
+
+@media (max-width: 640px) {
+  .inner {
+    padding: var(--space-10) var(--gutter) var(--space-6);
+  }
+
+  .grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-8);
+    margin-bottom: var(--space-8);
+  }
+}
+
+@media (max-width: 400px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+}

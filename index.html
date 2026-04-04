@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ── SEO ── -->
+    <title>Remvo — Conversion routing for platforms</title>
+    <meta name="description" content="Your users deposit Naira. You receive USDT. One API integration. Daily settlement to your wallet." />
+    <meta name="author" content="Remvo Labs Limited" />
+
+    <!-- ── Open Graph ── -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Remvo — Conversion routing for platforms" />
+    <meta property="og:description" content="Your users deposit Naira. You receive USDT. One API integration. Daily settlement to your wallet." />
+    <meta property="og:url" content="https://remvo.app" />
+    <meta property="og:site_name" content="Remvo" />
+    <meta property="og:locale" content="en_GB" />
+
+    <!-- ── Twitter / X ── -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Remvo — Conversion routing for platforms" />
+    <meta name="twitter:description" content="Your users deposit Naira. You receive USDT. One API integration. Daily settlement." />
+
+    <!-- ── Favicon: light mode (default) ── -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
+    <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
+
+    <!-- ── Favicon: dark mode override ── -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/dark/favicon-32x32.png" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/dark/favicon-16x16.png" media="(prefers-color-scheme: dark)" />
+
+    <!-- ── Theme ── -->
+    <meta name="theme-color" content="#1A1A1A" />
+    <meta name="msapplication-TileColor" content="#1A1A1A" />
+
+    <!-- ══════════════════════════════════════════
+         INLINE LOADER
+         Shows instantly before React mounts.
+         Removed by main.jsx after hydration.
+         ══════════════════════════════════════════ -->
+    <style>
+      #app-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 28px;
+        background-color: #1A1A1A;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+
+      #app-loader.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      /* ── Logo unit: mark + wordmark as one group ── */
+      #app-loader .loader-logo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+      }
+
+      #app-loader svg {
+        width: 44px;
+        height: 52px;
+      }
+
+      #app-loader .loader-wordmark {
+        font-family: system-ui, -apple-system, sans-serif;
+        font-weight: 600;
+        font-size: 0.875rem;
+        letter-spacing: 0.09375em;
+        color: #C9A84C;
+        opacity: 0;
+        animation: loader-text 0.5s ease 0.35s forwards;
+      }
+
+      /* ── Progress bar ── */
+      #app-loader .loader-bar-track {
+        width: 100px;
+        height: 1.5px;
+        background-color: rgba(255, 255, 255, 0.04);
+        border-radius: 1px;
+        overflow: hidden;
+        opacity: 0;
+        animation: loader-text 0.4s ease 0.5s forwards;
+      }
+
+      #app-loader .loader-bar-fill {
+        width: 0%;
+        height: 100%;
+        background-color: #C9A84C;
+        border-radius: 1px;
+        animation: loader-progress 1.4s cubic-bezier(0.4, 0, 0.2, 1) 0.6s forwards;
+      }
+
+      /* ── Vault planes: assemble top-down with scale ── */
+      #app-loader .plane-1 {
+        opacity: 0;
+        animation: loader-plane 0.4s cubic-bezier(0.2, 0, 0.2, 1) 0s forwards;
+      }
+      #app-loader .plane-2 {
+        opacity: 0;
+        animation: loader-plane 0.4s cubic-bezier(0.2, 0, 0.2, 1) 0.12s forwards;
+      }
+      #app-loader .plane-3 {
+        opacity: 0;
+        animation: loader-plane 0.4s cubic-bezier(0.2, 0, 0.2, 1) 0.24s forwards;
+      }
+
+      @keyframes loader-plane {
+        from {
+          opacity: 0;
+          transform: translateY(-3px) scale(0.92);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      @keyframes loader-text {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+
+      @keyframes loader-progress {
+        0% { width: 0%; }
+        50% { width: 65%; }
+        85% { width: 90%; }
+        100% { width: 100%; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        #app-loader,
+        #app-loader .loader-wordmark,
+        #app-loader .loader-bar-track,
+        #app-loader .plane-1,
+        #app-loader .plane-2,
+        #app-loader .plane-3 {
+          animation: none !important;
+          opacity: 1 !important;
+          transform: none !important;
+          transition: none !important;
+        }
+        #app-loader .loader-bar-fill {
+          animation: none !important;
+          width: 100% !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ── Loader (visible before React) ── -->
+    <div id="app-loader" aria-live="polite" aria-label="Loading Remvo">
+      <div class="loader-logo">
+        <svg viewBox="0 0 40 48" fill="#C9A84C" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <polygon class="plane-1" points="20,6 32,13 20,20 8,13" />
+          <polygon class="plane-2" points="20,12 32,19 20,26 8,19" fill-opacity="0.55" />
+          <polygon class="plane-3" points="20,18 32,25 20,32 8,25" fill-opacity="0.25" />
+        </svg>
+        <span class="loader-wordmark">REMVO</span>
+      </div>
+      <div class="loader-bar-track">
+        <div class="loader-bar-fill"></div>
+      </div>
+    </div>
+
+    <!-- ── React mount point ── -->
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

@@ -1,0 +1,86 @@
+.card {
+  position: relative;
+  width: 340px;
+  height: 200px;
+  background-color: var(--color-obsidian-light);
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  transform-origin: center center;
+  flex-shrink: 0;
+}
+
+.top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.mark {
+  width: 18px;
+  height: 22px;
+}
+
+.brandName {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: 0.75rem;
+  letter-spacing: var(--tracking-logo);
+  color: var(--color-gold);
+  line-height: 1;
+}
+
+.label {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-regular);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  color: rgba(255, 255, 255, 0.3);
+  line-height: 1;
+}
+
+.bottom {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.amount {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-3xl);
+  color: var(--color-white);
+  line-height: 1;
+}
+
+.reference {
+  font-family: var(--font-mono);
+  font-weight: var(--weight-regular);
+  font-size: var(--text-xs);
+  color: rgba(255, 255, 255, 0.3);
+  line-height: 1;
+}
+
+/* ── Responsive: scale down on small screens ── */
+
+@media (max-width: 400px) {
+  .card {
+    width: 290px;
+    height: 170px;
+    padding: var(--space-4);
+  }
+
+  .amount {
+    font-size: var(--text-2xl);
+  }
+}

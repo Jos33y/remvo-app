@@ -1,0 +1,604 @@
+/* ═══════════════════════════════════════
+   HOMEPAGE
+   Four sections: Hero, Features, Checkout, CTA.
+   Dark-Light-Dark-Dark rhythm.
+   ═══════════════════════════════════════ */
+
+
+/* ── Shared section label ── */
+
+.sectionLabel {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: var(--space-4);
+}
+
+
+/* ═══════════════════════════════════════
+   HERO
+   Flat obsidian. The card stack and
+   typography carry the visual weight.
+   ═══════════════════════════════════════ */
+
+.hero {
+  background-color: var(--color-obsidian);
+  padding: var(--space-16) 0 0;
+  overflow: hidden;
+}
+
+.heroInner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: var(--space-10);
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* ── Content ── */
+
+.heroContent {
+  padding: var(--space-6) 0 var(--space-10);
+}
+
+.heroLabel {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: var(--space-5);
+}
+
+.heroHeading {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-5xl);
+  line-height: 1.05;
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-white);
+  margin-bottom: var(--space-5);
+}
+
+.heroGold {
+  color: var(--color-gold);
+}
+
+.heroSub {
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: rgba(255, 255, 255, 0.5);
+  max-width: 380px;
+  margin-bottom: var(--space-8);
+}
+
+.heroCtas {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+/* ── Card stack ── */
+
+.heroCards {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-6) 0;
+}
+
+.cardStack {
+  position: relative;
+  width: 420px;
+  height: 250px;
+}
+
+.cardBack,
+.cardMid,
+.cardFront {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cardBack {
+  transform: translateX(-62%) translateY(-18px) rotate(-8deg);
+  z-index: 1;
+}
+
+.cardMid {
+  transform: translateX(-56%) translateY(-9px) rotate(-4deg);
+  z-index: 2;
+}
+
+.cardFront {
+  transform: translateX(-50%) rotate(0deg);
+  z-index: 3;
+}
+
+.cardStack:hover .cardBack {
+  transform: translateX(-76%) translateY(-22px) rotate(-14deg);
+}
+
+.cardStack:hover .cardMid {
+  transform: translateX(-62%) translateY(-12px) rotate(-7deg);
+}
+
+.cardStack:hover .cardFront {
+  transform: translateX(-40%) rotate(3deg);
+}
+
+/* ── Trust bar ── */
+
+.trustBar {
+  border-top: 0.5px solid rgba(255, 255, 255, 0.06);
+  margin-top: var(--space-4);
+}
+
+.trustBarInner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-5) var(--gutter);
+}
+
+.trustItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.trustValue {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-regular);
+  color: var(--color-white);
+}
+
+.trustLabel {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.trustDivider {
+  width: 1px;
+  height: 28px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+
+/* ═══════════════════════════════════════
+   FEATURES
+   Editorial three-column on warm-white.
+   Gold mono numbers, vertical dividers.
+   ═══════════════════════════════════════ */
+
+.features {
+  background-color: var(--color-warm-white);
+  padding: var(--space-20) 0;
+}
+
+.featuresInner {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.featuresHeading {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-2xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-text-dark);
+  margin-bottom: var(--space-10);
+}
+
+.featureGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0;
+}
+
+.featureBlock {
+  padding: var(--space-6) var(--space-6) var(--space-6) 0;
+  border-right: 0.5px solid rgba(0, 0, 0, 0.1);
+  transition: background-color var(--transition-fast);
+}
+
+.featureBlock:last-child {
+  border-right: none;
+}
+
+.featureBlock:first-child {
+  padding-left: 0;
+}
+
+.featureNum {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-gold);
+  margin-bottom: var(--space-4);
+  letter-spacing: 0.05em;
+}
+
+.featureTitle {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-lg);
+  color: var(--color-text-dark);
+  margin-bottom: var(--space-3);
+  line-height: var(--leading-tight);
+}
+
+.featureDesc {
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-dark-muted);
+}
+
+
+/* ═══════════════════════════════════════
+   CHECKOUT
+   Flat obsidian. The CheckoutMockup and
+   its ambient glow own the visual space.
+   ═══════════════════════════════════════ */
+
+.checkout {
+  background-color: var(--color-obsidian-light);
+  padding: var(--space-20) 0;
+  overflow: hidden;
+}
+
+.checkoutInner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: var(--space-10);
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.checkoutContent {
+  padding: var(--space-4) 0;
+}
+
+.checkoutHeading {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-2xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-white);
+  margin-bottom: var(--space-4);
+}
+
+.checkoutDesc {
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: rgba(255, 255, 255, 0.45);
+  max-width: 400px;
+  margin-bottom: var(--space-8);
+}
+
+.checkoutStats {
+  display: flex;
+  gap: var(--space-8);
+  padding-top: var(--space-5);
+  border-top: 0.5px solid rgba(255, 255, 255, 0.08);
+}
+
+.checkoutStat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.checkoutStatValue {
+  font-family: var(--font-mono);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-regular);
+  color: var(--color-gold);
+  line-height: 1;
+}
+
+.checkoutStatLabel {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ── Mockup ── */
+
+.checkoutMockup {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mockupGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(201, 168, 76, 0.06) 0%,
+    rgba(201, 168, 76, 0) 70%
+  );
+  pointer-events: none;
+}
+
+
+/* ═══════════════════════════════════════
+   CTA
+   Flat obsidian with vault watermark.
+   The watermark is the texture.
+   ═══════════════════════════════════════ */
+
+.cta {
+  position: relative;
+  background-color: var(--color-obsidian);
+  border-top: var(--border-subtle);
+  padding: var(--space-24) 0;
+  text-align: center;
+  overflow: hidden;
+}
+
+.ctaWatermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 360px;
+  height: auto;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ctaInner {
+  position: relative;
+  z-index: 1;
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.ctaHeading {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-4xl);
+  line-height: 1.1;
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-white);
+  margin-bottom: var(--space-4);
+}
+
+.ctaDesc {
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: var(--space-8);
+}
+
+.ctaActions {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════ */
+
+/* ── 860px: Hero and Checkout stack ── */
+@media (max-width: 860px) {
+  .heroInner {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .heroContent {
+    padding: var(--space-4) 0 0;
+    text-align: left;
+  }
+
+  .heroCards {
+    justify-content: center;
+    padding: var(--space-4) 0 var(--space-6);
+  }
+
+  .cardStack {
+    width: 380px;
+    height: 240px;
+  }
+
+  .cardBack {
+    transform: translateX(-58%) translateY(-14px) rotate(-6deg);
+  }
+
+  .cardMid {
+    transform: translateX(-54%) translateY(-7px) rotate(-3deg);
+  }
+
+  .checkoutInner {
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+
+  .checkoutMockup {
+    order: -1;
+  }
+}
+
+/* ── 760px: Features stack ── */
+@media (max-width: 760px) {
+  .featureGrid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .featureBlock {
+    border-right: none;
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+    padding: var(--space-5) 0;
+  }
+
+  .featureBlock:last-child {
+    border-bottom: none;
+  }
+
+  .featureBlock:first-child {
+    padding-left: 0;
+  }
+}
+
+/* ── 640px: Tighter spacing ── */
+@media (max-width: 640px) {
+  .hero {
+    padding: var(--space-10) 0 0;
+  }
+
+  .features {
+    padding: var(--space-16) 0;
+  }
+
+  .checkout {
+    padding: var(--space-16) 0;
+  }
+
+  .cta {
+    padding: var(--space-16) 0;
+  }
+
+  .checkoutStats {
+    gap: var(--space-6);
+  }
+
+  .trustBarInner {
+    gap: var(--space-5);
+  }
+
+  .trustValue {
+    font-size: 0.8125rem;
+  }
+
+  .trustLabel {
+    font-size: 0.5625rem;
+  }
+}
+
+/* ── 480px: Mobile ── */
+@media (max-width: 480px) {
+  .heroHeading {
+    font-size: var(--text-4xl);
+  }
+
+  .heroSub {
+    font-size: var(--text-sm);
+  }
+
+  .heroCtas {
+    flex-direction: column;
+  }
+
+  .heroCards {
+    overflow: hidden;
+    margin: 0 calc(var(--gutter) * -1);
+    padding: var(--space-2) var(--gutter) var(--space-4);
+  }
+
+  .cardStack {
+    width: 340px;
+    height: 230px;
+  }
+
+  .cardBack {
+    transform: translateX(-56%) translateY(-14px) rotate(-6deg);
+  }
+
+  .cardMid {
+    transform: translateX(-53%) translateY(-7px) rotate(-3deg);
+  }
+
+  .cardFront {
+    transform: translateX(-50%) rotate(0deg);
+  }
+
+  .featuresHeading {
+    font-size: var(--text-xl);
+  }
+
+  .featureTitle {
+    font-size: var(--text-base);
+  }
+
+  .checkoutHeading {
+    font-size: var(--text-xl);
+  }
+
+  .checkoutStats {
+    flex-wrap: wrap;
+    gap: var(--space-5);
+  }
+
+  .ctaHeading {
+    font-size: var(--text-2xl);
+  }
+
+  .ctaWatermark {
+    width: 200px;
+  }
+
+  .ctaActions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .trustBarInner {
+    flex-wrap: wrap;
+    gap: var(--space-4) var(--space-5);
+    justify-content: flex-start;
+  }
+
+  .trustDivider {
+    display: none;
+  }
+}
+
+/* ── 360px: Small phones ── */
+@media (max-width: 360px) {
+  .heroHeading {
+    font-size: 2rem;
+  }
+
+  .cardStack {
+    width: 300px;
+    height: 200px;
+  }
+}

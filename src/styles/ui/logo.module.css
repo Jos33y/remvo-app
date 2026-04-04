@@ -1,0 +1,47 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.mark {
+  flex-shrink: 0;
+}
+
+.wordmark {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-logo);
+  line-height: 1;
+  user-select: none;
+}
+
+/* ── Sizes ── */
+
+.default .mark {
+  width: 28px;
+  height: 34px;
+}
+
+.default .wordmark {
+  font-size: 1.125rem;
+}
+
+.small .mark {
+  width: 20px;
+  height: 24px;
+}
+
+.small .wordmark {
+  font-size: 0.875rem;
+}
+
+.large .mark {
+  width: 36px;
+  height: 43px;
+}
+
+.large .wordmark {
+  font-size: 1.375rem;
+}

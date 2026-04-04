@@ -1,0 +1,304 @@
+/* ═══════════════════════════════════════
+   PAGE HEADER (dark)
+   ═══════════════════════════════════════ */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.pageHeader {
+  background: radial-gradient(
+    ellipse 60% 60% at 50% 40%,
+    #1E1E1E 0%,
+    #1A1A1A 45%,
+    #151515 100%
+  );
+  padding: var(--space-8) 0;
+}
+
+.pageHeaderInner {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  color: var(--color-warm-white);
+  background-color: var(--color-error);
+  padding: 3px var(--space-3);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-4);
+  text-transform: uppercase;
+}
+
+.pageTitle {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-xl);
+  line-height: var(--leading-tight);
+  color: var(--color-white);
+  margin-bottom: var(--space-2);
+}
+
+.pageSub {
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* ═══════════════════════════════════════
+   BODY
+   ═══════════════════════════════════════ */
+
+.pageBody {
+  background-color: var(--color-warm-white);
+  padding: var(--space-8) 0 var(--space-16);
+}
+
+.pageBodyInner {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* ═══════════════════════════════════════
+   SECTIONS
+   ═══════════════════════════════════════ */
+
+.section {
+  margin-bottom: var(--space-8);
+  padding-bottom: var(--space-8);
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.06);
+}
+
+.section:last-of-type {
+  border-bottom: none;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-5);
+  padding-left: var(--space-3);
+  border-left: 2px solid var(--color-gold);
+}
+
+.sectionTitle {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-base);
+  color: var(--color-text-dark);
+  line-height: 1;
+}
+
+.sectionRange {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  color: var(--color-text-dark-muted);
+}
+
+/* ═══════════════════════════════════════
+   FIELDS
+   ═══════════════════════════════════════ */
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3) 0;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.04);
+}
+
+.field:last-child {
+  border-bottom: none;
+}
+
+.fieldHeader {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.fieldNumber {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  color: var(--color-gold);
+  min-width: 28px;
+  flex-shrink: 0;
+}
+
+.fieldLabel {
+  font-size: var(--text-sm);
+  color: var(--color-text-dark-muted);
+}
+
+.fieldValue {
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-dark);
+  padding-left: 36px;
+  word-break: break-word;
+}
+
+.fieldValue.empty {
+  color: var(--color-error);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-style: italic;
+}
+
+.fieldValue.sensitive {
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+
+/* ═══════════════════════════════════════
+   SHAREHOLDER LABEL
+   ═══════════════════════════════════════ */
+
+.shareholderLabel {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-gold);
+  padding: var(--space-3) 0 var(--space-1);
+  margin-top: var(--space-2);
+}
+
+/* ═══════════════════════════════════════
+   SIGNATURES
+   ═══════════════════════════════════════ */
+
+.signatureGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.signatureCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background-color: var(--color-white);
+  border-radius: var(--radius-md);
+  border: 0.5px solid rgba(0, 0, 0, 0.06);
+}
+
+.signatureLabel {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  color: var(--color-text-dark-muted);
+}
+
+.signaturePreview {
+  width: 100%;
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-warm-white);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.signatureImg {
+  max-width: 100%;
+  max-height: 100px;
+  object-fit: contain;
+}
+
+.signaturePlaceholder {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  color: var(--color-text-dark-muted);
+  text-align: center;
+  padding: var(--space-3);
+}
+
+.downloadBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  height: 36px;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: var(--weight-semibold);
+  color: var(--color-obsidian);
+  background-color: var(--color-gold);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: background-color var(--transition-fast);
+}
+
+.downloadBtn:hover {
+  background-color: #b8983f;
+}
+
+@media (max-width: 640px) {
+  .signatureGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ═══════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════ */
+
+.pageFooter {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 var(--gutter) var(--space-10);
+}
+
+.pageFooterInner {
+  padding-top: var(--space-6);
+  border-top: 0.5px solid rgba(0, 0, 0, 0.06);
+}
+
+.pageFooter p {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  color: var(--color-error);
+  line-height: var(--leading-relaxed);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ═══════════════════════════════════════
+   MOBILE
+   ═══════════════════════════════════════ */
+
+@media (max-width: 480px) {
+  .pageHeader {
+    padding: var(--space-6) 0;
+  }
+
+  .pageTitle {
+    font-size: var(--text-lg);
+  }
+
+  .fieldValue {
+    padding-left: 0;
+    margin-top: var(--space-1);
+  }
+
+  .sectionHeader {
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+}

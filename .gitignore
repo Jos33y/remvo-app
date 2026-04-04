@@ -1,0 +1,10 @@
+node_modules
+dist
+.env
+.env.local
+.env.production
+*.local
+.DS_Store
+dev_logs
+structure_remvo_v2.txt
+public/temp
