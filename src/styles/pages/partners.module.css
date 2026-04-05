@@ -662,3 +662,235 @@
     padding: var(--space-4);
   }
 }
+
+/* ═══════════════════════════════════════
+   EXAMPLE SECTION
+   Concrete $25 deposit walkthrough.
+   Narrative left, two-sided breakdown
+   right (user pays / settled to platform),
+   scale callout below.
+   ═══════════════════════════════════════ */
+
+.exampleGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-10);
+  margin-top: var(--space-8);
+  align-items: start;
+}
+
+.exampleStory {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.exampleStep {
+  display: flex;
+  gap: var(--space-4);
+  align-items: baseline;
+}
+
+.exampleStepNumber {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--color-gold);
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+  min-width: 24px;
+  padding-top: 2px;
+}
+
+.exampleStepText {
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-dark);
+}
+
+/* ── Breakdown card ── */
+
+.exampleBreakdown {
+  padding: var(--space-6);
+  background-color: var(--color-white);
+  border-radius: var(--radius-md);
+  border: 0.5px solid rgba(0, 0, 0, 0.08);
+}
+
+.examplePays {
+  margin-bottom: 0;
+}
+
+.examplePaysLabel {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--color-text-dark-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-2);
+}
+
+.examplePaysAmount {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xl);
+  color: var(--color-text-dark);
+  line-height: 1;
+  margin-bottom: var(--space-2);
+  letter-spacing: -0.01em;
+}
+
+.examplePaysRate {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-text-dark-muted);
+}
+
+.exampleDivider {
+  height: 0.5px;
+  background-color: rgba(0, 0, 0, 0.08);
+  margin-top: var(--space-5);
+  margin-bottom: var(--space-5);
+  margin-left: calc(var(--space-6) * -1);
+  margin-right: calc(var(--space-6) * -1);
+}
+
+.exampleBreakdownLabel {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--color-gold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-4);
+}
+
+.exampleTable {
+  margin: 0;
+  padding: 0;
+}
+
+.exampleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: var(--space-3) 0;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.06);
+  margin: 0;
+}
+
+.exampleRow:first-child {
+  border-top: 0.5px solid rgba(0, 0, 0, 0.06);
+}
+
+.exampleRowLabel {
+  font-size: var(--text-sm);
+  color: var(--color-text-dark-muted);
+  margin: 0;
+}
+
+.exampleRowValue {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-text-dark);
+  text-align: right;
+  margin: 0;
+}
+
+.exampleRowTotal {
+  border-bottom: none;
+  padding-top: var(--space-4);
+}
+
+.exampleRowTotal .exampleRowLabel {
+  color: var(--color-text-dark);
+  font-weight: var(--weight-semibold);
+}
+
+.exampleRowTotal .exampleRowValue {
+  color: var(--color-gold);
+  font-size: var(--text-base);
+}
+
+.exampleNote {
+  font-size: 0.75rem;
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-dark-muted);
+  margin: var(--space-5) 0 0;
+  padding-top: var(--space-4);
+  border-top: 0.5px solid rgba(0, 0, 0, 0.06);
+}
+
+/* ── Scale callout ── */
+
+.exampleScale {
+  margin-top: var(--space-10);
+  padding: var(--space-5) var(--space-6);
+  background-color: var(--color-obsidian);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-5);
+  position: relative;
+  overflow: hidden;
+}
+
+.exampleScale::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(201, 168, 76, 0.3) 50%,
+    transparent 100%
+  );
+}
+
+.exampleScaleLabel {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--color-gold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.exampleScaleText {
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 760px) {
+  .exampleGrid {
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+
+  .exampleScale {
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-5);
+  }
+}
+
+@media (max-width: 480px) {
+  .exampleBreakdown {
+    padding: var(--space-5);
+  }
+
+  .exampleDivider {
+    margin-left: calc(var(--space-5) * -1);
+    margin-right: calc(var(--space-5) * -1);
+  }
+
+  .examplePaysAmount {
+    font-size: var(--text-xl);
+  }
+}
