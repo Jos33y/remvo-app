@@ -662,13 +662,12 @@
     padding: var(--space-4);
   }
 }
-
 /* ═══════════════════════════════════════
    EXAMPLE SECTION
-   Concrete $25 deposit walkthrough.
+   Concrete $100 deposit walkthrough.
    Narrative left, two-sided breakdown
-   right (user pays / settled to platform),
-   scale callout below.
+   card right. Top-aligned, heights
+   differ naturally by content.
    ═══════════════════════════════════════ */
 
 .exampleGrid {
@@ -678,6 +677,8 @@
   margin-top: var(--space-8);
   align-items: start;
 }
+
+/* ── Narrative (left column) ── */
 
 .exampleStory {
   list-style: none;
@@ -710,7 +711,7 @@
   color: var(--color-text-dark);
 }
 
-/* ── Breakdown card ── */
+/* ── Breakdown card (right column) ── */
 
 .exampleBreakdown {
   padding: var(--space-6);
@@ -719,33 +720,77 @@
   border: 0.5px solid rgba(0, 0, 0, 0.08);
 }
 
-.examplePays {
-  margin-bottom: 0;
+.exampleBlock {
+  /* wraps each side — user experience or platform settlement */
 }
 
-.examplePaysLabel {
+.exampleBlockLabel {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
-  color: var(--color-text-dark-muted);
+  color: var(--color-gold);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--space-4);
 }
 
-.examplePaysAmount {
-  font-family: var(--font-mono);
+/* ── User experience block ── */
+
+.exampleHero {
+  margin-bottom: var(--space-4);
+}
+
+.exampleHeroRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: var(--space-1);
+}
+
+.exampleHeroLabel {
+  font-size: var(--text-sm);
+  color: var(--color-text-dark-muted);
+}
+
+.exampleHeroAmount {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
   font-size: var(--text-2xl);
   color: var(--color-text-dark);
   line-height: 1;
-  margin-bottom: var(--space-2);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
-.examplePaysRate {
+.exampleHeroRate {
   font-family: var(--font-mono);
   font-size: 0.75rem;
   color: var(--color-text-dark-muted);
+  text-align: right;
 }
+
+.exampleCreditRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: var(--space-3) 0;
+  border-top: 0.5px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.06);
+  margin-top: var(--space-3);
+}
+
+.exampleCreditLabel {
+  font-size: var(--text-sm);
+  color: var(--color-text-dark);
+  font-weight: var(--weight-semibold);
+}
+
+.exampleCreditAmount {
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+  color: var(--color-gold);
+}
+
+/* ── Divider between user and platform blocks ── */
 
 .exampleDivider {
   height: 0.5px;
@@ -756,14 +801,7 @@
   margin-right: calc(var(--space-6) * -1);
 }
 
-.exampleBreakdownLabel {
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  color: var(--color-gold);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: var(--space-4);
-}
+/* ── Platform settlement block ── */
 
 .exampleTable {
   margin: 0;
@@ -812,11 +850,13 @@
   font-size: var(--text-base);
 }
 
+/* ── Footnote ── */
+
 .exampleNote {
   font-size: 0.75rem;
   line-height: var(--leading-relaxed);
   color: var(--color-text-dark-muted);
-  margin: var(--space-5) 0 0;
+  margin: var(--space-6) 0 0;
   padding-top: var(--space-4);
   border-top: 0.5px solid rgba(0, 0, 0, 0.06);
 }
@@ -890,7 +930,7 @@
     margin-right: calc(var(--space-5) * -1);
   }
 
-  .examplePaysAmount {
+  .exampleHeroAmount {
     font-size: var(--text-xl);
   }
 }
