@@ -2,8 +2,8 @@
   position: relative;
   width: 340px;
   height: 200px;
-  background-color: var(--color-obsidian-light);
-  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(135deg, #1A1A1A 0%, #1A1A1A 55%, #14141A 100%);
+  border: 0.5px solid rgba(201, 168, 76, 0.18);
   border-radius: var(--radius-lg);
   padding: var(--space-5);
   display: flex;
@@ -14,23 +14,27 @@
   flex-shrink: 0;
 }
 
-.top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
+.state-pending { box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.10), var(--gold-bloom); }
+.state-owned { border-color: transparent; box-shadow: var(--gold-bloom); }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
+.edgeSvg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 
-.mark {
-  width: 18px;
-  height: 22px;
+.interactive {
+  cursor: pointer;
+  border: 0.5px solid rgba(201, 168, 76, 0.18);
+  background: linear-gradient(135deg, #1A1A1A 0%, #1A1A1A 55%, #14141A 100%);
+  text-align: left;
+  transition: transform var(--transition-normal);
 }
+.interactive:hover { transform: translateY(-1px); }
+.interactive:active { transform: translateY(0); }
+.interactive:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 4px; }
 
+.copied .reference { color: var(--color-gold); transition: color 200ms ease-out; }
+
+.top { display: flex; align-items: flex-start; justify-content: space-between; position: relative; z-index: 1; }
+.brand { display: flex; align-items: center; gap: 5px; }
+.mark { width: 18px; height: 22px; }
 .brandName {
   font-family: var(--font-sans);
   font-weight: var(--weight-semibold);
@@ -39,22 +43,27 @@
   color: var(--color-gold);
   line-height: 1;
 }
-
 .label {
   font-family: var(--font-sans);
-  font-weight: var(--weight-regular);
   font-size: var(--text-xs);
   letter-spacing: var(--tracking-wide);
   color: rgba(255, 255, 255, 0.3);
   line-height: 1;
 }
 
+/* PHASE 5 polish: tightened gap (7→6) and 2px bottom optical lift so
+ * the dollar/reference cluster sits 2px above the card's bottom padding
+ * edge. Geist tabular numerals are visually heavier at the top, so the
+ * geometric centre reads as low. This compensates without touching the
+ * card's overall geometry. */
 .bottom {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: 6px;
+  padding-bottom: 2px;
+  position: relative;
+  z-index: 1;
 }
-
 .amount {
   font-family: var(--font-sans);
   font-weight: var(--weight-semibold);
@@ -62,25 +71,14 @@
   color: var(--color-white);
   line-height: 1;
 }
-
 .reference {
   font-family: var(--font-mono);
-  font-weight: var(--weight-regular);
   font-size: var(--text-xs);
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.35);
   line-height: 1;
 }
 
-/* ── Responsive: scale down on small screens ── */
-
 @media (max-width: 400px) {
-  .card {
-    width: 290px;
-    height: 170px;
-    padding: var(--space-4);
-  }
-
-  .amount {
-    font-size: var(--text-2xl);
-  }
+  .card { width: 290px; height: 170px; padding: var(--space-4); }
+  .amount { font-size: var(--text-2xl); }
 }

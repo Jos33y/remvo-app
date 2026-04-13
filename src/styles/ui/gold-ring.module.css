@@ -1,0 +1,11 @@
+/* GoldRing — absolute SVG overlay inside a position:relative parent.
+ * Vector-rendered stroke, sharp at any zoom level. */
+
+.ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}

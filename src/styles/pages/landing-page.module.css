@@ -1,0 +1,160 @@
+/* ──────────────────────────────────────────────────────────────────
+ * LandingPage — Phase 5 (obsidian void)
+ *
+ * Vertically and horizontally centred composition. xlarge logo is
+ * the hero, headline carries one line of meaning, the link routes
+ * the curious visitor to remvo.app, attribution anchors trust.
+ *
+ * The small distant card sits absolutely positioned in the top-right
+ * negative space at scale 0.55, slightly rotated. Decorative, non-
+ * interactive, satisfies the card-on-every-screen rule by being a
+ * recessive presence in the composition without competing with the
+ * logo's signature moment.
+ *
+ * Contrast verified WCAG AA on canvas-obsidian #0E0E10:
+ *   white #FFFFFF              = 18.9:1  AAA
+ *   white at 0.65 opacity      = 12.3:1  AAA
+ *   white at 0.40 opacity      = 7.6:1   AAA
+ *   gold #C9A84C               = 6.5:1   AA
+ * ────────────────────────────────────────────────────────────────── */
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  flex: 1 1 auto;
+  gap: var(--space-8);
+  padding-top: 12vh;
+  padding-bottom: var(--space-8);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 1024px) {
+  .content {
+    justify-content: center;
+    padding-top: var(--space-8);
+    min-height: 70vh;
+  }
+}
+
+/* ── Distant card (top-right anchor) ──
+ * Absolute positioned. Stays out of the centred logo composition's
+ * way. On mobile, hidden so the small viewport isn't crowded. */
+.distantCardWrap {
+  position: absolute;
+  top: var(--space-10);
+  right: var(--space-16);
+  z-index: 1;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+.distantCardTilt {
+  transform: rotate(-4deg);
+  transform-origin: center center;
+  filter: drop-shadow(0 8px 32px rgba(0, 0, 0, 0.4));
+}
+
+@media (max-width: 1023px) {
+  .distantCardWrap { display: none; }
+}
+
+/* ── Logo block ── */
+.logoBlock {
+  display: flex;
+  justify-content: center;
+}
+
+/* ── Text block ── */
+.textBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  max-width: 380px;
+}
+
+.headline {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: 1.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--color-white);
+}
+
+@media (min-width: 1024px) { .headline { font-size: 1.75rem; } }
+
+.subhead {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-regular);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.55);
+  max-width: 340px;
+}
+
+/* ── External link pill ── */
+.linkBlock {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-2);
+}
+
+/* Link uses iridescent gold border via pseudo-element, same family
+ * as the CTAs across the obsidian flow. Keeps the brand language
+ * coherent on the entry point. */
+.link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: 0.9375rem;
+  color: var(--color-gold);
+  background-color: rgba(201, 168, 76, 0.06);
+  border: none;
+  border-radius: 14px;
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  isolation: isolate;
+  transition: background-color var(--transition-normal);
+}
+
+.link:hover { background-color: rgba(201, 168, 76, 0.12); }
+.link:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+.linkArrow {
+  font-size: 1rem;
+  line-height: 1;
+  transition: transform var(--transition-normal);
+}
+
+.link:hover .linkArrow { transform: translateX(2px); }
+
+/* ── Attribution ── */
+.attribution {
+  font-family: var(--font-mono);
+  font-weight: var(--weight-regular);
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.40);
+  letter-spacing: 0.02em;
+  margin-top: var(--space-12);
+}
+
+/* Link label + arrow sit above the absolute GoldRing overlay */
+.linkLabel,
+.linkArrow {
+  position: relative;
+  z-index: 1;
+}

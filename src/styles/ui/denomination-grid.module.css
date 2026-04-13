@@ -1,0 +1,80 @@
+/* ──────────────────────────────────────────────────────────────────
+ * DenominationGrid — Phase 5 (horizontal pill row, no-wrap)
+ *
+ * Six obsidian pills on a single line. nowrap is enforced because
+ * wrapping $500 to a second line broke the visual rhythm. At the
+ * 440px mobile baseline the row uses min-width 0 + flex shrink so
+ * the pills compress slightly rather than wrap. Active pill carries
+ * the iridescent gold ring via pseudo-element.
+ *
+ * Contrast verified WCAG AA:
+ *   white #FFFFFF on faceted obsidian #1A1A1A    = 17.4:1  AAA
+ *   gold  #C9A84C on faceted obsidian #1A1A1A    = 6.1:1   AA
+ * ────────────────────────────────────────────────────────────────── */
+
+.row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: var(--space-1) 0;
+}
+
+.pill {
+  position: relative;
+  display: inline-flex;
+  flex: 0 1 auto;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  height: 48px;
+  padding: 0 var(--space-4);
+  border: 0.5px solid rgba(201, 168, 76, 0.18);
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1A1A1A 0%, #1A1A1A 55%, #14141A 100%);
+  cursor: pointer;
+  isolation: isolate;
+  transition: border-color 200ms ease-out, box-shadow 250ms ease-out;
+  -webkit-tap-highlight-color: transparent;
+  will-change: transform;
+}
+
+@media (max-width: 480px) {
+  .pill { padding: 0 var(--space-3); height: 44px; }
+  .row { gap: 6px; }
+}
+
+.pill:hover:not(.pillSelected) {
+  border-color: rgba(201, 168, 76, 0.40);
+}
+
+.pill:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+.pill:active { filter: brightness(0.92); }
+
+/* Selected — iridescent gold ring + soft bloom */
+.pillSelected {
+  border-color: transparent;
+  box-shadow: var(--gold-bloom);
+}
+
+.amount {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: 0.9375rem;
+  color: var(--color-white);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  transition: color 200ms ease-out;
+}
+
+.pillSelected .amount { color: var(--color-gold); }

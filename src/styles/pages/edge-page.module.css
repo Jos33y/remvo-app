@@ -1,0 +1,202 @@
+/* ──────────────────────────────────────────────────────────────────
+ * Shared edge-page layout — Phase 5 (obsidian void)
+ *
+ * SPEC DEVIATION (intentional, documented April 12 2026):
+ * Original spec placed edge pages on warm "edge" canvas. That broke
+ * the visual continuity of the flow — Confirm/Pay/Complete/Select
+ * all live on obsidian, then edge pages dropped users onto warm
+ * paper. Register break, not transition. Edge pages now share the
+ * obsidian void with the rest of the premium flow. Recovery is
+ * acknowledged in the same world the user was just in.
+ *
+ * Recovery surfaces (Expired, AlreadyPaid, Invalid) on the void.
+ * Icon circle is a faceted obsidian object with iridescent gold
+ * inner ring + state-colour bloom. Reference panel (AlreadyPaid)
+ * is faceted obsidian-light, same family as PaymentPage's bank
+ * panel. CTA uses obsidian-tuned --gold-iridescent.
+ *
+ * Contrast verified WCAG AA on canvas-obsidian #0E0E10:
+ *   white #FFFFFF             = 18.9:1  AAA
+ *   white at 0.55 opacity      = 10.4:1  AAA
+ *   gold #C9A84C               = 6.5:1   AA
+ *   #E07070 (light error)      = 5.7:1   AA
+ *   #4FC07D (lifted success)   = 8.6:1   AA
+ *   #E0B84A (lifted warning)   = 9.7:1   AA
+ * ────────────────────────────────────────────────────────────────── */
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+  gap: var(--space-7, 1.75rem);
+  padding: var(--space-10) 0 var(--space-8);
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Icon circle ──
+ * 64px faceted obsidian object on the void. Iridescent gold inner
+ * ring + state-colour outer bloom. The bloom uses brightened state
+ * colours so it reads against the dark canvas. */
+/* Icon circle: faceted obsidian object with a crisp solid gold
+ * hairline. At 64px the eye cannot distinguish "iridescent" from
+ * "gold" — a solid 1px stroke reads sharper than any masked
+ * gradient on a circle this small. The state-colour drop-shadow
+ * on the glyph inside (see .iconGlyph rules below) carries the
+ * living element, the ring is the calm bezel. */
+.iconWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1A1A1A 0%, #1A1A1A 55%, #14141A 100%);
+  border: 1.5px solid var(--color-gold);
+  box-sizing: border-box;
+  isolation: isolate;
+}
+
+/* State colours brightened for the dark canvas. The icon glyph
+ * inherits via currentColor. The bloom is set on each page's
+ * inline boxShadow animation for the signature moment. */
+.iconWrap.warning { color: #E0B84A; }
+.iconWrap.success { color: #4FC07D; }
+.iconWrap.error   { color: #E07070; }
+
+/* State-colour halo lives on the icon glyph itself, not the circle.
+ * The glyph is the light source, the obsidian is the vessel, the
+ * gold ring is the bezel. Soft drop-shadow falls off naturally
+ * before reaching the ring — no bloom flooding the disc, no halo
+ * escaping past the bezel. Apple iOS notification model. */
+.iconWrap.warning .iconGlyph { filter: drop-shadow(0 0 6px rgba(224, 184, 74, 0.55)); }
+.iconWrap.success .iconGlyph { filter: drop-shadow(0 0 6px rgba(79, 192, 125, 0.55)); }
+.iconWrap.error   .iconGlyph { filter: drop-shadow(0 0 6px rgba(224, 112, 112, 0.55)); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .iconWrap .iconGlyph { transition: filter 600ms cubic-bezier(0.16, 1, 0.3, 1); }
+}
+
+.iconGlyph {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Text block ── */
+.textBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.headline {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: 1.375rem;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: var(--color-white);
+  text-align: center;
+}
+
+.subhead {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-regular);
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.55);
+  text-align: center;
+}
+
+/* ── Optional content (AlreadyPaid: card + reference row) ── */
+.contentBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+  margin-top: var(--space-2);
+}
+
+/* Reference panel: faceted obsidian-light surface with hairline gold
+ * border. Same family as the bank transfer card on PaymentPage. */
+.referenceWrap {
+  width: 100%;
+  background: linear-gradient(135deg, #1A1A1A 0%, #1A1A1A 55%, #14141A 100%);
+  border: 0.5px solid rgba(201, 168, 76, 0.18);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* ── CTA: obsidian-tuned iridescent gold pill (same as ConfirmPage) ── */
+.ctaBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  margin-top: var(--space-2);
+}
+
+.cta {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 56px;
+  padding: 0 var(--space-6);
+  border: none;
+  border-radius: 14px;
+  background-color: rgba(201, 168, 76, 0.08);
+  color: var(--color-gold);
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-base);
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  isolation: isolate;
+  transition: background-color var(--transition-normal),
+              transform var(--transition-fast);
+}
+
+.cta:hover { background-color: rgba(201, 168, 76, 0.14); }
+.cta:active { transform: scale(0.99); }
+.cta:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+.secondaryLink {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-regular);
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.55);
+  background: none;
+  border: none;
+  padding: var(--space-2);
+  cursor: pointer;
+  text-decoration: none;
+  transition: color var(--transition-normal);
+}
+
+.secondaryLink:hover {
+  color: var(--color-white);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* CTA label sits above the absolute GoldRing overlay */
+.ctaLabel {
+  position: relative;
+  z-index: 1;
+}

@@ -1,13 +1,19 @@
+/* Logo — production alignment strategy: explicit equal heights on
+ * mark and wordmark so align-items: center on the parent puts both
+ * optical centres on the same line. No transforms, pure box model.
+ *
+ * PHASE 5 additions: .animated class for the LandingPage signature
+ * moment, .wordmarkSweep for the gold light sweep over REMVO. */
+
 .logo {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   text-decoration: none;
+  color: var(--color-gold);
 }
 
-.mark {
-  flex-shrink: 0;
-}
+.mark { flex-shrink: 0; display: block; }
 
 .wordmark {
   font-family: var(--font-sans);
@@ -15,33 +21,72 @@
   letter-spacing: var(--tracking-logo);
   line-height: 1;
   user-select: none;
+  color: currentColor;
+  display: inline-flex;
+  align-items: center;
 }
 
-/* ── Sizes ── */
+.tone-gold { color: var(--color-gold); }
+.tone-white { color: var(--color-white); }
+.tone-dark { color: var(--color-text-dark); }
 
-.default .mark {
-  width: 28px;
-  height: 34px;
+/* Sizes */
+.logo.default .mark { width: 28px; height: 34px; }
+.logo.default .wordmark { font-size: 1.125rem; height: 34px; }
+
+.logo.small .mark { width: 22px; height: 26px; }
+.logo.small .wordmark { font-size: 0.875rem; height: 26px; }
+
+.logo.large .mark { width: 36px; height: 43px; }
+.logo.large .wordmark { font-size: 1.375rem; height: 43px; }
+
+.logo.xlarge { gap: 8px; }
+.logo.xlarge .mark { width: 64px; height: 77px; }
+.logo.xlarge .wordmark { font-size: 2rem; height: 77px; }
+
+@media (max-width: 480px) {
+  .logo.xlarge { gap: 6px; }
+  .logo.xlarge .mark { width: 52px; height: 62px; }
+  .logo.xlarge .wordmark { font-size: 1.625rem; height: 62px; }
 }
 
-.default .wordmark {
-  font-size: 1.125rem;
+/* ── PHASE 5 — Animated wordmark gold sweep ──
+ * Used by LandingPage. A soft warm-cool gold band sweeps left to
+ * right across the wordmark over 800ms, starting after the vault
+ * planes have finished drawing in (~600ms delay). One pass only.
+ * The wordmark holds its final colour after the sweep completes.
+ *
+ * Implementation: background-clip: text + animated background-position
+ * on a wide gradient. The base color shows through where the gradient
+ * sits at its idle position. */
+
+.wordmarkSweep {
+  background-image: linear-gradient(
+    100deg,
+    currentColor 0%,
+    currentColor 35%,
+    #F2D87A 50%,
+    currentColor 65%,
+    currentColor 100%
+  );
+  background-size: 250% 100%;
+  background-position: 100% 0;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: goldSweep 1200ms cubic-bezier(0.16, 1, 0.3, 1) 600ms forwards;
 }
 
-.small .mark {
-  width: 20px;
-  height: 24px;
+@keyframes goldSweep {
+  from { background-position: 100% 0; }
+  to   { background-position: 0% 0; }
 }
 
-.small .wordmark {
-  font-size: 0.875rem;
-}
-
-.large .mark {
-  width: 36px;
-  height: 43px;
-}
-
-.large .wordmark {
-  font-size: 1.375rem;
+@media (prefers-reduced-motion: reduce) {
+  .wordmarkSweep {
+    animation: none;
+    background-image: none;
+    -webkit-text-fill-color: currentColor;
+  }
 }

@@ -1,0 +1,24 @@
+/* VaultWatermark — fixed-position decorative SVG, off-axis bottom-right.
+ * Per-canvas opacity:
+ *   warm    : 6%   — visible presence behind composition
+ *   obsidian: 2.5% — subtle texture on the void */
+
+.watermark {
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+  transform: rotate(-12deg);
+}
+
+.planes { opacity: 0.06; }
+
+:global([data-canvas="warm"]) .planes { opacity: 0.06; }
+:global([data-canvas="obsidian"]) .planes { opacity: 0.025; }
+
+.default { bottom: -10vh; right: -8vw; width: 70vh; height: 70vh; }
+.large { bottom: -15vh; right: -12vw; width: 95vh; height: 95vh; }
+
+@media (max-width: 640px) {
+  .default { width: 90vw; height: 90vw; bottom: -15vw; right: -20vw; }
+  .large { width: 110vw; height: 110vw; bottom: -22vw; right: -28vw; }
+}

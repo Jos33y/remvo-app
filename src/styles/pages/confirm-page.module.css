@@ -1,0 +1,72 @@
+.content {
+  display: flex; flex-direction: column; align-items: center; width: 100%;
+  gap: var(--space-8); flex: 1; justify-content: center;
+}
+@media (min-width: 1024px) { .content { gap: var(--space-10); } }
+
+.cardBlock { display: flex; justify-content: center; }
+
+.amountBlock {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  will-change: filter, transform, opacity;
+}
+
+.amountValue {
+  font-family: var(--font-mono); font-weight: var(--weight-regular);
+  font-size: 2.5rem; line-height: 1; letter-spacing: var(--tracking-mono-tight);
+  font-variant-numeric: tabular-nums; color: var(--color-white); text-align: center;
+}
+@media (min-width: 1024px) { .amountValue { font-size: 3.5rem; } }
+
+.amountRate {
+  font-family: var(--font-mono); font-weight: var(--weight-regular);
+  font-size: 0.8125rem; line-height: 1; font-variant-numeric: tabular-nums;
+  color: rgba(212, 184, 92, 0.75); text-align: center;
+}
+
+.ctaBlock {
+  display: flex; flex-direction: column; align-items: center;
+  gap: var(--space-4); width: 100%; max-width: 360px;
+}
+
+/* CTA — the iridescent ring is supplied by the GoldRing SVG primitive
+ * injected as the first child of the button. Button itself has no
+ * border; GoldRing strokes a vector-precise 1px ring around the
+ * button's bounds. No mask arithmetic, no pixel stepping, sharp at
+ * any zoom level. */
+.cta {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; height: 56px; padding: 0 var(--space-6);
+  border: none; border-radius: 14px;
+  background-color: rgba(201, 168, 76, 0.08);
+  color: var(--color-gold);
+  font-family: var(--font-sans); font-weight: var(--weight-semibold);
+  font-size: var(--text-base); letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: background-color var(--transition-normal), transform var(--transition-fast);
+  isolation: isolate;
+}
+
+.cta:hover { background-color: rgba(201, 168, 76, 0.14); }
+.cta:active { transform: scale(0.99); }
+.cta:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 3px; }
+
+/* Label sits above the absolute GoldRing overlay */
+.ctaLabel { position: relative; z-index: 1; }
+
+.lockNote {
+  font-family: var(--font-sans); font-size: 0.75rem; line-height: 1.4;
+  color: rgba(255, 255, 255, 0.55); text-align: center;
+}
+
+.secondaryLinks { display: flex; align-items: center; justify-content: center; gap: var(--space-3); }
+
+.secondaryLink {
+  font-family: var(--font-sans); font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.6);
+  background: none; border: none; padding: var(--space-2);
+  cursor: pointer; transition: color var(--transition-normal);
+}
+.secondaryLink:hover { color: var(--color-white); text-decoration: underline; text-underline-offset: 3px; }
+.secondaryDivider { color: rgba(255, 255, 255, 0.4); user-select: none; }

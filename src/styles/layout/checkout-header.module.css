@@ -1,0 +1,72 @@
+/* ──────────────────────────────────────────────────────────────────
+ * CheckoutHeader
+ *
+ * Full-width edge to edge so any future bottom border spans the
+ * viewport. The inner container's max-width matches the page
+ * content max-width at the same viewport: 440px on mobile, 960px
+ * on desktop split layouts.
+ * ────────────────────────────────────────────────────────────────── */
+
+.header {
+  width: 100%;
+  background-color: var(--color-warm-white);
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.06);
+}
+
+.inner {
+  width: 100%;
+  max-width: var(--max-width-checkout); /* 440px mobile baseline */
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 56px;
+}
+
+@media (min-width: 1024px) {
+  .inner {
+    max-width: var(--max-width-content); /* 960px desktop */
+    padding: var(--space-4) var(--space-8); /* slightly more side padding */
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────
+ * Platform context (right side)
+ *
+ * "for GE-AS" — calmer, slightly smaller than before. The label
+ * "for" is in lowercase muted; the platform name is semibold dark.
+ * Together they read as a contextual aside, not a brand assertion.
+ * ────────────────────────────────────────────────────────────────── */
+
+.platform {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-family: var(--font-sans);
+}
+
+.platformLabel {
+  font-size: var(--text-xs); /* 11px */
+  font-weight: var(--weight-regular);
+  color: var(--color-text-dark-muted);
+  letter-spacing: 0.02em;
+}
+
+.platformName {
+  font-size: 0.8125rem; /* 13px (down from 14px) */
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-dark);
+  letter-spacing: -0.01em;
+}
+
+/* ──────────────────────────────────────────────────────────────────
+ * Responsive
+ * ────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .inner {
+    padding: var(--space-4);
+  }
+}

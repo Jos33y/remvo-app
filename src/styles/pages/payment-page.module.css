@@ -1,0 +1,78 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: var(--space-6); /* 24px on mobile — tighter rhythm */
+  flex: 1;
+}
+
+@media (min-width: 1024px) {
+  .content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-12);
+    align-items: start; /* stop centring — both columns start at the top */
+  }
+}
+
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+@media (min-width: 1024px) {
+  .leftCol {
+    gap: var(--space-10);
+    /* Card top edge sits ~12px below grid top so it visually aligns
+     * with the bank panel's first row (the TRANSFER TO THIS ACCOUNT
+     * header is ~12px from the panel's top edge). Holds at any
+     * viewport height. */
+    padding-top: 12px;
+  }
+}
+
+.cardBlock { display: flex; justify-content: center; }
+
+.amountBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.amountValue {
+  font-family: var(--font-mono);
+  font-weight: var(--weight-regular);
+  font-size: 2.25rem;
+  line-height: 1;
+  letter-spacing: var(--tracking-mono-tight);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-white);
+  text-align: center;
+}
+
+@media (min-width: 1024px) {
+  .amountValue { font-size: 3rem; }
+}
+
+.amountRate {
+  font-family: var(--font-mono);
+  font-weight: var(--weight-regular);
+  font-size: 0.8125rem;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: rgba(212, 184, 92, 0.75); /* WCAG-passing gold tint */
+  text-align: center;
+}
+
+.rightCol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  width: 100%;
+}
+
+.bankBlock { width: 100%; }
+.statusBlock { width: 100%; padding: 0 var(--space-1); }

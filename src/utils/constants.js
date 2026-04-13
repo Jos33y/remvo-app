@@ -28,3 +28,16 @@ export const SETTLEMENT = {
   NETWORK: 'Solana',
   SCHEDULE: 'Daily',
 };
+
+/* ── Checkout routes (pay.remvo.app subdomain) ── */
+export const CHECKOUT_ROUTES = {
+  LANDING: '/',
+  SESSION: '/:token',
+  PAYMENT: '/:token/pay',
+  COMPLETE: '/:token/complete',
+};
+
+/* Helper to build a checkout URL with a real token in place of :token */
+export function buildCheckoutPath(template, token) {
+  return template.replace(':token', token);
+}

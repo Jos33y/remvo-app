@@ -1,0 +1,66 @@
+/* ──────────────────────────────────────────────────────────────────
+ * DevSimulateButton
+ *
+ * Fixed pill in the bottom-right corner. Sits above the safe-area
+ * inset so it never overlaps an iOS home indicator. The backdrop
+ * blur softens any content underneath to make it instantly readable
+ * as a dev overlay rather than chrome.
+ * ────────────────────────────────────────────────────────────────── */
+
+.button {
+  position: fixed;
+  right: var(--space-4);
+  bottom: calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
+  z-index: 100;
+
+  padding: var(--space-2) 14px;
+  border: 1px dashed var(--color-text-dark-muted);
+  border-radius: 999px;
+
+  background-color: rgba(245, 240, 235, 0.92);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+
+  font-family: var(--font-mono);
+  font-weight: var(--weight-regular);
+  font-size: 0.6875rem; /* 11px */
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--color-text-dark);
+  white-space: nowrap;
+
+  cursor: pointer;
+  opacity: 0.9;
+  transition:
+    opacity var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.button:hover:not(:disabled) {
+  opacity: 1;
+  border-color: var(--color-text-dark);
+}
+
+.button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ──────────────────────────────────────────────────────────────────
+ * Mobile collision fix
+ *
+ * On narrow viewports the default bottom-right position visually
+ * collides with the footer's "Help" link (caught in the iPhone XR
+ * walkthrough screenshot). Push the button up above the footer's
+ * effective height (48px min-height + ~16px padding + safe area)
+ * so it sits in the gap above the footer instead of overlapping it.
+ *
+ * The desktop position stays unchanged because there's plenty of
+ * horizontal space and the footer never gets crowded on wide views.
+ * ────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .button {
+    bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  }
+}

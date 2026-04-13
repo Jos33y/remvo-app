@@ -1,0 +1,94 @@
+/* ──────────────────────────────────────────────────────────────────
+ * CheckoutFooter
+ *
+ * Mirrors the header structure: full-width edge to edge with an
+ * internal max-width container that matches the page content
+ * (440px mobile, 960px desktop split).
+ * ────────────────────────────────────────────────────────────────── */
+
+.footer {
+  width: 100%;
+  background-color: var(--color-warm-white);
+  border-top: 0.5px solid rgba(0, 0, 0, 0.06);
+}
+
+.inner {
+  width: 100%;
+  max-width: var(--max-width-checkout); /* 440px mobile baseline */
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 48px;
+}
+
+@media (min-width: 1024px) {
+  .inner {
+    max-width: var(--max-width-content); /* 960px desktop */
+    padding: var(--space-4) var(--space-8);
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────
+ * Secured trust signal — icon + label
+ *
+ * The icon and the label live inside one inline-flex group with
+ * tight gap so they read as a single unit. The icon is muted gold
+ * by default to add a small premium accent without competing with
+ * the page content.
+ * ────────────────────────────────────────────────────────────────── */
+
+.secured {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2); /* 8px between icon and label */
+  font-family: var(--font-sans);
+  font-size: var(--text-xs); /* 11px */
+  font-weight: var(--weight-regular);
+  color: var(--color-text-dark-muted);
+  letter-spacing: 0.02em;
+}
+
+.securedIcon {
+  color: rgba(201, 168, 76, 0.7);
+  flex-shrink: 0;
+}
+
+/* ──────────────────────────────────────────────────────────────────
+ * Help link
+ *
+ * Negative-margin trick to expand the touch target while keeping
+ * visual alignment tight against the right edge of the inner container.
+ * ────────────────────────────────────────────────────────────────── */
+
+.help {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-dark);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  padding: var(--space-2) var(--space-3);
+  margin: calc(var(--space-2) * -1) calc(var(--space-3) * -1);
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast);
+}
+
+.help:hover {
+  color: var(--color-obsidian);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+/* ──────────────────────────────────────────────────────────────────
+ * Responsive
+ * ────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .inner {
+    padding: var(--space-4);
+  }
+}

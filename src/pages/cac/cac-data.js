@@ -29,14 +29,14 @@ export const cacData = {
   companyEmail: 'hello@remvolabs.com', // [FILL] or keep this
 
   businessDescription:
-    'Remvo Labs Limited is a technology company that develops and operates digital platforms for payment facilitation, currency conversion routing, and value card services. The company builds software products that enable businesses to accept local currency payments and settle in digital assets. The company also provides software development, API services, and technology consulting to businesses across Africa.',
+    'Remvo Labs Limited is a technology company that develops and operates digital platforms for payment processing, currency conversion services, and digital value card products. The company builds software products that enable businesses to accept payments and settle transactions across multiple channels. The company also provides software development, API services, and technology consulting to businesses across Africa.',
 
   registeredAddress: {
-    state: '[FILL]',
-    localGovt: '[FILL]',
-    city: '[FILL]',
-    houseNumber: '[FILL]',
-    streetName: '[FILL]',
+    state: 'Lagos',
+    localGovt: 'Alimosho Local Government Area',
+    city: 'Ipaja',
+    houseNumber: '5',
+    streetName: 'Funmilayo Awodiya close, Ige Estate',
   },
 
   articleOfAssociation: 'Standard Table A (default CAC template for LLC)',
@@ -45,17 +45,17 @@ export const cacData = {
   // WITNESS (12-23)
   // ═══════════════════════════════════════
   witness: {
-    fullName: '[FILL]',
-    dateOfBirth: '[FILL]', // DD/MM/YYYY
-    sex: '[FILL]',
-    occupation: '[FILL]',
-    phoneNumber: '[FILL]',
-    email: '[FILL]',
+    fullName: 'Lagbalu Mary Anuoluwapo ',
+    dateOfBirth: '06/11/2008', // DD/MM/YYYY
+    sex: 'Female',
+    occupation: 'Student',
+    phoneNumber: '09026421370',
+    email: 'anuoluwapolagbalu8@gmail.com',
     nationality: 'Nigerian',
-    state: '[FILL]',
-    localGovt: '[FILL]',
-    town: '[FILL]',
-    houseAddress: '[FILL]',
+    state: 'Lagos',
+    localGovt: 'Ibeju-Lekki',
+    town: 'Akodo',
+    houseAddress: '20, Iwalesin Street, Egan Igando',
   },
 
   // ═══════════════════════════════════════
@@ -68,15 +68,15 @@ export const cacData = {
   // SECRETARY (24-31)
   // ═══════════════════════════════════════
   secretary: {
-    fullName: '[FILL]',
-    dateOfBirth: '[FILL]', // DD/MM/YYYY
-    sex: '[FILL]',
-    occupation: '[FILL]',
-    phoneNumber: '[FILL]',
-    email: '[FILL]',
-    address: '[FILL]',
-    localGovt: '[FILL]',
-    nin: '[FILL]',
+    fullName: 'Lagbalu Oreofe Benjamin',
+    dateOfBirth: '22/11/2000', // DD/MM/YYYY
+    sex: 'Male',
+    occupation: 'Student',
+    phoneNumber: '09133717780',
+    email: 'oreofelagbalu@gmail.com',
+    address: '20, Iwalesin Street, Egan Igando',
+    localGovt: 'Ibeju-Lekki',
+    nin: '56067080970',
   },
 
   // ═══════════════════════════════════════
@@ -85,27 +85,27 @@ export const cacData = {
   directors: [
     {
       label: 'Director 1 (Primary)',
-      fullName: '[FILL]',
-      dateOfBirth: '[FILL]', // DD/MM/YYYY
-      sex: '[FILL]',
+      fullName: 'Lagbalu Joseph Olorunfemi',
+      dateOfBirth: '08/08/1999', // DD/MM/YYYY
+      sex: 'Male',
       occupation: 'Software Developer / Entrepreneur',
-      phoneNumber: '[FILL]',
-      email: '[FILL]',
-      address: '[FILL]',
-      localGovt: '[FILL]',
-      nin: '[FILL]',
+      phoneNumber: '07037344408',
+      email: 'hello@thebrickdev.com',
+      address: '5, Funmilayo Awodiya close, Ige Estate, Lagos Nigeria',
+      localGovt: 'Alimosho Local Government Area',
+      nin: '90251065965',
       signatureFile: '/temp/director-1-signature.png',
     },
     {
       label: 'Director 2',
-      fullName: '[FILL]',
-      dateOfBirth: '[FILL]', // DD/MM/YYYY
-      sex: '[FILL]',
-      occupation: '[FILL]',
-      phoneNumber: '[FILL]',
-      email: '[FILL]',
-      address: '[FILL]',
-      localGovt: '[FILL]',
+      fullName: 'Lagbalu Abiodun Opeyemi ',
+      dateOfBirth: '24/12/97', // DD/MM/YYYY
+      sex: 'Female',
+      occupation: 'Entrepreneur',
+      phoneNumber: '09031333644',
+      email: 'abiodunlagbalu@gmail.com ',
+      address: '20, Iwalesin Street, Egan Igando',
+      localGovt: 'Alimosho Local Government Area',
       nin: '[FILL]',
       signatureFile: '/temp/director-2-signature.png',
     },
@@ -125,27 +125,28 @@ export const cacData = {
   // ═══════════════════════════════════════
   shareholders: [
     {
-      fullName: '[FILL]', // Director 1
-      dateOfBirth: '[FILL]',
-      sex: '[FILL]',
+     fullName: 'Lagbalu Joseph Olorunfemi',
+      dateOfBirth: '08/08/1999', // DD/MM/YYYY
+      sex: 'Male',
       occupation: 'Software Developer / Entrepreneur',
-      phoneNumber: '[FILL]',
-      email: '[FILL]',
-      houseAddress: '[FILL]',
-      localGovt: '[FILL]',
-      nin: '[FILL]',
+      phoneNumber: '07037344408',
+      email: 'hello@thebrickdev.com',
+      address: '5, Funmilayo Awodiya close, Ige Estate, Lagos Nigeria',
+      localGovt: 'Alimosho Local Government Area',
+      nin: '90251065965',
+
       sharesHeld: '900,000',
       percentage: '90%',
     },
     {
-      fullName: '[FILL]', // Director 2
-      dateOfBirth: '[FILL]',
-      sex: '[FILL]',
-      occupation: '[FILL]',
-      phoneNumber: '[FILL]',
-      email: '[FILL]',
-      houseAddress: '[FILL]',
-      localGovt: '[FILL]',
+      fullName: 'Lagbalu Abiodun Opeyemi ',
+      dateOfBirth: '24/12/97', // DD/MM/YYYY
+      sex: 'Female',
+      occupation: 'Entrepreneur',
+      phoneNumber: '09031333644',
+      email: 'abiodunlagbalu@gmail.com ',
+      address: '20, Iwalesin Street, Egan Igando',
+      localGovt: 'Alimosho Local Government Area',
       nin: '[FILL]',
       sharesHeld: '100,000',
       percentage: '10%',
@@ -156,8 +157,8 @@ export const cacData = {
   // SIGNATURE FILES (50-51)
   // ═══════════════════════════════════════
   signatures: {
-    director1: '/temp/director-1-signature.png',
-    director2: '/temp/director-2-signature.png',
+    director1: '/temp/director-1-signature.jpeg',
+    director2: '/temp/director-2-signature.jpeg',
     witness: '/temp/witness-signature.png',
   },
 };

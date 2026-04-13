@@ -1,0 +1,109 @@
+.shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--color-warm-white);
+  color: var(--color-text-dark);
+  padding-top: env(safe-area-inset-top, 0);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  padding-left: env(safe-area-inset-left, 0);
+  padding-right: env(safe-area-inset-right, 0);
+  position: relative;
+  overflow-x: hidden;
+}
+
+.shell[data-canvas="obsidian"] { background-color: var(--canvas-obsidian); color: var(--color-white); }
+.shell[data-canvas="warm"] { background-color: var(--canvas-warm); }
+.shell[data-canvas="edge"] { background-color: var(--canvas-edge); }
+
+/* ── Obsidian canvas: header + footer go void ──
+ * The shell sets the canvas. Header and footer follow via element
+ * selectors. We do NOT touch the Logo — it's tone="auto" by default
+ * and inherits via currentColor from a wrapper, not from the shell.
+ * The header gets a high z-index so it sits above the faceted wedge.
+ */
+.shell[data-canvas="obsidian"] header,
+.shell[data-canvas="obsidian"] footer {
+  background-color: var(--canvas-obsidian);
+  border-color: rgba(201, 168, 76, 0.10);
+  position: relative;
+  z-index: 2;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* Targeted text overrides — element-typed, never cascading into SVG */
+.shell[data-canvas="obsidian"] header span[class*="platformLabel"] { color: rgba(255, 255, 255, 0.4); }
+.shell[data-canvas="obsidian"] header span[class*="platformName"] { color: var(--color-white); }
+.shell[data-canvas="obsidian"] footer span[class*="secured"] { color: rgba(255, 255, 255, 0.5); }
+.shell[data-canvas="obsidian"] footer a[class*="help"] { color: var(--color-white); }
+
+/* The Logo on obsidian: wordmark inherits from header text colour
+ * (rgba 0.55) which is wrong — we want it crisp white. Set the
+ * Logo wrapper colour explicitly. The mark stays gold via its own
+ * fill attribute. */
+.shell[data-canvas="obsidian"] header [class*="logo"] { color: var(--color-white); }
+
+.main {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: var(--space-6) var(--space-5);
+  position: relative;
+  z-index: 1;
+}
+
+.inner {
+  width: 100%;
+  max-width: var(--max-width-checkout);
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+@media (min-width: 1024px) {
+  .innerWide { max-width: var(--max-width-content); }
+}
+
+.skipLink {
+  position: absolute;
+  top: -100%;
+  left: var(--space-4);
+  z-index: 9999;
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-obsidian);
+  background: var(--color-gold);
+  border-radius: var(--radius-sm);
+  transition: top var(--transition-fast);
+}
+.skipLink:focus { top: var(--space-4); }
+
+@media (max-width: 480px) { .main { padding: var(--space-5) var(--space-4); } }
+@media (min-width: 1024px) { .main { padding: var(--space-12) var(--space-8); } }
+
+.focusOutlet {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  will-change: filter, transform, opacity;
+}
+.screenLeaving {
+  filter: blur(8px);
+  transform: scale(0.96);
+  opacity: 0.4;
+  transition: filter 350ms cubic-bezier(0.16,1,0.3,1), transform 350ms cubic-bezier(0.16,1,0.3,1), opacity 350ms cubic-bezier(0.16,1,0.3,1);
+}
+.screenEntering { animation: focusIn 700ms cubic-bezier(0.16,1,0.3,1) forwards; }
+@keyframes focusIn {
+  from { filter: blur(12px); transform: scale(1.04); opacity: 0; }
+  to { filter: blur(0); transform: scale(1); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .screenLeaving, .screenEntering { animation: none; transition: none; filter: none; transform: none; opacity: 1; }
+}
