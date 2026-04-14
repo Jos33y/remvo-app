@@ -94,7 +94,8 @@ export const cacData = {
       address: '5, Funmilayo Awodiya close, Ige Estate, Lagos Nigeria',
       localGovt: 'Alimosho Local Government Area',
       nin: '90251065965',
-      signatureFile: '/temp/director-1-signature.png',
+      signatureFile: '/temp/director-1-signature.jpeg',
+      ninFile: '/temp/director-1-nin.jpeg',
     },
     {
       label: 'Director 2',
@@ -107,7 +108,8 @@ export const cacData = {
       address: '20, Iwalesin Street, Egan Igando',
       localGovt: 'Alimosho Local Government Area',
       nin: '84732225919',
-      signatureFile: '/temp/director-2-signature.png',
+      signatureFile: '/temp/director-2-signature.jpeg',
+      ninFile: '/temp/director-2-nin.jpeg',
     },
   ],
 
@@ -125,16 +127,15 @@ export const cacData = {
   // ═══════════════════════════════════════
   shareholders: [
     {
-     fullName: 'Lagbalu Joseph Olorunfemi',
+      fullName: 'Lagbalu Joseph Olorunfemi',
       dateOfBirth: '08/08/1999', // DD/MM/YYYY
       sex: 'Male',
       occupation: 'Software Developer / Entrepreneur',
       phoneNumber: '07037344408',
       email: 'hello@thebrickdev.com',
-      address: '5, Funmilayo Awodiya close, Ige Estate, Lagos Nigeria',
+      houseAddress: '5, Funmilayo Awodiya close, Ige Estate, Lagos Nigeria',
       localGovt: 'Alimosho Local Government Area',
       nin: '90251065965',
-
       sharesHeld: '900,000',
       percentage: '90%',
     },
@@ -145,7 +146,7 @@ export const cacData = {
       occupation: 'Entrepreneur',
       phoneNumber: '09031333644',
       email: 'abiodunlagbalu@gmail.com ',
-      address: '20, Iwalesin Street, Egan Igando',
+      houseAddress: '20, Iwalesin Street, Egan Igando',
       localGovt: 'Alimosho Local Government Area',
       nin: '84732225919',
       sharesHeld: '100,000',
@@ -160,5 +161,13 @@ export const cacData = {
     director1: '/temp/director-1-signature.jpeg',
     director2: '/temp/director-2-signature.jpeg',
     witness: '/temp/witness-signature.jpeg',
+  },
+
+  // ═══════════════════════════════════════
+  // NIN IMAGES (for director KYC)
+  // ═══════════════════════════════════════
+  ninImages: {
+    director1: '/temp/director-1-nin.jpeg',
+    director2: '/temp/director-2-nin.jpeg',
   },
 };

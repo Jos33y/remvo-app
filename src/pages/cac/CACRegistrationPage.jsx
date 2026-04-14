@@ -156,6 +156,55 @@ export function CACRegistrationPage() {
         ))}
       </section>
 
+      {/* ── DIRECTOR NIN IMAGES ── */}
+      <section className={styles.section}>
+        <SectionHeader title="Director NIN documents" />
+        <div className={styles.signatureGrid}>
+          <div className={styles.signatureCard}>
+            <span className={styles.signatureLabel}>Director 1 NIN</span>
+            <div className={styles.signaturePreview}>
+              <img
+                src={d.ninImages.director1}
+                alt="Director 1 NIN"
+                className={styles.signatureImg}
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'block';
+                }}
+              />
+              <span className={styles.signaturePlaceholder} style={{ display: 'none' }}>
+                Place director-1-nin.jpeg in public/temp/
+              </span>
+            </div>
+            <DownloadButton
+              filePath={d.ninImages.director1}
+              fileName="director-1-nin.jpeg"
+            />
+          </div>
+          <div className={styles.signatureCard}>
+            <span className={styles.signatureLabel}>Director 2 NIN</span>
+            <div className={styles.signaturePreview}>
+              <img
+                src={d.ninImages.director2}
+                alt="Director 2 NIN"
+                className={styles.signatureImg}
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'block';
+                }}
+              />
+              <span className={styles.signaturePlaceholder} style={{ display: 'none' }}>
+                Place director-2-nin.jpeg in public/temp/
+              </span>
+            </div>
+            <DownloadButton
+              filePath={d.ninImages.director2}
+              fileName="director-2-nin.jpeg"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* ── SHARE CAPITAL ── */}
       <section className={styles.section}>
         <SectionHeader title="Share capital" range="40" />
