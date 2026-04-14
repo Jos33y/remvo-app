@@ -106,7 +106,7 @@ export const cacData = {
       email: 'abiodunlagbalu@gmail.com ',
       address: '20, Iwalesin Street, Egan Igando',
       localGovt: 'Alimosho Local Government Area',
-      nin: '[FILL]',
+      nin: '84732225919',
       signatureFile: '/temp/director-2-signature.png',
     },
   ],
@@ -147,7 +147,7 @@ export const cacData = {
       email: 'abiodunlagbalu@gmail.com ',
       address: '20, Iwalesin Street, Egan Igando',
       localGovt: 'Alimosho Local Government Area',
-      nin: '[FILL]',
+      nin: '84732225919',
       sharesHeld: '100,000',
       percentage: '10%',
     },
@@ -159,6 +159,6 @@ export const cacData = {
   signatures: {
     director1: '/temp/director-1-signature.jpeg',
     director2: '/temp/director-2-signature.jpeg',
-    witness: '/temp/witness-signature.png',
+    witness: '/temp/witness-signature.jpeg',
   },
 };
