@@ -1,7 +1,7 @@
-import { Button } from '@components/ui/Button';
-import { Reveal } from '@components/ui/Reveal';
-import { EXTERNAL, ROUTES } from '@utils/constants';
-import styles from '@styles/pages/partners.module.css';
+import { Button } from '@components/ui/shared/Button';
+import { Reveal } from '@components/ui/marketing/Reveal';
+import { EXTERNAL, PARTNERS_ROUTES } from '@utils/constants';
+import styles from '@styles/pages/marketing/partners.module.css';
 
 export function CTASection() {
   return (
@@ -31,7 +31,7 @@ export function CTASection() {
             <Button href={EXTERNAL.EMAIL} variant="primary">
               Get in touch
             </Button>
-            <Button href={ROUTES.AGREEMENT} variant="secondary">
+            <Button href={PARTNERS_ROUTES.AGREEMENT} variant="secondary">
               Review agreement
             </Button>
           </div>

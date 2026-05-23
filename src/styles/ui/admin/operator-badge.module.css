@@ -1,0 +1,93 @@
+/* OperatorBadge | circular avatar with initials + name column. */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: var(--font-sans);
+  color: var(--neutral-text-primary);
+  text-align: left;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.interactive {
+  cursor: pointer;
+  padding: 2px;
+  margin: -2px;
+  transition: background-color var(--transition-fast);
+}
+
+.interactive:hover {
+  background-color: var(--neutral-surface-alt);
+}
+
+.interactive:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-gold);
+}
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: var(--neutral-surface-sunk);
+  color: var(--neutral-text-primary);
+  font-weight: var(--weight-semibold);
+  letter-spacing: -0.01em;
+  flex-shrink: 0;
+}
+
+.meta {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.name {
+  font-weight: var(--weight-semibold);
+  font-size: 0.8125rem;
+  line-height: 1.15;
+}
+
+.email {
+  font-size: 0.6875rem;
+  color: var(--neutral-text-muted);
+  line-height: 1.15;
+}
+
+/* ── Sizes ── */
+
+.size-sm .avatar { width: 24px; height: 24px; font-size: 0.625rem; }
+.size-md .avatar { width: 32px; height: 32px; font-size: 0.75rem; }
+.size-lg .avatar { width: 40px; height: 40px; font-size: 0.875rem; }
+
+.size-sm .name { font-size: 0.75rem; }
+.size-lg .name { font-size: 0.875rem; }
+
+/* ── Obsidian register ── */
+
+:global([data-canvas="obsidian"]) .badge {
+  color: var(--color-white);
+}
+
+:global([data-canvas="obsidian"]) .avatar {
+  background-color: rgba(201, 168, 76, 0.15);
+  color: var(--color-gold);
+  border: 0.5px solid rgba(201, 168, 76, 0.3);
+}
+
+:global([data-canvas="obsidian"]) .email {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+:global([data-canvas="obsidian"]) .interactive:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+}

@@ -1,21 +1,21 @@
-import { Reveal } from '@components/ui/Reveal';
-import styles from '@styles/pages/homepage.module.css';
+import { Reveal } from '@components/ui/marketing/Reveal';
+import styles from '@styles/pages/marketing/homepage.module.css';
 
 const FEATURES = [
   {
     num: '01',
-    title: 'Conversion routing',
-    desc: 'Value in one form, out another. Naira enters via bank transfer. Dollars settle to your platform. No custody, no holding period beyond the conversion window.',
+    title: 'Card checkout',
+    desc: 'Your users buy digital value cards in Naira through a hosted checkout. The dollar value is credited to your platform. One integration, one flow.',
   },
   {
     num: '02',
     title: 'Instant credit',
-    desc: 'The moment payment confirms, a webhook fires. Your platform credits the user immediately. No waiting for batch processing or manual review.',
+    desc: 'The moment payment confirms, a webhook fires. Your platform credits the user immediately. No waiting, no manual review.',
   },
   {
     num: '03',
-    title: 'Daily settlement',
-    desc: 'Dollar value settles to your platform every day. Transaction reference, email confirmation, full audit trail.',
+    title: 'Daily reconciliation',
+    desc: 'Dollar value posts to your platform every day. Reference number, email confirmation, full audit trail.',
   },
 ];
 

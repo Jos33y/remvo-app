@@ -1,0 +1,169 @@
+/* StatCard | single-metric tile. Register-aware via [data-canvas]. */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  text-align: left;
+  border: 1px solid var(--neutral-border);
+  background-color: var(--neutral-surface);
+  border-radius: var(--radius-md);
+  padding: var(--space-5) var(--space-6);
+  min-width: 0;
+  font-family: var(--font-sans);
+  color: var(--neutral-text-primary);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+/* ── Sizes ── */
+
+.size-sm { padding: var(--space-4) var(--space-5); gap: var(--space-1); }
+.size-md { padding: var(--space-5) var(--space-6); gap: var(--space-2); }
+.size-lg { padding: var(--space-6) var(--space-6); gap: var(--space-3); }
+
+/* ── Header ── */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.label {
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--neutral-text-secondary);
+  font-weight: var(--weight-semibold);
+  font-size: 0.6875rem;
+  line-height: 1;
+}
+
+.icon {
+  display: inline-flex;
+  color: var(--neutral-text-muted);
+  line-height: 0;
+}
+
+/* ── Value ── */
+
+.valueRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  min-height: 24px;
+}
+
+.value {
+  font-family: var(--font-mono);
+  font-weight: var(--weight-semibold);
+  color: var(--neutral-text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.size-sm .value { font-size: 1rem;    line-height: 1.25; }
+.size-md .value { font-size: 1.25rem; line-height: 1.2; }
+.size-lg .value { font-size: 2rem;    line-height: 1.15; }
+
+.valueLoading {
+  display: inline-block;
+  width: 60%;
+  height: 1em;
+  background-color: var(--neutral-surface-sunk);
+  border-radius: 4px;
+  animation: statCardPulse 1.5s ease-in-out infinite;
+}
+
+.size-sm .valueLoading { height: 1rem; }
+.size-md .valueLoading { height: 1.25rem; }
+.size-lg .valueLoading { height: 2rem; }
+
+@keyframes statCardPulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.55; }
+}
+
+/* ── Context line ── */
+
+.context {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: var(--neutral-text-muted);
+}
+
+.statusSuccess { color: var(--neutral-success); font-weight: var(--weight-semibold); }
+.statusWarning { color: var(--neutral-warning); font-weight: var(--weight-semibold); }
+.statusError   { color: var(--neutral-error);   font-weight: var(--weight-semibold); }
+.statusInfo    { color: var(--neutral-info);    font-weight: var(--weight-semibold); }
+
+/* ── Interactive ── */
+
+.interactive {
+  cursor: pointer;
+  user-select: none;
+  width: 100%;
+}
+
+.interactive:hover {
+  background-color: var(--neutral-surface-alt);
+  border-color: var(--neutral-border-strong);
+}
+
+.interactive:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-gold), 0 0 0 4px rgba(201, 168, 76, 0.2);
+}
+
+/* ── Obsidian register ── */
+
+:global([data-canvas="obsidian"]) .card {
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 0.5px solid rgba(201, 168, 76, 0.18);
+  border-radius: var(--radius-lg);
+  color: var(--color-white);
+}
+
+:global([data-canvas="obsidian"]) .label { color: rgba(255, 255, 255, 0.55); }
+:global([data-canvas="obsidian"]) .icon { color: rgba(255, 255, 255, 0.4); }
+:global([data-canvas="obsidian"]) .value { color: var(--color-white); }
+
+:global([data-canvas="obsidian"]) .size-lg .value {
+  background: var(--gold-iridescent);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+:global([data-canvas="obsidian"]) .valueLoading {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+:global([data-canvas="obsidian"]) .context { color: rgba(255, 255, 255, 0.55); }
+
+:global([data-canvas="obsidian"]) .statusSuccess { color: #7fd49e; }
+:global([data-canvas="obsidian"]) .statusWarning { color: #f2c969; }
+:global([data-canvas="obsidian"]) .statusError   { color: #f08a8a; }
+:global([data-canvas="obsidian"]) .statusInfo    { color: #8ab8d9; }
+
+:global([data-canvas="obsidian"]) .interactive:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+  border-color: rgba(201, 168, 76, 0.35);
+}
+
+/* ── Mobile ── */
+
+@media (max-width: 640px) {
+  .size-lg { padding: var(--space-5) var(--space-5); }
+  .size-lg .value { font-size: 1.75rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .valueLoading { animation: none; opacity: 0.8; }
+  .card { transition: none; }
+}

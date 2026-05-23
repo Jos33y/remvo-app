@@ -1,5 +1,5 @@
-import { Reveal } from '@components/ui/Reveal';
-import styles from '@styles/pages/partners.module.css';
+import { Reveal } from '@components/ui/marketing/Reveal';
+import styles from '@styles/pages/marketing/partners.module.css';
 
 const STEPS = [
   "On GE-AS, a user taps 'Deposit with Naira' and enters $100.",

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import {
   LegalPageLayout,
   Clause,
-} from '@components/layout/LegalPageLayout';
+} from '@components/layout/marketing/LegalPageLayout';
 import { BRAND } from '@utils/constants';
 
 export function PrivacyPage() {
@@ -13,9 +13,9 @@ export function PrivacyPage() {
   return (
     <LegalPageLayout
       title="Privacy Policy"
-      date="3 April 2026"
-      dateTime="2026-04-03"
-      version="v1.0"
+      date="23 May 2026"
+      dateTime="2026-05-23"
+      version="v1.2"
       preamble={
         <>
           This Privacy Policy explains how {BRAND.LEGAL_NAME} operating as
@@ -28,15 +28,15 @@ export function PrivacyPage() {
       }
     >
       <Clause id="controller" heading="1. Data controller">
-        <p>1.1. {BRAND.LEGAL_NAME}, a company registered in Nigeria, is the data controller for information processed through the {BRAND.NAME} checkout service.</p>
+        <p>1.1. {BRAND.LEGAL_NAME}, a company registered in Nigeria (RC {BRAND.RC_NUMBER}), is the data controller for information processed through the {BRAND.NAME} checkout service.</p>
         <p>1.2. For data protection enquiries, contact us at {BRAND.EMAIL}.</p>
       </Clause>
 
       <Clause id="what-we-collect" heading="2. Data we collect">
         <p>2.1. {BRAND.NAME} operates as a B2B service. We do not collect personal data directly from end users. The data we process is provided by the partner platform during checkout session initialization.</p>
         <p>2.2. Data received from partner platforms per transaction: platform identifier, user identifier (a reference code, not a name), optional email address (if provided by the platform), transaction amount, and callback URL.</p>
-        <p>2.3. Data generated during the transaction: payment reference, conversion rate applied, transaction status, timestamps, payment provider reference, and settlement reference.</p>
-        <p>2.4. Data from our payment provider (Monnify): payment confirmation status, bank transfer reference, and settlement reference. We do not receive your bank account number, name, or BVN from the payment provider.</p>
+        <p>2.3. Data generated during the transaction: payment reference, rate applied, transaction status, timestamps, payment provider reference, and credit reference.</p>
+        <p>2.4. Data from our payment provider (Kora): payment confirmation status, bank transfer reference, and credit reference. We do not receive your bank account number, name, or BVN from the payment provider.</p>
         <p>2.5. Technical data collected automatically: IP address (for fraud detection only, not stored long-term), browser type, device type, and page interaction timestamps.</p>
       </Clause>
 
@@ -49,7 +49,7 @@ export function PrivacyPage() {
       <Clause id="how-we-use" heading="4. How we use your data">
         <p>4.1. To process your checkout transaction and confirm payment.</p>
         <p>4.2. To send a webhook notification to the partner platform confirming your payment, so the platform can credit your account.</p>
-        <p>4.3. To settle USDT to the partner platform on your behalf.</p>
+        <p>4.3. To deliver the dollar credit to the partner platform on your behalf.</p>
         <p>4.4. To process refunds if a transaction cannot be completed.</p>
         <p>4.5. To detect and prevent fraud or abuse of the service.</p>
         <p>4.6. To comply with tax, audit, and regulatory requirements.</p>
@@ -58,10 +58,10 @@ export function PrivacyPage() {
 
       <Clause id="sharing" heading="5. Data sharing">
         <p>5.1. Partner platforms: we share transaction confirmations (amount, reference, status) with the platform through which you made the purchase. This is necessary to credit your account.</p>
-        <p>5.2. Payment providers: our payment provider (currently Monnify) processes the bank transfer. Their processing is subject to their own privacy policy.</p>
+        <p>5.2. Payment providers: our payment provider (currently Kora) processes the bank transfer. Their processing is subject to their own privacy policy.</p>
         <p>5.3. Regulatory authorities: we may disclose transaction data if required by law, court order, or regulatory authority.</p>
         <p>5.4. We do not sell, rent, or share your data with third parties for marketing or advertising purposes.</p>
-        <p>5.5. We do not transfer data outside Nigeria except where required by the settlement process. Any such transfer complies with NDPR cross-border transfer requirements.</p>
+        <p>5.5. We do not transfer data outside Nigeria except where required to deliver the dollar credit to the partner platform. Any such transfer complies with NDPR cross-border transfer requirements.</p>
       </Clause>
 
       <Clause id="retention" heading="6. Data retention">
@@ -75,7 +75,7 @@ export function PrivacyPage() {
         <p>7.1. All data in transit is encrypted using TLS 1.2 or higher.</p>
         <p>7.2. All data at rest is encrypted using AES-256 encryption.</p>
         <p>7.3. Access to transaction data is restricted to authorised personnel on a need-to-know basis.</p>
-        <p>7.4. API keys and secrets are stored in a self-hosted secrets manager (Infisical), not in environment variables or code repositories.</p>
+        <p>7.4. API keys and secrets are stored in a self-hosted secrets manager, not in environment variables or code repositories.</p>
         <p>7.5. We conduct periodic security reviews of our infrastructure and access controls.</p>
       </Clause>
 

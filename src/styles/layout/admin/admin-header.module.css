@@ -1,0 +1,163 @@
+/* ════════════════════════════════════════════════════════════════
+ * AdminHeader
+ *
+ * Fixed-position obsidian strip. 64px tall. Full viewport width.
+ * z-index 50. Hairline gold-tinted bottom border.
+ *
+ * Left cluster: logo mark (36px) + page title (h1, semibold 18px)
+ * with 8px gap so they read as a single branded unit.
+ *
+ * Optical alignment: Logo component now uses a 0 0 40 40 viewBox
+ * (fixed in Phase 6 Session A1 polish). Flex align-items: center
+ * produces correct optical alignment without per-surface nudges.
+ * ════════════════════════════════════════════════════════════════ */
+
+.header {
+  position: fixed;
+  top: env(safe-area-inset-top, 0);
+  left: 0;
+  right: 0;
+  z-index: 50;
+  height: var(--admin-header-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-5);
+  background-color: var(--color-obsidian);
+  border-bottom: 0.5px solid rgba(201, 168, 76, 0.18);
+  color: var(--color-white);
+}
+
+@media (max-width: 640px) {
+  .header {
+    padding: 0 var(--space-4);
+  }
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* Page title: semibold 18px, weight explicit to avoid browser
+ * inconsistency in the font shorthand. */
+.pageTitle {
+  font-family: var(--font-sans);
+  font-size: 1.125rem;
+  line-height: 1.625rem;
+  font-weight: var(--weight-semibold);
+  color: var(--color-white);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 1023px) {
+  .pageTitle { display: none; }
+}
+
+/* Environment pill */
+.envPill {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-sm);
+  font: var(--type-mono-sm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.envPillSandbox {
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 0.5px solid rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.envPillProduction {
+  background-color: transparent;
+  border: 0.5px solid var(--color-gold);
+  color: var(--color-gold);
+}
+
+@media (max-width: 640px) {
+  .envPill { display: none; }
+}
+
+/* Notification bell */
+.iconButton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  color: rgba(255, 255, 255, 0.7);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.iconButton:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+  color: var(--color-white);
+}
+
+.unreadDot {
+  position: absolute;
+  top: 9px;
+  right: 11px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--color-gold);
+  border: 1.5px solid var(--color-obsidian);
+}
+
+/* Operator avatar */
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--color-obsidian-light);
+  border: 1px solid rgba(201, 168, 76, 0.4);
+  color: var(--color-white);
+  font: var(--type-label);
+  letter-spacing: 0;
+  transition: border-color var(--transition-fast);
+}
+
+.avatar:hover {
+  border-color: var(--color-gold);
+}
+
+/* Hamburger (mobile only) */
+.hamburger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  color: rgba(255, 255, 255, 0.85);
+  transition: background-color var(--transition-fast);
+}
+
+.hamburger:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+@media (max-width: 1023px) {
+  .hamburger { display: inline-flex; }
+}

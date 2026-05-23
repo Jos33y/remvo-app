@@ -1,0 +1,405 @@
+/* ════════════════════════════════════════════════════════════════
+ * TransactionDetailPage | neutral
+ *
+ * Five sections, each card-bordered for scan-reading. Money flow
+ * is the hero | tile grid with the settled amount accented in
+ * gold so the operator's eye lands there first.
+ * ════════════════════════════════════════════════════════════════ */
+
+.page {
+  padding: var(--space-6) var(--space-6) var(--space-10);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 960px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ── Back link ── */
+
+.backLink {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 4px 0;
+  font: var(--type-body-sm);
+  color: var(--neutral-text-secondary);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+  align-self: flex-start;
+}
+
+.backLink:hover { color: var(--neutral-text-primary); }
+.backLink:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.backChevron {
+  display: inline-flex;
+  transform: rotate(180deg);
+  line-height: 0;
+}
+
+/* ── Header ── */
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.headerMain {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.headerEyebrow {
+  font: var(--type-label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--neutral-text-muted);
+}
+
+.headerTitle {
+  font: var(--type-display);
+  font-family: var(--font-mono);
+  margin: 0;
+  color: var(--neutral-text-primary);
+  letter-spacing: var(--tracking-mono-tight);
+  word-break: break-all;
+}
+
+.headerSub {
+  font: var(--type-body-sm);
+  color: var(--neutral-text-secondary);
+  margin-top: 2px;
+}
+
+.headerStatus {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-2);
+}
+
+.headerAmount {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.headerAmountValue {
+  font: var(--type-mono-data-display);
+  color: var(--neutral-text-primary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+.headerAmountFiat {
+  font: var(--type-mono-sm);
+  color: var(--neutral-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.statusPill {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid;
+  font: var(--type-microcopy);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  white-space: nowrap;
+}
+
+.statusPillSettled {
+  border-color: rgba(31, 107, 64, 0.32);
+  color: var(--neutral-success);
+  background-color: rgba(31, 107, 64, 0.08);
+}
+
+.statusPillPending {
+  border-color: rgba(139, 101, 8, 0.32);
+  color: var(--neutral-warning);
+  background-color: rgba(139, 101, 8, 0.08);
+}
+
+/* ── Section card ── */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.sectionHeading {
+  margin: 0;
+  font: var(--type-h3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--neutral-text-muted);
+}
+
+.sectionBody {
+  background-color: var(--neutral-surface);
+  border: 1px solid var(--neutral-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+}
+
+/* ── Money flow grid ── */
+
+.moneyGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-4);
+}
+
+.moneyTile {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-4);
+  background-color: var(--neutral-surface-sunk);
+  border: 1px solid var(--neutral-border);
+  border-radius: var(--radius-sm);
+}
+
+.moneyTileAccent {
+  border-color: rgba(201, 168, 76, 0.45);
+  background-color: rgba(201, 168, 76, 0.06);
+}
+
+.moneyLabel {
+  font: var(--type-microcopy);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--neutral-text-muted);
+}
+
+.moneyValue {
+  font: var(--type-mono-data-lg);
+  color: var(--neutral-text-primary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+.moneyTileAccent .moneyValue {
+  color: var(--color-gold);
+}
+
+.moneyCaption {
+  font: var(--type-microcopy);
+  color: var(--neutral-text-secondary);
+  line-height: 1.4;
+}
+
+/* ── Field rows grid ── */
+
+.fieldsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-2) var(--space-6);
+}
+
+.fieldRow {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-2) 0;
+  min-width: 0;
+  border-bottom: 1px solid var(--neutral-border);
+}
+
+.fieldRow:last-child { border-bottom: 0; }
+
+.fieldLabel {
+  font: var(--type-microcopy);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--neutral-text-muted);
+}
+
+.fieldValueWrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.fieldValue {
+  font: var(--type-body-sm);
+  color: var(--neutral-text-primary);
+  word-break: break-all;
+  min-width: 0;
+}
+
+.fieldValueMono {
+  font: var(--type-mono-data);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+.fieldEmpty {
+  color: var(--neutral-text-muted);
+}
+
+.fieldHint {
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+  width: 100%;
+}
+
+.fieldLink {
+  text-decoration: none;
+  color: var(--neutral-info);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.fieldLink:hover { text-decoration: underline; }
+
+.fieldLinkArrow {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+/* ── Gross margin treatment ── */
+
+.marginValueLg {
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: var(--weight-semibold);
+}
+
+.marginValuePos { color: var(--neutral-success); }
+.marginValueNeg { color: var(--neutral-error, #C43D3D); }
+
+.marginBadge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--neutral-border);
+  background-color: var(--neutral-surface-sunk);
+  font: var(--type-microcopy);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+  color: var(--neutral-text-secondary);
+}
+
+/* ── Copy button ── */
+
+.copyButton {
+  appearance: none;
+  background: transparent;
+  border: 1px solid var(--neutral-border);
+  color: var(--neutral-text-secondary);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font: var(--type-microcopy);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: border-color var(--transition-fast),
+              background-color var(--transition-fast),
+              color var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.copyButton:hover {
+  border-color: var(--color-gold);
+  color: var(--neutral-text-primary);
+  background-color: rgba(201, 168, 76, 0.06);
+}
+
+.copyButton:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 1px;
+}
+
+.copyButtonActive {
+  color: var(--neutral-success);
+  border-color: rgba(31, 107, 64, 0.4);
+  background-color: rgba(31, 107, 64, 0.08);
+}
+
+/* ── Pending settlement note ── */
+
+.pendingSettleNote {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  font: var(--type-body-sm);
+  color: var(--neutral-text-secondary);
+  line-height: 1.5;
+}
+
+.pendingSettleDot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--neutral-warning);
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+/* ── Loading ── */
+
+.loadingBlock {
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+  font: var(--type-body-sm);
+  color: var(--neutral-text-muted);
+}
+
+/* ── Motion ── */
+
+@media (prefers-reduced-motion: reduce) {
+  .backLink, .copyButton { transition: none; }
+}
+
+/* ── Mobile ── */
+
+@media (max-width: 640px) {
+  .page {
+    padding: var(--space-5) max(var(--space-4), env(safe-area-inset-right, 0)) var(--space-8) max(var(--space-4), env(safe-area-inset-left, 0));
+    gap: var(--space-5);
+  }
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .headerStatus {
+    align-items: flex-start;
+  }
+  .headerAmount {
+    align-items: flex-start;
+  }
+  .headerTitle { font: var(--type-h1); font-family: var(--font-mono); }
+  .sectionBody { padding: var(--space-4); }
+  .moneyGrid { grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+  .fieldsGrid { grid-template-columns: 1fr; gap: 0 var(--space-3); }
+}
+
+@media (max-width: 420px) {
+  .moneyGrid { grid-template-columns: 1fr; }
+}

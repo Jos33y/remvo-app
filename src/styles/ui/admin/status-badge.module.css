@@ -1,0 +1,91 @@
+/* ──────────────────────────────────────────────────────────────────
+ * StatusBadge
+ *
+ * Pill with hairline border and tinted background. The tint is a low-
+ * opacity wash of the tone colour on neutral; on obsidian the border
+ * shifts to the tone colour at higher opacity so the pill reads at
+ * distance on a dark canvas.
+ *
+ * Contrast verified: every text-on-tinted-surface pair passes AA at
+ * both 20px and 24px pill heights.
+ * ────────────────────────────────────────────────────────────────── */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-2);
+  border-radius: 99px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.size-sm { height: 20px; font-size: 0.6875rem; padding: 0 var(--space-2); }
+.size-md { height: 24px; font-size: 0.75rem;   padding: 0 var(--space-3); }
+
+.glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.label {
+  line-height: 1;
+}
+
+/* ── Neutral register tones ──────────────────────────────────── */
+
+.tone-success {
+  color: var(--neutral-success);
+  background-color: rgba(31, 107, 64, 0.08);
+  border-color: rgba(31, 107, 64, 0.2);
+}
+
+.tone-warning {
+  color: var(--neutral-warning);
+  background-color: rgba(139, 101, 8, 0.09);
+  border-color: rgba(139, 101, 8, 0.22);
+}
+
+.tone-error {
+  color: var(--neutral-error);
+  background-color: rgba(184, 42, 42, 0.08);
+  border-color: rgba(184, 42, 42, 0.22);
+}
+
+.tone-info {
+  color: var(--neutral-info);
+  background-color: rgba(30, 90, 138, 0.08);
+  border-color: rgba(30, 90, 138, 0.22);
+}
+
+/* ── Obsidian register tones ─────────────────────────────────── */
+
+:global([data-canvas="obsidian"]) .tone-success {
+  color: #7fd49e;
+  background-color: rgba(45, 122, 79, 0.14);
+  border-color: rgba(45, 122, 79, 0.4);
+}
+
+:global([data-canvas="obsidian"]) .tone-warning {
+  color: #f2c969;
+  background-color: rgba(184, 134, 11, 0.14);
+  border-color: rgba(184, 134, 11, 0.4);
+}
+
+:global([data-canvas="obsidian"]) .tone-error {
+  color: #f08a8a;
+  background-color: rgba(196, 61, 61, 0.14);
+  border-color: rgba(196, 61, 61, 0.4);
+}
+
+:global([data-canvas="obsidian"]) .tone-info {
+  color: #8ab8d9;
+  background-color: rgba(45, 106, 159, 0.14);
+  border-color: rgba(45, 106, 159, 0.4);
+}

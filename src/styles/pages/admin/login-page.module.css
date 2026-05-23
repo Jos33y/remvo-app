@@ -1,0 +1,324 @@
+/* ════════════════════════════════════════════════════════════════
+ * LoginPage
+ *
+ * Centred card on full-viewport obsidian. No header. The page owns
+ * the entire viewport per SCREEN_SPECS section 03.1.
+ *
+ * Bottom strip: version label + environment pill (SANDBOX / PRODUCTION).
+ * The env pill is here rather than in the absent header.
+ * ════════════════════════════════════════════════════════════════ */
+
+/* ──────────────────────────────────────────────────────────────────
+ * Layout
+ *
+ * Three-row CSS grid spanning the viewport:
+ *
+ *   ┌─────────────────────────┐
+ *   │  flex spacer (1fr)      │  pushes card to centre
+ *   │  card (auto)            │  the form
+ *   │  flex spacer (1fr)      │  remaining space below
+ *   │  footer (auto)          │  env pill, anchored bottom
+ *   └─────────────────────────┘
+ *
+ * No absolute positioning. Footer is a flex sibling of the card, so
+ * it can never collide with content regardless of how tall the card
+ * grows. Both spacers are flex: 1 so the card sits visually centred
+ * but the footer always reaches the viewport bottom.
+ *
+ * On short viewports (mobile) the spacers compress to 0 and the
+ * footer rides up under the card without touching it (the card has
+ * its own bottom margin).
+ * ────────────────────────────────────────────────────────────────── */
+
+.wrap {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-6);
+}
+
+/* Top + bottom spacers absorb extra space so .card centres without
+   collapsing the .foot row to the viewport edge. */
+.spacerTop,
+.spacerBottom {
+  flex: 1 1 var(--space-8);
+}
+
+.card {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.logoSlot {
+  margin-bottom: var(--space-6);
+}
+
+.heading {
+  font: var(--type-h1);
+  color: var(--color-white);
+  margin: 0;
+}
+
+.sub {
+  font: var(--type-body);
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0 0 var(--space-4) 0;
+  max-width: 320px;
+}
+
+.primary {
+  width: 100%;
+  height: 56px;
+  background: var(--gold-iridescent);
+  color: var(--color-obsidian);
+  font: var(--type-body);
+  font-weight: var(--weight-semibold);
+  border-radius: var(--radius-md);
+  transition: filter var(--transition-fast);
+}
+
+.primary:hover {
+  filter: brightness(1.05);
+}
+
+.primary:active {
+  filter: brightness(0.95);
+}
+
+.note {
+  font: var(--type-microcopy);
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: var(--space-3);
+  max-width: 320px;
+}
+
+/* Bottom strip: anchored to viewport bottom, version + env pill */
+/* ──────────────────────────────────────────────────────────────────
+ * Footer
+ *
+ * Single env pill, anchored at viewport bottom by the grid layout
+ * above (no absolute positioning). On a sign-in page the operator
+ * does not need to be reminded what app they're using | the Remvo
+ * logo above does that. The pill exists ONLY to make sandbox vs
+ * production unmistakable, so the operator never confuses the two.
+ *
+ * In production we suppress the pill entirely (the chrome of the
+ * deployment | URL bar, certificate, etc. | already signals prod).
+ * Sandbox renders it; the colour and dimness keep it secondary to
+ * the form.
+ * ────────────────────────────────────────────────────────────────── */
+.foot {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: var(--space-4);
+}
+
+/* Environment pills (same style as AdminHeader pills) */
+.envPillSandbox {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-sm);
+  font: var(--type-mono-sm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 0.5px solid rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.envPillProduction {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-sm);
+  font: var(--type-mono-sm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background-color: transparent;
+  border: 0.5px solid var(--color-gold);
+  color: var(--color-gold);
+}
+
+@media (max-width: 640px) {
+  .wrap {
+    padding: var(--space-6) var(--space-4);
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+ * Phase 7E additions | two-tab login (Passkey + Password)
+ * Appended; existing classes above are untouched.
+ * ════════════════════════════════════════════════════════════════ */
+
+.tabRow {
+  width: 100%;
+  display: flex;
+  gap: var(--space-2);
+  padding: 4px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-4);
+}
+
+.tab {
+  flex: 1;
+  height: 40px;
+  background: transparent;
+  border: none;
+  border-radius: calc(var(--radius-md) - 4px);
+  font: var(--type-body);
+  font-weight: var(--weight-semibold);
+  color: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.tab:hover:not(:disabled) {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.tabActive {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--color-white);
+}
+
+.tab:disabled {
+  cursor: not-allowed;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  text-align: left;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.label {
+  font: var(--type-microcopy);
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.input {
+  width: 100%;
+  height: 48px;
+  padding: 0 var(--space-3);
+  background: rgba(255, 255, 255, 0.04);
+  border: 0.5px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-md);
+  color: var(--color-white);
+  font: var(--type-body);
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.input:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.input:focus-visible {
+  outline: none;
+  border-color: var(--color-gold);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.inputMono {
+  font: var(--type-mono);
+  letter-spacing: 0.08em;
+}
+
+.formError {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: rgba(196, 61, 61, 0.08);
+  border: 0.5px solid rgba(196, 61, 61, 0.4);
+  color: rgba(255, 200, 200, 0.95);
+  font: var(--type-microcopy);
+}
+
+.banner {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.04);
+  border: 0.5px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.65);
+  font: var(--type-microcopy);
+  text-align: left;
+  margin-bottom: var(--space-2);
+}
+
+.passkeySlot {
+  width: 100%;
+  margin-top: var(--space-2);
+}
+
+.emailLine {
+  font: var(--type-microcopy);
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+}
+
+/* ════════════════════════════════════════════════════════════════
+ * Chrome/Edge autofill override
+ *
+ * Browsers stamp a pale background on autofilled fields, ignoring
+ * the obsidian theme. The standard fix is the box-shadow trick |
+ * inset shadow at the same colour as our input background, faking
+ * a transparent fill. Forcing -webkit-text-fill-color separately
+ * because the autofill text colour also gets overridden.
+ *
+ * Applies to ALL inputs in the login wrap, not just .input, in case
+ * password managers fill into native types (date, url, tel) we add
+ * later and forget to wire .input on.
+ * ════════════════════════════════════════════════════════════════ */
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus,
+.input:-webkit-autofill:active {
+  /* Match our input bg in obsidian: rgba(255,255,255,0.04) over
+     #0e0e10 ≈ #161618. We use solid here because box-shadow doesn't
+     compose with rgba over the autofill yellow. */
+  -webkit-box-shadow: 0 0 0px 1000px #161618 inset !important;
+  -webkit-text-fill-color: var(--color-white) !important;
+  caret-color: var(--color-white);
+  /* The browser also adds a thin yellow outline on first autofill;
+     transition delay defeats it without affecting our own focus
+     transitions. */
+  transition: background-color 9999s ease-in-out 0s;
+}

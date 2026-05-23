@@ -1,0 +1,120 @@
+/* MerchantBadge | pill with status dot + merchant name + optional
+ * muted preferred suffix. Register-aware. */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  border-radius: 99px;
+  border: 1px solid var(--neutral-border);
+  background-color: var(--neutral-surface);
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--neutral-text-primary);
+}
+
+.size-sm { height: 20px; font-size: 0.6875rem; padding: 0 var(--space-2); }
+.size-md { height: 24px; font-size: 0.75rem; }
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-success { background-color: var(--neutral-success); }
+.dot-warning { background-color: var(--neutral-warning); }
+.dot-error   { background-color: var(--neutral-error); }
+
+.name {
+  line-height: 1;
+}
+
+.preferred {
+  color: var(--neutral-text-muted);
+  font-weight: var(--weight-regular);
+  font-size: 0.6875rem;
+  line-height: 1;
+}
+
+.unknown {
+  color: var(--neutral-text-muted);
+  font-style: italic;
+}
+
+/* Obsidian register */
+:global([data-canvas="obsidian"]) .badge {
+  background-color: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: var(--color-white);
+}
+
+:global([data-canvas="obsidian"]) .dot-success { background-color: #7fd49e; }
+:global([data-canvas="obsidian"]) .dot-warning { background-color: #f2c969; }
+:global([data-canvas="obsidian"]) .dot-error   { background-color: #f08a8a; }
+
+:global([data-canvas="obsidian"]) .preferred {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+:global([data-canvas="obsidian"]) .unknown {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+
+/* Merchant-specific brand accents. Applied via data-merchant attribute
+ * on the badge element so the tint follows brand recognition without
+ * masking the status dot, which continues to reflect operational state.
+ *
+ * Kora:    brand purple (#7C3AED) left-edge accent + name tint.
+ * Paystack: signature blue (#0BA4DB) as a left-edge accent bar and name tint.
+ * Monnify: brand green (#0A7E3D) as a left-edge accent bar and name tint.
+ */
+
+.badge[data-merchant="kora"] {
+  border-left: 2px solid #7C3AED;
+  padding-left: calc(var(--space-2) - 1px);
+}
+.badge[data-merchant="kora"] .name {
+  color: #6D28D9;
+}
+
+.badge[data-merchant="paystack"] {
+  border-left: 2px solid #0BA4DB;
+  padding-left: calc(var(--space-2) - 1px);
+}
+.badge[data-merchant="paystack"] .name {
+  color: #0880AD;
+}
+
+.badge[data-merchant="monnify"] {
+  border-left: 2px solid #0A7E3D;
+  padding-left: calc(var(--space-2) - 1px);
+}
+.badge[data-merchant="monnify"] .name {
+  color: #0A7E3D;
+}
+
+/* Obsidian register: shift brand tints lighter so they remain legible on void. */
+:global([data-canvas="obsidian"]) .badge[data-merchant="kora"] {
+  border-left-color: #A78BFA;
+}
+:global([data-canvas="obsidian"]) .badge[data-merchant="kora"] .name {
+  color: #C4B5FD;
+}
+:global([data-canvas="obsidian"]) .badge[data-merchant="paystack"] {
+  border-left-color: #4DC4EC;
+}
+:global([data-canvas="obsidian"]) .badge[data-merchant="paystack"] .name {
+  color: #8FD7F0;
+}
+:global([data-canvas="obsidian"]) .badge[data-merchant="monnify"] {
+  border-left-color: #5DAE7D;
+}
+:global([data-canvas="obsidian"]) .badge[data-merchant="monnify"] .name {
+  color: #8FCDAA;
+}

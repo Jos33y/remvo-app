@@ -1,0 +1,237 @@
+/* PasskeyPrompt | WebAuthn UX states primitive.
+ *
+ * Two tones: obsidian (login/enrol pages, full-viewport dark) and
+ * neutral (settings page, neutral admin surface).
+ *
+ * Primary button size is consistent across states so the layout
+ * doesn't shift when swapping idle -> requesting -> success. The
+ * error panel sits above the button when in the error state.
+ */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+  font-family: var(--font-sans);
+}
+
+/* ── Primary button (shared across states) ── */
+
+.primaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  height: 56px;
+  padding: 0 var(--space-6);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+  border: 1px solid transparent;
+  user-select: none;
+  width: 100%;
+}
+
+.primaryButton[aria-disabled="true"],
+.primaryButton[aria-busy="true"] {
+  cursor: wait;
+}
+
+/* ── Tone: obsidian ── */
+
+.tone-obsidian .primaryButton {
+  background-color: var(--color-gold);
+  color: var(--color-obsidian);
+  border-color: var(--color-gold);
+}
+
+.tone-obsidian .primaryButton:hover {
+  background-color: #b8983f;
+  border-color: #b8983f;
+}
+
+.tone-obsidian .primaryButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-obsidian), 0 0 0 4px var(--color-gold);
+}
+
+.tone-obsidian .primaryButton[aria-busy="true"] {
+  background-color: rgba(201, 168, 76, 0.3);
+  color: rgba(255, 255, 255, 0.85);
+  border-color: transparent;
+}
+
+.tone-obsidian .successSurface {
+  background-color: rgba(45, 122, 79, 0.15);
+  color: #7fd49e;
+  border-color: rgba(45, 122, 79, 0.4);
+}
+
+/* ── Tone: neutral ── */
+
+.tone-neutral .primaryButton {
+  background-color: var(--color-obsidian);
+  color: var(--color-white);
+  border-color: var(--color-obsidian);
+}
+
+.tone-neutral .primaryButton:hover {
+  background-color: #2a2a2a;
+  border-color: #2a2a2a;
+}
+
+.tone-neutral .primaryButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-gold);
+}
+
+.tone-neutral .primaryButton[aria-busy="true"] {
+  background-color: var(--neutral-surface-sunk);
+  color: var(--neutral-text-secondary);
+  border-color: var(--neutral-border);
+}
+
+.tone-neutral .successSurface {
+  background-color: rgba(31, 107, 64, 0.08);
+  color: var(--neutral-success);
+  border-color: rgba(31, 107, 64, 0.3);
+}
+
+/* ── Spinner ── */
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: passkeySpin 0.7s linear infinite;
+  opacity: 0.8;
+}
+
+@keyframes passkeySpin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+    border-right-color: currentColor;
+    opacity: 0.5;
+  }
+}
+
+/* ── Helper copy under button ── */
+
+.helper {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.tone-neutral .helper {
+  color: var(--neutral-text-muted);
+}
+
+/* ── Error panel ── */
+
+.errorPanel {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  background-color: rgba(196, 61, 61, 0.08);
+  border: 1px solid rgba(196, 61, 61, 0.3);
+}
+
+.tone-neutral .errorPanel {
+  background-color: rgba(184, 42, 42, 0.05);
+  border-color: rgba(184, 42, 42, 0.25);
+}
+
+.errorIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #f08a8a;
+  flex-shrink: 0;
+  padding-top: 1px;
+}
+
+.tone-neutral .errorIcon {
+  color: var(--neutral-error);
+}
+
+.errorBody {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.errorTitle {
+  font-size: 0.8125rem;
+  font-weight: var(--weight-semibold);
+  color: #f08a8a;
+  line-height: 1.3;
+}
+
+.tone-neutral .errorTitle {
+  color: var(--neutral-error);
+}
+
+.errorMessage {
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.tone-neutral .errorMessage {
+  color: var(--neutral-text-secondary);
+}
+
+/* ── Fallback link ── */
+
+.fallbackLink {
+  background: none;
+  border: none;
+  padding: var(--space-2) 0;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: var(--weight-semibold);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  text-align: center;
+  transition: color var(--transition-fast);
+  text-decoration: none;
+  align-self: center;
+}
+
+.fallbackLink:hover {
+  color: var(--color-gold);
+  text-decoration: underline;
+  text-decoration-color: var(--color-gold);
+  text-underline-offset: 3px;
+}
+
+.fallbackLink:focus-visible {
+  outline: none;
+  color: var(--color-gold);
+  box-shadow: 0 2px 0 var(--color-gold);
+  border-radius: 2px;
+}
+
+.tone-neutral .fallbackLink {
+  color: var(--neutral-text-secondary);
+}
+
+.tone-neutral .fallbackLink:hover {
+  color: var(--color-obsidian);
+}

@@ -1,0 +1,118 @@
+/* ──────────────────────────────────────────────────────────────────
+ * AnalyticsLayout | mixed register
+ *
+ * Obsidian hero strip at the top (title + range picker), neutral
+ * body below (tabs + tab content). The obsidian strip reads as a
+ * signature moment; the neutral body earns density for tables and
+ * per-platform rollups.
+ * ────────────────────────────────────────────────────────────────── */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+/* ── Hero strip: obsidian ── */
+
+.hero {
+  background-color: var(--canvas-obsidian);
+  color: var(--color-white);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: var(--space-6) var(--space-6) var(--space-8);
+}
+
+.heroInner {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+  max-width: var(--max-width-content);
+}
+
+.heroText {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  flex: 1 1 320px;
+}
+
+.kicker {
+  font: var(--type-label);
+  color: rgba(201, 168, 76, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0;
+}
+
+.title {
+  font: var(--type-display);
+  color: var(--color-white);
+  margin: 0;
+  letter-spacing: -0.015em;
+}
+
+.subtitle {
+  font: var(--type-body);
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  max-width: 560px;
+  line-height: 1.5;
+}
+
+.heroControls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+/* ── Tabs strip: neutral ── */
+
+.tabsWrap {
+  background-color: var(--neutral-canvas);
+  padding: 0 var(--space-6);
+}
+
+/* ── Body: neutral ── */
+
+.body {
+  background-color: var(--neutral-canvas);
+  padding: var(--space-6);
+  padding-bottom: var(--space-10);
+  flex: 1 1 auto;
+}
+
+/* ── Mobile ── */
+
+@media (max-width: 720px) {
+  .hero {
+    padding: var(--space-5) var(--space-4) var(--space-6);
+  }
+
+  .tabsWrap {
+    padding: 0 var(--space-4);
+  }
+
+  .body {
+    padding: var(--space-5) var(--space-4) var(--space-8);
+  }
+
+  .heroInner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-4);
+  }
+
+  .heroControls {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .title {
+    font-size: 1.625rem;
+    line-height: 1.15;
+  }
+}

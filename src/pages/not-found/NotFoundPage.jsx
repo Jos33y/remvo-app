@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { Button } from '@components/ui/Button';
+import { Button } from '@components/ui/shared/Button';
 import { ROUTES } from '@utils/constants';
-import styles from '@styles/pages/not-found.module.css';
+import styles from '@styles/pages/marketing/not-found.module.css';
 
 export function NotFoundPage() {
   useEffect(() => {

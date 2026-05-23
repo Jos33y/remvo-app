@@ -1,0 +1,435 @@
+/* ════════════════════════════════════════════════════════════════
+ * InviteAcceptPage
+ *
+ * Centred card on full-viewport obsidian. Shares layout conventions
+ * with LoginPage: 400px max, centred text, gold-iridescent primary,
+ * 56px CTA height, foot strip anchored to viewport bottom.
+ *
+ * Three render states (validating | valid | invalid) share the same
+ * viewport shell. Only the card contents change.
+ * ════════════════════════════════════════════════════════════════ */
+
+.wrap {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-6);
+}
+
+.spacerTop,
+.spacerBottom {
+  flex: 1 1 var(--space-8);
+}
+
+.card {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.logoSlot {
+  margin-bottom: var(--space-6);
+}
+
+/* ── Transient states (validating, invalid) ── */
+
+.stateBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: center;
+}
+
+.stateSpinner {
+  width: 32px;
+  height: 32px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--color-gold);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: var(--space-2);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.stateIconError {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: rgba(196, 61, 61, 0.1);
+  border: 0.5px solid rgba(196, 61, 61, 0.32);
+  color: #E86D6D;
+  margin-bottom: var(--space-2);
+}
+
+/* ── Header (valid state) ── */
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: center;
+  width: 100%;
+}
+
+.welcomeRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  background-color: rgba(46, 160, 100, 0.1);
+  border: 0.5px solid rgba(46, 160, 100, 0.28);
+  color: #5EBF8C;
+  margin-bottom: var(--space-2);
+}
+
+.welcomeIcon {
+  display: inline-flex;
+}
+
+.welcomeText {
+  font: var(--type-mono-sm);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.heading {
+  font: var(--type-h1);
+  color: var(--color-white);
+  margin: 0;
+}
+
+.sub {
+  font: var(--type-body);
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+  line-height: 1.5;
+  max-width: 340px;
+}
+
+.invitedBy {
+  color: var(--color-white);
+  font-weight: var(--weight-semibold);
+}
+
+.roleTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 8px;
+  border-radius: var(--radius-sm);
+  background-color: rgba(201, 168, 76, 0.1);
+  border: 0.5px solid rgba(201, 168, 76, 0.28);
+  color: var(--color-gold);
+  font-size: 0.875rem;
+  font-weight: var(--weight-semibold);
+  text-transform: capitalize;
+}
+
+.emailLine {
+  font: var(--type-body-sm);
+  color: rgba(255, 255, 255, 0.55);
+  margin: var(--space-2) 0 0 0;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  color: var(--color-white);
+  letter-spacing: var(--tracking-mono-tight);
+  font-size: 0.875rem;
+}
+
+/* ── Form ── */
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.label {
+  font: var(--type-mono-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.input {
+  width: 100%;
+  height: 48px;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-sm);
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 0.5px solid rgba(255, 255, 255, 0.18);
+  color: var(--color-white);
+  font: var(--type-body);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.input:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.input:focus-visible {
+  outline: none;
+  border-color: var(--color-gold);
+  background-color: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.18);
+}
+
+.input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.hint {
+  font: var(--type-microcopy);
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.5;
+}
+
+/* ── Form error banner ── */
+
+.formError {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background-color: rgba(196, 61, 61, 0.08);
+  border: 0.5px solid rgba(196, 61, 61, 0.28);
+  color: #E86D6D;
+  font: var(--type-body-sm);
+  text-align: left;
+}
+
+.formError > :first-child {
+  flex-shrink: 0;
+}
+
+/* ── Buttons ── */
+
+.primary {
+  width: 100%;
+  height: 56px;
+  background: var(--gold-iridescent);
+  color: var(--color-obsidian);
+  font: var(--type-body);
+  font-weight: var(--weight-semibold);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: filter var(--transition-fast);
+  margin-top: var(--space-2);
+}
+
+.primary:hover:not(:disabled) {
+  filter: brightness(1.05);
+}
+
+.primary:active:not(:disabled) {
+  filter: brightness(0.95);
+}
+
+.primary:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+.primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: none;
+}
+
+.secondary {
+  width: 100%;
+  height: 48px;
+  background-color: transparent;
+  color: var(--color-white);
+  font: var(--type-body);
+  font-weight: var(--weight-semibold);
+  border: 0.5px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+  margin-top: var(--space-2);
+}
+
+.secondary:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.secondary:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+/* ── Foot ── */
+
+.foot {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: var(--space-4);
+}
+
+.envPillSandbox {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-sm);
+  font: var(--type-mono-sm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 0.5px solid rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ── Motion ── */
+
+@media (prefers-reduced-motion: reduce) {
+  .input, .primary, .secondary {
+    transition: none;
+  }
+  .stateSpinner {
+    animation: none;
+    border-top-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* ── Mobile ── */
+
+@media (max-width: 640px) {
+  .wrap {
+    padding: var(--space-6) var(--space-4);
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+ * Phase 7E additions | multi-step wizard (welcome / totp / password)
+ * Appended; existing classes above are untouched.
+ * ════════════════════════════════════════════════════════════════ */
+
+.stepIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.stepDot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: var(--type-mono-sm);
+  font-weight: var(--weight-semibold);
+  background: rgba(255, 255, 255, 0.04);
+  border: 0.5px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.stepDotActive {
+  background: var(--gold-iridescent);
+  border-color: transparent;
+  color: var(--color-obsidian);
+}
+
+.stepDotDone {
+  background: rgba(45, 122, 79, 0.2);
+  border-color: rgba(45, 122, 79, 0.5);
+  color: rgba(140, 220, 160, 0.95);
+}
+
+.stepConnector {
+  width: 24px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.stepConnectorDone {
+  background: rgba(45, 122, 79, 0.5);
+}
+
+.qrBlock {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-3);
+}
+
+.qrImage {
+  width: 180px;
+  height: 180px;
+  display: block;
+}
+
+.qrSecret {
+  font: var(--type-mono);
+  font-size: 12px;
+  color: var(--color-obsidian);
+  letter-spacing: 0.06em;
+  word-break: break-all;
+  text-align: center;
+  max-width: 240px;
+}
+
+.inputMono {
+  font: var(--type-mono);
+  letter-spacing: 0.08em;
+}
+
+/* Chrome/Edge autofill override | matches login-page treatment.
+   Browser-stamped pale background → obsidian-coloured inset shadow. */
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus,
+.input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0px 1000px #161618 inset !important;
+  -webkit-text-fill-color: var(--color-white) !important;
+  caret-color: var(--color-white);
+  transition: background-color 9999s ease-in-out 0s;
+}

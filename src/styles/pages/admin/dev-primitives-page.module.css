@@ -1,0 +1,438 @@
+/* DevPrimitivesPage
+ *
+ * Dev-only route harness. Sections contain RegisterFrames (light / dark)
+ * and DemoRows. This stylesheet is deliberately generous with padding
+ * and spacing so every primitive is visible without cramping.
+ */
+
+.wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-6) var(--space-12);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+/* ── Page header ── */
+
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--neutral-border);
+}
+
+.devFlag {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 2px 8px;
+  background-color: var(--color-gold);
+  color: var(--color-obsidian);
+  font-size: 0.625rem;
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 4px;
+}
+
+.pageTitle {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 1.75rem;
+  font-weight: var(--weight-semibold);
+  color: var(--neutral-text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.pageLead {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--neutral-text-secondary);
+  line-height: 1.5;
+  max-width: 720px;
+}
+
+/* ── Sections ── */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-6) 0;
+  border-top: 1px solid var(--neutral-border);
+}
+
+.section:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 1.125rem;
+  font-weight: var(--weight-semibold);
+  color: var(--neutral-text-primary);
+  letter-spacing: -0.01em;
+}
+
+.sectionSubtitle {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--neutral-text-muted);
+  line-height: 1.5;
+}
+
+.sectionBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* ── Register frames ── */
+
+.registerFrame {
+  position: relative;
+  padding: var(--space-5) var(--space-5) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--neutral-border);
+}
+
+.register-neutral {
+  background-color: var(--neutral-surface);
+}
+
+.register-obsidian {
+  background-color: var(--color-obsidian);
+  border-color: rgba(201, 168, 76, 0.15);
+}
+
+.registerLabel {
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  padding: 2px 8px;
+  background-color: var(--neutral-canvas);
+  font-size: 0.625rem;
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--neutral-text-muted);
+  border-radius: 4px;
+  border: 1px solid var(--neutral-border);
+}
+
+.register-obsidian .registerLabel {
+  background-color: var(--color-obsidian);
+  color: rgba(255, 255, 255, 0.55);
+  border-color: rgba(201, 168, 76, 0.25);
+}
+
+.registerInner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* ── Demo rows (label + content) ── */
+
+.demoRow {
+  display: flex;
+  gap: var(--space-4);
+  align-items: flex-start;
+  padding: var(--space-2) 0;
+}
+
+.demoLabel {
+  flex-shrink: 0;
+  width: 180px;
+  padding-top: 4px;
+  font-size: 0.75rem;
+  color: var(--neutral-text-muted);
+  line-height: 1.4;
+  font-family: var(--font-sans);
+}
+
+.register-obsidian .demoLabel {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.demoCell {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+/* ── Demo controls strip (for table / stat toggles) ── */
+
+.tableDemoControls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  flex-wrap: wrap;
+}
+
+.demoNote {
+  font-size: 0.75rem;
+  color: var(--neutral-text-muted);
+  line-height: 1.4;
+}
+
+/* ── Inline text helpers used by column renderers and A4 sections ── */
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--neutral-text-primary);
+}
+
+.muted {
+  color: var(--neutral-text-muted);
+}
+
+.strongValue {
+  font-weight: var(--weight-semibold);
+  color: var(--neutral-text-primary);
+}
+
+.capitalise {
+  text-transform: capitalize;
+}
+
+.kebabButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--neutral-text-muted);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.kebabButton:hover {
+  background-color: var(--neutral-surface-sunk);
+  color: var(--neutral-text-primary);
+}
+
+.kebabButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-gold);
+}
+
+/* ── A4 | StatCard grids ── */
+
+.statGridCockpit {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  width: 100%;
+}
+
+.statGridSecondary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+  width: 100%;
+}
+
+@media (max-width: 960px) {
+  .statGridSecondary { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .statGridCockpit { grid-template-columns: 1fr; }
+  .statGridSecondary { grid-template-columns: 1fr; }
+}
+
+/* ── B1 | hero cards grid ──
+ *
+ * Single-column max-width wrapper so the obsidian primitives render
+ * at a realistic dashboard-cockpit size, not stretched across the
+ * full 1200px harness width. At wide viewports two cards fit
+ * side-by-side when the inner grid is populated with multiple
+ * children (currently one per frame, but the layout is stable if
+ * a future preview adds a companion).
+ */
+
+.heroCardsGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 560px);
+  gap: var(--space-4);
+  width: 100%;
+  justify-content: start;
+}
+
+@media (max-width: 640px) {
+  .heroCardsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── A4 | AuditLog demo table ── */
+
+.auditTableWrap {
+  border: 1px solid var(--neutral-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--neutral-surface);
+}
+
+.auditTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.auditThead {
+  background-color: var(--neutral-surface-alt);
+  border-bottom: 1px solid var(--neutral-border);
+}
+
+.auditTh {
+  text-align: left;
+  padding: var(--space-2) var(--space-4);
+  font-size: 0.6875rem;
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--neutral-text-muted);
+  line-height: 1;
+}
+
+.auditTh:first-child {
+  width: 140px;
+}
+
+.auditTh:last-child {
+  width: 48px;
+  text-align: right;
+}
+
+@media (max-width: 640px) {
+  .auditTh:first-child { width: 100px; }
+  .auditTh:last-child { width: 36px; }
+}
+
+/* ── A4 | PasskeyPrompt slot (max-width wrapper so demos don't stretch) ── */
+
+.passkeySlot {
+  width: 100%;
+  max-width: 360px;
+}
+
+/* ── Icon grid (A2 icons section) ── */
+
+.iconGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--space-4);
+  width: 100%;
+}
+
+.iconCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--neutral-border);
+  border-radius: var(--radius-sm);
+}
+
+.register-obsidian .iconCell {
+  border-color: rgba(201, 168, 76, 0.15);
+}
+
+.iconRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--neutral-text-primary);
+}
+
+.register-obsidian .iconRow {
+  color: var(--color-white);
+}
+
+.iconName {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--neutral-text-muted);
+}
+
+.register-obsidian .iconName {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ── Bottom sheet demo list ── */
+
+.sheetList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sheetItem {
+  display: block;
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background: none;
+  border: none;
+  text-align: left;
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  color: var(--neutral-text-primary);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
+}
+
+.sheetItem:hover {
+  background-color: var(--neutral-surface-sunk);
+}
+
+.sheetNote {
+  margin: var(--space-4) 0 0;
+  font-size: 0.75rem;
+  color: var(--neutral-text-muted);
+  text-align: center;
+}
+
+/* ── Mobile ── */
+
+@media (max-width: 640px) {
+  .wrap {
+    padding: var(--space-5) var(--space-4) var(--space-8);
+  }
+
+  .demoRow {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .demoLabel {
+    width: auto;
+    padding-top: 0;
+    font-weight: var(--weight-semibold);
+    color: var(--neutral-text-secondary);
+  }
+}

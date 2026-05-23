@@ -1,0 +1,119 @@
+/* ════════════════════════════════════════════════════════════════
+ * WithdrawalsPage | neutral | Phase 7 shell
+ * ════════════════════════════════════════════════════════════════ */
+
+.page {
+  padding: var(--space-6) var(--space-6) var(--space-10);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pageTitle {
+  font: var(--type-h1);
+  color: var(--neutral-text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.pageSubtitle {
+  font: var(--type-body-sm);
+  color: var(--neutral-text-secondary);
+  margin: 0;
+  max-width: 640px;
+  line-height: 1.5;
+}
+
+/* ── Shell ── */
+
+.shell {
+  display: flex;
+  gap: var(--space-5);
+  padding: var(--space-8) var(--space-6);
+  border-radius: var(--radius-md);
+  background-color: var(--neutral-surface);
+  border: 1px solid var(--neutral-border);
+  max-width: 720px;
+}
+
+.icon {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  background-color: var(--neutral-surface-alt);
+  color: var(--neutral-text-secondary);
+  padding-top: 12px;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.heading {
+  font: var(--type-h2);
+  color: var(--neutral-text-primary);
+  margin: 0;
+}
+
+.body {
+  font: var(--type-body-sm);
+  color: var(--neutral-text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.scope {
+  list-style: none;
+  padding: var(--space-3) 0 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  border-top: 1px solid var(--neutral-border);
+}
+
+.scopeItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font: var(--type-body-sm);
+  color: var(--neutral-text-secondary);
+}
+
+.scopeItem > :first-child {
+  color: var(--neutral-text-muted);
+  flex-shrink: 0;
+}
+
+/* ── Mobile ── */
+
+@media (max-width: 640px) {
+  .page {
+    padding: var(--space-5) max(var(--space-4), env(safe-area-inset-right, 0)) var(--space-8) max(var(--space-4), env(safe-area-inset-left, 0));
+  }
+  .pageTitle {
+    font: var(--type-h2);
+  }
+  .shell {
+    flex-direction: column;
+    padding: var(--space-6) var(--space-5);
+    gap: var(--space-4);
+  }
+  .icon {
+    margin-bottom: 0;
+  }
+}

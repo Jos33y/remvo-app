@@ -7,12 +7,15 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname, './src'),
+      '@app': resolve(__dirname, './src/app'),
       '@components': resolve(__dirname, './src/components'),
       '@context': resolve(__dirname, './src/context'),
       '@pages': resolve(__dirname, './src/pages'),
       '@styles': resolve(__dirname, './src/styles'),
       '@hooks': resolve(__dirname, './src/hooks'),
       '@utils': resolve(__dirname, './src/utils'),
+      '@lib': resolve(__dirname, './src/lib'),
+
     },
   },
   css: {
@@ -20,4 +23,5 @@ export default defineConfig({
       localsConvention: 'camelCase',
     },
   },
+  server: { port: 5173 }
 });

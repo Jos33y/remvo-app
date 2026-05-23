@@ -1,0 +1,211 @@
+/* ════════════════════════════════════════════════════════════════
+ * EnrolPage
+ *
+ * Centred card on full-viewport obsidian. Shares layout conventions
+ * with LoginPage: 400px max, centred text, foot strip anchored to
+ * viewport bottom, same env pill styling.
+ * ════════════════════════════════════════════════════════════════ */
+
+.wrap {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-6);
+}
+
+.spacerTop,
+.spacerBottom {
+  flex: 1 1 var(--space-8);
+}
+
+.card {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.logoSlot {
+  margin-bottom: var(--space-6);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-items: center;
+  text-align: center;
+}
+
+.heading {
+  font: var(--type-h1);
+  color: var(--color-white);
+  margin: 0;
+}
+
+.sub {
+  font: var(--type-body);
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+  max-width: 340px;
+  line-height: 1.5;
+}
+
+/* ── Field ── */
+
+.field {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+  margin-top: var(--space-3);
+}
+
+.label {
+  font: var(--type-mono-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.input {
+  width: 100%;
+  height: 48px;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-sm);
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 0.5px solid rgba(255, 255, 255, 0.18);
+  color: var(--color-white);
+  font: var(--type-body);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.input:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.input:focus-visible {
+  outline: none;
+  border-color: var(--color-gold);
+  background-color: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.18);
+}
+
+.input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.hint {
+  font: var(--type-microcopy);
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.5;
+}
+
+/* ── Prompt slot ── */
+
+.promptSlot {
+  width: 100%;
+  position: relative;
+  margin-top: var(--space-3);
+}
+
+.promptLock {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(14, 14, 16, 0.6);
+  border-radius: var(--radius-sm);
+  cursor: not-allowed;
+}
+
+/* ── Foot ── */
+
+.foot {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: var(--space-4);
+}
+
+.envPillSandbox {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-sm);
+  font: var(--type-mono-sm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 0.5px solid rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ── Motion ── */
+
+@media (prefers-reduced-motion: reduce) {
+  .input {
+    transition: none;
+  }
+}
+
+/* ── Mobile ── */
+
+@media (max-width: 640px) {
+  .wrap {
+    padding: var(--space-6) var(--space-4);
+  }
+}
+
+/* Chrome/Edge autofill override | matches login-page treatment. */
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus,
+.input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0px 1000px #161618 inset !important;
+  -webkit-text-fill-color: var(--color-white) !important;
+  caret-color: var(--color-white);
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+/* Tertiary exit | "Back to dashboard". Plain text link, never a
+   button. Centred under the prompt with a soft top margin. The
+   colour is muted by default and brightens on hover so it doesn't
+   compete with the gold primary above. */
+.exitLink {
+  align-self: center;
+  margin-top: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background: transparent;
+  border: none;
+  font: var(--type-microcopy);
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+  border-radius: var(--radius-sm);
+}
+
+.exitLink:hover {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.exitLink:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}

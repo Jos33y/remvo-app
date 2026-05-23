@@ -1,13 +1,13 @@
 import { motion } from 'motion/react';
 import { useSession } from '@context/SessionContext';
 import { useReducedMotion } from '@hooks/useReducedMotion';
-import { CheckoutShell } from '@components/layout/CheckoutShell';
-import { GoldRing } from '@components/ui/GoldRing';
-import { RemvoCard } from '@components/ui/RemvoCard';
-import { CopyableRow } from '@components/ui/CopyableRow';
+import { CheckoutShell } from '@components/layout/checkout/CheckoutShell';
+import { GoldRing } from '@components/ui/shared/GoldRing';
+import { RemvoCard } from '@components/ui/shared/RemvoCard';
+import { CopyableRow } from '@components/ui/shared/CopyableRow';
 import { IconCheck } from '@components/ui/icons/IconCheck';
 import { staggerParent, reveal } from '@utils/motion';
-import styles from '@styles/pages/edge-page.module.css';
+import styles from '@styles/pages/checkout/edge-page.module.css';
 
 /* ──────────────────────────────────────────────────────────────────
  * AlreadyPaidPage — Phase 5

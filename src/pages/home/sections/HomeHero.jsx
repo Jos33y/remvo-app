@@ -1,8 +1,8 @@
-import { RemvoCard } from '@components/ui/RemvoCard';
-import { Button } from '@components/ui/Button';
-import { Reveal } from '@components/ui/Reveal';
+import { RemvoCard } from '@components/ui/shared/RemvoCard';
+import { Button } from '@components/ui/shared/Button';
+import { Reveal } from '@components/ui/marketing/Reveal';
 import { ROUTES } from '@utils/constants';
-import styles from '@styles/pages/homepage.module.css';
+import styles from '@styles/pages/marketing/homepage.module.css';
 
 export function HomeHero() {
   return (
@@ -20,11 +20,11 @@ export function HomeHero() {
               dollar-denominated value in seconds. One card, one checkout.
             </p>
             <div className={styles.heroCtas}>
-              <Button href={ROUTES.PARTNERS} variant="primary" size="large">
-                For platforms
-              </Button>
-              <Button href={ROUTES.CONTACT} variant="secondary" size="large">
+              <Button href={ROUTES.CONTACT} variant="primary" size="large">
                 Get in touch
+              </Button>
+              <Button href={ROUTES.TERMS} variant="secondary" size="large">
+                Read terms
               </Button>
             </div>
           </div>
@@ -53,7 +53,7 @@ export function HomeHero() {
           <div className={styles.trustBarInner}>
             <div className={styles.trustItem}>
               <span className={styles.trustValue}>3-5 min</span>
-              <span className={styles.trustLabel}>Deposit time</span>
+              <span className={styles.trustLabel}>Checkout time</span>
             </div>
             <div className={styles.trustDivider} aria-hidden="true" />
             <div className={styles.trustItem}>
@@ -68,7 +68,7 @@ export function HomeHero() {
             <div className={styles.trustDivider} aria-hidden="true" />
             <div className={styles.trustItem}>
               <span className={styles.trustValue}>Daily</span>
-              <span className={styles.trustLabel}>Settlement</span>
+              <span className={styles.trustLabel}>Reconciliation</span>
             </div>
           </div>
         </div>

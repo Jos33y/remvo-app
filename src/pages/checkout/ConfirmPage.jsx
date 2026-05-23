@@ -5,15 +5,18 @@ import { useSession } from '@context/SessionContext';
 import { useCheckoutNavigate } from '@hooks/useCheckoutNavigate';
 import { useReducedMotion } from '@hooks/useReducedMotion';
 
-import { CheckoutShell } from '@components/layout/CheckoutShell';
-import { RemvoCard } from '@components/ui/RemvoCard';
-import { GoldRing } from '@components/ui/GoldRing';
-import { DevSimulateButton } from '@components/ui/DevSimulateButton';
+import { CheckoutShell } from '@components/layout/checkout/CheckoutShell';
+import { RemvoCard } from '@components/ui/shared/RemvoCard';
+import { GoldRing } from '@components/ui/shared/GoldRing';
+import { DevSimulateButton } from '@components/ui/checkout/DevSimulateButton';
 
 import { formatNaira } from '@utils/formatNaira';
+/* PHASE_7F_S4_CHECKOUT_EVENTS */
+import { useCheckoutViewEvent, useCheckoutEmitter } from '@hooks/useCheckoutEvent';
+import { CHECKOUT_EVENTS } from '@lib/checkoutEventsClient';
 import { durSlow, easeOut } from '@utils/motion';
 
-import styles from '@styles/pages/confirm-page.module.css';
+import styles from '@styles/pages/checkout/confirm-page.module.css';
 
 /* Phase 5 — obsidian canvas. Card on the left (default state),
  * Naira hero in the centre with the gold-bloom signature moment,
@@ -27,11 +30,23 @@ export function ConfirmPage() {
   const { session, mockResetToSelectMode } = useSession();
   const reduced = useReducedMotion();
 
+  /* confirm.view fires once on reaching the confirm screen;
+   * emitConfirm drives the confirm.proceed action event. */
+  useCheckoutViewEvent(CHECKOUT_EVENTS.CONFIRM_VIEW, session?.session_id);
+  const emitConfirm = useCheckoutEmitter(session?.session_id);
+
   if (!session) return null;
 
   const isSelectFlow = session.checkout_mode === 'select';
 
-  const handlePay = () => checkoutNavigate(`/${token}/pay`);
+  const handlePay = () => {
+    /* confirm.proceed | user committed to paying. Fired before
+     * navigation; keepalive carries it through the route change. */
+    emitConfirm(CHECKOUT_EVENTS.CONFIRM_PROCEED, {
+      amount_usd: session.amount_usd_card,
+    });
+    checkoutNavigate(`/${token}/pay`);
+  };
   const handleChangeAmount = () => {
     mockResetToSelectMode();
     checkoutNavigate(`/${token}`);

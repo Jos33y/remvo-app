@@ -1,0 +1,249 @@
+/* PaginationControl
+ *
+ * Footer-style control for page-based navigation. Sits beneath any
+ * data table that supports paged-cursor walks. Visual register is
+ * deliberately quieter than the table content above | the table is
+ * the subject, this is the chrome.
+ *
+ * Three-column desktop layout: size selector | position label |
+ * nav buttons. Collapses to stacked rows below 640px.
+ *
+ * Tokens used:
+ *   --color-obsidian       #1A1A1A
+ *   --color-obsidian-light #2A2A2A
+ *   --color-gold           #C9A84C
+ *   --color-warm-white     #F5F0EB
+ *   --color-text           obsidian on light, white on obsidian
+ *   --color-text-muted     #7A7A7A
+ *   --color-border         subtle, ~rgba(26, 26, 26, 0.08)
+ *
+ * Inherited from the page register. The control is theme-neutral |
+ * it reads correctly on warm-white (audit log) and obsidian
+ * (transactions detail) without per-page overrides. */
+
+.root {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+  padding: 14px 18px;
+  border: 1px solid var(--color-border, rgba(26, 26, 26, 0.08));
+  border-radius: 10px;
+  background: transparent;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-self: start;
+  min-width: 0;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  justify-self: center;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-self: end;
+  min-width: 0;
+}
+
+/* ── Page size selector ─────────────────────────────────────── */
+
+.sizeLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sizeLabelText {
+  font-family: 'Geist Variable', 'Geist', system-ui, sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted, #7a7a7a);
+  font-weight: 600;
+}
+
+.sizeSelect {
+  height: 32px;
+  padding: 0 30px 0 12px;
+  border: 1px solid var(--color-border, rgba(26, 26, 26, 0.12));
+  border-radius: 6px;
+  background-color: var(--color-warm-white, #f5f0eb);
+  color: var(--color-text, #3a3a3a);
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M2 4l3 3 3-3' stroke='%237a7a7a' stroke-width='1.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+
+.sizeSelect:hover:not(:disabled) {
+  border-color: var(--color-text-muted, #7a7a7a);
+}
+
+.sizeSelect:focus-visible {
+  outline: 2px solid var(--color-gold, #c9a84c);
+  outline-offset: 2px;
+  border-color: var(--color-gold, #c9a84c);
+}
+
+.sizeSelect:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Position label ────────────────────────────────────────── */
+
+.position {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text, #3a3a3a);
+  font-feature-settings: 'tnum';
+  letter-spacing: 0;
+}
+
+.positionDivider {
+  color: var(--color-text-muted, #7a7a7a);
+  margin: 0 2px;
+  user-select: none;
+}
+
+/* ── Back to start link ────────────────────────────────────── */
+
+.jumpLink {
+  background: none;
+  border: 0;
+  padding: 4px 8px;
+  margin-left: 6px;
+  font-family: 'Geist Variable', 'Geist', system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-gold, #c9a84c);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 150ms ease;
+}
+
+.jumpLink:hover:not(:disabled) {
+  background-color: rgba(201, 168, 76, 0.1);
+}
+
+.jumpLink:focus-visible {
+  outline: 2px solid var(--color-gold, #c9a84c);
+  outline-offset: 2px;
+}
+
+.jumpLink:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Nav buttons ────────────────────────────────────────────── */
+
+.navBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 14px;
+  border: 1px solid var(--color-border, rgba(26, 26, 26, 0.12));
+  border-radius: 6px;
+  background-color: var(--color-warm-white, #f5f0eb);
+  color: var(--color-text, #3a3a3a);
+  font-family: 'Geist Variable', 'Geist', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease;
+  user-select: none;
+}
+
+.navBtn:hover:not(:disabled) {
+  border-color: var(--color-obsidian, #1a1a1a);
+  background-color: var(--color-warm-white, #f5f0eb);
+  color: var(--color-obsidian, #1a1a1a);
+}
+
+.navBtn:focus-visible {
+  outline: 2px solid var(--color-gold, #c9a84c);
+  outline-offset: 2px;
+  border-color: var(--color-gold, #c9a84c);
+}
+
+.navBtn:active:not(:disabled) {
+  background-color: rgba(26, 26, 26, 0.04);
+}
+
+.navBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.navBtn svg {
+  flex-shrink: 0;
+}
+
+/* ── Reduced motion ─────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .sizeSelect,
+  .navBtn,
+  .jumpLink {
+    transition: none;
+  }
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+
+@media (max-width: 720px) {
+  .root {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 14px;
+  }
+  .left {
+    justify-self: stretch;
+    justify-content: space-between;
+  }
+  .center {
+    justify-self: stretch;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .right {
+    justify-self: stretch;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .navBtn {
+    justify-content: center;
+    height: 38px;
+  }
+}
+
+/* ── Dark register support ─────────────────────────────────── */
+/* When the parent page uses obsidian register, the inherited
+ * --color-text resolves to white. The buttons + select inherit
+ * sensibly because background tokens flip with the register. */

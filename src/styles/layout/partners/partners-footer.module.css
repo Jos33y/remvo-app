@@ -1,0 +1,70 @@
+/* ──────────────────────────────────────────────────────────────────
+ * PartnersFooter — legal mark only. Dark surface matching the
+ * marketing footer baseline, but a single line of identification
+ * rather than three columns.
+ * ────────────────────────────────────────────────────────────────── */
+
+.footer {
+  background: radial-gradient(
+    ellipse 70% 60% at 50% 0%,
+    #1E1E1E 0%,
+    #1A1A1A 40%,
+    #151515 100%
+  );
+  border-top: var(--border-subtle);
+  margin-top: auto;
+}
+
+.inner {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-8) var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.mark {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.55);
+  flex-wrap: wrap;
+}
+
+.entity {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.rc {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.01em;
+}
+
+.domain {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.sep {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.copy {
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 640px) {
+  .inner {
+    padding: var(--space-6) var(--gutter);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+}

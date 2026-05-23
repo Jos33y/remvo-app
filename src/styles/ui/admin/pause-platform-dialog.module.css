@@ -1,0 +1,76 @@
+/* ════════════════════════════════════════════════════════════════
+ * PausePlatformDialog
+ * ════════════════════════════════════════════════════════════════ */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.lede {
+  font: var(--type-body-sm);
+  color: var(--color-text-secondary, #6B6B6B);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.platformLine {
+  font: var(--type-body-sm);
+  color: var(--color-text-primary, #1A1A1A);
+  margin: 0;
+}
+
+.platformLine strong {
+  font-weight: var(--weight-semibold);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+}
+
+.fieldLabel {
+  font: var(--type-microcopy);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary, #6B6B6B);
+}
+
+.textarea {
+  font: var(--type-body-sm);
+  padding: var(--space-3);
+  border: 0.5px solid var(--color-neutral-border, #E8E5DD);
+  border-radius: var(--radius-sm);
+  background: var(--color-white, #FFFFFF);
+  color: var(--color-text-primary, #1A1A1A);
+  resize: vertical;
+  min-height: 72px;
+  line-height: 1.4;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.18);
+}
+
+.charCount {
+  position: absolute;
+  right: 8px;
+  bottom: 6px;
+  font: var(--type-microcopy);
+  color: var(--color-text-tertiary, #9A9A9A);
+  pointer-events: none;
+}
+
+.error {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #C43D3D;
+  font: var(--type-microcopy);
+  margin: 0;
+}

@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import {
   LegalPageLayout,
   Clause,
-} from '@components/layout/LegalPageLayout';
-import { ROUTES, BRAND } from '@utils/constants';
+} from '@components/layout/marketing/LegalPageLayout';
+import { BRAND } from '@utils/constants';
 
 export function TermsPage() {
   useEffect(() => {
@@ -13,9 +13,9 @@ export function TermsPage() {
   return (
     <LegalPageLayout
       title="Terms of Service"
-      date="3 April 2026"
-      dateTime="2026-04-03"
-      version="v1.0"
+      date="23 May 2026"
+      dateTime="2026-05-23"
+      version="v1.1"
       preamble={
         <>
           These Terms of Service (&quot;Terms&quot;) govern the use of the
@@ -29,7 +29,7 @@ export function TermsPage() {
       <Clause id="service" heading="1. Service overview">
         <p>1.1. {BRAND.NAME} provides a checkout service that allows users to purchase digital value cards denominated in US dollars by paying in Nigerian Naira via bank transfer.</p>
         <p>1.2. The {BRAND.NAME} checkout is accessed through partner platforms. {BRAND.NAME} does not operate a consumer-facing application or hold user accounts.</p>
-        <p>1.3. {BRAND.NAME} is a conversion routing service. It is not a bank, exchange, or custodial service. Funds are not held beyond the time required to complete the transaction.</p>
+        <p>1.3. {BRAND.NAME} provides checkout infrastructure. It is not a bank, exchange, or custodial service. Funds are not held beyond the time required to complete the transaction.</p>
       </Clause>
 
       <Clause id="eligibility" heading="2. Eligibility">
@@ -40,15 +40,15 @@ export function TermsPage() {
       </Clause>
 
       <Clause id="transactions" heading="3. Transactions">
-        <p>3.1. Each transaction begins when you select a card denomination or enter a custom amount on the checkout page. The conversion rate displayed at checkout is locked for the duration of the payment window.</p>
+        <p>3.1. Each transaction begins when you select a card denomination or enter a custom amount on the checkout page. The exchange rate displayed at checkout is locked for the duration of the payment window.</p>
         <p>3.2. Payment is made via bank transfer to the account details displayed on the checkout page. You have thirty (30) minutes to complete the transfer from the moment the checkout session is created.</p>
         <p>3.3. If payment is not received within the payment window, the session expires. No funds are deducted and no value card is issued. You may start a new transaction at the current rate.</p>
         <p>3.4. Once payment is confirmed by our payment provider, the corresponding dollar credit is applied to your account on the partner platform. This credit is processed within seconds of payment confirmation.</p>
-        <p>3.5. Minimum deposit: ₦10,000. Maximum deposit: ₦1,000,000 per transaction. These limits may change with notice.</p>
+        <p>3.5. Minimum transaction: ₦10,000. Maximum transaction: ₦1,000,000 per session. These limits may change with notice.</p>
       </Clause>
 
       <Clause id="rates" heading="4. Rates and pricing">
-        <p>4.1. The conversion rate displayed at checkout is the complete cost of the transaction. There are no additional fees, surcharges, or hidden costs charged to you by {BRAND.NAME}.</p>
+        <p>4.1. The exchange rate displayed at checkout is the complete cost of the transaction. There are no additional fees, surcharges, or hidden costs charged to you by {BRAND.NAME}.</p>
         <p>4.2. Rates are determined by market conditions and may fluctuate between transactions. The rate locked at the start of your checkout session is the rate applied to your transaction.</p>
         <p>4.3. Your bank may charge its own transfer fees. These are outside the control of {BRAND.NAME} and are your responsibility.</p>
       </Clause>
@@ -63,7 +63,7 @@ export function TermsPage() {
       <Clause id="prohibited" heading="6. Prohibited use">
         <p>6.1. You must not use the {BRAND.NAME} checkout for money laundering, terrorist financing, fraud, or any other illegal activity.</p>
         <p>6.2. You must not use the service to evade currency controls, sanctions, or any applicable financial regulation.</p>
-        <p>6.3. You must not attempt to circumvent transaction limits by splitting deposits across multiple sessions or accounts.</p>
+        <p>6.3. You must not attempt to circumvent transaction limits by splitting payments across multiple sessions or accounts.</p>
         <p>6.4. {BRAND.NAME} reserves the right to refuse or reverse any transaction that it reasonably suspects to be fraudulent, illegal, or in violation of these Terms.</p>
       </Clause>
 

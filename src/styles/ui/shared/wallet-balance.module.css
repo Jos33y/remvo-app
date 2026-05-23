@@ -1,0 +1,286 @@
+/* WalletBalance | obsidian hero card + compact header strip variant.
+ *
+ * Card background uses rgba(255,255,255,0.02) so the underlying
+ * obsidian canvas and its vault watermark show through. Depth
+ * comes from the 0.5px gold-tinted border only | no shadows,
+ * no gradient fills, no glow. Consistent with the Phase 5
+ * obsidian register and VOCABULARY section 02.
+ */
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-6) var(--space-6) var(--space-5);
+  border-radius: var(--radius-lg);
+  border: 0.5px solid rgba(201, 168, 76, 0.18);
+  background-color: rgba(255, 255, 255, 0.02);
+  color: var(--color-white);
+  min-width: 0;
+  min-height: 100%;
+  transition: border-color var(--transition-fast);
+}
+
+.tier-sufficient  { border-color: rgba(201, 168, 76, 0.18); }
+.tier-adequate    { border-color: rgba(201, 168, 76, 0.32); }
+.tier-underfunded { border-color: rgba(196, 61, 61, 0.45); }
+
+/* ── Header ── */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.label {
+  font: var(--type-label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ── Value row ── */
+
+.valueRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  min-height: 38px;
+}
+
+.value {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  white-space: nowrap;
+}
+
+.valueNumber {
+  font: var(--type-mono-data-display);
+  letter-spacing: var(--tracking-mono-tight);
+  color: var(--color-white);
+  line-height: 1.1;
+}
+
+/* Iridescent gold numeral only when the wallet is comfortably ahead. */
+.tier-sufficient .valueNumber {
+  background: var(--gold-iridescent);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.valueUnit {
+  font: var(--type-mono-data-lg);
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+.valueLoading {
+  display: inline-block;
+  width: 62%;
+  height: 2rem;
+  background-color: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  animation: walletPulse 1.5s ease-in-out infinite;
+}
+
+/* ── Calibration line ── */
+
+.calibration {
+  font: var(--type-mono-sm);
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+.calibrationLabel {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0;
+}
+
+.calibrationValue {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.calibrationUnit {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ── Divider ── */
+
+.divider {
+  height: 0.5px;
+  background-color: rgba(201, 168, 76, 0.18);
+  margin-top: var(--space-1);
+}
+
+/* ── Status strip ── */
+
+.strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 28px;
+}
+
+.stripStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  /* flex: 1 + min-width: 0 lets the inner .stripLabel's
+   * white-space: nowrap; text-overflow: ellipsis actually trigger.
+   * Without these, the flex item's content size sets the width and
+   * "Underfunded by 1,234.56 USDT" pushes past the card edge. */
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.stripDot {
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+}
+
+.tier-sufficient  .stripDot { color: #7fd49e; }
+.tier-adequate    .stripDot { color: #f2c969; }
+.tier-underfunded .stripDot { color: #f08a8a; }
+
+.stripLabel {
+  font: var(--type-body-sm);
+  color: rgba(255, 255, 255, 0.72);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tier-underfunded .stripLabel {
+  color: #f08a8a;
+  font-weight: var(--weight-semibold);
+}
+
+.stripLabelLoading {
+  display: inline-block;
+  width: 96px;
+  height: 0.8125rem;
+  background-color: rgba(255, 255, 255, 0.06);
+  border-radius: 3px;
+  animation: walletPulse 1.5s ease-in-out infinite;
+}
+
+/* ── Top-up tertiary button ── */
+
+.topUpButton {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 6px 10px;
+  background: transparent;
+  border: none;
+  color: var(--color-gold);
+  font: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.topUpButton:hover {
+  background-color: rgba(201, 168, 76, 0.08);
+}
+
+.topUpButton:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring-iridescent);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+ * Compact variant | one-line strip. Renders in the mobile
+ * AdminHeader as a tap-to-expand affordance in Phase B2.
+ * ══════════════════════════════════════════════════════════════════ */
+
+.compact {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  border: 0.5px solid rgba(201, 168, 76, 0.18);
+  background-color: rgba(255, 255, 255, 0.02);
+  color: var(--color-white);
+  cursor: default;
+}
+
+.compact.tier-sufficient  { border-color: rgba(201, 168, 76, 0.18); }
+.compact.tier-adequate    { border-color: rgba(201, 168, 76, 0.32); }
+.compact.tier-underfunded { border-color: rgba(196, 61, 61, 0.45); }
+
+.compactDot {
+  display: inline-flex;
+  line-height: 0;
+}
+
+.compact.tier-sufficient  .compactDot { color: #7fd49e; }
+.compact.tier-adequate    .compactDot { color: #f2c969; }
+.compact.tier-underfunded .compactDot { color: #f08a8a; }
+
+.compactValue {
+  font: var(--type-mono-data);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-mono-tight);
+  color: var(--color-white);
+  white-space: nowrap;
+}
+
+.compactValueLoading {
+  display: inline-block;
+  width: 80px;
+  height: 0.875rem;
+  background-color: rgba(255, 255, 255, 0.06);
+  border-radius: 3px;
+  animation: walletPulse 1.5s ease-in-out infinite;
+}
+
+.compactChevron {
+  display: inline-flex;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 0;
+}
+
+/* ── Motion ── */
+
+@keyframes walletPulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.55; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .compact,
+  .topUpButton {
+    transition: none;
+  }
+  .valueLoading,
+  .stripLabelLoading,
+  .compactValueLoading {
+    animation: none;
+    opacity: 0.8;
+  }
+}
+
+/* ── Mobile ── */
+
+@media (max-width: 640px) {
+  .card {
+    padding: var(--space-5) var(--space-5);
+    gap: var(--space-3);
+  }
+  .valueNumber { font-size: 1.75rem; }
+  .strip { flex-wrap: wrap; gap: var(--space-2); }
+}

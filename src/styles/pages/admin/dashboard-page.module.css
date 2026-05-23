@@ -1,0 +1,612 @@
+/* ════════════════════════════════════════════════════════════════
+ * DashboardPage | full obsidian, surgical spacing
+ *
+ * Spacing scale (locked):
+ *   Page top padding                  var(--space-6)  | 24px
+ *   Page horizontal padding           var(--space-6)  | 24px
+ *   Page max-width                    1200px (contains watermark)
+ *   Cockpit rows gap (hero -> stats)  var(--space-4)  | 16px
+ *   Card-to-card gap within row       var(--space-4)  | 16px
+ *   Cockpit -> Activity section gap   var(--space-8)  | 40px
+ *   Activity row height (min)         56px (tap target)
+ *   Activity row padding              12px 20px
+ *
+ * Alignment rules:
+ *   - All section headers use align-items: center, not baseline
+ *   - Activity section owns top-margin; cockpit never bleeds down
+ *   - No extra horizontal padding inside list rows; chevron removed
+ * ════════════════════════════════════════════════════════════════ */
+
+/* ── Utility ── */
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Page container ── */
+
+.page {
+  position: relative;
+  padding: var(--space-6) var(--space-6) var(--space-10);
+  z-index: 1;
+}
+
+/* Content inner width: the cockpit and activity sections cap at 1200px
+ * and center within the main content area. .page itself fills the main
+ * width so the background and border treatments stay edge-to-edge. */
+.cockpit,
+.activity,
+.alertBanner {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ── Alert banner ── */
+
+.alertBanner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-5);
+  background-color: rgba(196, 61, 61, 0.12);
+  border: 0.5px solid rgba(196, 61, 61, 0.45);
+  border-radius: var(--radius-md);
+  color: var(--color-white);
+}
+
+.alertIcon {
+  display: inline-flex;
+  color: #f08a8a;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.alertBody {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font: var(--type-body-sm);
+}
+
+.alertBody strong {
+  color: #f08a8a;
+  font-weight: var(--weight-semibold);
+}
+
+.alertSub {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.alertLink {
+  align-self: center;
+  min-height: 32px;
+  padding: 6px 10px;
+  background: transparent;
+  border: none;
+  color: var(--color-gold);
+  font: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  transition: background-color var(--transition-fast);
+}
+
+.alertLink:hover {
+  background-color: rgba(201, 168, 76, 0.08);
+}
+
+.alertLink:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring-iridescent);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ * Cockpit | hero + secondary rows treated as one unit
+ * ════════════════════════════════════════════════════════════════ */
+
+.cockpit {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.heroRow,
+.secondaryRow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+  align-items: stretch;
+}
+
+/* ════════════════════════════════════════════════════════════════
+ * Recent activity | sits well below the cockpit so the eye reads
+ * them as separate sections of the same page
+ * ════════════════════════════════════════════════════════════════ */
+
+.activity {
+  margin-top: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.activityHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.activityTitleGroup {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.activityTitle {
+  font: var(--type-h2);
+  color: var(--color-white);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.activitySubtitle {
+  font: var(--type-microcopy);
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.activityViewAll {
+  min-height: 36px;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  color: var(--color-gold);
+  font: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  transition: background-color var(--transition-fast);
+}
+
+.activityViewAll:hover {
+  background-color: rgba(201, 168, 76, 0.08);
+}
+
+.activityViewAll:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring-iridescent);
+}
+
+/* ── List container ── */
+
+.activityList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-radius: var(--radius-lg);
+  border: 0.5px solid rgba(201, 168, 76, 0.18);
+  background-color: rgba(255, 255, 255, 0.02);
+  overflow: hidden;
+}
+
+.activityList > li {
+  border-bottom: 0.5px solid rgba(201, 168, 76, 0.10);
+}
+
+.activityList > li:last-child {
+  border-bottom: none;
+}
+
+/* ── Row ──
+ * Time (fixed 72px) + prose (flex) | no chevron. The whole row is
+ * a button; hover background is the affordance. */
+
+.activityRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3) var(--space-5);
+  background: transparent;
+  border: none;
+  text-align: left;
+  color: var(--color-white);
+  cursor: pointer;
+  min-height: 56px;
+  transition: background-color var(--transition-fast);
+}
+
+.activityRow:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.activityRow:focus-visible {
+  outline: none;
+  background-color: rgba(201, 168, 76, 0.06);
+  box-shadow: inset 0 0 0 1px rgba(201, 168, 76, 0.45);
+}
+
+.activityTime {
+  flex-shrink: 0;
+  width: 72px;
+  font: var(--type-mono-sm);
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+.activityText {
+  flex: 1;
+  min-width: 0;
+  font: var(--type-body-sm);
+  color: rgba(255, 255, 255, 0.82);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Empty state ── */
+
+.activityEmpty {
+  padding: var(--space-6) var(--space-5);
+  border-radius: var(--radius-lg);
+  border: 0.5px solid rgba(201, 168, 76, 0.18);
+  background-color: rgba(255, 255, 255, 0.02);
+  text-align: center;
+}
+
+.activityEmptyHeading {
+  font: var(--type-h3);
+  color: var(--color-white);
+  margin-bottom: 4px;
+}
+
+.activityEmptyBody {
+  font: var(--type-body-sm);
+  color: rgba(255, 255, 255, 0.55);
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* ── Motion ── */
+
+@media (prefers-reduced-motion: reduce) {
+  .alertLink,
+  .activityViewAll,
+  .activityRow {
+    transition: none;
+  }
+}
+
+/* ── Tablet (1024px and below) ── */
+
+@media (max-width: 1023px) {
+  .heroRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .heroRow > :nth-child(3) {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ── Mobile (640px and below) ── */
+
+@media (max-width: 640px) {
+  .page {
+    padding: var(--space-5) max(var(--space-5), env(safe-area-inset-right, 0)) var(--space-8) max(var(--space-5), env(safe-area-inset-left, 0));
+  }
+  .heroRow,
+  .secondaryRow {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+  .heroRow > :nth-child(3) {
+    grid-column: auto;
+  }
+  .activity {
+    margin-top: var(--space-8);
+  }
+  .alertBanner {
+    flex-wrap: wrap;
+  }
+  .alertLink {
+    margin-left: auto;
+  }
+  .activityRow {
+    padding: var(--space-3) var(--space-4);
+    gap: var(--space-3);
+  }
+  .activityTime {
+    width: 60px;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+ * SECTION 2 ADDITIONS
+ *
+ * - .statusStrip          | freshness + refresh + webhook pill
+ * - .webhookPill_*        | success / warning / error / neutral tones
+ * - .recentTxns           | new section between cockpit and activity
+ * ════════════════════════════════════════════════════════════════ */
+
+/* ── Status strip ── */
+
+.statusStrip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  padding-top: var(--space-2);
+  font: var(--type-microcopy);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.statusFresh {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}
+
+.statusError {
+  color: #f08a8a;
+  font-weight: var(--weight-semibold);
+}
+
+.refreshButton {
+  appearance: none;
+  background: transparent;
+  border: 0.5px solid rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.75);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font: var(--type-microcopy);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color var(--transition-fast),
+              color var(--transition-fast),
+              background-color var(--transition-fast);
+}
+
+.refreshButton:hover {
+  border-color: var(--gold-edge-soft);
+  color: var(--color-white);
+  background-color: rgba(201, 168, 76, 0.06);
+}
+
+.refreshButton:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring-iridescent);
+}
+
+/* ── Webhook health pill ── */
+
+.webhookPill,
+.webhookPillIdle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font: var(--type-microcopy);
+  font-variant-numeric: tabular-nums;
+  border: 0.5px solid rgba(255, 255, 255, 0.12);
+  background-color: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.75);
+  cursor: default;
+}
+
+.webhookPillIdle {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.webhookDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+  background-color: rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+}
+
+.webhookPill_success {
+  border-color: rgba(45, 122, 79, 0.45);
+  color: #6dd0a0;
+}
+.webhookPill_success .webhookDot {
+  background-color: #6dd0a0;
+  box-shadow: 0 0 6px rgba(109, 208, 160, 0.45);
+}
+
+.webhookPill_warning {
+  border-color: rgba(184, 134, 11, 0.45);
+  color: #e8b54a;
+}
+.webhookPill_warning .webhookDot {
+  background-color: #e8b54a;
+  box-shadow: 0 0 6px rgba(232, 181, 74, 0.45);
+}
+
+.webhookPill_error {
+  border-color: rgba(196, 61, 61, 0.5);
+  color: #f08a8a;
+}
+.webhookPill_error .webhookDot {
+  background-color: #f08a8a;
+  box-shadow: 0 0 6px rgba(240, 138, 138, 0.5);
+}
+
+.webhookPill_neutral {
+  /* default */
+}
+
+/* ── Recent transactions ── */
+
+.recentTxns {
+  max-width: 1200px;
+  margin: var(--space-8) auto 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.txnsList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.txnsRow {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 88px minmax(0, 100px) minmax(0, 1fr) minmax(0, auto);
+  align-items: center;
+  gap: var(--space-3);
+  padding: 14px 20px;
+  text-align: left;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.85);
+  transition: background-color var(--transition-fast);
+  min-height: 56px;
+}
+
+.txnsRow:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.txnsRow:focus-visible {
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.04);
+  box-shadow: inset 0 0 0 1px var(--color-gold);
+}
+
+.txnsTime {
+  font: var(--type-mono-sm);
+  color: rgba(255, 255, 255, 0.55);
+  font-variant-numeric: tabular-nums;
+}
+
+.txnsAmount {
+  font: var(--type-mono-data);
+  font-weight: var(--weight-semibold);
+  color: var(--color-white);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+.txnsPlatform {
+  font: var(--type-body-sm);
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: lowercase;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.txnsStatus {
+  font: var(--type-microcopy);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 0.5px solid;
+  white-space: nowrap;
+}
+
+.txnsStatusSettled {
+  border-color: rgba(45, 122, 79, 0.45);
+  color: #6dd0a0;
+  background-color: rgba(45, 122, 79, 0.08);
+}
+
+.txnsStatusPending {
+  border-color: rgba(184, 134, 11, 0.45);
+  color: #e8b54a;
+  background-color: rgba(184, 134, 11, 0.08);
+}
+
+.txnsLoading {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 0.5px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.txnsLoadingRow {
+  height: 56px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.02) 0%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  background-size: 200% 100%;
+  animation: txnsShimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes txnsShimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .txnsLoadingRow {
+    animation: none;
+    background: rgba(255, 255, 255, 0.04);
+  }
+  .refreshButton {
+    transition: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .statusStrip {
+    gap: var(--space-2);
+  }
+  .recentTxns {
+    margin-top: var(--space-6);
+  }
+  .txnsRow {
+    grid-template-columns: 72px minmax(0, 80px) minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    padding: 12px 16px;
+    gap: 6px var(--space-3);
+  }
+  .txnsStatus {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+  .txnsPlatform {
+    font-size: 12px;
+  }
+}

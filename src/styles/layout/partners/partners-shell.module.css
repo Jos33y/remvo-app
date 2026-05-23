@@ -1,0 +1,23 @@
+/* ──────────────────────────────────────────────────────────────────
+ * PartnersShell — warm-white surface, same vertical structure as
+ * the marketing PageShell but with the partner-specific header and
+ * footer slotted in.
+ * ────────────────────────────────────────────────────────────────── */
+
+.shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--color-warm-white);
+  color: var(--color-text-dark);
+  position: relative;
+  overflow-x: hidden;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+}

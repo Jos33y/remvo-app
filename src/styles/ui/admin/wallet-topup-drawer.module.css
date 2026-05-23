@@ -1,0 +1,356 @@
+/* WalletTopUpDrawer | obsidian modal sheet.
+ *
+ * Geometry tuned to fit a 32-character base58 address on one line
+ * at desktop widths and gracefully wrap on mobile. The address row
+ * is the focal element; everything else recedes.
+ */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  background-color: rgba(10, 10, 12, 0.72);
+  backdrop-filter: blur(2px);
+  animation: backdropIn 200ms ease-out;
+}
+
+@keyframes backdropIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.dialog {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  max-height: calc(100vh - 2 * var(--space-4));
+  overflow-y: auto;
+  background-color: var(--canvas-obsidian-facet);
+  border: 0.5px solid rgba(201, 168, 76, 0.22);
+  border-radius: var(--radius-lg);
+  color: var(--color-white);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  animation: dialogIn 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes dialogIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop, .dialog { animation: none; }
+}
+
+/* ── Header ── */
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.heading {
+  margin: 0;
+  font: var(--type-h1);
+  color: var(--color-white);
+  letter-spacing: var(--tracking-tight);
+}
+
+.closeButton {
+  appearance: none;
+  background: transparent;
+  border: 0.5px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.65);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color var(--transition-fast),
+              color var(--transition-fast);
+}
+
+.closeButton:hover {
+  border-color: var(--gold-edge-soft);
+  color: var(--color-white);
+}
+
+.closeButton:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring-iridescent);
+}
+
+/* ── Warning strip ── */
+
+.warningStrip {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background-color: rgba(196, 61, 61, 0.10);
+  border: 0.5px solid rgba(196, 61, 61, 0.40);
+}
+
+.warningIcon {
+  color: #f08a8a;
+  margin-top: 2px;
+  flex-shrink: 0;
+  display: inline-flex;
+  line-height: 0;
+}
+
+.warningText {
+  font: var(--type-body-sm);
+  color: rgba(255, 255, 255, 0.88);
+}
+.warningText strong {
+  color: #f08a8a;
+  font-weight: var(--weight-semibold);
+}
+
+/* ── Summary block ── */
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-3) var(--space-4);
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+}
+
+.summaryRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.summaryLabel {
+  font: var(--type-microcopy);
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+}
+
+.summaryValue {
+  font: var(--type-mono-data);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-mono-tight);
+  color: var(--color-white);
+}
+
+.summaryRowAccent .summaryValue {
+  color: var(--color-gold);
+  font-weight: var(--weight-semibold);
+}
+
+/* ── Field (address + mint) ── */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.fieldHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.fieldLabel {
+  font: var(--type-label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.fieldNetwork,
+.fieldHint {
+  font: var(--type-microcopy);
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.fieldNetwork {
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  padding: 2px 8px;
+  border: 0.5px solid rgba(201, 168, 76, 0.32);
+  border-radius: 999px;
+  color: var(--color-gold);
+}
+
+/* ── Copy row | the primary action ── */
+
+.copyRow {
+  appearance: none;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 56px;
+  padding: var(--space-3) var(--space-4);
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 0.5px solid rgba(255, 255, 255, 0.10);
+  border-radius: var(--radius-md);
+  color: var(--color-white);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color var(--transition-fast),
+              background-color var(--transition-fast);
+}
+
+.copyRow:hover:not(:disabled) {
+  border-color: var(--gold-edge-soft);
+  background-color: rgba(201, 168, 76, 0.04);
+}
+
+.copyRow:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring-iridescent);
+}
+
+.copyRow:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.copyValue {
+  flex: 1;
+  min-width: 0;
+  font: var(--type-mono-data);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-mono-tight);
+  color: var(--color-white);
+  word-break: break-all;
+  /* Show all the characters | base58 addresses are not secret and
+   * the full string is what gets pasted. Wrap to the next line on
+   * narrow viewports rather than truncating with ellipsis. */
+}
+
+.copyAffordance {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  font: var(--type-microcopy);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-gold);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background-color: rgba(201, 168, 76, 0.10);
+  transition: color var(--transition-fast),
+              background-color var(--transition-fast);
+}
+
+.copyAffordanceCopied {
+  color: #7fd49e;
+  background-color: rgba(45, 122, 79, 0.16);
+}
+
+/* ── Steps ── */
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.stepsList {
+  margin: 0;
+  padding-left: 1.25em;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font: var(--type-body-sm);
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.stepsList li {
+  line-height: var(--leading-normal);
+}
+
+.stepsList strong {
+  color: var(--color-white);
+  font-weight: var(--weight-semibold);
+}
+
+.stepsList em {
+  color: var(--color-gold);
+  font-style: normal;
+  font-weight: var(--weight-semibold);
+}
+
+/* ── Footer ── */
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: var(--space-2);
+  border-top: 0.5px solid rgba(255, 255, 255, 0.06);
+}
+
+.doneButton {
+  appearance: none;
+  background: transparent;
+  border: 0.5px solid rgba(255, 255, 255, 0.18);
+  color: var(--color-white);
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  font: var(--type-body);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  min-width: 96px;
+  transition: border-color var(--transition-fast),
+              background-color var(--transition-fast);
+}
+
+.doneButton:hover {
+  border-color: var(--gold-edge-soft);
+  background-color: rgba(201, 168, 76, 0.06);
+}
+
+.doneButton:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring-iridescent);
+}
+
+/* ── Mobile ── */
+
+@media (max-width: 640px) {
+  .backdrop {
+    align-items: flex-end;
+    padding: 0;
+  }
+  .dialog {
+    max-width: 100%;
+    max-height: 92vh;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    padding: var(--space-5);
+    gap: var(--space-4);
+  }
+  .heading { font: var(--type-h2); }
+  .copyValue {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+}

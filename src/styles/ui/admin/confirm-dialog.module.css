@@ -1,0 +1,203 @@
+/* ConfirmDialog | centred desktop modal. Mobile path renders via
+ * BottomSheet composition so the styling here is desktop-only.
+ *
+ * obsidianHeader option renders an obsidian strip above the body for
+ * brand-forward confirmations (settlement trigger, prod merchant flip). */
+
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(26, 26, 26, 0.5);
+  animation: confirmBackdropIn 180ms ease-out;
+}
+
+.dialog {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  min-height: 240px;
+  max-height: calc(100vh - 2 * var(--space-4));
+  background-color: var(--neutral-surface);
+  border: 1px solid var(--neutral-border-strong);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: confirmDialogIn 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.header,
+.obsidianHeader {
+  padding: var(--space-5) var(--space-6) var(--space-4);
+  border-bottom: 1px solid var(--neutral-border);
+}
+
+.obsidianHeader {
+  background-color: var(--canvas-obsidian);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.18);
+}
+
+.obsidianHeader .title {
+  color: var(--color-white);
+}
+
+.title {
+  font: var(--type-h2);
+  color: var(--neutral-text-primary);
+  margin: 0;
+}
+
+.content {
+  padding: var(--space-5) var(--space-6) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  overflow-y: auto;
+}
+
+.body {
+  font: var(--type-body);
+  color: var(--neutral-text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.body strong {
+  color: var(--neutral-text-primary);
+  font-weight: var(--weight-semibold);
+}
+
+.extra {
+  padding: var(--space-3);
+  background-color: var(--neutral-surface-sunk);
+  border-radius: var(--radius-sm);
+  font: var(--type-body-sm);
+  color: var(--neutral-text-secondary);
+}
+
+/* ── Action row ── */
+
+.actions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: flex-end;
+  margin-top: var(--space-2);
+}
+
+.cancelButton,
+.confirmButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 40px;
+  padding: 0 var(--space-5);
+  border-radius: var(--radius-sm);
+  font: var(--type-body);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+  border: 1px solid transparent;
+}
+
+.cancelButton {
+  background: none;
+  border-color: var(--neutral-border);
+  color: var(--neutral-text-primary);
+}
+
+.cancelButton:hover:not(:disabled) {
+  background-color: var(--neutral-surface-alt);
+  border-color: var(--neutral-border-strong);
+}
+
+.cancelButton:focus-visible,
+.confirmButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-gold);
+}
+
+.confirmButton:disabled,
+.cancelButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.confirm-primary {
+  background-color: var(--color-gold);
+  color: var(--color-obsidian);
+  border-color: var(--color-gold);
+}
+
+.confirm-primary:hover:not(:disabled) {
+  background-color: #b8983f;
+  border-color: #b8983f;
+}
+
+.confirm-destructive {
+  background-color: var(--neutral-error);
+  color: var(--color-white);
+  border-color: var(--neutral-error);
+}
+
+.confirm-destructive:hover:not(:disabled) {
+  background-color: #9e1f1f;
+  border-color: #9e1f1f;
+}
+
+/* ── Spinner ── */
+
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: confirmSpin 0.8s linear infinite;
+}
+
+.confirm-destructive .spinner {
+  border-color: rgba(255, 255, 255, 0.3);
+  border-top-color: currentColor;
+}
+
+@keyframes confirmSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Animations ── */
+
+@keyframes confirmBackdropIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes confirmDialogIn {
+  from { opacity: 0; transform: scale(0.97) translateY(4px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.reducedMotion {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialog, .backdrop {
+    animation: none !important;
+  }
+  .spinner {
+    animation: none !important;
+    border-top-color: transparent;
+  }
+}

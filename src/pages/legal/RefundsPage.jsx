@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import {
   LegalPageLayout,
   Clause,
-} from '@components/layout/LegalPageLayout';
+} from '@components/layout/marketing/LegalPageLayout';
 import { BRAND } from '@utils/constants';
 
 export function RefundsPage() {
@@ -13,9 +13,9 @@ export function RefundsPage() {
   return (
     <LegalPageLayout
       title="Refund Policy"
-      date="3 April 2026"
-      dateTime="2026-04-03"
-      version="v1.0"
+      date="23 May 2026"
+      dateTime="2026-05-23"
+      version="v1.2"
       preamble={
         <>
           This Refund Policy describes when and how refunds are processed for
@@ -25,7 +25,7 @@ export function RefundsPage() {
       }
     >
       <Clause id="when" heading="1. When refunds apply">
-        <p>1.1. A refund is initiated when payment is received from you but the transaction cannot be completed on the {BRAND.NAME} side. This may occur due to a system error during processing, the partner platform being unable to accept the credit, or a settlement failure that cannot be resolved within a reasonable timeframe.</p>
+        <p>1.1. A refund is initiated when payment is received from you but the transaction cannot be completed on the {BRAND.NAME} side. This may occur due to a system error during processing, the partner platform being unable to accept the credit, or a delivery failure on our side that cannot be resolved within a reasonable timeframe.</p>
         <p>1.2. Refunds are not issued for completed transactions where the dollar credit has been successfully applied to your account on the partner platform. Disputes about credited balances should be directed to the partner platform.</p>
         <p>1.3. Expired checkout sessions where no payment was received do not result in a refund because no funds were collected.</p>
       </Clause>
@@ -39,8 +39,8 @@ export function RefundsPage() {
 
       <Clause id="amount" heading="3. Refund amount">
         <p>3.1. Refunds are processed in the original currency (Naira) to the original payment source.</p>
-        <p>3.2. The refund amount is the full Naira amount you paid, less any irrecoverable payment processing fees charged by the payment provider (Monnify). At the time of writing, this fee is ₦500 or less per transaction.</p>
-        <p>3.3. Refunds are processed in Naira only and cannot be issued in any other currency or denomination. The conversion rate at the time of refund may differ from the rate at the time of the original transaction. This difference does not affect the Naira refund amount.</p>
+        <p>3.2. The refund amount is the full Naira amount you paid, less any irrecoverable payment processing fees charged by the payment provider (Kora). At the time of writing, this fee is approximately 1.5% of the transaction amount plus VAT. The exact fee for your transaction is recorded against your transaction reference.</p>
+        <p>3.3. Refunds are processed in Naira only and cannot be issued in any other currency or denomination. The exchange rate at the time of refund may differ from the rate at the time of the original transaction. This difference does not affect the Naira refund amount.</p>
       </Clause>
 
       <Clause id="destination" heading="4. Refund destination">

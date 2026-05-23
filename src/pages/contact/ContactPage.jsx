@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { Reveal } from '@components/ui/Reveal';
+import { Reveal } from '@components/ui/marketing/Reveal';
 import { BRAND, EXTERNAL } from '@utils/constants';
-import styles from '@styles/pages/contact.module.css';
+import styles from '@styles/pages/marketing/contact.module.css';
 
 export function ContactPage() {
   useEffect(() => {
@@ -59,27 +59,27 @@ export function ContactPage() {
 
         <Reveal delay={300}>
           <div className={styles.guidance}>
-            <h3 className={styles.guidanceTitle}>For platform partnerships</h3>
+            <h3 className={styles.guidanceTitle}>For business enquiries</h3>
             <p className={styles.guidanceText}>
-              If you operate a platform and want to offer Naira deposits to
-              your users, include the following in your message:
+              If you operate a technology platform and want to integrate the
+              {' '}{BRAND.NAME} checkout, include the following in your message:
             </p>
             <div className={styles.guidanceList}>
               <div className={styles.guidanceItem}>
-                <span className={styles.guidanceLabel}>Platform name</span>
-                <span className={styles.guidanceDesc}>Your product name and URL</span>
+                <span className={styles.guidanceLabel}>Company and product</span>
+                <span className={styles.guidanceDesc}>Your registered company, product name, and URL</span>
+              </div>
+              <div className={styles.guidanceItem}>
+                <span className={styles.guidanceLabel}>Operating region</span>
+                <span className={styles.guidanceDesc}>Country or countries where your users are based</span>
               </div>
               <div className={styles.guidanceItem}>
                 <span className={styles.guidanceLabel}>Expected volume</span>
-                <span className={styles.guidanceDesc}>Monthly deposit volume estimate in Naira or USD</span>
-              </div>
-              <div className={styles.guidanceItem}>
-                <span className={styles.guidanceLabel}>Settlement preference</span>
-                <span className={styles.guidanceDesc}>USDT network preference (Solana, TRON, or ERC-20)</span>
+                <span className={styles.guidanceDesc}>Monthly transaction volume estimate in Naira or USD</span>
               </div>
               <div className={styles.guidanceItem}>
                 <span className={styles.guidanceLabel}>Timeline</span>
-                <span className={styles.guidanceDesc}>When you want to go live</span>
+                <span className={styles.guidanceDesc}>When you would like to go live</span>
               </div>
             </div>
           </div>

@@ -1,0 +1,806 @@
+/* SettingsPage | neutral */
+
+.page {
+  padding: var(--space-6) var(--space-6) var(--space-10);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 960px;
+}
+
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pageTitle {
+  font: var(--type-h1);
+  color: var(--neutral-text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.pageSubtitle {
+  font: var(--type-body-sm);
+  color: var(--neutral-text-secondary);
+  margin: 0;
+  max-width: 640px;
+  line-height: 1.5;
+}
+
+/* ── Section ── */
+
+.section {
+  border-radius: var(--radius-md);
+  background-color: var(--neutral-surface);
+  border: 1px solid var(--neutral-border);
+  overflow: hidden;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-5) var(--space-4);
+  border-bottom: 1px solid var(--neutral-border);
+}
+
+.sectionHeaderMain {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sectionAside {
+  flex-shrink: 0;
+}
+
+.asideStack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.sectionTitle {
+  font: var(--type-h3);
+  color: var(--neutral-text-primary);
+  margin: 0;
+}
+
+.sectionDescription {
+  font: var(--type-body-sm);
+  color: var(--neutral-text-secondary);
+  margin: 0;
+  max-width: 560px;
+  line-height: 1.5;
+}
+
+.sectionBody {
+  padding: var(--space-3) var(--space-5) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.sectionFooter {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-top: var(--space-3);
+  margin-top: var(--space-2);
+  border-top: 1px dashed var(--neutral-border);
+  flex-wrap: wrap;
+}
+
+/* ── Buttons ── */
+
+.primaryAction {
+  min-height: 36px;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  background-color: var(--neutral-text-primary);
+  border: 1px solid var(--neutral-text-primary);
+  color: var(--neutral-surface);
+  font: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+
+.primaryAction:hover:not(:disabled) { opacity: 0.9; }
+.primaryAction:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 2px; }
+.primaryAction:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.secondaryAction {
+  min-height: 36px;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  background-color: var(--neutral-surface);
+  border: 1px solid var(--neutral-border-strong);
+  color: var(--neutral-text-primary);
+  font: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.secondaryAction:hover:not(:disabled) { background-color: var(--neutral-surface-alt); }
+.secondaryAction:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 2px; }
+.secondaryAction:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.dangerAction {
+  min-height: 36px;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  background-color: var(--neutral-surface);
+  border: 1px solid rgba(196, 61, 61, 0.32);
+  color: var(--neutral-error);
+  font: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+}
+
+.dangerAction:hover:not(:disabled) { background-color: rgba(196, 61, 61, 0.04); }
+.dangerAction:focus-visible { outline: 2px solid var(--neutral-error); outline-offset: 2px; }
+.dangerAction:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.smallAction {
+  min-height: 28px;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background-color: var(--neutral-surface);
+  border: 1px solid var(--neutral-border);
+  color: var(--neutral-text-primary);
+  font: var(--type-microcopy);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+}
+
+.smallAction:hover:not(:disabled) { background-color: var(--neutral-surface-alt); }
+.smallAction:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.actionHint {
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+}
+
+/* ── Operator list ── */
+
+.operatorList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.operatorRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--neutral-border);
+}
+
+.operatorRow:last-child { border-bottom: none; }
+
+.operatorIdent {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.operatorText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.operatorEmail {
+  font: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--neutral-text-primary);
+  word-break: break-word;
+}
+
+.operatorMeta {
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+}
+
+.operatorActions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.youTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background-color: rgba(201, 168, 76, 0.08);
+  border: 1px solid rgba(201, 168, 76, 0.28);
+  font: var(--type-label);
+  font-weight: var(--weight-semibold);
+  color: var(--color-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ── Passkey list ── */
+
+.passkeyList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.passkeyRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--neutral-border);
+}
+
+.passkeyRow:last-child { border-bottom: none; }
+
+.passkeyIdent {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.passkeyLabel {
+  font: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--neutral-text-primary);
+}
+
+.passkeyMeta {
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+}
+
+.guardrail {
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+  margin: var(--space-2) 0 0;
+  padding-top: var(--space-2);
+  border-top: 1px dashed var(--neutral-border);
+  font-style: italic;
+}
+
+/* ── Row ── */
+
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--neutral-border);
+}
+
+.row:last-child { border-bottom: none; }
+
+.rowLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.rowLabelText {
+  font: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--neutral-text-primary);
+}
+
+.rowHint {
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+}
+
+.rowValue {
+  font: var(--type-body-sm);
+  color: var(--neutral-text-primary);
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  letter-spacing: var(--tracking-mono-tight);
+  font-size: 0.8125rem;
+  font-weight: var(--weight-semibold);
+}
+
+/* ── Motion ── */
+
+@media (prefers-reduced-motion: reduce) {
+  .primaryAction, .secondaryAction, .dangerAction, .smallAction {
+    transition: none;
+  }
+}
+
+/* ── Mobile ── */
+
+@media (max-width: 640px) {
+  .page {
+    padding: var(--space-5) max(var(--space-4), env(safe-area-inset-right, 0)) var(--space-8) max(var(--space-4), env(safe-area-inset-left, 0));
+    gap: var(--space-4);
+  }
+  .pageTitle { font: var(--type-h2); }
+  .sectionHeader {
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-4) var(--space-3);
+  }
+  .sectionAside { width: 100%; }
+  .asideStack { align-items: flex-start; }
+  .sectionBody { padding: var(--space-2) var(--space-4) var(--space-3); }
+  .operatorRow, .passkeyRow {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .operatorActions { width: 100%; justify-content: flex-start; }
+  .row { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .rowValue { text-align: left; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+ * Phase 7E.x | Settings frontend wiring
+ *
+ * Additions only. Existing classes above are untouched.
+ *
+ * Design notes:
+ *   - Form inputs default to neutral-surface-sunk fill so they read as
+ *     editable affordances against the section's neutral-surface body.
+ *   - Toggles are pill switches; the underlying checkbox stays in DOM
+ *     for accessibility and is positioned off-screen (sr-only).
+ *   - Sign-out blocks have a hairline separator, not a card edge,
+ *     because they sit inside the section's existing border-radius.
+ *   - The nuclear sign-out block gains a subtle red wash so the eye
+ *     reaches it after the safer option.
+ * ════════════════════════════════════════════════════════════════ */
+
+/* ── Error hints (replace inline style={{color}}) ── */
+
+.errorHint {
+  font: var(--type-microcopy);
+  color: var(--neutral-error);
+}
+
+.errorGuardrail {
+  font: var(--type-microcopy);
+  color: var(--neutral-error);
+  margin: var(--space-2) 0 0;
+  padding: var(--space-3);
+  border: 1px solid rgba(196, 61, 61, 0.22);
+  border-radius: var(--radius-sm);
+  background-color: rgba(196, 61, 61, 0.04);
+  line-height: 1.5;
+}
+
+.errorGuardrail strong {
+  color: var(--neutral-error);
+  font-weight: var(--weight-semibold);
+}
+
+.totpReadinessList {
+  list-style: disc;
+  margin: var(--space-2) 0 var(--space-2) var(--space-5);
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: var(--tracking-mono-tight);
+  color: var(--neutral-text-primary);
+}
+
+.totpReadinessList li {
+  padding: 2px 0;
+}
+
+/* ── Role chip (Owner / Operator) ── */
+
+.roleChip {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.02em;
+}
+
+.roleChipOwner {
+  background-color: rgba(201, 168, 76, 0.14);
+  border: 1px solid rgba(201, 168, 76, 0.32);
+  color: #8b6f1f;
+}
+
+.roleChipOperator {
+  background-color: var(--neutral-surface-sunk);
+  border: 1px solid var(--neutral-border);
+  color: var(--neutral-text-secondary);
+}
+
+.operatorMetaSeparator {
+  display: inline-block;
+  margin: 0 6px;
+  color: var(--neutral-text-disabled);
+}
+
+.operatorMetaText {
+  display: inline;
+}
+
+.operatorMeta {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px 0;
+}
+
+/* ── Time pair (mono absolute + muted relative) ── */
+
+.timePair {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.timePairMono {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: var(--tracking-mono-tight);
+  color: var(--neutral-text-primary);
+  font-weight: var(--weight-regular);
+}
+
+.timePairMuted {
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+}
+
+/* Passkey meta line | the inline labels need their own treatment
+ * because they read as a sentence, not a key/value table. */
+.passkeyMeta {
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px;
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+}
+
+.passkeyMetaLabel {
+  font-weight: var(--weight-semibold);
+  color: var(--neutral-text-secondary);
+}
+
+.passkeyMetaSeparator {
+  color: var(--neutral-text-disabled);
+  margin: 0 2px;
+}
+
+/* ── Form grid (Notifications + Security) ── */
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4) var(--space-5);
+  padding: var(--space-2) 0 var(--space-1);
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.formLabel {
+  font: var(--type-label);
+  color: var(--neutral-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.formHint {
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+  line-height: 1.4;
+}
+
+.formInput {
+  width: 100%;
+  height: 36px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-sm);
+  background-color: var(--neutral-surface-sunk);
+  border: 1px solid var(--neutral-border);
+  color: var(--neutral-text-primary);
+  font: var(--type-body);
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.formInput:hover:not(:disabled) {
+  background-color: var(--neutral-surface);
+  border-color: var(--neutral-border-strong);
+}
+
+.formInput:focus {
+  outline: none;
+  background-color: var(--neutral-surface);
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.18);
+}
+
+.formInput:disabled {
+  background-color: var(--neutral-surface-sunk);
+  color: var(--neutral-text-muted);
+  cursor: not-allowed;
+}
+
+/* Hide spinner controls on numeric inputs | they look messy and the
+ * keyboard arrow keys still work for power users. */
+.formInput[type="number"]::-webkit-outer-spin-button,
+.formInput[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.formInput[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.formInputMono {
+  font-family: var(--font-mono);
+  letter-spacing: var(--tracking-mono-tight);
+  font-size: 0.8125rem;
+}
+
+.formInputCompact {
+  max-width: 220px;
+}
+
+/* ── Toggle switch ── */
+
+.toggleRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--neutral-border);
+}
+
+.toggleLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.toggleLabelText {
+  font: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--neutral-text-primary);
+}
+
+.toggleHint {
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+  line-height: 1.4;
+  max-width: 480px;
+}
+
+.toggleControl {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  cursor: pointer;
+  margin-top: 2px;
+}
+
+.toggleControl input {
+  /* sr-only | preserves keyboard focus + screen reader accessibility */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.toggleSwitch {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  width: 36px;
+  height: 20px;
+  border-radius: 999px;
+  background-color: var(--neutral-border-strong);
+  transition: background-color var(--transition-fast);
+}
+
+.toggleThumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--neutral-surface);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  transition: transform var(--transition-fast);
+}
+
+.toggleControl input:checked ~ .toggleSwitch {
+  background-color: var(--color-gold);
+}
+
+.toggleControl input:checked ~ .toggleSwitch .toggleThumb {
+  transform: translateX(16px);
+}
+
+.toggleControl input:focus-visible ~ .toggleSwitch {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+.toggleControl input:disabled ~ .toggleSwitch {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.toggleControl:has(input:disabled) {
+  cursor: not-allowed;
+}
+
+/* ── Form actions (Save / Revert + attribution) ── */
+
+.formActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  padding-top: var(--space-3);
+  margin-top: var(--space-2);
+  border-top: 1px dashed var(--neutral-border);
+}
+
+.savedAttribution {
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+  margin: 0;
+  margin-left: auto;
+}
+
+.savedAttribution strong {
+  color: var(--neutral-text-secondary);
+  font-weight: var(--weight-semibold);
+}
+
+/* ── Sign-out section ── */
+
+.signOutGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.signOutBlock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--neutral-border);
+}
+
+.signOutBlock:last-child {
+  border-bottom: none;
+}
+
+.signOutBlockNuclear {
+  margin: var(--space-2) calc(-1 * var(--space-3)) 0;
+  padding: var(--space-3);
+  border-top: 1px solid rgba(196, 61, 61, 0.18);
+  border-bottom: 1px solid rgba(196, 61, 61, 0.18);
+  border-radius: var(--radius-sm);
+  background-color: rgba(196, 61, 61, 0.03);
+}
+
+.signOutCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.signOutTitle {
+  font: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--neutral-text-primary);
+}
+
+.signOutHint {
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+  line-height: 1.4;
+  max-width: 540px;
+}
+
+/* ── Typed confirm input (sign-out-everyone dialog) ── */
+
+.typedConfirmField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ── Mobile adjustments ── */
+
+@media (max-width: 640px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  .toggleRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+  .formActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .savedAttribution {
+    margin-left: 0;
+  }
+  .signOutBlock {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-3);
+  }
+  .signOutBlockNuclear {
+    margin: var(--space-2) 0 0;
+  }
+  .formInputCompact {
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .formInput,
+  .toggleSwitch,
+  .toggleThumb {
+    transition: none;
+  }
+}

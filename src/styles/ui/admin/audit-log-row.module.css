@@ -1,0 +1,343 @@
+/* AuditLogRow | prose-first row pattern.
+ *
+ * Collapsed row: 140px timestamp | flex prose | 48px chevron.
+ * Expanded row: spans below the collapsed row with before/after diff.
+ *
+ * Operator and entity links are semantic <button>s styled as subtle
+ * inline links. Entity IDs use IBM Plex Mono on a surface-sunk pill
+ * for instant visual recognition.
+ *
+ * Changed keys in the JSON diff render in gold; unchanged keys in
+ * muted text. Changed detection is exact JSON.stringify comparison
+ * across before/after snapshots.
+ */
+
+.row {
+  background-color: var(--neutral-surface);
+  border-bottom: 1px solid var(--neutral-border);
+  transition: background-color var(--transition-fast);
+}
+
+.row:last-of-type {
+  border-bottom: none;
+}
+
+.rowExpanded {
+  background-color: var(--neutral-surface-alt);
+}
+
+.timestampCell {
+  width: 140px;
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
+  vertical-align: top;
+}
+
+.timestamp {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--neutral-text-muted);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  line-height: 1.4;
+  padding-top: 2px;
+}
+
+.proseCell {
+  padding: var(--space-3) var(--space-4);
+  vertical-align: top;
+  line-height: 1.5;
+}
+
+.prose {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--neutral-text-primary);
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.chevronCell {
+  width: 48px;
+  text-align: right;
+  padding: var(--space-3) var(--space-4) var(--space-3) 0;
+  vertical-align: top;
+}
+
+/* ── Inline operator link ── */
+
+.operatorStatic {
+  font-weight: var(--weight-semibold);
+  color: var(--neutral-text-primary);
+}
+
+.operatorLink {
+  display: inline;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  font-weight: var(--weight-semibold);
+  color: var(--neutral-text-primary);
+  cursor: pointer;
+  text-decoration: none;
+  border-bottom: 1px dotted var(--neutral-border-strong);
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.operatorLink:hover {
+  color: var(--color-gold);
+  border-bottom-color: var(--color-gold);
+}
+
+.operatorLink:focus-visible {
+  outline: none;
+  color: var(--color-gold);
+  border-bottom-color: var(--color-gold);
+  box-shadow: 0 2px 0 var(--color-gold);
+}
+
+/* ── Inline entity pill ── */
+
+.entityStatic,
+.entityLink code {
+  display: inline-block;
+  padding: 1px 6px;
+  background-color: var(--neutral-surface-sunk);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--neutral-text-primary);
+  line-height: 1.4;
+}
+
+.entityLink {
+  display: inline-block;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.entityLink:hover code {
+  background-color: rgba(201, 168, 76, 0.12);
+  color: var(--color-gold);
+}
+
+.entityLink:focus-visible {
+  outline: none;
+}
+
+.entityLink:focus-visible code {
+  box-shadow: 0 0 0 2px var(--color-gold);
+}
+
+/* ── Inline value / strong / reason ── */
+
+.value {
+  display: inline-block;
+  padding: 0 4px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--neutral-text-primary);
+  background-color: var(--neutral-surface-sunk);
+  border-radius: 3px;
+}
+
+.inlineStrong {
+  font-weight: var(--weight-semibold);
+  color: var(--neutral-text-primary);
+}
+
+.reason {
+  font-style: italic;
+  color: var(--neutral-text-secondary);
+}
+
+/* ── Chevron ── */
+
+.chevronButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--neutral-text-muted);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast), transform 0.2s ease;
+}
+
+.chevronButton:hover {
+  background-color: var(--neutral-surface-sunk);
+  color: var(--neutral-text-primary);
+}
+
+.chevronButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-gold);
+}
+
+.chevronExpanded {
+  transform: rotate(180deg);
+}
+
+/* ── Expanded diff row ── */
+
+.diffRow {
+  background-color: var(--neutral-surface-alt);
+}
+
+.diffRow:last-of-type {
+  border-bottom: 1px solid var(--neutral-border);
+}
+
+.diffCell {
+  padding: 0 var(--space-4) var(--space-4);
+}
+
+.diffContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  background-color: var(--neutral-surface);
+  border: 1px solid var(--neutral-border);
+  border-radius: var(--radius-sm);
+}
+
+.diffGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+@media (max-width: 640px) {
+  .diffGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.diffColumn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.diffColumnLabel {
+  font-size: 0.625rem;
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--neutral-text-muted);
+}
+
+.diffJson {
+  margin: 0;
+  padding: var(--space-3);
+  background-color: var(--neutral-surface-sunk);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.55;
+  color: var(--neutral-text-secondary);
+  white-space: pre-wrap;
+  word-break: break-all;
+  overflow-x: auto;
+}
+
+.diffBrace { color: var(--neutral-text-muted); }
+.diffKey   { color: var(--neutral-text-secondary); }
+.diffVal   { color: var(--neutral-text-primary); }
+
+.diffUnchanged { opacity: 0.55; }
+
+.diffChanged {
+  color: var(--color-gold);
+}
+
+.diffChanged .diffKey { color: var(--color-gold); }
+.diffChanged .diffVal { color: var(--color-gold); }
+
+.diffNull {
+  padding: var(--space-3);
+  background-color: var(--neutral-surface-sunk);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--neutral-text-muted);
+  font-style: italic;
+}
+
+.metadataBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.metadataLabel {
+  font-size: 0.625rem;
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--neutral-text-muted);
+}
+
+.metadataJson {
+  margin: 0;
+  padding: var(--space-3);
+  background-color: var(--neutral-surface-sunk);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--neutral-text-primary);
+  white-space: pre-wrap;
+  word-break: break-all;
+  overflow-x: auto;
+}
+
+.requestId {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  color: var(--neutral-text-muted);
+  padding-top: var(--space-2);
+  border-top: 1px dashed var(--neutral-border);
+}
+
+.requestId code {
+  font-family: var(--font-mono);
+  color: var(--neutral-text-secondary);
+  padding: 0 4px;
+  background-color: var(--neutral-surface-sunk);
+  border-radius: 3px;
+}
+
+/* ── Mobile ── */
+
+@media (max-width: 640px) {
+  .timestampCell {
+    width: 100px;
+    padding-left: var(--space-3);
+  }
+
+  .proseCell {
+    padding: var(--space-3);
+  }
+
+  .chevronCell {
+    width: 36px;
+    padding-right: var(--space-3);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .operatorLink, .entityLink, .chevronButton, .row { transition: none; }
+}

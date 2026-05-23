@@ -1,0 +1,419 @@
+/* ════════════════════════════════════════════════════════════════
+ * RateEnginePage | full obsidian
+ *
+ * Spacing scale matches DashboardPage (B2.5):
+ *   Page top/horizontal padding       var(--space-6)  | 24px
+ *   Section gap                       var(--space-8)  | 40px
+ *   Hero row gap                      var(--space-4)  | 16px
+ *
+ * All content rendered on obsidian canvas. Tables are obsidian
+ * with hairline gold-tinted dividers at 10% opacity.
+ * ════════════════════════════════════════════════════════════════ */
+
+.page {
+  position: relative;
+  padding: var(--space-6) var(--space-6) var(--space-10);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+/* ── Header ── */
+
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pageTitle {
+  font: var(--type-h1);
+  color: var(--color-white);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.pageSubtitle {
+  font: var(--type-body-sm);
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+  max-width: 640px;
+  line-height: 1.5;
+}
+
+/* ════════════════════════════════════════════════════════════════
+ * Hero row | RateEntryInput (left, wider) + CurrentRateTile (right)
+ * ════════════════════════════════════════════════════════════════ */
+
+.heroRow {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: stretch;
+}
+
+.heroEntry,
+.heroCurrent {
+  display: flex;
+  min-width: 0;
+}
+
+.heroEntry > *,
+.heroCurrent > * {
+  width: 100%;
+}
+
+/* ════════════════════════════════════════════════════════════════
+ * Section header shared style
+ * ════════════════════════════════════════════════════════════════ */
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.sectionTitleGroup {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sectionTitle {
+  font: var(--type-h2);
+  color: var(--color-white);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.sectionSubtitle {
+  font: var(--type-microcopy);
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.sectionViewAll {
+  min-height: 36px;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  color: var(--color-gold);
+  font: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  transition: background-color var(--transition-fast);
+}
+
+.sectionViewAll:hover {
+  background-color: rgba(201, 168, 76, 0.08);
+}
+
+.sectionViewAll:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring-iridescent);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ * Shared table treatment on obsidian
+ * ════════════════════════════════════════════════════════════════ */
+
+.sourcesTableWrap,
+.historyTableWrap {
+  border-radius: var(--radius-lg);
+  border: 0.5px solid rgba(201, 168, 76, 0.18);
+  background-color: rgba(255, 255, 255, 0.02);
+  overflow: hidden;
+}
+
+.sourcesTable,
+.historyTable {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+.sourcesHeadRow,
+.historyHeadRow {
+  background-color: rgba(255, 255, 255, 0.02);
+  border-bottom: 0.5px solid rgba(201, 168, 76, 0.18);
+}
+
+.sourcesTh,
+.historyTh {
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  font: var(--type-label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.sourcesRow,
+.historyRow {
+  border-bottom: 0.5px solid rgba(201, 168, 76, 0.10);
+}
+
+.sourcesRow:last-child,
+.historyRow:last-child {
+  border-bottom: none;
+}
+
+.sourcesTd,
+.historyTd {
+  padding: var(--space-3) var(--space-4);
+  vertical-align: middle;
+  color: var(--color-white);
+  font: var(--type-body-sm);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ * Rate sources table specifics
+ * ════════════════════════════════════════════════════════════════ */
+
+.priorityNum {
+  font: var(--type-mono-data);
+  font-weight: var(--weight-semibold);
+  color: var(--color-white);
+}
+
+.sourceNameRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.sourceName {
+  font: var(--type-body);
+  font-weight: var(--weight-semibold);
+  color: var(--color-white);
+}
+
+.sourceSub {
+  font: var(--type-mono-sm);
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+.winningBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background-color: rgba(201, 168, 76, 0.12);
+  border: 0.5px solid rgba(201, 168, 76, 0.45);
+  color: var(--color-gold);
+  font: var(--type-label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.lastUsed {
+  font: var(--type-mono-sm);
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 0.5px solid transparent;
+  font: var(--type-label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.statusActive {
+  color: #7fd49e;
+  border-color: rgba(45, 122, 79, 0.45);
+  background-color: rgba(45, 122, 79, 0.12);
+}
+
+.statusPaused {
+  color: rgba(255, 255, 255, 0.55);
+  border-color: rgba(255, 255, 255, 0.16);
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ * Recent entries (history) table specifics
+ * ════════════════════════════════════════════════════════════════ */
+
+.historyTimeGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.historyTimeAbs {
+  font: var(--type-mono-sm);
+  color: rgba(255, 255, 255, 0.82);
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+.historyTimeRel {
+  font: var(--type-microcopy);
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.historyRate {
+  font: var(--type-mono-data);
+  font-weight: var(--weight-semibold);
+  color: var(--color-white);
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+.historyNotes {
+  font: var(--type-body-sm);
+  color: rgba(255, 255, 255, 0.72);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  line-height: 1.4;
+}
+
+.historyMuted {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.statePill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: 0.5px solid transparent;
+  font: var(--type-label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.stateActive {
+  color: #7fd49e;
+  border-color: rgba(45, 122, 79, 0.45);
+  background-color: rgba(45, 122, 79, 0.12);
+}
+
+.stateExpired {
+  color: rgba(255, 255, 255, 0.55);
+  border-color: rgba(255, 255, 255, 0.16);
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.stateReplaced {
+  color: rgba(255, 255, 255, 0.45);
+  border-color: rgba(255, 255, 255, 0.12);
+  background-color: transparent;
+}
+
+/* ── Empty state ── */
+
+.historyEmpty {
+  padding: var(--space-8) var(--space-5);
+  border-radius: var(--radius-lg);
+  border: 0.5px solid rgba(201, 168, 76, 0.18);
+  background-color: rgba(255, 255, 255, 0.02);
+  text-align: center;
+}
+
+.historyEmptyHeading {
+  font: var(--type-h3);
+  color: var(--color-white);
+  margin-bottom: 4px;
+}
+
+.historyEmptyBody {
+  font: var(--type-body-sm);
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ── Motion ── */
+
+@media (prefers-reduced-motion: reduce) {
+  .sectionViewAll {
+    transition: none;
+  }
+}
+
+/* ── Tablet (1024px and below) ── */
+
+@media (max-width: 1023px) {
+  .heroRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Mobile (640px and below) ── */
+
+@media (max-width: 640px) {
+  .page {
+    padding: var(--space-5) max(var(--space-5), env(safe-area-inset-right, 0)) var(--space-8) max(var(--space-5), env(safe-area-inset-left, 0));
+    gap: var(--space-6);
+  }
+
+  .pageTitle {
+    font: var(--type-h2);
+  }
+
+  /* Collapse history table to stacked cards on mobile. Transforms
+   * tr into a bordered card, hides th, displays each td as a row
+   * with label before value using data-label attribute (populated
+   * below via ::before). */
+
+  .historyTableWrap {
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .historyTable,
+  .historyTable tbody,
+  .historyTable tr,
+  .historyTable td {
+    display: block;
+    width: 100%;
+  }
+
+  .historyTable thead {
+    display: none;
+  }
+
+  .historyRow {
+    border: 0.5px solid rgba(201, 168, 76, 0.18);
+    border-radius: var(--radius-md);
+    background-color: rgba(255, 255, 255, 0.02);
+    margin-bottom: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .historyTd {
+    padding: 4px 0;
+    border: none;
+  }
+
+  /* Horizontal scroll fallback for rate sources table on mobile */
+  .sourcesTableWrap {
+    overflow-x: auto;
+  }
+
+  .sourcesTable {
+    min-width: 480px;
+  }
+}

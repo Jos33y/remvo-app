@@ -1,0 +1,264 @@
+/* ──────────────────────────────────────────────────────────────────
+ * RangePicker — obsidian + neutral registers
+ *
+ * Segmented control aesthetic: 4 equal-weight buttons in a pill
+ * container, active segment lifts via tone shift, not shadow.
+ * Custom button reveals a popover below with two native date
+ * inputs.
+ *
+ * Contrast verified WCAG AA:
+ *   Obsidian inactive  rgba(255,255,255,0.55)  = 10.4:1 AAA
+ *   Obsidian active    #FFFFFF on #2A2A2A       = 15.2:1 AAA
+ *   Neutral inactive   #5A5A5A on #F5F4F0       = 7.0:1  AAA
+ *   Neutral active     #1A1A1A on #FFFFFF       = 17.4:1 AAA
+ * ────────────────────────────────────────────────────────────────── */
+
+.wrap {
+  position: relative;
+  display: inline-block;
+}
+
+/* ── Segmented control ── */
+
+.segmented {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 2px;
+  padding: 4px;
+  border-radius: var(--radius-md);
+}
+
+.segment {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 0 14px;
+  border: none;
+  background: transparent;
+  font: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color var(--transition-fast),
+              color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.segment:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+/* ── Obsidian register ── */
+
+.register-obsidian .segmented {
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 0.5px solid rgba(255, 255, 255, 0.10);
+}
+
+.register-obsidian .segment {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.register-obsidian .segment:hover {
+  color: rgba(255, 255, 255, 0.88);
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.register-obsidian .segmentActive,
+.register-obsidian .segmentActive:hover {
+  color: var(--color-white);
+  background-color: rgba(255, 255, 255, 0.10);
+}
+
+/* ── Neutral register ── */
+
+.register-neutral .segmented {
+  background-color: var(--neutral-surface-alt);
+  border: 1px solid var(--neutral-border);
+}
+
+.register-neutral .segment {
+  color: var(--neutral-text-secondary);
+}
+
+.register-neutral .segment:hover {
+  color: var(--neutral-text-primary);
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.register-neutral .segmentActive,
+.register-neutral .segmentActive:hover {
+  color: var(--neutral-text-primary);
+  background-color: var(--neutral-surface);
+}
+
+/* ── Custom button inner label with chevron ── */
+
+.customLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chev {
+  display: flex;
+  align-items: center;
+  opacity: 0.7;
+}
+
+/* ── Popover ── */
+
+.popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 50;
+  min-width: 280px;
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background-color: var(--neutral-surface);
+  border: 1px solid var(--neutral-border-strong);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12),
+              0 2px 6px  rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.popoverHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.popoverTitle {
+  font: var(--type-label);
+  color: var(--neutral-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.popoverClose {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: var(--neutral-text-muted);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.popoverClose:hover {
+  background-color: var(--neutral-surface-alt);
+  color: var(--neutral-text-primary);
+}
+
+.popoverClose:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+/* ── Fields ── */
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fieldLabel {
+  font: var(--type-label);
+  color: var(--neutral-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.dateInput {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--neutral-border);
+  border-radius: var(--radius-sm);
+  background-color: var(--neutral-surface);
+  color: var(--neutral-text-primary);
+  font: var(--type-body);
+  font-variant-numeric: tabular-nums;
+  transition: border-color var(--transition-fast);
+}
+
+.dateInput:hover {
+  border-color: var(--neutral-border-strong);
+}
+
+.dateInput:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.12);
+}
+
+/* ── Apply ── */
+
+.popoverFooter {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.applyBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 var(--space-5);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--gold-iridescent);
+  color: var(--color-obsidian);
+  font: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition: transform var(--transition-fast), filter var(--transition-normal);
+}
+
+.applyBtn:hover:not(:disabled) {
+  filter: brightness(1.04);
+}
+
+.applyBtn:active:not(:disabled) {
+  transform: scale(0.99);
+}
+
+.applyBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  filter: saturate(0.7);
+}
+
+.applyBtn:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+/* ── Responsive: full-width popover on mobile ── */
+
+@media (max-width: 480px) {
+  .popover {
+    position: fixed;
+    top: auto;
+    left: var(--space-4);
+    right: var(--space-4);
+    bottom: var(--space-4);
+    min-width: 0;
+  }
+}

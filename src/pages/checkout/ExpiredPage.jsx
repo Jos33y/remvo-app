@@ -1,11 +1,11 @@
 import { motion } from 'motion/react';
 import { useSession } from '@context/SessionContext';
 import { useReducedMotion } from '@hooks/useReducedMotion';
-import { CheckoutShell } from '@components/layout/CheckoutShell';
-import { GoldRing } from '@components/ui/GoldRing';
+import { CheckoutShell } from '@components/layout/checkout/CheckoutShell';
+import { GoldRing } from '@components/ui/shared/GoldRing';
 import { IconClock } from '@components/ui/icons/IconClock';
 import { staggerParent, reveal } from '@utils/motion';
-import styles from '@styles/pages/edge-page.module.css';
+import styles from '@styles/pages/checkout/edge-page.module.css';
 
 /* ──────────────────────────────────────────────────────────────────
  * ExpiredPage — Phase 5

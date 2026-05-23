@@ -1,0 +1,200 @@
+/* FlipMerchantDialog
+ * Composed inside ConfirmDialog. */
+
+.lead {
+  margin: 0 0 4px 0;
+  color: var(--color-text);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.routeMono {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  color: var(--color-text);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.fieldset:disabled {
+  opacity: 0.7;
+}
+
+.legend {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  padding: 0;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.legendNote {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--color-warning, #b8860b);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.item {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  padding: 0;
+  transition: border-color 150ms ease, background 150ms ease;
+}
+
+.item:hover:not(.itemDisabled) {
+  border-color: var(--color-text-muted);
+}
+
+.item:has(.radio:checked) {
+  border-color: var(--color-gold);
+  background: rgba(201, 168, 76, 0.05);
+}
+
+.itemDisabled {
+  opacity: 0.55;
+}
+
+.itemLabel {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.itemDisabled .itemLabel {
+  cursor: not-allowed;
+}
+
+.radio {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--color-gold);
+}
+
+.radio:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+  border-radius: 50%;
+}
+
+.itemMain {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.itemMethods {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 11px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.itemAside {
+  display: flex;
+  align-items: center;
+}
+
+.disabledReason {
+  display: block;
+  padding: 0 12px 10px 40px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.emptyNote {
+  padding: 12px;
+  border: 1px dashed var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.fieldLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.fieldLabelText {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 60px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.textarea:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+  border-color: var(--color-gold);
+}
+
+.textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.charCount {
+  align-self: flex-end;
+  font-size: 11px;
+  color: var(--color-text-muted);
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+.error {
+  margin: 4px 0 0 0;
+  padding: 8px 12px;
+  background: rgba(196, 61, 61, 0.08);
+  border: 1px solid rgba(196, 61, 61, 0.2);
+  border-radius: 6px;
+  color: var(--color-error, #c43d3d);
+  font-size: 13px;
+  line-height: 1.4;
+}

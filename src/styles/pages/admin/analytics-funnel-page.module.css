@@ -1,0 +1,176 @@
+/* ──────────────────────────────────────────────────────────────────
+ * AnalyticsFunnelPage | neutral
+ * ────────────────────────────────────────────────────────────────── */
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: var(--max-width-content);
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sectionTitle {
+  font: var(--type-h1);
+  color: var(--neutral-text-primary);
+  margin: 0;
+}
+
+.sectionSubtitle {
+  font: var(--type-body-sm);
+  color: var(--neutral-text-secondary);
+  margin: 0;
+}
+
+.rangeText {
+  color: var(--neutral-text-primary);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Segment filters ── */
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background-color: var(--neutral-surface);
+  border: 1px solid var(--neutral-border);
+  border-radius: var(--radius-md);
+}
+
+.filterGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.filterLabel {
+  font: var(--type-label);
+  color: var(--neutral-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  min-width: 64px;
+}
+
+.filterChips {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 30px;
+  padding: 0 12px;
+  border: 1px solid var(--neutral-border);
+  background-color: var(--neutral-surface);
+  color: var(--neutral-text-secondary);
+  font: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color var(--transition-fast),
+              border-color var(--transition-fast),
+              color var(--transition-fast);
+}
+
+.chip:hover {
+  color: var(--neutral-text-primary);
+  border-color: var(--neutral-border-strong);
+}
+
+.chip:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+.chipActive,
+.chipActive:hover {
+  background-color: var(--neutral-text-primary);
+  color: var(--neutral-surface);
+  border-color: var(--neutral-text-primary);
+}
+
+.chipCount {
+  font: var(--type-mono-sm);
+  font-weight: var(--weight-regular);
+  opacity: 0.65;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Summary row ── */
+
+.summaryRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+}
+
+.summaryCard {
+  min-width: 0;
+}
+
+/* ── Panel ── */
+
+.panel {
+  background-color: var(--neutral-surface);
+  border: 1px solid var(--neutral-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.panelTitle {
+  font: var(--type-h2);
+  color: var(--neutral-text-primary);
+  margin: 0;
+}
+
+/* ── Empty ── */
+
+.empty {
+  padding: var(--space-8) var(--space-5);
+  border: 1px dashed var(--neutral-border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--neutral-surface-alt);
+  color: var(--neutral-text-secondary);
+  text-align: center;
+  font: var(--type-body);
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 900px) {
+  .summaryRow { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 520px) {
+  .filterGroup {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .filterLabel {
+    min-width: 0;
+  }
+}

@@ -1,0 +1,65 @@
+/* ──────────────────────────────────────────────────────────────────
+ * SkeletonBlock
+ *
+ * Pulse via opacity. 1.5s cycle. prefers-reduced-motion drops the
+ * animation; the muted surface tone still communicates loading.
+ *
+ * Surface tone adapts to parent register via [data-canvas] selector.
+ * ────────────────────────────────────────────────────────────────── */
+
+.skeleton {
+  display: inline-block;
+  background-color: var(--neutral-surface-sunk);
+  border-radius: var(--radius-sm);
+  animation: skeletonPulse 1.5s ease-in-out infinite;
+}
+
+.text {
+  height: 14px;
+  width: 80%;
+  border-radius: 4px;
+  vertical-align: middle;
+}
+
+.card {
+  display: block;
+  height: 128px;
+  width: 100%;
+  border-radius: var(--radius-md);
+}
+
+.row {
+  display: block;
+  height: 56px;
+  width: 100%;
+  border-radius: 4px;
+}
+
+.circle {
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.linesGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+@keyframes skeletonPulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.55; }
+}
+
+/* Obsidian register adaptation */
+:global([data-canvas="obsidian"]) .skeleton {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+    opacity: 0.8;
+  }
+}

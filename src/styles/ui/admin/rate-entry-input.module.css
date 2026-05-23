@@ -1,0 +1,412 @@
+/* RateEntryInput | obsidian hero card. The daily load-bearing
+ * action. Input focus uses the GoldRing primitive so the focus ring
+ * is vector-precise on curves at any zoom level (same technique as
+ * the Phase 5 primary CTAs). No shadows, no glow, no neon. */
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-8);
+  border-radius: var(--radius-lg);
+  border: 0.5px solid rgba(201, 168, 76, 0.18);
+  background-color: rgba(255, 255, 255, 0.02);
+  color: var(--color-white);
+  min-width: 0;
+}
+
+/* ── Header ── */
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+}
+
+.labelBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.label {
+  font: var(--type-label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.labelRequired {
+  margin-left: 4px;
+  color: rgba(255, 255, 255, 0.45);
+  font-weight: var(--weight-regular);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* ── CoinGecko calibration pill ── */
+
+.coingeckoPill {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+}
+
+.coingeckoName {
+  font: var(--type-label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.coingeckoValue {
+  font: var(--type-mono-sm);
+  color: rgba(255, 255, 255, 0.82);
+  letter-spacing: var(--tracking-mono-tight);
+  white-space: nowrap;
+}
+
+.coingeckoOp {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.coingeckoEffective {
+  color: var(--color-white);
+  font-weight: var(--weight-semibold);
+}
+
+.coingeckoAge {
+  font: var(--type-microcopy);
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ── Input ── */
+
+.inputWrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.inputShell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  padding: 0 16px;
+  border-radius: var(--radius-md);
+  background-color: rgba(0, 0, 0, 0.32);
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.inputShell:focus-within {
+  background-color: rgba(0, 0, 0, 0.38);
+  border-color: transparent;
+}
+
+.inputShell:focus-within .inputRing {
+  opacity: 0.45;
+}
+
+.inputRing {
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.inputPrefix {
+  font-family: var(--font-mono);
+  font-weight: var(--weight-semibold);
+  font-size: 1.375rem;
+  color: rgba(255, 255, 255, 0.55);
+  margin-right: 8px;
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-white);
+  font-family: var(--font-mono);
+  font-weight: var(--weight-semibold);
+  font-size: 1.375rem;
+  letter-spacing: var(--tracking-mono-tight);
+  text-align: right;
+  padding: 0;
+}
+
+.input:focus,
+.input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Delta indicator ── */
+
+.delta {
+  font: var(--type-microcopy);
+  padding-left: 2px;
+  min-height: 16px;
+  transition: color var(--transition-fast);
+}
+
+.delta-neutral { color: rgba(255, 255, 255, 0.55); }
+.delta-above   { color: var(--color-gold); font-weight: var(--weight-semibold); }
+.delta-below   { color: #f2c969; }
+
+.errorText {
+  font: var(--type-microcopy);
+  color: #f08a8a;
+  font-weight: var(--weight-semibold);
+}
+
+/* ── Notes ── */
+
+.notesWrap {
+  display: flex;
+}
+
+.notes {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background-color: rgba(0, 0, 0, 0.24);
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  color: var(--color-white);
+  font: var(--type-body-sm);
+  font-family: var(--font-sans);
+  resize: vertical;
+  min-height: 56px;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.notes::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.notes:focus-visible {
+  outline: none;
+  border-color: rgba(201, 168, 76, 0.55);
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.14);
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.notes:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Footer ── */
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  padding-top: var(--space-3);
+  border-top: 0.5px solid rgba(201, 168, 76, 0.18);
+}
+
+.toggleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 8px 4px;
+  min-height: 44px;
+  background: transparent;
+  border: none;
+  color: var(--color-white);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
+}
+
+.toggle:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.toggle:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring-iridescent);
+}
+
+.toggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.toggleTrack {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 20px;
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.16);
+  transition: background-color var(--transition-fast);
+}
+
+.toggleOn .toggleTrack {
+  background-color: var(--color-gold);
+}
+
+.toggleThumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--color-white);
+  transition: transform var(--transition-fast);
+}
+
+.toggleOn .toggleThumb {
+  transform: translateX(16px);
+  background-color: var(--color-obsidian);
+}
+
+.toggleLabel {
+  font: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.toggleHelper {
+  font: var(--type-microcopy);
+  color: rgba(255, 255, 255, 0.45);
+  padding-left: 44px;
+}
+
+/* ── Save ── */
+
+.saveWrap {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.saveButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 24px;
+  background: var(--gold-iridescent);
+  color: var(--color-obsidian);
+  border: none;
+  border-radius: 8px;
+  font: var(--type-body);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition: filter var(--transition-fast), opacity var(--transition-fast);
+}
+
+.saveButton:hover:not(.saveButtonDisabled) {
+  filter: brightness(0.96);
+}
+
+.saveButton:active:not(.saveButtonDisabled) {
+  filter: brightness(0.92);
+}
+
+.saveButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--canvas-obsidian), var(--focus-ring-iridescent);
+}
+
+.saveButtonDisabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.savedBadge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 16px;
+  background-color: rgba(45, 122, 79, 0.18);
+  border: 0.5px solid rgba(127, 212, 158, 0.45);
+  border-radius: var(--radius-md);
+  color: #7fd49e;
+  font: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+}
+
+/* ── Motion ── */
+
+@media (prefers-reduced-motion: reduce) {
+  .inputShell,
+  .notes,
+  .toggle,
+  .toggleTrack,
+  .toggleThumb,
+  .saveButton,
+  .delta,
+  .inputRing {
+    transition: none;
+  }
+}
+
+/* ── Mobile (390px) ── */
+
+@media (max-width: 640px) {
+  .card {
+    padding: var(--space-6) var(--space-5);
+    gap: var(--space-4);
+  }
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+  .coingeckoPill {
+    align-items: flex-start;
+    width: 100%;
+  }
+  .input,
+  .inputPrefix {
+    font-size: 1.25rem;
+  }
+  .footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-3);
+  }
+  .saveButton,
+  .savedBadge {
+    width: 100%;
+    justify-content: center;
+  }
+  .toggleHelper {
+    padding-left: 0;
+  }
+}

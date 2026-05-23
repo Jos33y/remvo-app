@@ -1,0 +1,113 @@
+/* Operator dropdown menu anchored to the avatar button in AdminHeader.
+ *
+ * Neutral register (white surface, hairline border, gold focus ring).
+ * Positions below the avatar with a small offset; width grows to fit
+ * content up to 260px. On mobile (<480px) the menu spans the right
+ * edge of the viewport with 16px safe-area gutter so it never clips.
+ */
+
+.avatarWrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 220px;
+  max-width: 260px;
+  background-color: var(--neutral-surface);
+  border: 1px solid var(--neutral-border);
+  border-radius: 8px;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 8px 24px rgba(0, 0, 0, 0.12);
+  padding: var(--space-2) 0;
+  z-index: 50;
+  animation: menuIn 120ms ease-out;
+}
+
+@keyframes menuIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.identity {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-2) var(--space-3) var(--space-3);
+}
+
+.identityName {
+  font: var(--type-body);
+  font-weight: 600;
+  color: var(--neutral-text-primary);
+}
+
+.identityEmail {
+  font: var(--type-microcopy);
+  color: var(--neutral-text-secondary);
+  word-break: break-all;
+}
+
+.divider {
+  height: 1px;
+  background-color: var(--neutral-border);
+  margin: var(--space-1) 0;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  background: none;
+  border: none;
+  text-align: left;
+  font: var(--type-body);
+  color: var(--neutral-text-primary);
+  cursor: pointer;
+  transition: background-color 80ms ease-out;
+  min-height: 40px;
+}
+
+.item:hover,
+.item:focus-visible {
+  background-color: var(--neutral-surface-alt, rgba(0, 0, 0, 0.03));
+  outline: none;
+}
+
+.item:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--neutral-border-focus, var(--gold, #c4a464));
+}
+
+.itemMuted {
+  color: var(--neutral-text-secondary);
+  justify-content: space-between;
+}
+
+.kbd {
+  font: var(--type-microcopy);
+  font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+  color: var(--neutral-text-muted);
+  padding: 2px 6px;
+  border: 1px solid var(--neutral-border);
+  border-radius: 4px;
+  background-color: var(--neutral-surface-sunk, rgba(0, 0, 0, 0.02));
+}
+
+@media (max-width: 480px) {
+  .menu {
+    right: 0;
+    max-width: calc(100vw - 32px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu {
+    animation: none;
+  }
+}

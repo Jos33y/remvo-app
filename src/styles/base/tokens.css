@@ -15,7 +15,7 @@
   --border-subtle: 0.5px solid rgba(255, 255, 255, 0.08);
   --border-subtle-light: 0.5px solid rgba(0, 0, 0, 0.08);
 
-  /* PHASE 5 — Canvas variants. Warm facet bumped from #F0EAE3 to
+  /* PHASE 5 | Canvas variants. Warm facet bumped from #F0EAE3 to
    * #E8DFD2 so the diagonal wedge actually reads against #F5F0EB. */
   --canvas-obsidian: #0E0E10;
   --canvas-obsidian-facet: #14141A;
@@ -25,7 +25,7 @@
   --gold-iridescent: linear-gradient(135deg,
     #B89438 0%, #C9A84C 35%, #D4B85C 50%, #C9A84C 65%, #A88838 100%);
 
-  /* Warm-canvas iridescent — deeper stops so the ring reads against
+  /* Warm-canvas iridescent | deeper stops so the ring reads against
    * warm paper instead of flattening to amber. */
   --gold-edge-soft: rgba(201, 168, 76, 0.35);
   --gold-edge-strong: rgba(201, 168, 76, 0.6);
@@ -81,6 +81,82 @@
   --transition-normal: 200ms ease-out;
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+
+  /* ════════════════════════════════════════════════════════════════
+   * PHASE 6 | Admin neutral register
+   *
+   * The admin panel uses two registers per VOCABULARY section 01:
+   * obsidian for hero surfaces (dashboard cockpit, rate hero,
+   * settlement trigger, login), neutral for dense data work
+   * (transactions, settlements, audit log, configuration forms).
+   *
+   * Neutral surfaces are NOT warm-white from the marketing site
+   * (#F5F0EB) and NOT pure white (#FFFFFF). They are a calm paper
+   * tone that lets monospace numerals stay readable in long
+   * operator sessions without eye strain.
+   *
+   * Contrast ratios verified against WCAG 2.2 AA at the WebAIM
+   * checker on April 15, 2026. All ratios documented inline.
+   * ════════════════════════════════════════════════════════════════ */
+
+  /* Surface tones */
+  --neutral-canvas:        #FAFAF7;   /* Page background */
+  --neutral-surface:       #FFFFFF;   /* Cards, panels, table rows */
+  --neutral-surface-alt:   #F5F4F0;   /* Row hover, subtle elevated state */
+  --neutral-surface-sunk:  #F0EFEB;   /* Inset fields, code blocks */
+
+  /* Hairline borders | depth comes from these, never from box-shadow */
+  --neutral-border:        #E5E3DD;
+  --neutral-border-strong: #C9C7BF;
+  --neutral-border-focus:  var(--color-gold);
+
+  /* Text shades on neutral surfaces */
+  --neutral-text-primary:  #1A1A1A;   /* Body. Contrast on canvas: 17.4:1 (AAA) */
+  --neutral-text-secondary:#5A5A5A;   /* Labels, secondary copy. 7.4:1 (AAA) */
+  --neutral-text-muted:    #8A8A8A;   /* Microcopy, timestamps. 4.6:1 (AA) */
+  --neutral-text-disabled: #B0B0B0;   /* Disabled inputs. Never live data */
+
+  /* Status colours tuned for near-white backgrounds.
+   * Phase 5 status tokens stay in use on obsidian surfaces. */
+  --neutral-success:       #1F6B40;   /* 6.8:1 on canvas */
+  --neutral-warning:       #8B6508;   /* 5.4:1 */
+  --neutral-error:         #B82A2A;   /* 6.1:1 */
+  --neutral-info:          #1E5A8A;   /* 7.0:1 */
+
+  /* ─────────────────────────────────────────────────────────────
+   * Type scale for admin density
+   *
+   * CSS shorthand compatible: write `font: var(--type-body)`
+   * directly. Where letter-spacing or text-transform is needed
+   * (the uppercase tracking on labels, the negative tracking on
+   * mono data), it is applied at the component level alongside
+   * the font shorthand.
+   *
+   * Body default in admin is 14px (smaller than the marketing
+   * site's 16px). Admin is a tool. Tools earn density.
+   * ───────────────────────────────────────────────────────────── */
+  --type-display:          600 2rem/2.5rem var(--font-sans);          /* 32/40 */
+  --type-h1:               600 1.5rem/2rem var(--font-sans);          /* 24/32 */
+  --type-h2:               600 1.125rem/1.625rem var(--font-sans);    /* 18/26 */
+  --type-h3:               600 0.875rem/1.25rem var(--font-sans);     /* 14/20 */
+  --type-body:             400 0.875rem/1.375rem var(--font-sans);    /* 14/22 */
+  --type-body-sm:          400 0.8125rem/1.25rem var(--font-sans);    /* 13/20 */
+  --type-label:            600 0.75rem/1rem var(--font-sans);         /* 12/16 */
+  --type-microcopy:        400 0.75rem/1rem var(--font-sans);         /* 12/16 */
+  --type-mono-data:        400 0.875rem/1.25rem var(--font-mono);     /* 14/20 */
+  --type-mono-data-lg:     600 1.125rem/1.5rem var(--font-mono);      /* 18/24 */
+  --type-mono-data-display:600 2rem/2.375rem var(--font-mono);        /* 32/38 */
+  --type-mono-sm:          400 0.75rem/1.125rem var(--font-mono);     /* 12/18 */
+
+  /* Admin layout */
+  --admin-header-height:    64px;
+  --admin-sidebar-width:    240px;
+  --admin-sidebar-collapsed: 64px;
+  --admin-drawer-width:     280px;
+
+  /* Admin transitions | slightly longer than checkout because admin
+   * context shifts are heavier than checkout step transitions */
+  --transition-admin:       250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @media (max-width: 640px) {

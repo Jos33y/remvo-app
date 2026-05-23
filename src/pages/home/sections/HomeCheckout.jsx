@@ -1,6 +1,6 @@
-import { CheckoutMockup } from '@components/ui/CheckoutMockup';
-import { Reveal } from '@components/ui/Reveal';
-import styles from '@styles/pages/homepage.module.css';
+import { CheckoutMockup } from '@components/ui/marketing/CheckoutMockup';
+import { Reveal } from '@components/ui/marketing/Reveal';
+import styles from '@styles/pages/marketing/homepage.module.css';
 
 export function HomeCheckout() {
   return (

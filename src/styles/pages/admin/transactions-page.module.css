@@ -1,0 +1,397 @@
+/* ════════════════════════════════════════════════════════════════
+ * TransactionsPage | neutral
+ *
+ * Mirrors AuditLogPage layout so operators have one mental model
+ * for "list-with-filters-and-search". Differences:
+ *   - Right-aligned numeric columns (USD, Naira, rate)
+ *   - Status pill column for settlement state
+ *   - Reference + user_id stack in a single cell so the table fits
+ *     7 columns without horizontal scroll on a 1280px viewport
+ * ════════════════════════════════════════════════════════════════ */
+
+.page {
+  padding: var(--space-6) var(--space-6) var(--space-10);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pageTitle {
+  font: var(--type-h1);
+  color: var(--neutral-text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.pageSubtitle {
+  font: var(--type-body-sm);
+  color: var(--neutral-text-secondary);
+  margin: 0;
+  max-width: 720px;
+  line-height: 1.5;
+}
+
+/* ── Filter strip ── */
+
+.filterStrip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+  margin-bottom: var(--space-3);
+}
+
+.filterField {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 140px;
+}
+
+.filterLabel {
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.filterSelect {
+  height: 36px;
+  padding: 0 var(--space-3);
+  background: var(--neutral-surface);
+  border: 1px solid var(--neutral-border);
+  border-radius: var(--radius-sm);
+  color: var(--neutral-text-primary);
+  font: var(--type-body-sm);
+  cursor: pointer;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--neutral-text-muted) 50%),
+                    linear-gradient(135deg, var(--neutral-text-muted) 50%, transparent 50%);
+  background-position: calc(100% - 16px) 14px, calc(100% - 11px) 14px;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: var(--space-6);
+  transition: border-color var(--transition-fast);
+}
+
+.filterSelect:hover:not(:disabled) {
+  border-color: var(--neutral-text-muted);
+}
+
+.filterSelect:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 1px;
+  border-color: transparent;
+}
+
+.dateInput {
+  height: 36px;
+  padding: 0 var(--space-3);
+  background: var(--neutral-surface);
+  border: 1px solid var(--neutral-border);
+  border-radius: var(--radius-sm);
+  color: var(--neutral-text-primary);
+  font: var(--type-body-sm);
+  transition: border-color var(--transition-fast);
+}
+
+.dateInput:hover:not(:disabled) { border-color: var(--neutral-text-muted); }
+.dateInput:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 1px;
+  border-color: transparent;
+}
+
+/* ── Meta row ── */
+
+.metaRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-2) var(--space-1) 0;
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+}
+
+/* ── Loading ── */
+
+.loadingBlock {
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+  font: var(--type-body-sm);
+  color: var(--neutral-text-muted);
+}
+
+/* ── Table ── */
+
+.tableWrap {
+  border: 1px solid var(--neutral-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--neutral-surface);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+.thead {
+  background-color: var(--neutral-surface-alt);
+  border-bottom: 1px solid var(--neutral-border);
+}
+
+.th {
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  font: var(--type-label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--neutral-text-muted);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.thRight {
+  text-align: right;
+}
+
+.row {
+  border-bottom: 1px solid var(--neutral-border);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.row:hover {
+  background-color: var(--neutral-surface-alt);
+}
+
+.row:focus-visible {
+  outline: none;
+  background-color: var(--neutral-surface-alt);
+  box-shadow: inset 0 0 0 2px var(--color-gold);
+}
+
+.td {
+  padding: var(--space-3) var(--space-4);
+  font: var(--type-body-sm);
+  color: var(--neutral-text-primary);
+  vertical-align: middle;
+}
+
+.tdRight {
+  text-align: right;
+}
+
+.timeMono {
+  font: var(--type-mono-sm);
+  color: var(--neutral-text-secondary);
+  white-space: nowrap;
+}
+
+.referenceBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.reference {
+  font: var(--type-mono-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--neutral-text-primary);
+  letter-spacing: var(--tracking-mono-tight);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userMeta {
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.platformChip {
+  display: inline-block;
+  padding: 2px 8px;
+  border: 1px solid var(--neutral-border);
+  border-radius: 999px;
+  font: var(--type-microcopy);
+  color: var(--neutral-text-secondary);
+  text-transform: lowercase;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.mono {
+  font: var(--type-mono-data);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-mono-tight);
+  color: var(--neutral-text-primary);
+}
+
+.monoMuted {
+  font: var(--type-mono-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--neutral-text-secondary);
+}
+
+.statusPill {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid;
+  font: var(--type-microcopy);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  white-space: nowrap;
+}
+
+.statusPillSettled {
+  border-color: rgba(31, 107, 64, 0.32);
+  color: var(--neutral-success);
+  background-color: rgba(31, 107, 64, 0.08);
+}
+
+.statusPillPending {
+  border-color: rgba(139, 101, 8, 0.32);
+  color: var(--neutral-warning);
+  background-color: rgba(139, 101, 8, 0.08);
+}
+
+/* ── Margin column ── */
+
+.marginBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  line-height: 1.25;
+}
+
+.marginValue {
+  font: var(--type-mono-data);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-mono-tight);
+  font-weight: var(--weight-semibold);
+}
+
+.marginPos { color: var(--neutral-success); }
+.marginNeg { color: var(--neutral-error, #C43D3D); }
+
+.marginPct {
+  font: var(--type-microcopy);
+  font-variant-numeric: tabular-nums;
+  color: var(--neutral-text-muted);
+}
+
+.marginEmpty {
+  font: var(--type-mono-sm);
+  color: var(--neutral-text-muted);
+}
+
+/* ── Pagination tail ── */
+
+.loadMoreWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  flex-wrap: wrap;
+}
+
+.loadMoreBtn {
+  min-height: 36px;
+  padding: 8px 16px;
+  background: var(--neutral-surface);
+  border: 1px solid var(--neutral-border);
+  border-radius: var(--radius-sm);
+  color: var(--neutral-text-primary);
+  font: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.loadMoreBtn:hover {
+  background-color: var(--neutral-surface-alt);
+  border-color: var(--neutral-border-strong);
+}
+
+.loadMoreBtn:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+.loadMoreBtn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.endOfList {
+  text-align: center;
+  padding: var(--space-4);
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+  border-top: 1px solid var(--neutral-border);
+  margin-top: var(--space-2);
+}
+
+/* ── Motion ── */
+
+@media (prefers-reduced-motion: reduce) {
+  .row, .loadMoreBtn { transition: none; }
+}
+
+/* ── Mobile ── */
+
+@media (max-width: 1024px) {
+  .tableWrap { overflow-x: auto; }
+  .table { min-width: 1000px; }
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: var(--space-5) max(var(--space-4), env(safe-area-inset-right, 0)) var(--space-8) max(var(--space-4), env(safe-area-inset-left, 0));
+    gap: var(--space-4);
+  }
+  .pageTitle { font: var(--type-h2); }
+}
+
+/* DENSITY_VARIANTS */
+/* Density variants for native <table> | controlled by data-density
+ * attribute on .tableWrap. CSS Modules scope the .tableWrap, .th,
+ * .td selectors to this file, so this block only affects the
+ * containing module. Default state is the existing rules above. */
+
+.tableWrap[data-density="compact"] .th,
+.tableWrap[data-density="compact"] .td {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.tableWrap[data-density="comfortable"] .th,
+.tableWrap[data-density="comfortable"] .td {
+  padding-top: 14px;
+  padding-bottom: 14px;
+  font-size: 15px;
+  line-height: 1.55;
+}

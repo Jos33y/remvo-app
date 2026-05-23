@@ -1,0 +1,240 @@
+/* ════════════════════════════════════════════════════════════════
+ * AuditLogPage | neutral
+ * ════════════════════════════════════════════════════════════════ */
+
+.page {
+  padding: var(--space-6) var(--space-6) var(--space-10);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pageTitle {
+  font: var(--type-h1);
+  color: var(--neutral-text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.pageSubtitle {
+  font: var(--type-body-sm);
+  color: var(--neutral-text-secondary);
+  margin: 0;
+  max-width: 640px;
+  line-height: 1.5;
+}
+
+/* ── Table wrap | matches DataTable treatment ── */
+
+.tableWrap {
+  border: 1px solid var(--neutral-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--neutral-surface);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+.thead {
+  background-color: var(--neutral-surface-alt);
+  border-bottom: 1px solid var(--neutral-border);
+}
+
+.th {
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  font: var(--type-label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--neutral-text-muted);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* ── Load more ── */
+
+.loadMoreWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  flex-wrap: wrap;
+}
+
+.loadMoreBtn {
+  min-height: 36px;
+  padding: 8px 16px;
+  background: var(--neutral-surface);
+  border: 1px solid var(--neutral-border);
+  border-radius: var(--radius-sm);
+  color: var(--neutral-text-primary);
+  font: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.loadMoreBtn:hover {
+  background-color: var(--neutral-surface-alt);
+  border-color: var(--neutral-border-strong);
+}
+
+.loadMoreBtn:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+.loadMoreMeta {
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+}
+
+/* ── Motion ── */
+
+@media (prefers-reduced-motion: reduce) {
+  .loadMoreBtn {
+    transition: none;
+  }
+}
+
+/* ── Mobile ── */
+
+@media (max-width: 640px) {
+  .page {
+    padding: var(--space-5) max(var(--space-4), env(safe-area-inset-right, 0)) var(--space-8) max(var(--space-4), env(safe-area-inset-left, 0));
+    gap: var(--space-4);
+  }
+  .pageTitle {
+    font: var(--type-h2);
+  }
+  .tableWrap {
+    overflow-x: auto;
+  }
+  .table {
+    min-width: 560px;
+  }
+}
+
+/* Phase 7E: live-API loading state. Sits where the table would
+   otherwise render. Quiet enough not to distract; visible enough
+   to confirm the page is doing something. */
+.loadingBlock {
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+  font: var(--type-body-sm);
+  color: var(--neutral-text-muted);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ * Filter strip | sits above FilterBar
+ *
+ * Three native <select> chips + a date range. Native select is the
+ * right call here over a custom dropdown: keyboard-accessible by
+ * default, free i18n, free OS-native rendering on mobile, and the
+ * filter list is short enough that we don't need search-within-select.
+ *
+ * The strip wraps to a second row at narrow widths so the page works
+ * on a phone | each filter is a fixed minimum width and lets flexbox
+ * wrap rather than overflow.
+ * ════════════════════════════════════════════════════════════════ */
+
+.filterStrip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+  margin-bottom: var(--space-3);
+}
+
+.filterField {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 140px;
+}
+
+.filterLabel {
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.filterSelect {
+  height: 36px;
+  padding: 0 var(--space-3);
+  background: var(--neutral-surface);
+  border: 1px solid var(--neutral-border);
+  border-radius: var(--radius-sm);
+  color: var(--neutral-text-primary);
+  font: var(--type-body-sm);
+  cursor: pointer;
+  /* native chevron via padding-right + bg-image keeps the look
+     consistent across browsers without disabling keyboard support */
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--neutral-text-muted) 50%),
+                    linear-gradient(135deg, var(--neutral-text-muted) 50%, transparent 50%);
+  background-position: calc(100% - 16px) 14px, calc(100% - 11px) 14px;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: var(--space-6);
+  transition: border-color var(--transition-fast);
+}
+
+.filterSelect:hover:not(:disabled) {
+  border-color: var(--neutral-text-muted);
+}
+
+.filterSelect:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 1px;
+  border-color: transparent;
+}
+
+.dateInput {
+  height: 36px;
+  padding: 0 var(--space-3);
+  background: var(--neutral-surface);
+  border: 1px solid var(--neutral-border);
+  border-radius: var(--radius-sm);
+  color: var(--neutral-text-primary);
+  font: var(--type-body-sm);
+  transition: border-color var(--transition-fast);
+}
+
+.dateInput:hover:not(:disabled) { border-color: var(--neutral-text-muted); }
+.dateInput:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 1px;
+  border-color: transparent;
+}
+
+/* Page-level metadata strip (showing 50 of 247 + end-of-log) */
+.metaRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3) var(--space-1) 0;
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+}
+
+.endOfLog {
+  text-align: center;
+  padding: var(--space-4);
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+  border-top: 1px solid var(--neutral-border);
+  margin-top: var(--space-2);
+}

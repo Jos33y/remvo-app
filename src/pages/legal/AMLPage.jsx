@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import {
   LegalPageLayout,
   Clause,
-} from '@components/layout/LegalPageLayout';
+} from '@components/layout/marketing/LegalPageLayout';
 import { BRAND } from '@utils/constants';
 
 export function AMLPage() {
@@ -13,9 +13,9 @@ export function AMLPage() {
   return (
     <LegalPageLayout
       title="Anti-Money Laundering Policy"
-      date="3 April 2026"
-      dateTime="2026-04-03"
-      version="v1.0"
+      date="23 May 2026"
+      dateTime="2026-05-23"
+      version="v1.1"
       preamble={
         <>
           This Anti-Money Laundering (AML) Policy sets out the measures
@@ -35,10 +35,10 @@ export function AMLPage() {
       </Clause>
 
       <Clause id="service-model" heading="2. Service model and risk profile">
-        <p>2.1. {BRAND.NAME} operates as a B2B conversion routing service. End users access the {BRAND.NAME} checkout through partner platforms that have completed their own KYC and user verification processes.</p>
+        <p>2.1. {BRAND.NAME} operates as a B2B checkout infrastructure service. End users access the {BRAND.NAME} checkout through partner platforms that have completed their own KYC and user verification processes.</p>
         <p>2.2. {BRAND.NAME} does not hold user accounts, store user funds beyond the transaction window, or establish direct relationships with end users.</p>
-        <p>2.3. All deposits are made via bank transfer from Nigerian bank accounts. This provides inherent traceability, as bank accounts in Nigeria require BVN verification and are subject to CBN monitoring.</p>
-        <p>2.4. Transaction limits (₦10,000 minimum, ₦1,000,000 maximum per transaction) are enforced at the checkout level and cannot be bypassed by the end user.</p>
+        <p>2.3. All payments are made via bank transfer from Nigerian bank accounts. This provides inherent traceability, as bank accounts in Nigeria require BVN verification and are subject to CBN monitoring.</p>
+        <p>2.4. Transaction limits (₦10,000 minimum, ₦1,000,000 maximum per session) are enforced at the checkout level and cannot be bypassed by the end user.</p>
       </Clause>
 
       <Clause id="kyc" heading="3. Know Your Customer">
@@ -50,7 +50,7 @@ export function AMLPage() {
 
       <Clause id="monitoring" heading="4. Transaction monitoring">
         <p>4.1. All transactions processed through {BRAND.NAME} are logged with timestamps, amounts, payment references, and platform identifiers.</p>
-        <p>4.2. The following patterns are flagged for review: multiple transactions from the same user identifier within a short period, transactions at or near the maximum deposit limit repeated in sequence, unusual spikes in transaction volume from a single platform, and transactions occurring at unusual hours relative to normal platform activity.</p>
+        <p>4.2. The following patterns are flagged for review: multiple transactions from the same user identifier within a short period, transactions at or near the maximum transaction amount repeated in sequence, unusual spikes in transaction volume from a single platform, and transactions occurring at unusual hours relative to normal platform activity.</p>
         <p>4.3. Flagged transactions are reviewed by the designated compliance officer within twenty-four (24) hours.</p>
         <p>4.4. {BRAND.NAME} may pause, delay, or reverse transactions that are flagged during review, pending the outcome of the investigation.</p>
       </Clause>

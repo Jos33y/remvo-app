@@ -1,0 +1,159 @@
+/* ════════════════════════════════════════════════════════════════
+ * SettlementWalletDialog
+ * ════════════════════════════════════════════════════════════════ */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.lede {
+  font: var(--type-body-sm);
+  color: var(--color-text-secondary, #6B6B6B);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.sectionTitle {
+  font: var(--type-microcopy);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary, #6B6B6B);
+  margin: 0;
+}
+
+.addressRow {
+  padding: var(--space-3);
+  border: 0.5px solid var(--color-neutral-border, #E8E5DD);
+  border-radius: var(--radius-sm);
+  background: var(--color-neutral-surface-soft, #F5F2EB);
+  word-break: break-all;
+}
+
+.address {
+  font: var(--type-mono-data);
+  font-size: 13px;
+  color: var(--color-text-primary, #1A1A1A);
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+.empty {
+  color: var(--color-text-tertiary, #9A9A9A);
+  font-style: italic;
+}
+
+.input {
+  padding: var(--space-3);
+  font: var(--type-mono-data);
+  font-size: 13px;
+  border: 0.5px solid var(--color-neutral-border, #E8E5DD);
+  border-radius: var(--radius-sm);
+  background: var(--color-white, #FFFFFF);
+  color: var(--color-text-primary, #1A1A1A);
+  letter-spacing: var(--tracking-mono-tight);
+  word-break: break-all;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.18);
+}
+
+.input[aria-invalid="true"] {
+  border-color: #C43D3D;
+}
+
+.hintError {
+  font: var(--type-microcopy);
+  color: #C43D3D;
+  margin: 0;
+}
+
+.hintMuted {
+  font: var(--type-microcopy);
+  color: var(--color-text-tertiary, #9A9A9A);
+  margin: 0;
+}
+
+/* ── Validation tiers ── */
+
+.validationOk,
+.validationWarn {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 0.5px solid;
+}
+
+.validationOk {
+  background: rgba(31, 107, 64, 0.06);
+  border-color: rgba(31, 107, 64, 0.36);
+  color: #1F6B40;
+}
+
+.validationWarn {
+  background: rgba(184, 134, 11, 0.06);
+  border-color: rgba(184, 134, 11, 0.36);
+  color: #8A5F0A;
+}
+
+.validationTitle {
+  display: block;
+  font: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.validationBody {
+  font: var(--type-microcopy);
+  margin: 4px 0 0;
+  line-height: 1.4;
+  color: var(--color-text-secondary, #6B6B6B);
+}
+
+.validationAta {
+  display: block;
+  margin-top: var(--space-2);
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: var(--radius-xs);
+  font: var(--type-mono-sm);
+  font-size: 11px;
+  word-break: break-all;
+  color: var(--color-text-secondary, #6B6B6B);
+}
+
+.skipCheck {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  font: var(--type-microcopy);
+  color: var(--color-text-secondary, #6B6B6B);
+  cursor: pointer;
+  line-height: 1.4;
+}
+
+.skipCheck input {
+  margin-top: 2px;
+  accent-color: var(--color-gold);
+  cursor: pointer;
+}
+
+.error {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #C43D3D;
+  font: var(--type-microcopy);
+  margin: 0;
+}

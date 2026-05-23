@@ -1,8 +1,8 @@
-import { Button } from '@components/ui/Button';
-import { CheckoutMockup } from '@components/ui/CheckoutMockup';
-import { Reveal } from '@components/ui/Reveal';
-import { ROUTES, EXTERNAL } from '@utils/constants';
-import styles from '@styles/pages/partners.module.css';
+import { Button } from '@components/ui/shared/Button';
+import { CheckoutMockup } from '@components/ui/marketing/CheckoutMockup';
+import { Reveal } from '@components/ui/marketing/Reveal';
+import { PARTNERS_ROUTES, EXTERNAL } from '@utils/constants';
+import styles from '@styles/pages/marketing/partners.module.css';
 
 export function HeroSection() {
   return (
@@ -24,7 +24,7 @@ export function HeroSection() {
               <Button href={EXTERNAL.EMAIL} variant="primary">
                 Start integrating
               </Button>
-              <Button href={ROUTES.AGREEMENT} variant="secondary">
+              <Button href={PARTNERS_ROUTES.AGREEMENT} variant="secondary">
                 Review agreement
               </Button>
             </div>

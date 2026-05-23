@@ -1,14 +1,14 @@
 import { motion } from 'motion/react';
 import { useReducedMotion } from '@hooks/useReducedMotion';
 
-import { CheckoutShell } from '@components/layout/CheckoutShell';
-import { GoldRing } from '@components/ui/GoldRing';
-import { Logo } from '@components/ui/Logo';
-import { RemvoCard } from '@components/ui/RemvoCard';
+import { CheckoutShell } from '@components/layout/checkout/CheckoutShell';
+import { GoldRing } from '@components/ui/shared/GoldRing';
+import { Logo } from '@components/ui/shared/Logo';
+import { RemvoCard } from '@components/ui/shared/RemvoCard';
 
 import { staggerParent, reveal } from '@utils/motion';
 
-import styles from '@styles/pages/landing-page.module.css';
+import styles from '@styles/pages/checkout/landing-page.module.css';
 
 /* ──────────────────────────────────────────────────────────────────
  * LandingPage — Phase 5 (mounts at /)

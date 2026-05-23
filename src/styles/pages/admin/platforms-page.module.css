@@ -1,0 +1,189 @@
+/* ════════════════════════════════════════════════════════════════
+ * PlatformsPage | neutral
+ *
+ * Section 7 additions:
+ *   - errorBanner for API failure surface
+ * ════════════════════════════════════════════════════════════════ */
+
+.page {
+  padding: var(--space-6) var(--space-6) var(--space-10);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.pageHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.pageHeaderMain {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pageHeaderAside {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.primaryAction {
+  min-height: 36px;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  background-color: var(--neutral-text-primary);
+  border: 1px solid var(--neutral-text-primary);
+  color: var(--neutral-surface);
+  font: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+
+.primaryAction:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.primaryAction:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+.primaryAction:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.actionHint {
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+}
+
+.pageTitle {
+  font: var(--type-h1);
+  color: var(--neutral-text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.pageSubtitle {
+  font: var(--type-body-sm);
+  color: var(--neutral-text-secondary);
+  margin: 0;
+  max-width: 640px;
+  line-height: 1.5;
+}
+
+/* ── Error banner (API mode) ── */
+
+.errorBanner {
+  padding: var(--space-3) var(--space-4);
+  background: rgba(196, 61, 61, 0.06);
+  border: 1px solid rgba(196, 61, 61, 0.36);
+  border-radius: var(--radius-sm);
+  color: #A03030;
+  font: var(--type-body-sm);
+}
+
+/* ── Cell content ── */
+
+.nameCell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nameText {
+  font: var(--type-body);
+  font-weight: var(--weight-semibold);
+  color: var(--neutral-text-primary);
+}
+
+.nameId {
+  font: var(--type-mono-sm);
+  color: var(--neutral-text-muted);
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+.countryCount {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  font: var(--type-body-sm);
+}
+
+.countryActive {
+  font: var(--type-mono-data);
+  font-weight: var(--weight-semibold);
+  color: var(--neutral-success);
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+.countrySlash,
+.countryTotal {
+  font: var(--type-mono-data);
+  color: var(--neutral-text-muted);
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+.countryMuted {
+  color: var(--neutral-text-muted);
+  margin-left: 4px;
+  font: var(--type-microcopy);
+}
+
+.settlementText {
+  font: var(--type-body-sm);
+  color: var(--neutral-text-primary);
+}
+
+.skimValue {
+  font: var(--type-mono-data);
+  font-weight: var(--weight-semibold);
+  color: var(--neutral-text-primary);
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+.timeCell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.timeRel {
+  font: var(--type-body-sm);
+  color: var(--neutral-text-primary);
+}
+
+.timeAbs {
+  font: var(--type-mono-sm);
+  color: var(--neutral-text-muted);
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+/* ── Mobile ── */
+
+@media (max-width: 640px) {
+  .page {
+    padding: var(--space-5) max(var(--space-4), env(safe-area-inset-right, 0)) var(--space-8) max(var(--space-4), env(safe-area-inset-left, 0));
+    gap: var(--space-4);
+  }
+  .pageTitle {
+    font: var(--type-h2);
+  }
+  .pageHeader {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .pageHeaderAside {
+    width: 100%;
+    align-items: flex-start;
+  }
+}

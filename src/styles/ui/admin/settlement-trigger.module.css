@@ -1,0 +1,343 @@
+/* SettlementTrigger | obsidian cockpit card, generous padding per
+ * PRIMITIVES 03.4. CTA uses the iridescent gold gradient carried
+ * from Phase 5 primary surfaces. No shadows, no glow | depth comes
+ * from the 0.5px gold-tinted border over the obsidian canvas. */
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-6) var(--space-6) var(--space-5);
+  border-radius: var(--radius-lg);
+  border: 0.5px solid rgba(201, 168, 76, 0.18);
+  background-color: rgba(255, 255, 255, 0.02);
+  color: var(--color-white);
+  min-width: 0;
+  min-height: 100%;
+}
+
+/* ── Header ── */
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.label {
+  font: var(--type-label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.microcopy {
+  font: var(--type-microcopy);
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ── Total ── */
+
+.totalRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  min-height: 32px;
+}
+
+.totalValue {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  white-space: nowrap;
+}
+
+.totalNumber {
+  font-family: var(--font-mono);
+  font-weight: var(--weight-semibold);
+  font-size: 1.75rem;
+  line-height: 1.1;
+  letter-spacing: var(--tracking-mono-tight);
+  color: var(--color-white);
+}
+
+.totalUnit {
+  font: var(--type-mono-data);
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+/* ── Per-platform breakdown ── */
+
+.breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: var(--space-3);
+  border-top: 0.5px solid rgba(201, 168, 76, 0.18);
+}
+
+.breakdownTitle {
+  font: var(--type-label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.breakdownList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.breakdownRow {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: var(--space-3);
+  align-items: baseline;
+  padding: 6px 0;
+}
+
+.breakdownName {
+  font: var(--type-body-sm);
+  color: rgba(255, 255, 255, 0.82);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.breakdownCount {
+  font: var(--type-mono-sm);
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+.breakdownAmount {
+  font: var(--type-mono-data);
+  font-weight: var(--weight-semibold);
+  color: var(--color-white);
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+/* ── CTA ── */
+
+.ctaWrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  background: var(--gold-iridescent);
+  color: var(--color-obsidian);
+  font: var(--type-body);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition: filter var(--transition-fast), opacity var(--transition-fast);
+}
+
+.cta:hover:not(.ctaDisabled):not(.ctaRunning) {
+  filter: brightness(0.96);
+}
+
+.cta:active:not(.ctaDisabled):not(.ctaRunning) {
+  filter: brightness(0.92);
+}
+
+.cta:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--canvas-obsidian), var(--focus-ring-iridescent);
+}
+
+.ctaDisabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ctaRunning {
+  cursor: default;
+  color: rgba(26, 26, 26, 0.7);
+}
+
+.ctaLabel {
+  position: relative;
+  z-index: 1;
+}
+
+.ctaSkeleton {
+  position: absolute;
+  inset: 4px;
+  border-radius: 6px;
+  background-color: rgba(26, 26, 26, 0.12);
+  animation: settlementPulse 1.5s ease-in-out infinite;
+}
+
+.helper {
+  margin: 0;
+  font: var(--type-microcopy);
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.5;
+}
+
+.errorText {
+  margin: 0;
+  font: var(--type-microcopy);
+  color: #f08a8a;
+  font-weight: var(--weight-semibold);
+}
+
+/* ── Empty state ──
+ *
+ * Mirrors the populated card rhythm:
+ *   label row | value row (32px) | divider | status line
+ * so the three hero cards line up visually across the row.
+ */
+
+.cardEmpty {
+  /* Same padding as idle .card, no overrides | identical height. */
+}
+
+.emptyValueRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 32px;
+}
+
+.emptyIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-color: rgba(45, 122, 79, 0.18);
+  color: #7fd49e;
+}
+
+.emptyValue {
+  font: var(--type-h3);
+  color: var(--color-white);
+  line-height: 1.2;
+}
+
+.emptyDivider {
+  height: 0.5px;
+  background-color: rgba(201, 168, 76, 0.18);
+  margin-top: var(--space-1);
+}
+
+.emptyStatus {
+  font: var(--type-body-sm);
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.5;
+}
+
+/* ── Success state ── */
+
+.cardSuccess {
+  padding: var(--space-6);
+  gap: var(--space-4);
+}
+
+.successInner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.successIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-color: rgba(45, 122, 79, 0.18);
+  color: #7fd49e;
+}
+
+.successText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.successHeadline {
+  font: var(--type-h3);
+  color: var(--color-white);
+}
+
+.successBody {
+  font: var(--type-body-sm);
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.viewLink {
+  align-self: flex-start;
+  min-height: 32px;
+  padding: 6px 10px;
+  background: transparent;
+  border: none;
+  color: var(--color-gold);
+  font: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
+}
+
+.viewLink:hover {
+  background-color: rgba(201, 168, 76, 0.08);
+}
+
+.viewLink:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring-iridescent);
+}
+
+/* ── Motion ── */
+
+@keyframes settlementPulse {
+  0%, 100% { opacity: 0.6; }
+  50%      { opacity: 0.9; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta,
+  .viewLink {
+    transition: none;
+  }
+  .ctaSkeleton {
+    animation: none;
+    opacity: 0.6;
+  }
+}
+
+/* ── Mobile ── */
+
+@media (max-width: 640px) {
+  .card {
+    padding: var(--space-6) var(--space-5) var(--space-5);
+  }
+  .totalNumber { font-size: 1.625rem; }
+  .breakdownRow { gap: var(--space-2); }
+}

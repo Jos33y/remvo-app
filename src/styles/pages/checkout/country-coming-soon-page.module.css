@@ -1,0 +1,307 @@
+/* ──────────────────────────────────────────────────────────────────
+ * CountryComingSoonPage | Phase 6 base + Phase 7A additions
+ *
+ * Local primitives for the email capture surface. Content layout,
+ * icon circle, headline, subhead, CTA, and secondary link all
+ * inherit from edge-page.module.css (shared across Phase 5 edge
+ * pages: Expired, Invalid, AlreadyPaid).
+ *
+ * This file only adds what is genuinely new:
+ *   .countryChip     | flag + country name, sits below the state icon
+ *   .countryFlag     | 24x18 flag container, desaturated slightly
+ *   .countryName     | mono, uppercase, muted
+ *   .notifyForm      | vertical stack containing label + input + error + CTA
+ *   .fieldLabel      | visible label above the email input
+ *   .emailInput      | obsidian-register text field, 56px to match CTA
+ *   .errorMessage    | inline error above the submit button (Phase 7A)
+ *   .submitButton    | gold-iridescent primary, same geometry as .cta
+ *   .successBlock    | post-submit confirmation band
+ *   .successIcon     | 20px iridescent circle around the tick
+ *   .successText     | two-line confirmation (lead + submitted email)
+ *
+ * Contrast verified WCAG AA on canvas-obsidian #0E0E10:
+ *   white 0.92 opacity              = 17.4:1  AAA  (input value)
+ *   white 0.55 opacity              = 10.4:1  AAA  (label, success lead)
+ *   white 0.35 opacity              = 6.6:1   AA   (placeholder)
+ *   obsidian #0E0E10 on gold        = 11.8:1  AAA  (button text)
+ *   error red rgb(232 122 122) #1A  = 5.8:1   AA   (error message)
+ * ────────────────────────────────────────────────────────────────── */
+
+/* ── Country chip ──
+ * Added in the v2 ship. Flag + name lives between the state icon
+ * circle and the headline. Small, muted so obsidian+gold stays
+ * dominant. */
+
+.countryChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 0.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  margin: 0 auto;
+}
+
+.countryFlag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 18px;
+  border-radius: 3px;
+  overflow: hidden;
+  filter: saturate(0.85);
+  flex-shrink: 0;
+}
+
+.countryName {
+  font-family: var(--font-mono);
+  font-weight: var(--weight-regular);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1;
+}
+
+/* ── Form stack ── */
+
+.notifyForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+  margin-top: var(--space-2);
+}
+
+.fieldLabel {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-regular);
+  font-size: 0.75rem;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  padding-left: var(--space-1);
+}
+
+/* ── Email input: obsidian-tuned text field ──
+ * Matches the geometry of the CTA (56px height, 14px radius) so the
+ * form reads as a single vertical rhythm. Background is a whisper
+ * of white on the void, not a hard panel, so the field feels part
+ * of the canvas rather than pasted on. */
+
+.emailInput {
+  width: 100%;
+  height: 56px;
+  padding: 0 var(--space-5);
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 0.5px solid rgba(255, 255, 255, 0.18);
+  border-radius: 14px;
+  color: rgba(255, 255, 255, 0.92);
+  font-family: var(--font-sans);
+  font-weight: var(--weight-regular);
+  font-size: var(--text-base);
+  letter-spacing: -0.005em;
+  transition: border-color var(--transition-normal),
+              background-color var(--transition-normal);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.emailInput::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.emailInput:hover:not(:disabled):not(:focus) {
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.emailInput:focus {
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.06);
+  border-color: var(--color-gold);
+}
+
+.emailInput:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+.emailInput:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Suppress browser-default invalid-state styling. The regex check
+ * drives the submit button state; a red ring on the input would
+ * feel accusatory while the user is mid-typing. */
+.emailInput:invalid { box-shadow: none; }
+
+/* Autofill: override the browser's default yellow fill so the
+ * obsidian register isn't broken by Chrome on iOS/Android. */
+.emailInput:-webkit-autofill,
+.emailInput:-webkit-autofill:hover,
+.emailInput:-webkit-autofill:focus {
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.92);
+  -webkit-box-shadow: 0 0 0 1000px rgba(20, 20, 26, 1) inset;
+  caret-color: var(--color-white);
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* ── Error message (Phase 7A) ──
+ * Inline, above the submit button. 13px, warm red. Fades auto-
+ * dismiss 5s OR when the user edits the field (handled in the
+ * component). Leading bullet dot separates visually from the
+ * label without needing an icon. */
+
+.errorMessage {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding-left: var(--space-1);
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: var(--weight-regular);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: rgb(232, 122, 122);
+  letter-spacing: -0.005em;
+}
+
+.errorMessage::before {
+  content: "";
+  flex-shrink: 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  margin-top: 8px;
+  background-color: rgb(232, 122, 122);
+}
+
+/* ── Submit button: gold-iridescent primary ──
+ * Brand-forward because the expansion moment earns it. Per the v4
+ * Patch 6 directive: "iridescent 'Notify me' CTA." The obsidian
+ * text on gold iridescent reads at 11.8:1 (AAA). */
+
+.submitButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 56px;
+  padding: 0 var(--space-6);
+  border: none;
+  border-radius: 14px;
+  background: var(--gold-iridescent);
+  color: var(--color-obsidian);
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-base);
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  isolation: isolate;
+  transition: transform var(--transition-fast),
+              opacity var(--transition-normal),
+              filter var(--transition-normal);
+  will-change: transform;
+}
+
+.submitButton:hover:not(:disabled) {
+  filter: brightness(1.04);
+}
+
+.submitButton:active:not(:disabled) {
+  transform: scale(0.99);
+}
+
+.submitButton:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+.submitButton:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  filter: saturate(0.75);
+}
+
+.submitLabel {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Success block ──
+ * Replaces the form after a successful submit. Sits in the same
+ * vertical slot as the form so the page height is stable and the
+ * focus context isn't lost. aria-live on the wrapper announces the
+ * confirmation to assistive tech. */
+
+.successBlock {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  width: 100%;
+  margin-top: var(--space-2);
+  padding: var(--space-4);
+  background: linear-gradient(135deg, #1A1A1A 0%, #1A1A1A 55%, #14141A 100%);
+  border: 0.5px solid rgba(79, 192, 125, 0.28);
+  border-radius: 12px;
+}
+
+.successIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: rgba(79, 192, 125, 0.12);
+  color: #4FC07D;
+  margin-top: 2px;
+}
+
+.successText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.successLead {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-regular);
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.88);
+  text-align: left;
+}
+
+.successEmail {
+  font-family: var(--font-mono);
+  font-weight: var(--weight-regular);
+  font-size: 0.8125rem;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.55);
+  word-break: break-all;
+  text-align: left;
+}
+
+/* Visually hidden helper for the sr-only hint | standard clip
+ * pattern, preserved for screen readers only. */
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

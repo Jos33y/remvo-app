@@ -1,7 +1,7 @@
-import { Button } from '@components/ui/Button';
-import { Reveal } from '@components/ui/Reveal';
+import { Button } from '@components/ui/shared/Button';
+import { Reveal } from '@components/ui/marketing/Reveal';
 import { ROUTES } from '@utils/constants';
-import styles from '@styles/pages/homepage.module.css';
+import styles from '@styles/pages/marketing/homepage.module.css';
 
 export function HomeCTA() {
   return (
@@ -26,13 +26,10 @@ export function HomeCTA() {
             real volume.
           </h2>
           <p className={styles.ctaDesc}>
-            One integration. Instant user credits. Daily dollar settlement.
+            One integration. Instant user credits. Daily reconciliation.
           </p>
           <div className={styles.ctaActions}>
-            <Button href={ROUTES.PARTNERS} variant="primary" size="large">
-              Platform overview
-            </Button>
-            <Button href={ROUTES.CONTACT} variant="outline" size="large">
+            <Button href={ROUTES.CONTACT} variant="primary" size="large">
               Get in touch
             </Button>
           </div>

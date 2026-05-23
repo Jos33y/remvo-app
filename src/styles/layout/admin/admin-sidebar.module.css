@@ -1,0 +1,266 @@
+/* ════════════════════════════════════════════════════════════════
+ * AdminSidebar
+ *
+ * Fixed-position left column. Hidden below 1024px.
+ * Width: 240px expanded, 64px collapsed, 150ms ease transition.
+ *
+ * Right edge: 1px iridescent gold hairline via ::after.
+ * Bottom fade: gradient overlay signals "more content below".
+ * Scrollbar: 2px wide, invisible until hover.
+ *
+ * Active item (expanded): 2px gold left border + tinted bg.
+ * Active item (collapsed): 2px gold bottom bar under icon + tinted bg.
+ * ════════════════════════════════════════════════════════════════ */
+
+.sidebar {
+  position: fixed;
+  top: var(--admin-header-height);
+  bottom: 0;
+  left: 0;
+  z-index: 40;
+  width: var(--admin-sidebar-width);
+  background-color: var(--color-obsidian);
+  display: flex;
+  flex-direction: column;
+  transition: width var(--transition-fast);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  padding-left: env(safe-area-inset-left, 0);
+}
+
+@media (max-width: 1023px) {
+  .sidebar { display: none; }
+}
+
+.sidebar.collapsed {
+  width: var(--admin-sidebar-collapsed);
+}
+
+/* Right-edge iridescent hairline */
+.sidebar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--gold-iridescent);
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* Bottom gradient fade */
+.sidebar::before {
+  content: "";
+  position: absolute;
+  bottom: 52px;
+  left: 0;
+  right: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, transparent, var(--color-obsidian));
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.9;
+}
+
+/* Nav scroll container */
+.nav {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: var(--space-5) 0 var(--space-4);
+  position: relative;
+}
+
+/* Scrollbar: invisible by default, subtle 2px on hover.
+ * Firefox: scrollbar-width: none hides it; on hover we
+ * switch to thin. Webkit: 0px width, 2px on hover. */
+.nav {
+  scrollbar-width: none;
+}
+
+.nav:hover {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+}
+
+.nav::-webkit-scrollbar {
+  width: 0;
+}
+
+.nav:hover::-webkit-scrollbar {
+  width: 2px;
+}
+
+.nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.nav::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 1px;
+}
+
+.nav:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Section */
+.section {
+  margin-bottom: var(--space-5);
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.sectionLabel {
+  padding: 0 var(--space-5) var(--space-2);
+  font: var(--type-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.collapsed .sectionLabel {
+  display: none;
+}
+
+/* Item list */
+.itemList {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Nav item (expanded) */
+.item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-5);
+  min-height: 44px;
+  color: rgba(255, 255, 255, 0.7);
+  font: var(--type-body);
+  text-decoration: none;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  border-left: 2px solid transparent;
+}
+
+.item:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+  color: var(--color-white);
+}
+
+.itemActive {
+  background-color: rgba(201, 168, 76, 0.06);
+  color: var(--color-white);
+  border-left-color: var(--color-gold);
+}
+
+.itemActive:hover {
+  background-color: rgba(201, 168, 76, 0.08);
+}
+
+.itemIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.itemLabel {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Nav item (collapsed): icon centred, no left border.
+ * Active: gold bottom bar under icon + stronger tinted bg. */
+.collapsed .item {
+  justify-content: center;
+  padding: var(--space-3);
+  gap: 0;
+  border-left-width: 0;
+}
+
+.collapsed .itemActive {
+  background-color: rgba(201, 168, 76, 0.12);
+}
+
+.collapsed .itemActive::after {
+  content: "";
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 2px;
+  background-color: var(--color-gold);
+  border-radius: 1px;
+}
+
+/* Collapse toggle (bottom of sidebar) */
+.collapseToggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-5);
+  min-height: 44px;
+  color: rgba(255, 255, 255, 0.4);
+  font: var(--type-microcopy);
+  border-top: 0.5px solid rgba(255, 255, 255, 0.06);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  position: relative;
+  z-index: 2;
+}
+
+.collapseToggle:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+  color: var(--color-white);
+}
+
+.collapsed .collapseToggle {
+  justify-content: center;
+  padding: var(--space-3);
+}
+
+.collapseChevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-fast);
+}
+
+.collapseChevron[data-collapsed="false"] {
+  transform: rotate(180deg);
+}
+
+.collapseLabel {
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar,
+  .item,
+  .collapseToggle,
+  .collapseChevron {
+    transition: none;
+  }
+}
+
+/* PHASE_7F_S3_ITEM_DISABLED */
+.itemDisabled {
+  color: rgba(255, 255, 255, 0.28);
+  cursor: not-allowed;
+  user-select: none;
+}
+
+.itemDisabled:hover {
+  background-color: transparent;
+  color: rgba(255, 255, 255, 0.28);
+}
+
+.itemDisabled .itemIcon {
+  opacity: 0.6;
+}

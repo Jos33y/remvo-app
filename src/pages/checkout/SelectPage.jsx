@@ -6,16 +6,19 @@ import { useSession } from '@context/SessionContext';
 import { useCheckoutNavigate } from '@hooks/useCheckoutNavigate';
 import { useReducedMotion } from '@hooks/useReducedMotion';
 
-import { CheckoutShell } from '@components/layout/CheckoutShell';
-import { GoldRing } from '@components/ui/GoldRing';
-import { RemvoCard } from '@components/ui/RemvoCard';
-import { DenominationGrid } from '@components/ui/DenominationGrid';
-import { DevSimulateButton } from '@components/ui/DevSimulateButton';
+import { CheckoutShell } from '@components/layout/checkout/CheckoutShell';
+import { GoldRing } from '@components/ui/shared/GoldRing';
+import { RemvoCard } from '@components/ui/shared/RemvoCard';
+import { DenominationGrid } from '@components/ui/checkout/DenominationGrid';
+import { DevSimulateButton } from '@components/ui/checkout/DevSimulateButton';
 
 import { formatNaira } from '@utils/formatNaira';
+/* PHASE_7F_S4_CHECKOUT_EVENTS */
+import { useCheckoutViewEvent, useCheckoutEmitter } from '@hooks/useCheckoutEvent';
+import { CHECKOUT_EVENTS } from '@lib/checkoutEventsClient';
 import { staggerParent, reveal, easeOut } from '@utils/motion';
 
-import styles from '@styles/pages/select-page.module.css';
+import styles from '@styles/pages/checkout/select-page.module.css';
 
 const DENOMINATIONS = [10, 25, 50, 100, 250, 500];
 const DEFAULT_AMOUNT = 25;
@@ -59,6 +62,11 @@ export function SelectPage() {
   const { session, mockSelectAmount } = useSession();
   const reduced = useReducedMotion();
 
+  /* select.view fires once on reaching the denomination screen;
+   * emitSelect drives the select.amount action event. */
+  useCheckoutViewEvent(CHECKOUT_EVENTS.SELECT_VIEW, session?.session_id);
+  const emitSelect = useCheckoutEmitter(session?.session_id);
+
   const [inputValue, setInputValue] = useState(String(DEFAULT_AMOUNT));
 
   const numericValue = inputValue ? parseInt(inputValue, 10) : 0;
@@ -76,6 +84,10 @@ export function SelectPage() {
 
   const handleContinue = () => {
     if (!canContinue) return;
+    /* select.amount | the committed amount, fired before navigation.
+     * keepalive on the client ensures the beacon survives the route
+     * change. */
+    emitSelect(CHECKOUT_EVENTS.SELECT_AMOUNT, { amount_usd: numericValue });
     mockSelectAmount(numericValue);
     checkoutNavigate(`/${token}`);
   };

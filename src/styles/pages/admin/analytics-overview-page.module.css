@@ -1,0 +1,291 @@
+/* ──────────────────────────────────────────────────────────────────
+ * AnalyticsOverviewPage | neutral
+ *
+ * Spacing rhythm:
+ *   Section gap              var(--space-6)
+ *   Header to first row      var(--space-5)
+ *   Primary row gap          var(--space-4)
+ *   Inside panel gap         var(--space-4)
+ * ────────────────────────────────────────────────────────────────── */
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: var(--max-width-content);
+}
+
+/* ── Header ── */
+
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sectionTitle {
+  font: var(--type-h1);
+  color: var(--neutral-text-primary);
+  margin: 0;
+}
+
+.sectionSubtitle {
+  font: var(--type-body-sm);
+  color: var(--neutral-text-secondary);
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+}
+
+.sectionRange {
+  color: var(--neutral-text-primary);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+.sectionSeparator {
+  color: var(--neutral-text-muted);
+}
+
+.sep {
+  color: var(--neutral-text-muted);
+  font-weight: var(--weight-regular);
+}
+
+/* ── Rows of stat cards ── */
+
+.primaryRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+
+.secondaryRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+
+.primaryCard,
+.secondaryCard {
+  min-width: 0;
+}
+
+/* ── Delta badge ──
+ * Three semantic tones: up (green), down (red), flat (muted), and a
+ * fourth "new" tone for windows where the previous period has no
+ * comparable data. "new" reads as neutral-informative, not as a win. */
+
+.delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font: var(--type-mono-sm);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.delta-up {
+  background-color: rgba(31, 107, 64, 0.10);
+  color: var(--neutral-success);
+}
+
+.delta-down {
+  background-color: rgba(184, 42, 42, 0.10);
+  color: var(--neutral-error);
+}
+
+.delta-flat {
+  background-color: var(--neutral-surface-alt);
+  color: var(--neutral-text-muted);
+}
+
+.delta-new {
+  background-color: var(--neutral-surface-alt);
+  color: var(--neutral-text-secondary);
+  font-weight: var(--weight-regular);
+  text-transform: lowercase;
+  letter-spacing: 0;
+}
+
+/* ── Panel (trend chart) ── */
+
+.panel {
+  background-color: var(--neutral-surface);
+  border: 1px solid var(--neutral-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.panelHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.panelText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.panelTitle {
+  font: var(--type-h2);
+  color: var(--neutral-text-primary);
+  margin: 0;
+}
+
+.panelSubtitle {
+  font: var(--type-body-sm);
+  color: var(--neutral-text-secondary);
+  margin: 0;
+}
+
+.trendWrap {
+  width: 100%;
+  padding-top: var(--space-2);
+}
+
+/* ── Highlight callouts ── */
+
+.highlightGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+}
+
+.highlight {
+  background-color: var(--neutral-surface);
+  border: 1px solid var(--neutral-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.highlightTitle {
+  font: var(--type-label);
+  color: var(--neutral-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+
+.highlightBody {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.highlightValue {
+  font: var(--type-mono-data-lg);
+  color: var(--neutral-text-primary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.highlightMeta {
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+}
+
+.highlightEmpty {
+  font: var(--type-body-sm);
+  color: var(--neutral-text-muted);
+  padding: var(--space-2) 0;
+}
+
+/* ── Session outcomes row ──
+ * Three stat blocks side by side with coloured status dots.
+ * Replaces the former "Window health" callout which conflated
+ * expired (normal) with failed (incident). */
+
+.outcomeRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+  padding-top: 2px;
+}
+
+.outcome {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  align-items: baseline;
+  column-gap: var(--space-2);
+  row-gap: 2px;
+}
+
+.outcomeDot {
+  grid-row: 1 / 3;
+  align-self: center;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.outcomeDotSuccess { background-color: var(--neutral-success); }
+.outcomeDotWarning { background-color: var(--neutral-warning); }
+.outcomeDotError   { background-color: var(--neutral-error); }
+
+.outcomeValue {
+  grid-column: 2;
+  grid-row: 1;
+  font: var(--type-mono-data);
+  font-weight: var(--weight-semibold);
+  color: var(--neutral-text-primary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+}
+
+.outcomeLabel {
+  grid-column: 2;
+  grid-row: 2;
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+}
+
+/* ── Empty state ── */
+
+.emptyState {
+  margin-top: var(--space-2);
+  padding: var(--space-5);
+  border: 1px dashed var(--neutral-border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--neutral-surface-alt);
+  color: var(--neutral-text-secondary);
+  font: var(--type-body);
+  text-align: center;
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 900px) {
+  .primaryRow { grid-template-columns: repeat(2, 1fr); }
+  .secondaryRow { grid-template-columns: repeat(2, 1fr); }
+  .highlightGrid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 520px) {
+  .primaryRow,
+  .secondaryRow {
+    grid-template-columns: 1fr;
+  }
+
+  .outcomeRow {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-2);
+  }
+}

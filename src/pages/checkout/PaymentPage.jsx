@@ -6,18 +6,21 @@ import { useSession } from '@context/SessionContext';
 import { useCheckoutNavigate } from '@hooks/useCheckoutNavigate';
 import { useReducedMotion } from '@hooks/useReducedMotion';
 
-import { CheckoutShell } from '@components/layout/CheckoutShell';
-import { RemvoCard } from '@components/ui/RemvoCard';
-import { BankTransferCard } from '@components/ui/BankTransferCard';
-import { PaymentStatusBar } from '@components/ui/PaymentStatusBar';
-import { DevSimulateButton } from '@components/ui/DevSimulateButton';
+import { CheckoutShell } from '@components/layout/checkout/CheckoutShell';
+import { RemvoCard } from '@components/ui/shared/RemvoCard';
+import { BankTransferCard } from '@components/ui/checkout/BankTransferCard';
+import { PaymentStatusBar } from '@components/ui/checkout/PaymentStatusBar';
+import { DevSimulateButton } from '@components/ui/checkout/DevSimulateButton';
 
 import { formatNaira } from '@utils/formatNaira';
+/* PHASE_7F_S4_CHECKOUT_EVENTS */
+import { useCheckoutViewEvent, useCheckoutEmitter } from '@hooks/useCheckoutEvent';
+import { CHECKOUT_EVENTS } from '@lib/checkoutEventsClient';
 import { durSlow, easeOut } from '@utils/motion';
 
-import styles from '@styles/pages/payment-page.module.css';
+import styles from '@styles/pages/checkout/payment-page.module.css';
 
-/* Phase 5 — obsidian canvas. Card on the left in default state,
+/* Phase 5 â€” obsidian canvas. Card on the left in default state,
  * transitions to pending when the webhook lands, then SessionResolver
  * navigates to /complete where the card becomes owned with the
  * iridescent border draw. BankTransferCard on the right carries the
@@ -32,11 +35,26 @@ export function PaymentPage() {
     startPaymentWindow();
   }, [startPaymentWindow]);
 
+  /* payment.view | reached the bank-transfer page. */
+  useCheckoutViewEvent(CHECKOUT_EVENTS.PAYMENT_VIEW, session?.session_id);
+  const emitPayment = useCheckoutEmitter(session?.session_id);
+
+  /* payment.waiting | the window is live and the user is still
+   * pending a transfer. Only emit when status is 'pending' so a
+   * session that lands already-settled does not record a phantom
+   * wait. The view-event dedup makes this safe to evaluate every
+   * render | it fires at most once. */
+  useCheckoutViewEvent(
+    CHECKOUT_EVENTS.PAYMENT_WAITING,
+    session?.status === 'pending' ? session?.session_id : null
+  );
+
   useEffect(() => {
     if (!session) return;
     if (session.status === 'completed') {
       checkoutNavigate(`/${token}/complete`, { replace: true });
-    } else if (session.status === 'expired') {
+    } else if (session.status === 'expired' || session.status === 'failed') {
+      /* PHASE_7F_S5_FAILED_NAV | expired or failed both route home to SessionResolver */
       checkoutNavigate(`/${token}`, { replace: true });
     }
   }, [session, token, checkoutNavigate]);
@@ -92,6 +110,7 @@ export function PaymentPage() {
               reference={session.reference}
               disabled={!isPending}
               accent={isSettled}
+              onCopy={() => emitPayment(CHECKOUT_EVENTS.PAYMENT_COPY)}
             />
           </motion.div>
 

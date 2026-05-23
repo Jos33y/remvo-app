@@ -4,8 +4,8 @@ import {
   Clause,
   DefList,
   DefItem,
-} from '@components/layout/LegalPageLayout';
-import { ROUTES, BRAND } from '@utils/constants';
+} from '@components/layout/marketing/LegalPageLayout';
+import { PARTNERS_ROUTES, BRAND } from '@utils/constants';
 
 const TOC_ITEMS = [
   { id: 'definitions', label: 'Definitions' },
@@ -42,7 +42,7 @@ export function AgreementPage() {
       date="3 April 2026"
       dateTime="2026-04-03"
       version="v1.0"
-      backTo={ROUTES.PARTNERS}
+      backTo={PARTNERS_ROUTES.HOME}
       backLabel="Back to overview"
       tocItems={TOC_ITEMS}
       preamble={

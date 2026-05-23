@@ -1,0 +1,306 @@
+/* ──────────────────────────────────────────────────────────────────
+ * AnalyticsPlatformsPage | neutral
+ *
+ * 7-column table (down from 8). Fits 960px content width without
+ * horizontal scroll at typical body widths. On narrow mobile (<720px)
+ * the table still scrolls horizontally because dense tabular data
+ * does not reflow cleanly at those widths; the panel keeps the
+ * visible scroll-shadow cue so the operator knows more is to the
+ * right.
+ * ────────────────────────────────────────────────────────────────── */
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: var(--max-width-content);
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sectionTitle {
+  font: var(--type-h1);
+  color: var(--neutral-text-primary);
+  margin: 0;
+}
+
+.sectionSubtitle {
+  font: var(--type-body-sm);
+  color: var(--neutral-text-secondary);
+  margin: 0;
+}
+
+.rangeText {
+  color: var(--neutral-text-primary);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Totals strip ── */
+
+.totals {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  background-color: var(--neutral-surface);
+  border: 1px solid var(--neutral-border);
+  border-radius: var(--radius-md);
+}
+
+.totalCell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.totalLabel {
+  font: var(--type-label);
+  color: var(--neutral-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.totalValue {
+  font: var(--type-mono-data-lg);
+  color: var(--neutral-text-primary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* ── Panel + table ── */
+
+.panel {
+  background-color: var(--neutral-surface);
+  border: 1px solid var(--neutral-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.tableScroller {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+.table thead th {
+  font: var(--type-label);
+  color: var(--neutral-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--neutral-surface-alt);
+  border-bottom: 1px solid var(--neutral-border);
+  white-space: nowrap;
+}
+
+.table thead .colNum,
+.table thead .colConversion {
+  text-align: right;
+}
+
+.colPlatform  { width: 18%; min-width: 140px; }
+.colConversion { width: 20%; min-width: 160px; }
+.colCountries { width: 22%; min-width: 180px; }
+
+.row {
+  border-bottom: 1px solid var(--neutral-border);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.row:hover {
+  background-color: var(--neutral-surface-alt);
+}
+
+.table td {
+  padding: var(--space-4);
+  vertical-align: middle;
+  font: var(--type-body);
+  color: var(--neutral-text-primary);
+}
+
+/* Platform cell: name + id */
+
+.platformCell {
+  min-width: 140px;
+}
+
+.platformName {
+  display: block;
+  font-weight: var(--weight-semibold);
+}
+
+.platformId {
+  display: block;
+  font: var(--type-mono-sm);
+  color: var(--neutral-text-muted);
+  letter-spacing: -0.01em;
+  margin-top: 2px;
+}
+
+/* Numeric cells: right-aligned, tabular */
+
+.numCell {
+  text-align: right;
+  font: var(--type-mono-data);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+  color: var(--neutral-text-primary);
+}
+
+/* Volume cell: stacks USD primary + NGN muted sub-line */
+
+.volumeCell {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.volumeUsd {
+  display: block;
+  font: var(--type-mono-data);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.015em;
+  color: var(--neutral-text-primary);
+  line-height: 1.2;
+}
+
+.volumeNaira {
+  display: block;
+  font: var(--type-mono-sm);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  color: var(--neutral-text-muted);
+  margin-top: 2px;
+}
+
+/* Conversion cell */
+
+.conversionCell {
+  min-width: 160px;
+}
+
+.conversionStack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.conversionValue {
+  font: var(--type-mono-data);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+  color: var(--neutral-text-primary);
+}
+
+.barTrack {
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background-color: var(--neutral-surface-sunk);
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.barTone-success { background-color: var(--neutral-success); }
+.barTone-neutral { background-color: var(--color-gold); }
+.barTone-warning { background-color: var(--neutral-warning); }
+
+/* Country cell: chip pairs (code + count) with a trailing +N more */
+
+.countryCell {
+  min-width: 160px;
+}
+
+.countryList {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.countryItem {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background-color: var(--neutral-surface-alt);
+  border: 0.5px solid var(--neutral-border);
+}
+
+.countryCode {
+  font: var(--type-mono-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--neutral-text-primary);
+  letter-spacing: 0;
+}
+
+.countryCount {
+  font: var(--type-mono-sm);
+  color: var(--neutral-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.countryMore {
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+  white-space: nowrap;
+}
+
+.emptyInline {
+  color: var(--neutral-text-muted);
+  font: var(--type-body-sm);
+}
+
+/* ── Empty ── */
+
+.empty {
+  padding: var(--space-8) var(--space-5);
+  border: 1px dashed var(--neutral-border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--neutral-surface-alt);
+  color: var(--neutral-text-secondary);
+  text-align: center;
+  font: var(--type-body);
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 900px) {
+  .totals {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Below 900px, let columns take their natural width again and
+   * allow horizontal scroll so data stays readable. */
+  .table {
+    min-width: 760px;
+  }
+}
+
+@media (max-width: 520px) {
+  .totals {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

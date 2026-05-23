@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import { useSession } from '@context/SessionContext';
-import { CheckoutShell } from '@components/layout/CheckoutShell';
-import { RemvoCard } from '@components/ui/RemvoCard';
+import { CheckoutShell } from '@components/layout/checkout/CheckoutShell';
+import { RemvoCard } from '@components/ui/shared/RemvoCard';
 import { useReducedMotion } from '@hooks/useReducedMotion';
 import { formatNaira } from '@utils/formatNaira';
+/* PHASE_7F_S4_CHECKOUT_EVENTS */
+import { useCheckoutViewEvent } from '@hooks/useCheckoutEvent';
+import { CHECKOUT_EVENTS } from '@lib/checkoutEventsClient';
 import { durSlow, easeOut } from '@utils/motion';
-import styles from '@styles/pages/complete-page.module.css';
+import styles from '@styles/pages/checkout/complete-page.module.css';
 
 const REDIRECT_DELAY_MS = 5000;
 
@@ -36,6 +39,12 @@ export function CompletePage() {
     return () => { if (redirectRef.current) clearTimeout(redirectRef.current); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.callback_url]);
+
+  /* complete.view | user reached the confirmation screen. The
+   * payment.confirmed event is emitted server-side from the Monnify
+   * webhook; this is the distinct "user actually saw the success
+   * screen" signal. */
+  useCheckoutViewEvent(CHECKOUT_EVENTS.COMPLETE_VIEW, session?.session_id);
 
   if (!session) return null;
 

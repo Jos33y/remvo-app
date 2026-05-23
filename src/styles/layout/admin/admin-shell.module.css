@@ -1,0 +1,62 @@
+/* ════════════════════════════════════════════════════════════════
+ * AdminShell
+ *
+ * When nav=true: fixed header across top (64px), fixed sidebar on
+ * left at desktop widths. Main content offsets with padding-top +
+ * padding-left to sit beside both.
+ *
+ * When nav=false: no header, no sidebar. Main content fills the
+ * full viewport. Used by login, enrol, invite accept.
+ * ════════════════════════════════════════════════════════════════ */
+
+.shell {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--neutral-canvas);
+  color: var(--neutral-text-primary);
+  padding-top: env(safe-area-inset-top, 0);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  padding-left: env(safe-area-inset-left, 0);
+  padding-right: env(safe-area-inset-right, 0);
+  position: relative;
+  overflow-x: hidden;
+}
+
+.shell[data-canvas="obsidian"] {
+  background-color: var(--canvas-obsidian);
+  color: var(--color-white);
+}
+
+/* Main content area: top padding accounts for fixed header,
+ * left padding accounts for fixed sidebar at desktop widths. */
+.main {
+  position: relative;
+  z-index: 1;
+  padding-top: var(--admin-header-height);
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+@media (min-width: 1024px) {
+  .main {
+    padding-left: var(--admin-sidebar-width);
+    transition: padding-left var(--transition-fast);
+  }
+
+  .shellCollapsed .main {
+    padding-left: var(--admin-sidebar-collapsed);
+  }
+}
+
+/* No-nav variant (login, enrol, invite accept): no header and no
+ * sidebar at any breakpoint, so both padding offsets drop to zero.
+ * The page fills the entire viewport. */
+.shellNoNav .main {
+  padding-top: 0;
+}
+
+@media (min-width: 1024px) {
+  .shellNoNav .main {
+    padding-left: 0;
+  }
+}

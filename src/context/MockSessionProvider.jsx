@@ -72,6 +72,39 @@ function buildBaseSession({ token, mode = 'preset', amountUsdCard = 25 }) {
   };
 }
 
+/* ──────────────────────────────────────────────────────────────────
+ * buildCountryNotActiveSession
+ *
+ * Phase 6 (checkout extension) — fixtures for CountryComingSoonPage.
+ * Mirrors the shape documented in PHASE_6_ADMIN_SCREEN_SKETCH_v4_PATCH
+ * Patch 6. All payment fields are stripped because no checkout flow
+ * is possible; only the fields CountryComingSoonPage reads are kept.
+ *
+ * country_code is an ISO-3166-1 alpha-2 string used by CountryFlag
+ * to render the right glyph; the human-readable country string is
+ * independent for display flexibility.
+ * ────────────────────────────────────────────────────────────────── */
+function buildCountryNotActiveSession({
+  token,
+  reason,
+  country,
+  countryCode,
+  notifyEnabled,
+}) {
+  return {
+    session_id: token,
+    status: 'country_not_active',
+    reason,
+    country,
+    country_code: countryCode,
+    notify_enabled: notifyEnabled,
+    platform_name: 'GE-AS',
+    platform_logo_url: null,
+    platform_id: 'geas',
+    callback_url: 'https://ge-as.com/deposit/complete',
+  };
+}
+
 function resolveToken(token) {
   if (!token || !token.startsWith('cs_')) {
     return {
@@ -98,6 +131,65 @@ function resolveToken(token) {
     }
     case 'cs_test_invalid':
       return { ...buildBaseSession({ token }), status: 'invalid' };
+
+    /* ── Country-not-active fixtures (Phase 6 checkout extension) ── */
+    case 'cs_test_coming_soon':
+      return buildCountryNotActiveSession({
+        token,
+        reason: 'coming_soon',
+        country: 'Ghana',
+        countryCode: 'GH',
+        notifyEnabled: true,
+      });
+    case 'cs_test_coming_soon_no_notify':
+      return buildCountryNotActiveSession({
+        token,
+        reason: 'coming_soon',
+        country: 'Kenya',
+        countryCode: 'KE',
+        notifyEnabled: false,
+      });
+    case 'cs_test_paused':
+      return buildCountryNotActiveSession({
+        token,
+        reason: 'paused',
+        country: 'Uganda',
+        countryCode: 'UG',
+        notifyEnabled: true,
+      });
+    case 'cs_test_paused_no_notify':
+      return buildCountryNotActiveSession({
+        token,
+        reason: 'paused',
+        country: 'Tanzania',
+        countryCode: 'TZ',
+        notifyEnabled: false,
+      });
+    case 'cs_test_coming_soon_za':
+      return buildCountryNotActiveSession({
+        token,
+        reason: 'coming_soon',
+        country: 'South Africa',
+        countryCode: 'ZA',
+        notifyEnabled: true,
+      });
+    case 'cs_test_coming_soon_eg':
+      return buildCountryNotActiveSession({
+        token,
+        reason: 'coming_soon',
+        country: 'Egypt',
+        countryCode: 'EG',
+        notifyEnabled: true,
+      });
+    case 'cs_test_coming_soon_ci':
+      return buildCountryNotActiveSession({
+        token,
+        reason: 'coming_soon',
+        country: "Cote d'Ivoire",
+        countryCode: 'CI',
+        notifyEnabled: true,
+      });
+
     default:
       return buildBaseSession({ token, mode: 'preset', amountUsdCard: 25 });
   }

@@ -1,0 +1,192 @@
+/* CurrentRateTile | obsidian cockpit tile. Geometry matches
+ * WalletBalance and SettlementTrigger so the three cockpit cards
+ * sit flush. Value uses IBM Plex Mono Semibold at the same display
+ * size as WalletBalance; the hero numeral is iridescent gold on
+ * manual (the preferred source) and white-with-amber tint on
+ * coingecko / last_known. No shadows, no glow. */
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-6) var(--space-6) var(--space-5);
+  border-radius: var(--radius-lg);
+  border: 0.5px solid rgba(201, 168, 76, 0.18);
+  background-color: rgba(255, 255, 255, 0.02);
+  color: var(--color-white);
+  min-width: 0;
+  min-height: 100%;
+  justify-content: flex-start;
+}
+
+.tone-manual    { border-color: rgba(201, 168, 76, 0.28); }
+.tone-coingecko { border-color: rgba(201, 168, 76, 0.18); }
+.tone-stale     { border-color: rgba(184, 134, 11, 0.45); }
+
+.cardUnavailable {
+  border-color: rgba(196, 61, 61, 0.45);
+}
+
+/* ── Header ── */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.label {
+  font: var(--type-label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.iconSlot {
+  display: inline-flex;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ── Value row ── */
+
+.valueRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  min-height: 38px;
+}
+
+.value {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  white-space: nowrap;
+}
+
+.valueNumber {
+  font: var(--type-mono-data-display);
+  letter-spacing: var(--tracking-mono-tight);
+  line-height: 1.1;
+  color: var(--color-white);
+}
+
+.tone-manual .valueNumber {
+  background: var(--gold-iridescent);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.tone-stale .valueNumber {
+  color: #f2c969;
+}
+
+.valueUnit {
+  font: var(--type-mono-data);
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+/* ── Attribution ── */
+
+.attribution {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: var(--space-1);
+  border-top: 0.5px solid rgba(201, 168, 76, 0.18);
+}
+
+.attributionPrimary {
+  font: var(--type-body-sm);
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.tone-stale .attributionPrimary {
+  color: #f2c969;
+  font-weight: var(--weight-semibold);
+}
+
+.attributionSecondary {
+  font: var(--type-microcopy);
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ── Open button ── */
+
+.openButton {
+  align-self: flex-start;
+  min-height: 32px;
+  padding: 6px 10px;
+  background: transparent;
+  border: none;
+  color: var(--color-gold);
+  font: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
+}
+
+.openButton:hover {
+  background-color: rgba(201, 168, 76, 0.08);
+}
+
+.openButton:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring-iridescent);
+}
+
+/* ── Unavailable state ── */
+
+.unavailableInner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+}
+
+.unavailableIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-color: rgba(196, 61, 61, 0.18);
+  color: #f08a8a;
+}
+
+.unavailableText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.unavailableHeadline {
+  font: var(--type-h3);
+  color: #f08a8a;
+}
+
+.unavailableBody {
+  font: var(--type-body-sm);
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* ── Motion ── */
+
+@media (prefers-reduced-motion: reduce) {
+  .openButton { transition: none; }
+}
+
+/* ── Mobile ── */
+
+@media (max-width: 640px) {
+  .card {
+    padding: var(--space-5) var(--space-5);
+  }
+  .valueNumber { font-size: 1.75rem; }
+}

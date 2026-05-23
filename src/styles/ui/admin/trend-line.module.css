@@ -1,0 +1,250 @@
+/* ──────────────────────────────────────────────────────────────────
+ * TrendLine — hand-authored SVG line chart styles
+ *
+ * Stroke + area vary by tone (gold default, success, info). Gridlines
+ * and baseline vary by register. Hover marker is always gold so the
+ * focus is unmistakable regardless of series colour.
+ *
+ * Layout reserves 20px at the bottom of the wrap element for the
+ * HTML tick labels; the SVG inside uses the full height. Tick labels
+ * sit in an absolute row at the bottom of the container.
+ * ────────────────────────────────────────────────────────────────── */
+
+.wrap {
+  position: relative;
+  width: 100%;
+  min-height: 120px;
+  /* Reserve space below the SVG for tick labels. SVG fills 100%
+   * but with this bottom padding the tick row has room. */
+  padding-bottom: 20px;
+  box-sizing: content-box;
+}
+
+.svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  display: block;
+}
+
+/* ── Gridlines + baseline ── */
+
+.register-obsidian .gridline {
+  stroke: rgba(255, 255, 255, 0.06);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 2 4;
+}
+
+.register-obsidian .baseline {
+  stroke: rgba(255, 255, 255, 0.18);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.register-neutral .gridline {
+  stroke: rgba(0, 0, 0, 0.06);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 2 4;
+}
+
+.register-neutral .baseline {
+  stroke: rgba(0, 0, 0, 0.18);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+/* ── Line + area fills by tone ── */
+
+.line {
+  fill: none;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tone-gold .line    { stroke: var(--color-gold); }
+.tone-success .line { stroke: #4FC07D; }
+.tone-info .line    { stroke: #7FB4E3; }
+
+.area {
+  stroke: none;
+}
+
+.tone-gold .area    { fill: rgba(201, 168, 76, 0.14); }
+.tone-success .area { fill: rgba(79, 192, 125, 0.12); }
+.tone-info .area    { fill: rgba(127, 180, 227, 0.12); }
+
+.register-neutral.tone-gold .area    { fill: rgba(201, 168, 76, 0.18); }
+.register-neutral.tone-success .area { fill: rgba(31, 107, 64, 0.12); }
+.register-neutral.tone-info .area    { fill: rgba(30, 90, 138, 0.10); }
+
+.register-neutral.tone-success .line { stroke: var(--neutral-success); }
+.register-neutral.tone-info .line    { stroke: var(--neutral-info); }
+
+/* ── Peak marker ── */
+
+.peakDot {
+  fill: var(--color-gold);
+  stroke: var(--color-gold);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.85;
+}
+
+.register-neutral .peakDot {
+  fill: var(--color-gold);
+  stroke: var(--neutral-surface);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.peakLabel {
+  position: absolute;
+  top: 2px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 2;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font: var(--type-mono-sm);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.register-obsidian .peakLabel {
+  background-color: rgba(201, 168, 76, 0.14);
+  color: var(--color-gold);
+  border: 0.5px solid rgba(201, 168, 76, 0.35);
+}
+
+.register-neutral .peakLabel {
+  background-color: rgba(201, 168, 76, 0.12);
+  color: #8B6E1F;
+  border: 0.5px solid rgba(201, 168, 76, 0.5);
+}
+
+.peakValue {
+  line-height: 1;
+}
+
+/* ── Axis ticks (HTML overlay at bottom of container) ── */
+
+.ticks {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 16px;
+  pointer-events: none;
+  font: var(--type-microcopy);
+  font-variant-numeric: tabular-nums;
+}
+
+.tick {
+  position: absolute;
+  top: 0;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.tick-start  { transform: translateX(0); }
+.tick-center { transform: translateX(-50%); }
+.tick-end    { transform: translateX(-100%); }
+
+.register-obsidian .tick {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.register-neutral .tick {
+  color: var(--neutral-text-muted);
+}
+
+/* ── Hover marker ── */
+
+.hoverLine {
+  stroke: rgba(201, 168, 76, 0.4);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.hoverDot {
+  fill: var(--color-gold);
+  stroke: var(--color-white);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.register-neutral .hoverDot {
+  stroke: var(--neutral-surface);
+}
+
+.hitzone {
+  fill: transparent;
+  cursor: crosshair;
+}
+
+/* ── Tooltip ── */
+
+.tooltip {
+  position: absolute;
+  top: 0;
+  transform: translate(-50%, -100%);
+  padding: var(--space-2) var(--space-3);
+  min-width: 120px;
+  max-width: 200px;
+  border-radius: var(--radius-sm);
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 3;
+  text-align: center;
+}
+
+.register-obsidian .tooltip {
+  background-color: rgba(26, 26, 26, 0.96);
+  border: 0.5px solid rgba(255, 255, 255, 0.12);
+  color: var(--color-white);
+}
+
+.register-neutral .tooltip {
+  background-color: #1A1A1A;
+  border: 0.5px solid rgba(0, 0, 0, 0.2);
+  color: var(--color-white);
+}
+
+.tooltipTime {
+  font: var(--type-microcopy);
+  opacity: 0.6;
+  margin-bottom: 2px;
+}
+
+.tooltipValue {
+  font: var(--type-mono-data);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Empty state ── */
+
+.empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: var(--type-body-sm);
+}
+
+.register-obsidian .empty {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.register-neutral .empty {
+  color: var(--neutral-text-muted);
+}

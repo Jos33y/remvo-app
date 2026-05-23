@@ -1,0 +1,219 @@
+/* ════════════════════════════════════════════════════════════════
+ * SettlementsPage | neutral
+ * ════════════════════════════════════════════════════════════════ */
+
+.page {
+  padding: var(--space-6) var(--space-6) var(--space-10);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pageTitle {
+  font: var(--type-h1);
+  color: var(--neutral-text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.pageSubtitle {
+  font: var(--type-body-sm);
+  color: var(--neutral-text-secondary);
+  margin: 0;
+  max-width: 640px;
+  line-height: 1.5;
+}
+
+/* ── Pending batch card ── */
+
+.pendingCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border-radius: var(--radius-md);
+  background-color: var(--neutral-surface);
+  border: 1px solid var(--neutral-border);
+}
+
+.pendingHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.pendingLabel {
+  font: var(--type-label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--neutral-text-secondary);
+}
+
+.pendingBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background-color: rgba(139, 101, 8, 0.08);
+  border: 1px solid rgba(139, 101, 8, 0.24);
+  font: var(--type-label);
+  font-weight: var(--weight-semibold);
+  color: var(--neutral-warning);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.pendingGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+
+.pendingStat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pendingStatLabel {
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.pendingStatValue {
+  font: var(--type-mono-data-lg);
+  color: var(--neutral-text-primary);
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+.pendingHelper {
+  font: var(--type-body-sm);
+  color: var(--neutral-text-secondary);
+  margin: 0;
+}
+
+/* ── Cell content ── */
+
+.batchId {
+  font: var(--type-mono-data);
+  font-weight: var(--weight-semibold);
+  color: var(--neutral-text-primary);
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+.timeCell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.timeRel {
+  font: var(--type-body-sm);
+  color: var(--neutral-text-primary);
+}
+
+.timeAbs {
+  font: var(--type-mono-sm);
+  color: var(--neutral-text-muted);
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+.countValue {
+  font: var(--type-mono-data);
+  color: var(--neutral-text-primary);
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+.totalValue {
+  font: var(--type-mono-data);
+  font-weight: var(--weight-semibold);
+  color: var(--neutral-text-primary);
+  letter-spacing: var(--tracking-mono-tight);
+}
+
+.platformText {
+  font: var(--type-body-sm);
+  color: var(--neutral-text-primary);
+}
+
+/* ── Mobile ── */
+
+@media (max-width: 640px) {
+  .page {
+    padding: var(--space-5) max(var(--space-4), env(safe-area-inset-right, 0)) var(--space-8) max(var(--space-4), env(safe-area-inset-left, 0));
+    gap: var(--space-4);
+  }
+  .pageTitle {
+    font: var(--type-h2);
+  }
+  .pendingGrid {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+}
+
+/* ── Section 5: API-mode list states ── */
+
+.loadingBlock {
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+  font: var(--type-body-sm);
+  color: var(--neutral-text-muted);
+}
+
+.loadMoreWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) 0;
+}
+
+.loadMoreBtn {
+  min-height: 36px;
+  padding: 8px 16px;
+  background: var(--neutral-surface);
+  border: 1px solid var(--neutral-border);
+  border-radius: var(--radius-sm);
+  color: var(--neutral-text-primary);
+  font: var(--type-body-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.loadMoreBtn:hover {
+  background-color: var(--neutral-surface-alt);
+  border-color: var(--neutral-border-strong);
+}
+
+.loadMoreBtn:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+.loadMoreBtn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.endOfList {
+  text-align: center;
+  padding: var(--space-4);
+  font: var(--type-microcopy);
+  color: var(--neutral-text-muted);
+  border-top: 1px solid var(--neutral-border);
+  margin-top: var(--space-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loadMoreBtn { transition: none; }
+}
