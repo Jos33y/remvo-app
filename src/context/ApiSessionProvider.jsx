@@ -117,11 +117,11 @@ function normalize(raw, opts) {
       reason: raw.reason === 'paused' ? 'paused' : 'coming_soon',
       country: (code && COUNTRY_NAMES[code]) || 'your region',
       country_code: code,
-      // The public GET does not echo notify_email_enabled (the
-      // initialize POST does). Default to true | offering the
-      // waitlist is the friendly, conversion-positive default.
-      // Tracked: the GET should echo notify_email_enabled for parity.
-      notify_enabled: true,
+      // PHASE_8_FIX_A | the public GET echoes notify_email_enabled
+      // (sessions/routes.js, Batch 16). Default to false on absence
+      // so a platform whose country_config has not set the flag
+      // never sees a waitlist form whose POST has no backing.
+      notify_enabled: raw.notify_email_enabled === true,
       platform_id: raw.platform_id || null,
       platform_name: raw.platform_name || 'the platform',
       platform_logo_url: null,
