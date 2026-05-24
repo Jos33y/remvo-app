@@ -12,12 +12,13 @@ export function HomeHero() {
           <div className={styles.heroContent}>
             <span className={styles.heroLabel}>The digital value card</span>
             <h1 id="hero-heading" className={styles.heroHeading}>
-              Naira in.<br />
-              <span className={styles.heroGold}>Dollars out.</span>
+              Buy a card.<br />
+              <span className={styles.heroGold}>Activate instantly.</span>
             </h1>
             <p className={styles.heroSub}>
-              Pay in Naira from any Nigerian bank account. Receive
-              dollar-denominated value in seconds. One card, one checkout.
+              A digital value card for the platforms you already use. Pay in
+              Naira by bank transfer. Your card activates the moment payment
+              confirms.
             </p>
             <div className={styles.heroCtas}>
               <Button href={ROUTES.CONTACT} variant="primary" size="large">

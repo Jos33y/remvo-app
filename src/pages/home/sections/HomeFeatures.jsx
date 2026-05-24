@@ -5,7 +5,7 @@ const FEATURES = [
   {
     num: '01',
     title: 'Card checkout',
-    desc: 'Your users buy digital value cards in Naira through a hosted checkout. The dollar value is credited to your platform. One integration, one flow.',
+    desc: 'Your users buy digital value cards in Naira through a hosted checkout. The card value is credited to your platform account. One integration, one flow.',
   },
   {
     num: '02',
@@ -15,7 +15,7 @@ const FEATURES = [
   {
     num: '03',
     title: 'Daily reconciliation',
-    desc: 'Dollar value posts to your platform every day. Reference number, email confirmation, full audit trail.',
+    desc: 'Daily activity summary posted to your platform. Reference number, email confirmation, full audit trail.',
   },
 ];
 

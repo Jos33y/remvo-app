@@ -32,8 +32,8 @@ export function NotFoundPage() {
         <p className={styles.body}>
           The URL you followed may be outdated or mistyped.
         </p>
-        <Button href={ROUTES.PARTNERS} variant="primary">
-          Go to platform overview
+        <Button href={ROUTES.HOME} variant="primary">
+          Back to home
         </Button>
       </div>
     </section>
