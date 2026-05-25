@@ -41,7 +41,7 @@ export function CompletePage() {
   }, [session?.callback_url]);
 
   /* complete.view | user reached the confirmation screen. The
-   * payment.confirmed event is emitted server-side from the PSP
+   * payment.confirmed event is emitted server-side from the Monnify
    * webhook; this is the distinct "user actually saw the success
    * screen" signal. */
   useCheckoutViewEvent(CHECKOUT_EVENTS.COMPLETE_VIEW, session?.session_id);

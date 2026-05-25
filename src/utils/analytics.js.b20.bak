@@ -53,7 +53,7 @@ export const EVENT_TYPES = {
   PAYMENT_VIEW:        'payment.view',        // PaymentPage rendered
   PAYMENT_COPY:        'payment.copy',        // user copied the bank account number
   PAYMENT_WAITING:     'payment.waiting',     // 30-min window started, still waiting
-  PAYMENT_CONFIRMED:   'payment.confirmed',   // PSP webhook confirmed payment
+  PAYMENT_CONFIRMED:   'payment.confirmed',   // Monnify webhook confirmed payment
   COMPLETE_VIEW:       'complete.view',       // CompletePage rendered
   SESSION_EXPIRED:     'session.expired',     // 15-min or 30-min window lapsed
   SESSION_FAILED:      'session.failed',      // webhook / merchant failure

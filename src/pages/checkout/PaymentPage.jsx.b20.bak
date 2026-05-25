@@ -20,7 +20,7 @@ import { durSlow, easeOut } from '@utils/motion';
 
 import styles from '@styles/pages/checkout/payment-page.module.css';
 
-/* Phase 5 | obsidian canvas. Card on the left in default state,
+/* Phase 5 â€” obsidian canvas. Card on the left in default state,
  * transitions to pending when the webhook lands, then SessionResolver
  * navigates to /complete where the card becomes owned with the
  * iridescent border draw. BankTransferCard on the right carries the

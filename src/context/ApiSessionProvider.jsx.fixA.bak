@@ -23,7 +23,7 @@ import { CheckoutLoading } from '@components/ui/checkout/CheckoutLoading';
  * Admin's mock and API share a data-mutation surface | both call the
  * same action functions. Checkout's mock mutators (mockConfirmPayment,
  * mockSelectAmount, ...) have NO API equivalent | confirmation comes
- * from a PSP webhook, not a button; the amount is set by the
+ * from a Monnify webhook, not a button; the amount is set by the
  * platform at init, not chosen here. Folding the two would be one
  * file with two minds. The SessionContext IS the seam: two providers
  * satisfy it, the router picks one, consumers never branch.
@@ -56,11 +56,12 @@ import { CheckoutLoading } from '@components/ui/checkout/CheckoutLoading';
  *     so the user is never stranded on a dead pending screen.
  * ────────────────────────────────────────────────────────────────── */
 
-/* The display name on the Kora dynamic VBA. We pass 'Remvo' to Kora
- * at charge creation (modules/kora/client.js, createBankTransferCharge:
- * accountName) and Kora honours it on the resolved account. The
- * normalize() fallback below preserves UX even if a future GET
- * response stops echoing this field. */
+/* The reserved-account name. Monnify's reserved account is created
+ * with this exact name by the backend (modules/monnify/client.js,
+ * createReservedAccount: accountName). The public GET does not echo
+ * it, so we mirror the known constant here. If the reserved-account
+ * name ever changes it changes in BOTH places | see the S5 handoff
+ * "tracked follow-ups". */
 const REMVO_ACCOUNT_NAME = 'Remvo';
 
 /* Poll cadence while pending. Matches the route header in
@@ -116,11 +117,11 @@ function normalize(raw, opts) {
       reason: raw.reason === 'paused' ? 'paused' : 'coming_soon',
       country: (code && COUNTRY_NAMES[code]) || 'your region',
       country_code: code,
-      // PHASE_8_FIX_A | the public GET echoes notify_email_enabled
-      // (sessions/routes.js, Batch 16). Default to false on absence
-      // so a platform whose country_config has not set the flag
-      // never sees a waitlist form whose POST has no backing.
-      notify_enabled: raw.notify_email_enabled === true,
+      // The public GET does not echo notify_email_enabled (the
+      // initialize POST does). Default to true | offering the
+      // waitlist is the friendly, conversion-positive default.
+      // Tracked: the GET should echo notify_email_enabled for parity.
+      notify_enabled: true,
       platform_id: raw.platform_id || null,
       platform_name: raw.platform_name || 'the platform',
       platform_logo_url: null,
@@ -150,7 +151,7 @@ function normalize(raw, opts) {
 
     bank_name: virtualAccount.bank_name || null,
     account_number: virtualAccount.account_number || null,
-    account_name: (virtualAccount.account_name || REMVO_ACCOUNT_NAME),
+    account_name: REMVO_ACCOUNT_NAME,
 
     // The backend has ONE 15-minute window (expires_at). The mock's
     // separate payment_expires_at is fiction | alias it so the
@@ -334,7 +335,7 @@ export function ApiSessionProvider({ token, children }) {
   const value = useMemo(
     () => ({
       session,
-      // Confirmation is PSP-driven | nothing to simulate.
+      // Confirmation is Monnify-driven | nothing to simulate.
       mockConfirmPayment: noop,
       // Countdown reaching zero nudges an immediate poll; the
       // backend 'expired' is authoritative.

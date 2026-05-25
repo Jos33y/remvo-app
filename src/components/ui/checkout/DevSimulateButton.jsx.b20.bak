@@ -19,7 +19,7 @@ import styles from '@styles/ui/checkout/dev-simulate-button.module.css';
  *
  *   3. IS_CHECKOUT_API (PHASE_7F_S5) | when the checkout tree runs
  *      against the real backend, simulating a payment is meaningless:
- *      confirmation comes from a PSP webhook, not a button. The
+ *      confirmation comes from a Monnify webhook, not a button. The
  *      provider's mockConfirmPayment is a no-op in API mode, so the
  *      button would render but do nothing | confusing. Hide it.
  *

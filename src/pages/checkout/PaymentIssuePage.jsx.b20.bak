@@ -15,7 +15,7 @@ import styles from '@styles/pages/checkout/edge-page.module.css';
  *
  * Reached via SessionResolver when status === 'failed'. The backend
  * marks a session 'failed' when a transfer arrives but the amount
- * does not match the locked order (modules/kora/routes.js, the
+ * does not match the locked order (modules/monnify/routes.js, the
  * amount-tolerance check). It is rare, and an operator is alerted
  * over Telegram the moment it happens.
  *
