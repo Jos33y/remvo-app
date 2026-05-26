@@ -1081,6 +1081,7 @@ export function fetchPlatform(id) {
  *   name?: string,
  *   webhook_url?: string,
  *   settlement_mode?: 'batch'|'per_transaction',
+ *   telegram_chat_id?: string|null,
  * }} patch
  * @returns {Promise<object>}
  */

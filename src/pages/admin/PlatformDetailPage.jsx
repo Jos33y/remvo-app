@@ -106,6 +106,7 @@ function toViewModel(row) {
     countries: row.country_config || {},
     apiKeyRef: '(stored as hash)',
     webhookUrl: row.webhook_url,
+    telegramChatId: row.telegram_chat_id ?? null,
     createdAt:
       row.created_at instanceof Date ? row.created_at.toISOString() : row.created_at,
     updatedAt:
@@ -222,6 +223,7 @@ export function PlatformDetailPage() {
         name: platform.displayName || '',
         webhook_url: platform.webhookUrl || '',
         settlement_mode: platform.settlementMode || 'batch',
+        telegram_chat_id: platform.telegramChatId || '',
       });
     }
   }, [platform, identityDraft]);
@@ -231,7 +233,8 @@ export function PlatformDetailPage() {
     platform != null &&
     (identityDraft.name !== platform.displayName ||
       identityDraft.webhook_url !== platform.webhookUrl ||
-      identityDraft.settlement_mode !== platform.settlementMode);
+      identityDraft.settlement_mode !== platform.settlementMode ||
+      identityDraft.telegram_chat_id !== (platform.telegramChatId || ''));
 
   const handleSaveIdentity = useCallback(async () => {
     if (!identityDirty) return;
@@ -242,6 +245,13 @@ export function PlatformDetailPage() {
       if (identityDraft.name !== platform.displayName) patch.name = identityDraft.name;
       if (identityDraft.webhook_url !== platform.webhookUrl) patch.webhook_url = identityDraft.webhook_url;
       if (identityDraft.settlement_mode !== platform.settlementMode) patch.settlement_mode = identityDraft.settlement_mode;
+      // telegram_chat_id: empty string in the form maps to null on the
+      // server (clear the field). Trimmed string maps to a set.
+      const currentChatId = platform.telegramChatId || '';
+      const draftChatId = (identityDraft.telegram_chat_id || '').trim();
+      if (draftChatId !== currentChatId) {
+        patch.telegram_chat_id = draftChatId === '' ? null : draftChatId;
+      }
       if (IS_API_MODE) {
         const row = await updatePlatformIdentity(id, patch);
         setApiPlatform(toViewModel(row));
@@ -262,6 +272,7 @@ export function PlatformDetailPage() {
       name: platform.displayName || '',
       webhook_url: platform.webhookUrl || '',
       settlement_mode: platform.settlementMode || 'batch',
+      telegram_chat_id: platform.telegramChatId || '',
     });
     setIdentityError(null);
   }, [platform]);
@@ -630,6 +641,32 @@ export function PlatformDetailPage() {
               <option value="batch">Daily batch</option>
               <option value="per_transaction">Per transaction</option>
             </select>
+          </label>
+
+          {/* Pre-Live Alert Batch | per-platform Telegram chat for
+              settlement-complete notifications. Empty clears the
+              field; partner is then not notified. */}
+          <label className={styles.editField}>
+            <span className={styles.editFieldLabel}>Telegram chat ID</span>
+            <input
+              type="text"
+              value={identityDraft?.telegram_chat_id ?? ''}
+              onChange={(e) =>
+                setIdentityDraft((d) => ({
+                  ...(d || {}),
+                  telegram_chat_id: e.target.value,
+                }))
+              }
+              className={`${styles.editInput} ${styles.editInputMono}`}
+              maxLength={64}
+              spellCheck="false"
+              autoCorrect="off"
+              placeholder="-1001234567890"
+              aria-describedby={`${id}-tg-help`}
+            />
+            <span id={`${id}-tg-help`} className={styles.subtle}>
+              Partner-side chat for settlement-complete alerts. Leave empty to disable. Group ids start with a minus.
+            </span>
           </label>
 
           <Row

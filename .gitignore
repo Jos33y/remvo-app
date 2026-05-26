@@ -7,3 +7,6 @@ dist
 .DS_Store
 dev_logs
 remvo_web_tree.txt
+*.bak
+bundle_remvo_studio_inputs.ps1
+remvo_studio_inputs_bundle.zip
