@@ -8,7 +8,6 @@ import { IconCheck } from '@components/ui/icons/IconCheck';
 import { adminPath } from '@app/adminRouter';
 import {
   fetchSessionDetail,
-  replayWebhookDelivery,
   AuthApiError,
 } from '@lib/authClient';
 import styles from '@styles/pages/admin/session-detail-page.module.css';
@@ -187,38 +186,18 @@ export function SessionDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Pre-Live Alerts follow-up | replay state, keyed by delivery id.
-  // Per-row so a click on one button doesn't disable the others.
-  //
-  // Shape per id:
-  //   { phase: 'idle' | 'confirm' | 'sending' | 'error', error?: string }
-  //
-  // The 'confirm' phase is the second-click inline confirmation.
-  // First click flips idle -> confirm; second click within ~6s flips
-  // confirm -> sending; outside the window we revert to idle (a
-  // setTimeout per row handles this).
-  const [replayStateById, setReplayStateById] = useState({});
-
-  /**
-   * Load (or reload) the detail. Used by the initial mount effect AND
-   * after a successful replay so the deliveries list refreshes with
-   * the new attempts / status. Returns a Promise so callers can chain
-   * post-load actions.
-   *
-   * cancelled-guard pattern: the caller passes a `cancelledRef` (a
-   * mutable ref-like object) so the strict-mode double-invoke + an
-   * unmount mid-fetch don't both set state on a dead component.
-   */
-  const loadDetail = useCallback(
-    async (cancelledRef) => {
-      try {
-        const result = await fetchSessionDetail(id);
-        if (cancelledRef?.cancelled) return;
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
+    fetchSessionDetail(id)
+      .then((result) => {
+        if (cancelled) return;
         setDetail(result);
-        setError(null);
         setLoading(false);
-      } catch (err) {
-        if (cancelledRef?.cancelled) return;
+      })
+      .catch((err) => {
+        if (cancelled) return;
         setLoading(false);
         if (err instanceof AuthApiError && err.status === 404) {
           setError({ kind: 'not_found' });
@@ -228,90 +207,9 @@ export function SessionDetailPage() {
             message: err instanceof AuthApiError ? err.message : 'Could not load this session.',
           });
         }
-      }
-    },
-    [id]
-  );
-
-  useEffect(() => {
-    const cancelledRef = { cancelled: false };
-    setLoading(true);
-    setError(null);
-    loadDetail(cancelledRef);
-    return () => { cancelledRef.cancelled = true; };
-  }, [loadDetail]);
-
-  /**
-   * Replay an abandoned or failed outbound webhook delivery.
-   *
-   * Two-step inline confirm | first click sets row to 'confirm'
-   * (button label changes to "Confirm replay"). A 6-second timer
-   * reverts to 'idle' if the operator doesn't follow through. Second
-   * click within the window fires the API call.
-   *
-   * On success: refetch the session detail so the list reflects new
-   * attempts/status. The dispatcher tick (~5s) means the row may
-   * appear in 'pending' first and flip to 'delivered' on a subsequent
-   * load | the operator's natural reflex is to refresh, which Just
-   * Works.
-   *
-   * On error: surface the API message inline next to the button.
-   * Never blocks the rest of the page.
-   *
-   * @param {string|number} deliveryId
-   */
-  const handleReplay = useCallback(
-    async (deliveryId) => {
-      const current = replayStateById[deliveryId]?.phase;
-
-      // First click | arm the confirm window.
-      if (current !== 'confirm') {
-        setReplayStateById((prev) => ({
-          ...prev,
-          [deliveryId]: { phase: 'confirm' },
-        }));
-        // Auto-revert after 6s so an abandoned click doesn't leave
-        // the row armed forever.
-        setTimeout(() => {
-          setReplayStateById((prev) => {
-            if (prev[deliveryId]?.phase !== 'confirm') return prev;
-            const next = { ...prev };
-            delete next[deliveryId];
-            return next;
-          });
-        }, 6000);
-        return;
-      }
-
-      // Second click | fire the replay.
-      setReplayStateById((prev) => ({
-        ...prev,
-        [deliveryId]: { phase: 'sending' },
-      }));
-      try {
-        await replayWebhookDelivery(deliveryId);
-        // Clear the row state, then refetch.
-        setReplayStateById((prev) => {
-          const next = { ...prev };
-          delete next[deliveryId];
-          return next;
-        });
-        await loadDetail({ cancelled: false });
-      } catch (err) {
-        setReplayStateById((prev) => ({
-          ...prev,
-          [deliveryId]: {
-            phase: 'error',
-            error:
-              err instanceof AuthApiError
-                ? err.message
-                : 'Replay failed. Try again.',
-          },
-        }));
-      }
-    },
-    [replayStateById, loadDetail]
-  );
+      });
+    return () => { cancelled = true; };
+  }, [id]);
 
   function goBack() {
     navigate(adminPath('/sessions'));
@@ -618,9 +516,6 @@ export function SessionDetailPage() {
             <ul className={styles.webhookList}>
               {deliveries.map((d) => {
                 const pillClass = WEBHOOK_PILL_CLASS[d.status] || 'webhookPillFailed';
-                const replayable = d.status === 'abandoned' || d.status === 'failed';
-                const rState = replayStateById[d.id];
-                const phase = rState?.phase || 'idle';
                 return (
                   <li key={d.id} className={styles.webhookItem}>
                     <div className={styles.webhookHead}>
@@ -631,28 +526,6 @@ export function SessionDetailPage() {
                       <span className={styles.webhookAttempts}>
                         {d.attempts === 1 ? '1 attempt' : `${d.attempts} attempts`}
                       </span>
-                      {/* Pre-Live Alerts follow-up | inline replay */}
-                      {replayable && (
-                        <button
-                          type="button"
-                          onClick={() => handleReplay(d.id)}
-                          disabled={phase === 'sending'}
-                          className={[
-                            styles.webhookReplayButton,
-                            phase === 'confirm' && styles.webhookReplayButtonArmed,
-                            phase === 'sending' && styles.webhookReplayButtonSending,
-                          ].filter(Boolean).join(' ')}
-                          aria-label={
-                            phase === 'confirm'
-                              ? `Confirm replay of delivery ${d.id}`
-                              : `Replay delivery ${d.id}`
-                          }
-                        >
-                          {phase === 'sending' && 'Replaying...'}
-                          {phase === 'confirm' && 'Confirm replay'}
-                          {phase !== 'sending' && phase !== 'confirm' && 'Replay'}
-                        </button>
-                      )}
                     </div>
                     <div className={styles.webhookMeta}>
                       <span className={styles.webhookUrl}>{d.target_url}</span>
@@ -669,11 +542,6 @@ export function SessionDetailPage() {
                       )}
                       {d.last_error && (
                         <span className={styles.webhookError}>{d.last_error}</span>
-                      )}
-                      {phase === 'error' && rState?.error && (
-                        <span className={styles.webhookError}>
-                          {rState.error}
-                        </span>
                       )}
                     </div>
                   </li>

@@ -637,3 +637,69 @@
 @media (max-width: 420px) {
   .moneyGrid { grid-template-columns: 1fr; }
 }
+
+/* PRE_LIVE_ALERTS_REPLAY_BUTTON | do not edit between these markers
+ *
+ * Inline two-step confirm pattern for replaying abandoned outbound
+ * webhooks from the session detail page.
+ *
+ * .webhookReplayButton          | resting state
+ * .webhookReplayButtonArmed     | second-click confirm window (6s)
+ * .webhookReplayButtonSending   | in-flight after second click
+ *
+ * Lives inside .webhookHead alongside the pill / event / attempts
+ * row. ml-auto pushes it to the right of the flex row.
+ */
+.webhookReplayButton {
+  margin-left: auto;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 400;
+  font-family: inherit;
+  color: rgba(255, 255, 255, 0.85);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+.webhookReplayButton:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #ffffff;
+}
+
+.webhookReplayButton:focus-visible {
+  outline: 2px solid #c9a84c;
+  outline-offset: 2px;
+}
+
+.webhookReplayButtonArmed {
+  color: #c9a84c;
+  border-color: #c9a84c;
+  background: rgba(201, 168, 76, 0.08);
+}
+
+.webhookReplayButtonArmed:hover {
+  background: rgba(201, 168, 76, 0.16);
+  color: #c9a84c;
+}
+
+.webhookReplayButtonSending {
+  color: rgba(255, 255, 255, 0.5);
+  border-color: rgba(255, 255, 255, 0.12);
+  cursor: progress;
+}
+
+.webhookReplayButtonSending:hover {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .webhookReplayButton {
+    transition: none;
+  }
+}
+/* END PRE_LIVE_ALERTS_REPLAY_BUTTON */

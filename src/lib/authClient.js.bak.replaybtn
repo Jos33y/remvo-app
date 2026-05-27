@@ -879,42 +879,6 @@ export function fetchSessionDetail(id) {
   return request(`/v1/admin/sessions/${encodeURIComponent(String(id))}`);
 }
 
-/**
- * POST /v1/admin/webhook-deliveries/:id/replay
- *
- * Re-queues an abandoned or failed outbound webhook delivery. The
- * dispatcher resets attempts to 0, status to 'pending', clears
- * last_error, and the row is picked up on the next dispatcher tick
- * (within ~5 seconds at the default poll interval). The replay gets
- * a fresh 7-attempt budget.
- *
- * Optional `target_url` override lets the operator point this single
- * replay at a corrected URL without mutating the platform's stored
- * webhook_url config | useful when GE-AS's webhook host had a typo
- * for one delivery but is otherwise correct. Omit to replay against
- * the stored URL.
- *
- * Server returns the updated delivery row. Audit log captures the
- * replay action with actor + before/after.
- *
- * @param {string|number} id        webhook delivery id (bigint as string is fine)
- * @param {{ target_url?: string }} [override]
- * @returns {Promise<object>}
- */
-export function replayWebhookDelivery(id, override) {
-  const body =
-    override && typeof override.target_url === 'string' && override.target_url.length > 0
-      ? { target_url: override.target_url }
-      : {};
-  return request(
-    `/v1/admin/webhook-deliveries/${encodeURIComponent(String(id))}/replay`,
-    {
-      method: 'POST',
-      body,
-    }
-  );
-}
-
 // ══════════════════════════════════════════════════════════════════
 //  Settlements (Section 5)
 // ══════════════════════════════════════════════════════════════════
