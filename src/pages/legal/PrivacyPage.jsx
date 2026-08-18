@@ -36,7 +36,7 @@ export function PrivacyPage() {
         <p>2.1. {BRAND.NAME} operates as a B2B service. We do not collect personal data directly from end users. The data we process is provided by the partner platform during checkout session initialization.</p>
         <p>2.2. Data received from partner platforms per transaction: platform identifier, user identifier (a reference code, not a name), optional email address (if provided by the platform), transaction amount, and callback URL.</p>
         <p>2.3. Data generated during the transaction: payment reference, rate applied, transaction status, timestamps, payment provider reference, and credit reference.</p>
-        <p>2.4. Data from our payment provider (Kora): payment confirmation status, bank transfer reference, and credit reference. We do not receive your bank account number, name, or BVN from the payment provider.</p>
+        <p>2.4. Data from our payment provider (Paystack): payment confirmation status, bank transfer reference, and credit reference. We do not receive your bank account number, name, or BVN from the payment provider.</p>
         <p>2.5. Technical data collected automatically: IP address (for fraud detection only, not stored long-term), browser type, device type, and page interaction timestamps.</p>
       </Clause>
 
@@ -58,7 +58,7 @@ export function PrivacyPage() {
 
       <Clause id="sharing" heading="5. Data sharing">
         <p>5.1. Partner platforms: we share transaction confirmations (amount, reference, status) with the platform through which you made the purchase. This is necessary to credit your account.</p>
-        <p>5.2. Payment providers: our payment provider (currently Kora) processes the bank transfer. Their processing is subject to their own privacy policy.</p>
+        <p>5.2. Payment providers: our payment provider (currently Paystack) processes the bank transfer. Their processing is subject to their own privacy policy.</p>
         <p>5.3. Regulatory authorities: we may disclose transaction data if required by law, court order, or regulatory authority.</p>
         <p>5.4. We do not sell, rent, or share your data with third parties for marketing or advertising purposes.</p>
         <p>5.5. We do not transfer data outside Nigeria except where required to deliver the dollar credit to the partner platform. Any such transfer complies with NDPR cross-border transfer requirements.</p>

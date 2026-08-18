@@ -39,7 +39,7 @@ export function RefundsPage() {
 
       <Clause id="amount" heading="3. Refund amount">
         <p>3.1. Refunds are processed in the original currency (Naira) to the original payment source.</p>
-        <p>3.2. The refund amount is the full Naira amount you paid, less any irrecoverable payment processing fees charged by the payment provider (Kora). At the time of writing, this fee is approximately 1.5% of the transaction amount plus VAT. The exact fee for your transaction is recorded against your transaction reference.</p>
+        <p>3.2. The refund amount is the full Naira amount you paid, less any irrecoverable payment processing fees charged by the payment provider (Paystack). The exact fee for your transaction is recorded against your transaction reference.</p>
         <p>3.3. Refunds are processed in Naira only and cannot be issued in any other currency or denomination. The exchange rate at the time of refund may differ from the rate at the time of the original transaction. This difference does not affect the Naira refund amount.</p>
       </Clause>
 
