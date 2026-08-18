@@ -94,6 +94,14 @@ const STATUS_LABEL = {
   country_not_active: 'Country blocked',
 };
 
+/* Terminal-state labels for the lifecycle strip. Keyed on status so
+ * the cell can never disagree with the status pill above it. */
+const LIFECYCLE_TERMINAL_LABELS = {
+  confirmed: 'Confirmed',
+  expired: 'Expired',
+  failed: 'Failed',
+};
+
 const WEBHOOK_PILL_CLASS = {
   pending: 'webhookPillPending',
   delivered: 'webhookPillDelivered',
@@ -385,6 +393,9 @@ export function SessionDetailPage() {
 
   const { session: s, transaction: tx, webhook_deliveries: deliveries } = detail;
   const isInactive = s.status === 'country_not_active';
+  /* Only a confirmed session moved money. Everything else is a
+   * quote, and the money and rate panels say so. */
+  const isConfirmed = s.status === 'confirmed';
   const statusClass = STATUS_PILL_CLASS[s.status] || 'statusPillExpired';
   const statusLabel = STATUS_LABEL[s.status] || s.status;
   const marginNegative = margin.naira != null && margin.naira < 0;
@@ -431,11 +442,20 @@ export function SessionDetailPage() {
           <div className={styles.lifecycleGrid}>
             <LifecycleCell label="Locked" value={formatDateTime(s.locked_at)} />
             <LifecycleCell label="Expires" value={formatDateTime(s.expires_at)} />
+            {/* Label follows the status, not whichever timestamp
+              * happens to be set. The cron used to write failed_at
+              * when it expired a session, so this cell rendered
+              * FAILED next to a status pill reading EXPIRED. A
+              * timeout and a failure are different events and an
+              * operator reading this at 2am should not have to
+              * reconcile them. */}
             <LifecycleCell
-              label={s.status === 'failed' || s.status === 'expired' ? 'Failed' : 'Confirmed'}
+              label={LIFECYCLE_TERMINAL_LABELS[s.status] ?? 'Confirmed'}
               value={
                 s.confirmed_at
                   ? formatDateTime(s.confirmed_at)
+                  : s.expired_at
+                  ? formatDateTime(s.expired_at)
                   : s.failed_at
                   ? formatDateTime(s.failed_at)
                   : null
@@ -445,30 +465,59 @@ export function SessionDetailPage() {
           </div>
         </Section>
 
-        {/* ── Money snapshot (skip for blocked countries) ── */}
+        {/* ── Money snapshot (skip for blocked countries) ──
+          * On a confirmed session these are facts. On any other
+          * status they are the quote the session was priced at and
+          * no money moved, so the heading says so and the tiles are
+          * muted. Rendering "+₦2,574 margin" on an unpaid session
+          * invents revenue for whoever is scanning the list. */}
         {!isInactive && (
-          <Section heading="Money snapshot">
+          <Section
+            heading={
+              isConfirmed ? 'Money snapshot' : 'Money snapshot (quoted, not settled)'
+            }
+          >
             <div className={styles.moneyGrid}>
               <MoneyTile
                 label="User pays"
                 value={formatNaira(s.amount_ngn)}
-                caption="Bank transfer to virtual account"
+                caption={
+                  isConfirmed
+                    ? 'Bank transfer to virtual account'
+                    : 'Quoted. No transfer received.'
+                }
+                muted={!isConfirmed}
               />
               <MoneyTile
                 label="Card credited"
                 value={formatUsd(s.amount_usd_credited)}
-                caption="USD value applied on confirm"
+                caption={
+                  isConfirmed
+                    ? 'USD value applied on confirm'
+                    : 'Would have been applied on confirm'
+                }
+                muted={!isConfirmed}
               />
               <MoneyTile
                 label="Platform settles"
                 value={formatUsd(s.amount_usd_settled)}
-                caption="USDT to platform wallet"
-                accent
+                caption={
+                  isConfirmed
+                    ? 'USDT to platform wallet'
+                    : 'Would have settled to platform wallet'
+                }
+                accent={isConfirmed}
+                muted={!isConfirmed}
               />
               <MoneyTile
                 label="Remvo fee"
                 value={formatUsd(s.platform_fee_usd)}
-                caption="Retained from credited"
+                caption={
+                  isConfirmed
+                    ? 'Retained from credited'
+                    : 'Would have been retained'
+                }
+                muted={!isConfirmed}
               />
             </div>
           </Section>
@@ -739,9 +788,13 @@ function Section({ heading, children }) {
   );
 }
 
-function MoneyTile({ label, value, caption, accent = false }) {
+function MoneyTile({ label, value, caption, accent = false, muted = false }) {
   return (
-    <div className={[styles.moneyTile, accent && styles.moneyTileAccent].filter(Boolean).join(' ')}>
+    <div className={[
+      styles.moneyTile,
+      accent && styles.moneyTileAccent,
+      muted && styles.moneyTileMuted,
+    ].filter(Boolean).join(' ')}>
       <div className={styles.moneyLabel}>{label}</div>
       <div className={styles.moneyValue}>{value}</div>
       {caption && <div className={styles.moneyCaption}>{caption}</div>}

@@ -28,7 +28,7 @@ import styles from '@styles/pages/admin/sessions-page.module.css';
  *   - Status              | pending | confirmed | expired | failed | country_not_active
  *   - Date range          | preset (today, yesterday, 7d, 30d, custom) on created_at
  *   - Search              | ILIKE across (id, public_reference,
- *                           platform_user_id, monnify_reference)
+ *                           platform_user_id, provider_reference)
  *
  * Sessions differ from transactions in two important ways:
  *   1. Money fields can be 0 (country_not_active rows) | the table
@@ -336,7 +336,7 @@ export function SessionsPage() {
         <header className={styles.pageHeader}>
           <h1 className={styles.pageTitle}>Sessions</h1>
           <p className={styles.pageSubtitle}>
-            Every checkout session in any state. Filter by status or date, search by reference, session id, platform user id, or Monnify reference.
+            Every checkout session in any state. Filter by status or date, search by reference, session id, platform user id, or payment provider reference.
           </p>
         </header>
 
@@ -399,7 +399,7 @@ export function SessionsPage() {
         <FilterBar
           searchValue={search}
           onSearchChange={setSearch}
-          searchPlaceholder="Reference, session id, user id, or Monnify ref"
+          searchPlaceholder="Reference, session id, user id, or provider ref"
           autoFocusSearch
           filters={activeFilters}
           onFilterRemove={handleFilterRemove}

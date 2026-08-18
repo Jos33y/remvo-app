@@ -254,6 +254,12 @@
 
 .moneyTileAccent .moneyValue { color: var(--color-gold); }
 
+/* Unconfirmed session | the figures are a quote, not a settlement.
+ * Muted rather than hidden: the operator still needs to see what the
+ * session was priced at, they just must not read it as revenue. */
+.moneyTileMuted { background-color: transparent; border-style: dashed; }
+.moneyTileMuted .moneyValue { color: var(--neutral-text-secondary); }
+
 .moneyCaption {
   font: var(--type-microcopy);
   color: var(--neutral-text-secondary);
