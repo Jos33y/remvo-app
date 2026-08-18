@@ -399,11 +399,24 @@ export function SessionDetailPage() {
   const statusClass = STATUS_PILL_CLASS[s.status] || 'statusPillExpired';
   const statusLabel = STATUS_LABEL[s.status] || s.status;
   const marginNegative = margin.naira != null && margin.naira < 0;
+  /* Gross margin is the only figure in the rate panel that describes
+   * an OUTCOME rather than a price. Display rate, cost basis, spread
+   * and source were all genuinely true at lock time on any session.
+   * Margin was not: on an unconfirmed session no money moved and
+   * nothing was earned.
+   *
+   * Rendered in success green it is the most revenue-looking number
+   * on the page, so an operator scanning expired sessions reads
+   * income that does not exist. Neutral colour when unconfirmed. */
   const marginValueClass = [
     styles.fieldValue,
     styles.fieldValueMono,
     styles.marginValueLg,
-    marginNegative ? styles.marginValueNeg : styles.marginValuePos,
+    !isConfirmed
+      ? styles.marginValueQuoted
+      : marginNegative
+      ? styles.marginValueNeg
+      : styles.marginValuePos,
   ].join(' ');
 
   return (
@@ -545,7 +558,9 @@ export function SessionDetailPage() {
                 hint="Operator's P2P cost when session opened"
               />
               <div className={styles.fieldRow}>
-                <div className={styles.fieldLabel}>Gross margin</div>
+                <div className={styles.fieldLabel}>
+                  {isConfirmed ? 'Gross margin' : 'Gross margin (not earned)'}
+                </div>
                 <div className={styles.fieldValueWrap}>
                   {margin.naira == null ? (
                     <span className={styles.fieldEmpty}>—</span>
@@ -562,7 +577,9 @@ export function SessionDetailPage() {
                     </>
                   )}
                   <span className={styles.fieldHint}>
-                    {marginNegative
+                    {!isConfirmed
+                      ? 'Would have been the margin. No payment received.'
+                      : marginNegative
                       ? 'Sold below cost basis. Loss on this session.'
                       : '(effective rate − cost basis) × USD credited'}
                   </span>

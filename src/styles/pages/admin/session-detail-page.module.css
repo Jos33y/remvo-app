@@ -348,6 +348,10 @@
 
 .marginValuePos { color: var(--neutral-success); }
 .marginValueNeg { color: var(--neutral-error, #C43D3D); }
+/* Unconfirmed session | quoted, not earned. Neutral so it does not
+ * read as income, and the badge loses its emphasis with it. */
+.marginValueQuoted { color: var(--neutral-text-secondary); }
+.marginValueQuoted ~ .marginBadge { opacity: 0.6; }
 
 .marginBadge {
   display: inline-block;
