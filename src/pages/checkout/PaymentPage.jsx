@@ -10,6 +10,7 @@ import { CheckoutShell } from '@components/layout/checkout/CheckoutShell';
 import { RemvoCard } from '@components/ui/shared/RemvoCard';
 import { BankTransferCard } from '@components/ui/checkout/BankTransferCard';
 import { PaymentStatusBar } from '@components/ui/checkout/PaymentStatusBar';
+import { useCountdown } from '@hooks/useCountdown';
 import { DevSimulateButton } from '@components/ui/checkout/DevSimulateButton';
 
 import { formatNaira } from '@utils/formatNaira';
@@ -58,6 +59,29 @@ export function PaymentPage() {
       checkoutNavigate(`/${token}`, { replace: true });
     }
   }, [session, token, checkoutNavigate]);
+
+  /* The PSP account dies at expires_at. The server does not flip the
+   * session to 'expired' until the cron runs (up to a 60s grace plus
+   * the 30s interval), and the provider's client-side hard stop is
+   * 90s past expiry | deliberately generous, because a transfer that
+   * lands at 14:59 may not confirm until after the window closes, and
+   * calling it expired early would be worse.
+   *
+   * That leaves a window where the countdown reads 00:00 while the
+   * panel still shows a live account number with working copy
+   * buttons. A user can copy it and send money to an account that no
+   * longer exists.
+   *
+   * The client already knows expires_at has passed, so it stops
+   * presenting the panel as actionable immediately. The server stays
+   * authoritative for the final status; this only governs what the
+   * page offers the user to do in the meantime.
+   *
+   * Timestamp-derived, so a backgrounded tab returning to focus is
+   * correct without waiting for a tick. */
+  const { expired: windowClosed } = useCountdown(
+    session?.status === 'pending' ? session?.payment_expires_at : null
+  );
 
   if (!session) return null;
 
@@ -108,7 +132,7 @@ export function PaymentPage() {
               accountName={session.account_name}
               amountNaira={session.user_pays_naira}
               reference={session.reference}
-              disabled={!isPending}
+              disabled={!isPending || windowClosed}
               accent={isSettled}
               onCopy={() => emitPayment(CHECKOUT_EVENTS.PAYMENT_COPY)}
             />

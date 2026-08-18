@@ -33,6 +33,13 @@ const STATUS_LABELS = {
   completed: 'Payment confirmed',
 };
 
+/* Shown while the server still reports 'pending' but the window has
+ * closed. The PSP account is already dead, so "waiting for your
+ * transfer" is untrue and invites someone to send money into a void.
+ * Deliberately not "expired": the server has not said so yet, and a
+ * transfer that landed just before the deadline may still confirm. */
+const WINDOW_CLOSED_LABEL = 'Transfer window closed';
+
 function getThreshold(totalSeconds) {
   if (totalSeconds <= 0) return 'expired';
   if (totalSeconds < 60) return 'urgent';
@@ -89,18 +96,25 @@ export function PaymentStatusBar({ status = 'pending', expiresAt, onExpire }) {
     }
   }, [showCountdown, totalSeconds, minutes, seconds]);
 
-  const label = STATUS_LABELS[status] ?? STATUS_LABELS.pending;
+  const windowClosed = status === 'pending' && expired;
+  const label = windowClosed
+    ? WINDOW_CLOSED_LABEL
+    : (STATUS_LABELS[status] ?? STATUS_LABELS.pending);
 
-  const indicatorClassName = `${styles.indicator} ${styles[status]}`;
+  const indicatorClassName = `${styles.indicator} ${
+    windowClosed ? styles.closed : styles[status]
+  }`;
   const countdownClassName = `${styles.countdown} ${styles[threshold]}`;
 
   /* ── Dot motion config ──
    * Pending: pulsing at natural size (10px icon)
    * Processing/completed: scale up to 1.2 (10 -> 12px visual),
    *   600ms ease-out, hold. The "system noticed" gesture. */
+  /* The pulse means "we are still watching for your money". Once the
+   * window has closed that is no longer true, so it holds still. */
   const dotAnimate = isSettled
     ? { scale: 1.2 }
-    : (prefersReducedMotion ? {} : pulse);
+    : (prefersReducedMotion || windowClosed ? {} : pulse);
   const dotTransition = isSettled
     ? { duration: 0.6, ease: easeOut }
     : undefined;
