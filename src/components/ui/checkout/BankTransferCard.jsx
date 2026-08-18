@@ -101,15 +101,53 @@ export function BankTransferCard({
         label="Account number"
         value={accountValueNode}
         copyValue={rawAccount}
-        caption={accountName}
         valueVariant="mono"
         ariaName="Account number"
         disabled={disabled}
         tone="dark"
       />
 
+      {/* Own row, not a caption under the account number. This is the
+        * beneficiary name the user cross-checks against their bank app
+        * before sending, so it needs the same weight as Bank and
+        * Amount rather than being the faintest text in the panel. Not
+        * copyable | nobody types a beneficiary name in, and a copy
+        * button there implies they should. The value is whatever the
+        * PSP resolves (currently "PAYSTACK CHECKOUT"); we do not
+        * control it and must show it verbatim or the page and the
+        * bank app disagree. */}
+      <div className={styles.divider} aria-hidden="true" />
+      <CopyableRow
+        label="Account name"
+        value={accountName}
+        valueVariant="sans"
+        ariaName="Account name"
+        disabled={disabled}
+        tone="dark"
+        copyable={false}
+      />
+
       <div className={styles.divider} aria-hidden="true" />
       <CopyableRow label="Amount" value={formattedAmount} copyValue={rawAmount} valueVariant="mono" ariaName="Amount" disabled={disabled} tone="dark" />
+
+      {/* The PwT virtual account is bound to the exact charge amount.
+        * Paystack reverses anything higher or lower at the account,
+        * before it reaches us | verified live across two banks in both
+        * directions. The reversal is automatic and the user gets their
+        * money back, but their bank says "reversed" with no reason
+        * while this page still reads "waiting for your transfer", so
+        * they assume we took it. One line here prevents the mistake
+        * instead of explaining it afterwards. Hidden when the window
+        * is closed, where it no longer applies. */}
+      {!disabled && (
+        <>
+          <div className={styles.divider} aria-hidden="true" />
+          <p className={styles.exactNote}>
+            Transfer this exact amount. Anything higher or lower is
+            reversed automatically.
+          </p>
+        </>
+      )}
 
       <div className={styles.divider} aria-hidden="true" />
 

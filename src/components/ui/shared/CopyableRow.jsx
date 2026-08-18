@@ -7,7 +7,13 @@ import styles from '@styles/ui/shared/copyable-row.module.css';
 /* CopyableRow — Phase 5 adds `tone` prop ('light' | 'dark').
  * 'light' (default) preserves Phase 4 behaviour. 'dark' switches
  * label/value/icon colours for usage on the obsidian canvas inside
- * BankTransferCard. No API breakage; existing call sites unchanged. */
+ * BankTransferCard. No API breakage; existing call sites unchanged.
+ *
+ * `copyable={false}` renders the same row as a div with no icon and
+ * no click target. For values the user reads and verifies rather
+ * than enters | the beneficiary name being the case it was added
+ * for. A copy affordance there implies the value should be typed
+ * into the bank app, which it should not. */
 export function CopyableRow({
   label,
   value,
@@ -17,6 +23,7 @@ export function CopyableRow({
   ariaName,
   disabled = false,
   tone = 'light',
+  copyable = true,
 }) {
   const { copy, copied } = useClipboard({ resetMs: 2000 });
   const [announcement, setAnnouncement] = useState('');
@@ -44,9 +51,22 @@ export function CopyableRow({
     styles[`tone-${tone}`],
     copied ? styles.copied : '',
     disabled ? styles.disabled : '',
+    !copyable ? styles.static : '',
   ].filter(Boolean).join(' ');
 
   const valueClassName = valueVariant === 'mono' ? styles.valueMono : styles.valueSans;
+
+  if (!copyable) {
+    return (
+      <div className={className}>
+        <span className={styles.label}>{label}</span>
+        <span className={styles.valueCol}>
+          <span className={valueClassName}>{value}</span>
+          {caption && <span className={styles.caption}>{caption}</span>}
+        </span>
+      </div>
+    );
+  }
 
   return (
     <button

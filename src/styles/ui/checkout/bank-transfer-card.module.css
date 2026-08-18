@@ -27,6 +27,22 @@
 .accountDigits { display: inline-flex; }
 .accountDigit { display: inline-block; will-change: transform, opacity; }
 
+/* Exact-amount warning. Sits directly under the Amount row because
+ * that is the value it qualifies. Muted white rather than gold: gold
+ * reads as accent here, and this is information the user must act on.
+ * 9.78:1 on #14141A — passes AAA. */
+.exactNote {
+  margin: 0;
+  padding: var(--space-3) var(--space-5);
+  font-family: var(--font-sans);
+  font-weight: var(--weight-regular);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  letter-spacing: -0.005em;
+  color: rgba(255, 255, 255, 0.72);
+  text-wrap: pretty;
+}
+
 /* Copy all CTA */
 .copyAll {
   display: flex;

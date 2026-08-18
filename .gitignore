@@ -1,12 +1,43 @@
 node_modules
 dist
+dist-ssr
+.vite
+coverage
+
 .env
-.env.local
-.env.production
+.env.*
+!.env.example
 *.local
+
 .DS_Store
-dev_logs
-remvo_web_tree.txt
+Thumbs.db
+desktop.ini
+
+.idea
+.vscode
+*.iml
+
+# Backups. *.bak alone misses suffixed variants like
+# authClient.js.bak.replaybtn, which is how ten of these ended up
+# tracked despite the rule already being here.
 *.bak
-bundle_remvo_studio_inputs.ps1
-remvo_studio_inputs_bundle.zip
+*.bak.*
+*.b[0-9][0-9].bak
+*.deleted
+*.orig
+*.old
+*.rej
+*~
+
+# Tree dumps and bundling artefacts from patch handoffs
+*_tree.txt
+bundle_*.ps1
+*_inputs.zip
+*_inputs-*.zip
+*-inputs.zip
+*.zip
+
+dev_logs
+*.log
+npm-debug.log*
+yarn-error.log*
