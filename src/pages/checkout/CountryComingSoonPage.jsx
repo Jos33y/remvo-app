@@ -25,19 +25,22 @@ import styles from '@styles/pages/checkout/country-coming-soon-page.module.css';
  *     register-appropriate (rgba warm-white red), fades to null
  *     after 5s OR as soon as the user edits the email field
  *
- * Session shape expected (unchanged from v2):
+ * Later change: the POST body is now { session_id, email }.
+ *   platform_id and country_code used to be sent from here and taken
+ *   at face value by the API, which had no auth on that endpoint.
+ *   Anyone could attribute signups to any platform and queue
+ *   arbitrary addresses to be emailed on activation. The server now
+ *   derives both from the session row, so the session id is the
+ *   credential and nothing in the body is trusted but the email.
+ *
+ * Session shape expected:
  *   status: 'country_not_active'
  *   reason: 'coming_soon' | 'paused'
  *   country: string              (display name)
- *   country_code: string         (ISO-3166-1 alpha-2)
+ *   country_code: string         (ISO-3166-1 alpha-2, display only)
  *   notify_enabled: boolean
- *   platform_id: string          ← required for POST (added in Phase 7A)
  *   platform_name: string
  *   callback_url: string
- *
- * In dev the MockSessionProvider already returns platform_id on the
- * country_not_active fixture. In staging/prod the real session init
- * endpoint (ships in Phase 7 main) populates it.
  * ────────────────────────────────────────────────────────────────── */
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -91,8 +94,17 @@ export function CountryComingSoonPage() {
   const reason = session.reason === 'paused' ? 'paused' : 'coming_soon';
   const country = session.country ?? 'your region';
   const countryCode = session.country_code ?? null;
-  const platformId = session.platform_id ?? null;
   const platformName = session.platform_name ?? 'the platform';
+
+  // The session id is the credential for the signup POST. Prefer it
+  // off the session object; fall back to the checkout URL, which is
+  // always /cs_<id> on this route. The fallback can be dropped once
+  // SessionContext is confirmed to expose it in every provider.
+  const sessionId =
+    session.session_id ??
+    session.id ??
+    window.location.pathname.match(/cs_[A-Za-z0-9_-]+/)?.[0] ??
+    null;
   const notifyEnabled = Boolean(session.notify_enabled);
   const copy = COPY[reason];
 
@@ -116,8 +128,8 @@ export function CountryComingSoonPage() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (submitDisabled) return;
-    if (!platformId || !countryCode) {
-      setError('We could not identify your platform. Try refreshing.');
+    if (!sessionId) {
+      setError('We could not identify this checkout. Try refreshing.');
       return;
     }
 
@@ -128,11 +140,7 @@ export function CountryComingSoonPage() {
       const res = await fetch(`${API_BASE}/v1/country-interest`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          platform_id: platformId,
-          country_code: countryCode,
-          email,
-        }),
+        body: JSON.stringify({ session_id: sessionId, email }),
       });
 
       if (!res.ok) {
