@@ -56,7 +56,22 @@ const SESSION_ID_RE = /^cs_[A-Za-z0-9_-]{24}$/;
 /* The nine client-emittable event types. Kept here as a frozen set
  * so a typo in a caller fails fast in dev rather than producing a
  * silent 400 from the server. Mirrors CLIENT_EMITTABLE in the API's
- * events/service.js. */
+ * events/service.js.
+ *
+ * DEAD SINCE 20 AUGUST 2026: confirm.view and confirm.proceed.
+ * ConfirmPage was deleted when the two checkout screens merged
+ * (CONVERSION_CHECKLIST.md section C) and nothing emits them now.
+ *
+ * They stay in this set deliberately. The server's CLIENT_EMITTABLE
+ * still lists them, historical rows exist, and removing them here
+ * would make replaying or backfilling old sessions fail validation
+ * on the client before the request left the browser.
+ *
+ * MEASUREMENT WARNING: the funnel's step 3 -> step 4 drop was 33.3%
+ * before the merge and auto-qualifies to 100% after it, because the
+ * step it measured no longer exists. That is an artefact, not an
+ * improvement. Any before/after comparison must treat 20 August as a
+ * boundary rather than reading straight across it. */
 export const CHECKOUT_EVENTS = Object.freeze({
   CHECKOUT_OPEN: 'checkout.open',
   SELECT_VIEW: 'select.view',

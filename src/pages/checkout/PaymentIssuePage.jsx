@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { useSession } from '@context/SessionContext';
 import { useReducedMotion } from '@hooks/useReducedMotion';
+import { useRestartCheckout } from '@hooks/useRestartCheckout';
 import { CheckoutShell } from '@components/layout/checkout/CheckoutShell';
 import { GoldRing } from '@components/ui/shared/GoldRing';
 import { CopyableRow } from '@components/ui/shared/CopyableRow';
@@ -32,6 +33,8 @@ import styles from '@styles/pages/checkout/edge-page.module.css';
 export function PaymentIssuePage() {
   const { session } = useSession();
   const reduced = useReducedMotion();
+  const { restart, pending, error, exhausted } =
+    useRestartCheckout(session?.session_id ?? null);
 
   if (!session) return null;
 
@@ -83,12 +86,48 @@ export function PaymentIssuePage() {
         )}
 
         <motion.div className={styles.ctaBlock} variants={reveal}>
-          <button type="button" className={styles.cta} onClick={handleReturn}>
-            <GoldRing shape="rect" radius={14} />
-            <span className={styles.ctaLabel}>
+          {/* A 'failed' session means a transfer arrived with the
+            * wrong amount and an operator is already reviewing it.
+            * Restart is offered because the user still wants their
+            * deposit, but the reference above stays visible so the
+            * original is traceable | the two are separate matters and
+            * starting a new purchase does not resolve the old one. */}
+          {!exhausted && (
+            <button
+              type="button"
+              className={styles.cta}
+              onClick={restart}
+              disabled={pending}
+            >
+              <GoldRing shape="rect" radius={14} />
+              <span className={styles.ctaLabel}>
+                {pending ? 'Starting new purchase' : 'Start a new purchase'}
+              </span>
+            </button>
+          )}
+
+          {error && (
+            <p className={styles.subhead} role="alert">
+              {error}
+            </p>
+          )}
+
+          {exhausted ? (
+            <button type="button" className={styles.cta} onClick={handleReturn}>
+              <GoldRing shape="rect" radius={14} />
+              <span className={styles.ctaLabel}>
+                Return to {platformName}
+              </span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              className={styles.secondaryLink}
+              onClick={handleReturn}
+            >
               Return to {platformName}
-            </span>
-          </button>
+            </button>
+          )}
         </motion.div>
       </motion.div>
     </CheckoutShell>

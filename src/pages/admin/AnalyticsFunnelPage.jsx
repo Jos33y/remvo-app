@@ -6,7 +6,7 @@ import { useAnalyticsRange } from './AnalyticsLayout';
 import { useAdminData } from '@context/AdminContext';
 import { useAnalyticsEvents } from '@hooks/useAnalyticsApi';
 import {
-  computeFunnel, eventsInRange, formatPercent,
+  computeFunnel, eventsInRange, formatPercent, resolveSessionDevices,
 } from '@utils/analytics';
 import styles from '@styles/pages/admin/analytics-funnel-page.module.css';
 
@@ -28,6 +28,20 @@ import styles from '@styles/pages/admin/analytics-funnel-page.module.css';
  * Device + country filters stay client-side because computeFunnel
  * is fast over a filtered array and refetching per filter change
  * would slow the experience for no correctness gain.
+ *
+ * Device resolution (checklist section K, 20 August 2026)
+ * ------------------------------------------------------
+ * Events are piped through resolveSessionDevices before filtering.
+ * session.init is recorded during a server-to-server call from the
+ * platform's backend, so its device was ALWAYS 'desktop' | the user's
+ * browser has not been involved at that point. Filtering by Mobile
+ * therefore returned zero sessions started and a full count of
+ * checkout opened, which is not a funnel.
+ *
+ * The resolver takes each session's device from its browser-originated
+ * events and applies it across the session, so step 1 inherits the
+ * truth. Aggregate numbers are unaffected; only the segmented views
+ * were ever wrong.
  * ────────────────────────────────────────────────────────────────── */
 
 const DEVICE_FILTERS = [
@@ -49,7 +63,14 @@ export function AnalyticsFunnelPage() {
   const api = useAnalyticsEvents({ from: fromIso, to: toIso });
   const events = api?.events ?? fallback.events;
 
-  const scoped = useMemo(() => eventsInRange(events, range), [events, range]);
+  /* Range-scope first, then resolve device per session. Order
+   * matters: resolving over the scoped set keeps the pass small, and
+   * a session straddling the range edge resolves from whatever of it
+   * is in view, which is the same set the funnel counts. */
+  const scoped = useMemo(
+    () => resolveSessionDevices(eventsInRange(events, range)),
+    [events, range]
+  );
 
   // Derive top three countries for the segment filter (weighted by
   // session count) plus an "all" pseudo-option.

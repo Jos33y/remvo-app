@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { useSession } from '@context/SessionContext';
 import { useReducedMotion } from '@hooks/useReducedMotion';
+import { useRestartCheckout } from '@hooks/useRestartCheckout';
 import { CheckoutShell } from '@components/layout/checkout/CheckoutShell';
 import { GoldRing } from '@components/ui/shared/GoldRing';
 import { IconClock } from '@components/ui/icons/IconClock';
@@ -20,6 +21,8 @@ import styles from '@styles/pages/checkout/edge-page.module.css';
 export function ExpiredPage() {
   const { session } = useSession();
   const reduced = useReducedMotion();
+  const { restart, pending, error, exhausted } =
+    useRestartCheckout(session?.session_id ?? null);
 
   if (!session) return null;
 
@@ -52,19 +55,59 @@ export function ExpiredPage() {
 
         <motion.div className={styles.textBlock} variants={reveal}>
           <h1 className={styles.headline}>This payment window has expired</h1>
+          {/* Two parts: what happened, what to do next. The price
+            * warning is not a disclaimer | the rate and the daily
+            * spread both re-resolve on restart, so the naira figure
+            * can differ from the one they were quoted. Saying so
+            * before the click is the whole point. Discovering it
+            * after would reintroduce exactly the distrust the daily
+            * spread lock was written to remove. */}
           <p className={styles.subhead}>
-            The window to complete this payment has passed.
-            Start a new purchase from {platformName} to continue.
+            {exhausted
+              ? `The window to complete this payment has passed. Start a new purchase from ${platformName} to continue.`
+              : 'The window to complete this payment has passed. You can start a new one now. Prices refresh, so the amount may differ.'}
           </p>
         </motion.div>
 
         <motion.div className={styles.ctaBlock} variants={reveal}>
-          <button type="button" className={styles.cta} onClick={handleReturn}>
-            <GoldRing shape="rect" radius={14} />
-            <span className={styles.ctaLabel}>
-            Return to {platformName}
-          </span>
-          </button>
+          {!exhausted && (
+            <button
+              type="button"
+              className={styles.cta}
+              onClick={restart}
+              disabled={pending}
+            >
+              <GoldRing shape="rect" radius={14} />
+              <span className={styles.ctaLabel}>
+                {pending ? 'Starting new purchase' : 'Start a new purchase'}
+              </span>
+            </button>
+          )}
+
+          {error && (
+            <p className={styles.subhead} role="alert">
+              {error}
+            </p>
+          )}
+
+          {/* Demoted, not removed. Once restart is exhausted this is
+            * the only way forward, so it becomes the primary. */}
+          {exhausted ? (
+            <button type="button" className={styles.cta} onClick={handleReturn}>
+              <GoldRing shape="rect" radius={14} />
+              <span className={styles.ctaLabel}>
+                Return to {platformName}
+              </span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              className={styles.secondaryLink}
+              onClick={handleReturn}
+            >
+              Return to {platformName}
+            </button>
+          )}
         </motion.div>
       </motion.div>
     </CheckoutShell>

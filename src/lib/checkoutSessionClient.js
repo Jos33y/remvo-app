@@ -17,11 +17,17 @@
  *   A dedicated client keeps each seam single-purpose. Same pattern
  *   the codebase already follows.
  *
- * Contract (matches src/modules/sessions/routes.js GET handler)
+ * Contract (matches src/modules/sessions/routes.js)
  * -------------------------------------------------------------
  *   GET /v1/checkout/session/:id        | no auth, no cookie
  *   200  -> the session snapshot (active or country_not_active shape)
  *   404  -> unknown / malformed token
+ *
+ *   POST /v1/checkout/session/:id/restart   | no auth, no cookie
+ *   201  -> the initialize-shaped response for a NEW session
+ *   400  -> session_not_restartable / restart_window_expired /
+ *           restart_limit_reached | all permanent for this token
+ *   429  -> rate limited (keyed on the token, not the IP)
  *
  * The id IS the capability | 144 bits of entropy, unguessable. No
  * credentials are sent. The route is public and cookie-free.
@@ -58,6 +64,62 @@ export class CheckoutSessionError extends Error {
     this.code = code;
     this.status = status;
   }
+}
+
+/**
+ * Mint a fresh session from an expired one.
+ *
+ * Unlike the GET, a 4xx here is NOT transient | not-restartable,
+ * window-expired and limit-reached are all permanent for this token.
+ * So every non-2xx throws with its code intact and the caller decides
+ * which are terminal. See hooks/useRestartCheckout.js.
+ *
+ * The 404 shortcut the GET uses is deliberately absent: a 404 on
+ * restart is a real error the user needs told about, not a routing
+ * signal.
+ *
+ * @param {string} token  the expired cs_<24> session id
+ * @returns {Promise<object>}  the initialize-shaped response,
+ *                             including checkout_url for the new session
+ * @throws {CheckoutSessionError}  on any non-2xx or network failure
+ */
+export async function restartCheckoutSession(token) {
+  let response;
+  try {
+    response = await fetch(
+      `${API_BASE}/v1/checkout/session/${encodeURIComponent(token)}/restart`,
+      {
+        method: 'POST',
+        // No credentials | the endpoint is public and cookie-free.
+        headers: { Accept: 'application/json' },
+      }
+    );
+  } catch (err) {
+    throw new CheckoutSessionError(
+      'network_error',
+      0,
+      'Network request failed'
+    );
+  }
+
+  let body = null;
+  try {
+    body = await response.json();
+  } catch {
+    body = null;
+  }
+
+  if (!response.ok) {
+    const code = body && body.error && body.error.code
+      ? body.error.code
+      : 'request_failed';
+    const message = body && body.error && body.error.message
+      ? body.error.message
+      : `Restart failed (${response.status})`;
+    throw new CheckoutSessionError(code, response.status, message);
+  }
+
+  return body;
 }
 
 /**

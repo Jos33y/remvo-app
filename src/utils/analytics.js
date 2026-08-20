@@ -68,9 +68,34 @@ export const EVENT_TYPES = {
 //
 // Step 1 — Session started           | SESSION_INIT
 // Step 2 — Checkout opened           | CHECKOUT_OPEN (user actually loaded the URL)
-// Step 3 — Amount selected           | SELECT_AMOUNT (or preset sessions skip Select)
-// Step 4 — Payment viewed            | PAYMENT_VIEW (user reached the bank-transfer page)
-// Step 5 — Payment confirmed         | PAYMENT_CONFIRMED (money received)
+// Step 3 — Payment viewed            | PAYMENT_VIEW (user reached the bank-transfer page)
+// Step 4 — Payment confirmed         | PAYMENT_CONFIRMED (money received)
+//
+// FOUR STEPS SINCE 20 AUGUST 2026 (checklist sections C and K)
+// ------------------------------------------------------------
+// There used to be an 'Amount selected' step between 2 and 3,
+// matching SELECT_AMOUNT or CONFIRM_VIEW. ConfirmPage was deleted
+// when the two checkout screens merged, so confirm.view no longer
+// fires, and select.amount only ever fired in the mock select flow
+// (the API provider hardcodes checkout_mode='preset').
+//
+// Leaving it in place would have been worse than useless. The walk
+// below breaks on the first miss because the funnel is monotonic, so
+// a step that can never be hit zeroes every step beneath it: the
+// funnel would have read 12/12/0/0/0 the morning section C deployed,
+// with nothing actually wrong.
+//
+// Removing it is also the honest shape. After the merge there is no
+// separate amount-selection action to measure | the platform sets the
+// amount server-to-server at init and the user lands directly on the
+// payment screen.
+//
+// COMPARING ACROSS THE BOUNDARY: historical sessions still carry
+// confirm.view rows, and this ladder computes correctly over them,
+// because all four remaining events existed before and after. But a
+// step-3 drop measured before 20 August is not the same quantity as a
+// step-3 drop after it. Treat 20 August as a boundary rather than
+// reading straight across it.
 
 export const FUNNEL_STEPS = [
   {
@@ -84,12 +109,6 @@ export const FUNNEL_STEPS = [
     label: 'Checkout opened',
     description: 'User loaded the Remvo checkout URL',
     matchEvent: EVENT_TYPES.CHECKOUT_OPEN,
-  },
-  {
-    key: 'amount_selected',
-    label: 'Amount selected',
-    description: 'User picked an amount (preset sessions auto-qualify)',
-    matchEvents: [EVENT_TYPES.SELECT_AMOUNT, EVENT_TYPES.CONFIRM_VIEW],
   },
   {
     key: 'payment_viewed',
@@ -205,6 +224,96 @@ export function eventsInRange(events, { from, to }) {
   return events.filter(e => {
     const t = new Date(e.occurredAt).getTime();
     return t >= from && t <= to;
+  });
+}
+
+// ─── Device attribution ──────────────────────────────────────────
+
+/**
+ * Event types that originate in the USER'S BROWSER, via
+ * POST /v1/events from checkoutEventsClient.js. Their `device` is
+ * computed from navigator.userAgent and is trustworthy.
+ *
+ * Everything absent from this set is recorded server-side and its
+ * `device` is meaningless:
+ *
+ *   session.init      | recorded during POST /v1/checkout/initialize,
+ *                       a server-to-server call from the platform's
+ *                       backend. The user agent is the platform's
+ *                       HTTP client, so classifyDevice returns
+ *                       'desktop' for every session ever created.
+ *   session.expired   | the expiry cron reads sessions.user_agent,
+ *                       captured from that same request.
+ *   session.failed    | recorded from the PSP webhook handler.
+ *   payment.confirmed | recorded from the PSP webhook handler.
+ *
+ * Note that sessions.user_agent and sessions.user_ip_hash are named
+ * for the user but hold the PLATFORM's values, for the same reason.
+ * Worth knowing before reading them anywhere else.
+ */
+export const CLIENT_ORIGINATED_EVENTS = new Set([
+  EVENT_TYPES.CHECKOUT_OPEN,
+  EVENT_TYPES.SELECT_VIEW,
+  EVENT_TYPES.SELECT_AMOUNT,
+  EVENT_TYPES.CONFIRM_VIEW,
+  EVENT_TYPES.CONFIRM_PROCEED,
+  EVENT_TYPES.PAYMENT_VIEW,
+  EVENT_TYPES.PAYMENT_COPY,
+  EVENT_TYPES.PAYMENT_WAITING,
+  EVENT_TYPES.COMPLETE_VIEW,
+]);
+
+/**
+ * Normalise `device` across every event in a session.
+ *
+ * Device is a property of the session, not of each event row. One
+ * user, one browser, one checkout. This reads the device from
+ * browser-originated events and applies it to every event sharing
+ * that sessionId, so server-recorded rows inherit the truth instead
+ * of asserting 'desktop'.
+ *
+ * Returns a NEW array with new objects. Callers memoise on the input,
+ * and mutating in place would make that memo lie.
+ *
+ * A session with no browser-originated events at all | the platform
+ * initialised a checkout the user never opened | keeps whatever the
+ * server recorded. There is nothing better to use, and those sessions
+ * are exactly the ones a device filter cannot meaningfully classify.
+ *
+ * Where a session somehow carries two different client devices (the
+ * user opened the link on a laptop and finished on a phone), the
+ * earliest wins. Rare enough that consistency matters more than which
+ * one is picked.
+ *
+ * @param {Array} events
+ * @returns {Array} same events, device normalised per session
+ */
+export function resolveSessionDevices(events) {
+  if (!Array.isArray(events) || events.length === 0) return events;
+
+  // sessionId -> device, from the earliest client-originated event.
+  const bySession = new Map();
+
+  for (const e of events) {
+    if (!CLIENT_ORIGINATED_EVENTS.has(e.event)) continue;
+    if (!e.device) continue;
+
+    const existing = bySession.get(e.sessionId);
+    if (!existing) {
+      bySession.set(e.sessionId, { device: e.device, at: e.occurredAt });
+      continue;
+    }
+    if (new Date(e.occurredAt) < new Date(existing.at)) {
+      bySession.set(e.sessionId, { device: e.device, at: e.occurredAt });
+    }
+  }
+
+  if (bySession.size === 0) return events;
+
+  return events.map((e) => {
+    const resolved = bySession.get(e.sessionId);
+    if (!resolved || resolved.device === e.device) return e;
+    return { ...e, device: resolved.device };
   });
 }
 

@@ -15,14 +15,41 @@
   }
 }
 
+/* MOBILE ORDER, 20 August 2026 (checklist section D)
+ *
+ * Measured on the real cascade: the left column is card 200 + gap 32
+ * + amount block 55 = 287px before the bank panel begins. The
+ * account number then lands ~400px below the content top and "Copy
+ * all details" ~615px | a full screen down on a 375x667 device. The
+ * design principles call that button the most important interactive
+ * element on the page.
+ *
+ * So on phones the bank panel and status bar come first and the card
+ * follows. This is a deliberate break from "the card is the product".
+ * That principle was written for the selection screen, where the card
+ * IS the object of choice. Here the choice is already made and the
+ * page has one job: copy an account number and send money.
+ * Reassurance below an actionable panel still reassures; an
+ * actionable panel below reassurance does not get acted on. The card
+ * still opens the desktop layout and still gets its owned-state
+ * moment on CompletePage.
+ *
+ * The order is reset in the 1024 block below, so the desktop grid
+ * renders byte-identically to before this change. */
 .leftCol {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-8);
+  order: 2;
 }
 
+.rightCol { order: 1; }
+
 @media (min-width: 1024px) {
+  .leftCol,
+  .rightCol { order: 0; }
+
   .leftCol {
     gap: var(--space-10);
     /* Card top edge sits ~12px below grid top so it visually aligns
@@ -76,3 +103,105 @@
 
 .bankBlock { width: 100%; }
 .statusBlock { width: 100%; padding: 0 var(--space-1); }
+
+/* windowClosed state. The countdown has hit 00:00 but the server has
+ * not yet flipped the session | up to 90s. The panel above is already
+ * disabled; this is the way out.
+ *
+ * Warning colour, not gold: gold is the accent and reads as
+ * invitation. This is information the user must act on. Same
+ * reasoning as the exact-amount note in bank-transfer-card.module.css.
+ * #E0B84A on the obsidian canvas is 9.7:1, AAA. */
+.closedBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-4) var(--space-5);
+  border: 0.5px solid rgba(224, 184, 74, 0.28);
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1A1A1A 0%, #1A1A1A 55%, #14141A 100%);
+}
+
+.closedNote {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: var(--weight-regular);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.72);
+  text-wrap: pretty;
+}
+
+/* 48px, above the 44px minimum touch target. Full width because on a
+ * phone this is the only action left on the screen. */
+.closedCta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  padding: 0 var(--space-5);
+  border: 0.5px solid rgba(224, 184, 74, 0.45);
+  border-radius: 10px;
+  background-color: rgba(224, 184, 74, 0.08);
+  color: #E0B84A;
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-sm);
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: background-color var(--transition-normal);
+}
+
+.closedCta:hover:not(:disabled) { background-color: rgba(224, 184, 74, 0.14); }
+.closedCta:disabled { cursor: default; opacity: 0.6; }
+.closedCta:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+.closedError {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: #E07070; /* 5.7:1 on the obsidian canvas, AA */
+}
+
+/* Ported verbatim from confirm-page.module.css when the two screens
+ * merged (checklist section C). Cancel is the only route back to the
+ * platform in the pay flow; Change amount is mock-only. */
+.secondaryLinks {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding-top: var(--space-2);
+}
+
+.secondaryLink {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.6);
+  background: none;
+  border: none;
+  padding: var(--space-2);
+  cursor: pointer;
+  transition: color var(--transition-normal);
+}
+
+.secondaryLink:hover {
+  color: var(--color-white);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.secondaryLink:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.secondaryDivider { color: rgba(255, 255, 255, 0.4); user-select: none; }

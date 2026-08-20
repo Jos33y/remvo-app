@@ -138,7 +138,9 @@ function normalize(raw, opts) {
     status,
     // The backend has no select mode | the platform sets the amount
     // server-to-server at initialize. Always 'preset'. This keeps
-    // ConfirmPage's "Change amount" link correctly hidden.
+    // PaymentPage's "Change amount" link correctly hidden. (The link
+    // moved there from ConfirmPage on 20 August 2026 when the two
+    // checkout screens merged.)
     checkout_mode: 'preset',
     platform_name: raw.platform_name || 'the platform',
     platform_logo_url: null,
@@ -152,7 +154,12 @@ function normalize(raw, opts) {
     account_number: virtualAccount.account_number || null,
     account_name: (virtualAccount.account_name || REMVO_ACCOUNT_NAME),
 
-    // The backend has ONE 15-minute window (expires_at). The mock's
+    /* Which PSP holds the account, from sessions.merchant_id. Null on
+     * an older row or a response that predates the field | the card
+     * simply omits the line rather than guessing a brand. */
+    processor: raw.processor || null,
+
+    // The backend has ONE 30-minute window (expires_at). The mock's
     // separate payment_expires_at is fiction | alias it so the
     // PaymentPage countdown reads the real lock.
     expires_at: raw.expires_at,

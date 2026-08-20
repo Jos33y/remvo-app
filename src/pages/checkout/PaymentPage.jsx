@@ -5,6 +5,7 @@ import { motion } from 'motion/react';
 import { useSession } from '@context/SessionContext';
 import { useCheckoutNavigate } from '@hooks/useCheckoutNavigate';
 import { useReducedMotion } from '@hooks/useReducedMotion';
+import { useRestartCheckout } from '@hooks/useRestartCheckout';
 
 import { CheckoutShell } from '@components/layout/checkout/CheckoutShell';
 import { RemvoCard } from '@components/ui/shared/RemvoCard';
@@ -29,7 +30,8 @@ import styles from '@styles/pages/checkout/payment-page.module.css';
 export function PaymentPage() {
   const { token } = useParams();
   const checkoutNavigate = useCheckoutNavigate();
-  const { session, startPaymentWindow, mockExpireSession } = useSession();
+  const { session, startPaymentWindow, mockExpireSession, mockResetToSelectMode } =
+    useSession();
   const reduced = useReducedMotion();
 
   useEffect(() => {
@@ -83,6 +85,24 @@ export function PaymentPage() {
     session?.status === 'pending' ? session?.payment_expires_at : null
   );
 
+  /* windowClosed is true from the moment expires_at passes until the
+   * server flips the session to 'expired' | up to 90 seconds (60s
+   * cron grace plus the 30s interval). For that whole stretch the
+   * page showed a disabled panel and offered nothing to do. The
+   * account number is already dead, so there is no reason to make
+   * someone wait out the cron before they can act.
+   *
+   * Declared ABOVE the early return below. Every hook in this
+   * component must run on every render or React throws "rendered more
+   * hooks than during the previous render" the first time a session
+   * resolves from null. Optional chaining covers the null case. */
+  const {
+    restart: restartFromClosedWindow,
+    pending: restartPending,
+    error: restartError,
+    exhausted: restartExhausted,
+  } = useRestartCheckout(session?.session_id ?? null);
+
   if (!session) return null;
 
   const isPending = session.status === 'pending';
@@ -90,6 +110,27 @@ export function PaymentPage() {
   const cardState = isSettled ? 'pending' : 'default';
 
   const handleCountdownExpire = () => mockExpireSession();
+
+  /* Rehomed from ConfirmPage when the two screens merged (checklist
+   * section C). Cancel was the ONLY route back to the platform
+   * anywhere in the pay flow. Without it a user who has just been
+   * redirected from a platform they trust to a domain they do not
+   * has the browser back button and nothing else, on a timer.
+   *
+   * Change amount is inert under the API provider | checkout_mode is
+   * always 'preset' there and mockResetToSelectMode is a noop. It
+   * exists so the ?checkout mock loop (SelectPage -> pay -> back)
+   * still closes. */
+  const isSelectFlow = session.checkout_mode === 'select';
+
+  const handleChangeAmount = () => {
+    mockResetToSelectMode();
+    checkoutNavigate(`/${token}`);
+  };
+
+  const handleCancel = () => {
+    if (session.callback_url) window.location.href = session.callback_url;
+  };
 
   return (
     <CheckoutShell wide canvas="obsidian" platformName={session.platform_name}>
@@ -132,6 +173,7 @@ export function PaymentPage() {
               accountName={session.account_name}
               amountNaira={session.user_pays_naira}
               reference={session.reference}
+              processor={session.processor}
               disabled={!isPending || windowClosed}
               accent={isSettled}
               onCopy={() => emitPayment(CHECKOUT_EVENTS.PAYMENT_COPY)}
@@ -149,6 +191,53 @@ export function PaymentPage() {
               expiresAt={isPending ? session.payment_expires_at : null}
               onExpire={handleCountdownExpire}
             />
+          </motion.div>
+
+          {windowClosed && isPending && !restartExhausted && (
+            <motion.div
+              className={styles.closedBlock}
+              initial={reduced ? false : { opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: durSlow, ease: easeOut }}
+            >
+              <p className={styles.closedNote}>
+                This account number is no longer active. Start a new
+                purchase to get a fresh one. Prices refresh, so the
+                amount may differ.
+              </p>
+              <button
+                type="button"
+                className={styles.closedCta}
+                onClick={restartFromClosedWindow}
+                disabled={restartPending}
+              >
+                {restartPending ? 'Starting new purchase' : 'Start a new purchase'}
+              </button>
+              {restartError && (
+                <p className={styles.closedError} role="alert">
+                  {restartError}
+                </p>
+              )}
+            </motion.div>
+          )}
+
+          <motion.div
+            className={styles.secondaryLinks}
+            initial={reduced ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: durSlow, ease: easeOut, delay: 0.45 }}
+          >
+            {isSelectFlow && (
+              <>
+                <button type="button" className={styles.secondaryLink} onClick={handleChangeAmount}>
+                  Change amount
+                </button>
+                <span className={styles.secondaryDivider} aria-hidden="true">·</span>
+              </>
+            )}
+            <button type="button" className={styles.secondaryLink} onClick={handleCancel}>
+              Cancel
+            </button>
           </motion.div>
         </div>
       </div>

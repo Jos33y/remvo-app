@@ -14,12 +14,24 @@ import styles from '@styles/ui/checkout/bank-transfer-card.module.css';
  * moment fires once on mount: each digit of the account number
  * drops 8px and lands at 60ms intervals. Reduced motion mounts
  * complete. */
+/* Merchant id from sessions.merchant_id -> the name the user knows.
+ * An unmapped id renders no footer at all rather than printing a raw
+ * database identifier at someone about to transfer money. */
+const PROCESSOR_NAMES = {
+  paystack: 'Paystack',
+  kora: 'Kora',
+};
+
 export function BankTransferCard({
   bankName,
   accountNumber,
   accountName,
   amountNaira,
   reference,
+  /* Which PSP holds this account. Optional | absent means no footer.
+   * Never hardcode a brand here: merchant dispatch is per-corridor
+   * and a flip to Kora must change what the user reads. */
+  processor,
   disabled = false,
   accent = false,
   /* PHASE_7F_S4_CHECKOUT_EVENTS
@@ -62,6 +74,8 @@ export function BankTransferCard({
     const t = setTimeout(() => setAllAnnouncement(''), 1500);
     return () => clearTimeout(t);
   }, [allAnnouncement]);
+
+  const processorName = processor ? PROCESSOR_NAMES[processor] : null;
 
   const cardClassName = [
     styles.card,
@@ -165,6 +179,26 @@ export function BankTransferCard({
         </span>
         <span className={styles.srOnly} aria-live="polite" aria-atomic="true">{allAnnouncement}</span>
       </button>
+
+      {/* The account name row above reads "PAYSTACK CHECKOUT", which is
+        * whatever the PSP resolves and outside our control. In Nigeria
+        * that name is an asset: Paystack is in every bank app and reads
+        * as a licensed, compliance-verified rail. Rendered as a bare
+        * value it is just a string. Named here, it is the reassurance
+        * the user needs at the moment they are about to send money to a
+        * domain they have never seen.
+        *
+        * Stays visible when the window has closed. It is a statement
+        * about who operates the account, not an invitation to act, so
+        * unlike the exact-amount note it does not stop being true. */}
+      {processorName && (
+        <>
+          <div className={styles.divider} aria-hidden="true" />
+          <p className={styles.processorNote}>
+            Secured by {processorName}, Remvo&apos;s payment processor.
+          </p>
+        </>
+      )}
     </div>
   );
 }

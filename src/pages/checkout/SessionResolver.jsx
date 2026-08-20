@@ -3,7 +3,7 @@ import { useSession } from '@context/SessionContext';
 import { useCheckoutViewEvent } from '@hooks/useCheckoutEvent';
 import { CHECKOUT_EVENTS } from '@lib/checkoutEventsClient';
 import { SelectPage } from './SelectPage';
-import { ConfirmPage } from './ConfirmPage';
+import { PaymentPage } from './PaymentPage';
 import { CompletePage } from './CompletePage';
 import { ExpiredPage } from './ExpiredPage';
 import { AlreadyPaidPage } from './AlreadyPaidPage';
@@ -25,9 +25,9 @@ import { PaymentIssuePage } from './PaymentIssuePage';
  *   country_not_active                   -> CountryComingSoonPage
  *   completed + !completed_in_session    -> AlreadyPaidPage
  *   completed + completed_in_session     -> CompletePage
- *   processing                           -> ConfirmPage
+ *   processing                           -> PaymentPage
  *   pending + select mode + amount == 0  -> SelectPage
- *   pending + anything else              -> ConfirmPage
+ *   pending + anything else              -> PaymentPage
  *
  * Status vocabulary note (PHASE_7F_S5):
  *   These are the SessionContext statuses. ApiSessionProvider
@@ -39,10 +39,26 @@ import { PaymentIssuePage } from './PaymentIssuePage';
  *   directly.
  *
  * Why amount-gated: checkout_mode records the session ORIGIN and
- * never flips. SelectPage vs ConfirmPage is decided by whether an
+ * never flips. SelectPage vs PaymentPage is decided by whether an
  * amount has been chosen. Under the API provider checkout_mode is
  * always 'preset' (the platform sets the amount at init), so the
  * SelectPage branch is mock-only.
+ *
+ * MERGED 20 August 2026 (checklist section C)
+ * -------------------------------------------
+ * 'pending' used to land on ConfirmPage, which showed the card, the
+ * naira figure and a "Pay with bank transfer" button, then navigated
+ * to /:token/pay where the account number finally appeared.
+ *
+ * The PSP charge is created inside POST /v1/checkout/initialize,
+ * before the redirect. So that screen revealed nothing that had not
+ * already been fetched, and the session countdown was already
+ * running while it sat there. Four of twelve sessions on 17-20
+ * August never got past it.
+ *
+ * ConfirmPage is deleted. PaymentPage renders everything it did plus
+ * the bank panel. /:token/pay stays mounted in checkoutRouter as an
+ * alias so live redirects and stored deep links still resolve.
  *
  * country_not_active is terminal for this session: the user's
  * country is coming_soon or paused and no checkout is possible.
@@ -78,12 +94,12 @@ export function SessionResolver() {
         : <AlreadyPaidPage />;
 
     case 'processing':
-      return <ConfirmPage />;
+      return <PaymentPage />;
 
     case 'pending':
       return (session.checkout_mode === 'select' && session.amount_usd_card === 0)
         ? <SelectPage />
-        : <ConfirmPage />;
+        : <PaymentPage />;
 
     default:
       return <InvalidPage />;

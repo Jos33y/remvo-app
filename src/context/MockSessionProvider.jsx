@@ -59,6 +59,9 @@ function buildBaseSession({ token, mode = 'preset', amountUsdCard = 25 }) {
     bank_name: 'Wema Bank',
     account_number: '7123456789',
     account_name: 'Remvo Labs Limited',
+    /* Matches the API provider's shape so the trust footer renders in
+     * ?checkout dev mode too. */
+    processor: 'paystack',
 
     locked_at: now.toISOString(),
     expires_at: expiresAt.toISOString(),
