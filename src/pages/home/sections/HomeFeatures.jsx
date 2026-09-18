@@ -4,18 +4,18 @@ import styles from '@styles/pages/marketing/homepage.module.css';
 const FEATURES = [
   {
     num: '01',
-    title: 'Card checkout',
-    desc: 'Your users buy digital value cards in Naira through a hosted checkout. The card value is credited to your platform account. One integration, one flow.',
+    title: 'Choose a card',
+    desc: 'Denominations from $10 to $500, or enter your own amount. You see the Naira price before you pay. That price is the whole cost.',
   },
   {
     num: '02',
-    title: 'Instant credit',
-    desc: 'The moment payment confirms, a webhook fires. Your platform credits the user immediately. No waiting, no manual review.',
+    title: 'Pay by bank transfer',
+    desc: 'Copy the account number, send the transfer from your bank app. You have thirty minutes. No card, no USSD, no app to install.',
   },
   {
     num: '03',
-    title: 'Daily reconciliation',
-    desc: 'Daily activity summary posted to your platform. Reference number, email confirmation, full audit trail.',
+    title: 'Use it immediately',
+    desc: 'Your card activates the moment payment confirms, and its value is applied to your account at the platform you bought it for.',
   },
 ];
 

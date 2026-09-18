@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Reveal } from '@components/ui/marketing/Reveal';
-import { BRAND, EXTERNAL } from '@utils/constants';
+import { BRAND } from '@utils/constants';
 import styles from '@styles/pages/marketing/contact.module.css';
 
 export function ContactPage() {
@@ -22,47 +22,53 @@ export function ContactPage() {
 
         <div className={styles.channels}>
           <Reveal delay={100}>
-            <a
-              href={`mailto:${BRAND.EMAIL}`}
-              className={styles.card}
-            >
+            <a href={`mailto:${BRAND.EMAIL}`} className={styles.card}>
               <div className={styles.cardIcon}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <rect x="2" y="4" width="20" height="16" rx="2" />
                   <path d="M22 4L12 13 2 4" />
                 </svg>
               </div>
-              <h2 className={styles.cardTitle}>Email</h2>
+              <h2 className={styles.cardTitle}>Bought a card</h2>
               <p className={styles.cardValue}>{BRAND.EMAIL}</p>
-              <p className={styles.cardMeta}>Response within 1 business day</p>
+              <p className={styles.cardMeta}>Include your transaction reference</p>
             </a>
           </Reveal>
 
           <Reveal delay={200}>
-            <a
-              href={EXTERNAL.WHATSAPP}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.card}
-            >
+            <a href={`mailto:${BRAND.PARTNERS_EMAIL}`} className={styles.card}>
               <div className={styles.cardIcon}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" />
+                  <rect x="2" y="7" width="20" height="14" rx="2" />
+                  <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
                 </svg>
               </div>
-              <h2 className={styles.cardTitle}>WhatsApp</h2>
-              <p className={styles.cardValue}>Send a message</p>
-              <p className={styles.cardMeta}>For time-sensitive enquiries</p>
+              <h2 className={styles.cardTitle}>Accept Remvo Cards</h2>
+              <p className={styles.cardValue}>{BRAND.PARTNERS_EMAIL}</p>
+              <p className={styles.cardMeta}>Response within 1 business day</p>
+            </a>
+          </Reveal>
+
+          <Reveal delay={300}>
+            <a href={`mailto:${BRAND.LEGAL_EMAIL}`} className={styles.card}>
+              <div className={styles.cardIcon}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M12 3l8 4v5c0 4.5-3.2 7.9-8 9-4.8-1.1-8-4.5-8-9V7l8-4z" />
+                </svg>
+              </div>
+              <h2 className={styles.cardTitle}>Legal and compliance</h2>
+              <p className={styles.cardValue}>{BRAND.LEGAL_EMAIL}</p>
+              <p className={styles.cardMeta}>Data protection, compliance, company enquiries</p>
             </a>
           </Reveal>
         </div>
 
-        <Reveal delay={300}>
+        <Reveal delay={400}>
           <div className={styles.guidance}>
-            <h3 className={styles.guidanceTitle}>For business enquiries</h3>
+            <h3 className={styles.guidanceTitle}>Accepting Remvo Cards</h3>
             <p className={styles.guidanceText}>
-              If you operate a technology platform and want to integrate the
-              {' '}{BRAND.NAME} checkout, include the following in your message:
+              If your customers are in Nigeria and you want them to be able to
+              pay you with a {BRAND.NAME} Card, tell us:
             </p>
             <div className={styles.guidanceList}>
               <div className={styles.guidanceItem}>
@@ -70,16 +76,16 @@ export function ContactPage() {
                 <span className={styles.guidanceDesc}>Your registered company, product name, and URL</span>
               </div>
               <div className={styles.guidanceItem}>
-                <span className={styles.guidanceLabel}>Operating region</span>
-                <span className={styles.guidanceDesc}>Country or countries where your users are based</span>
+                <span className={styles.guidanceLabel}>Where your customers are</span>
+                <span className={styles.guidanceDesc}>The countries your customers are based in</span>
               </div>
               <div className={styles.guidanceItem}>
-                <span className={styles.guidanceLabel}>Expected volume</span>
-                <span className={styles.guidanceDesc}>Monthly transaction volume estimate in Naira or USD</span>
+                <span className={styles.guidanceLabel}>How they pay you today</span>
+                <span className={styles.guidanceDesc}>What you currently accept, and what is missing</span>
               </div>
               <div className={styles.guidanceItem}>
                 <span className={styles.guidanceLabel}>Timeline</span>
-                <span className={styles.guidanceDesc}>When you would like to go live</span>
+                <span className={styles.guidanceDesc}>When you would like to start accepting cards</span>
               </div>
             </div>
           </div>

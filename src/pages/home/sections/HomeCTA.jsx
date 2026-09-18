@@ -22,11 +22,11 @@ export function HomeCTA() {
       <div className={styles.ctaInner}>
         <Reveal>
           <h2 id="cta-heading" className={styles.ctaHeading}>
-            Built for platforms processing<br />
-            real volume.
+            Accept Remvo Cards.
           </h2>
           <p className={styles.ctaDesc}>
-            One integration. Instant user credits. Daily reconciliation.
+            If your customers are in Nigeria and pay in Naira, they can buy a
+            Remvo Card and redeem it with you.
           </p>
           <div className={styles.ctaActions}>
             <Button href={ROUTES.CONTACT} variant="primary" size="large">

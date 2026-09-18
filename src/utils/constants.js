@@ -31,11 +31,25 @@ export const BRAND = {
   LEGAL_NAME: 'Remvo Labs Limited',
   RC_NUMBER: '9550568',
   DOMAIN: 'remvo.app',
-  EMAIL: 'partners@remvolabs.com',
+
+  /* Customer-facing. Used on Terms, Privacy, Refunds, AML and
+   * anywhere a cardholder is told where to write. Never partners@ |
+   * a customer asking about their own money or their own data
+   * should not be routed to a partnerships mailbox. */
+  EMAIL: 'support@remvolabs.com',
+
+  /* Company, legal, data protection and compliance enquiries. This
+   * is the address on the CAC register. */
+  LEGAL_EMAIL: 'hello@remvolabs.com',
+
+  /* Merchants who want to accept Remvo Cards. */
+  PARTNERS_EMAIL: 'partners@remvolabs.com',
 };
 
 export const EXTERNAL = {
-  WHATSAPP: 'https://wa.me/2348000000000',
+  /* TODO: replace with the real number before this ships. The
+   * placeholder resolves to a dead WhatsApp link on a public page. */
+  WHATSAPP: 'https://wa.me/2348162438553',
   EMAIL: 'mailto:partners@remvolabs.com',
 };
 

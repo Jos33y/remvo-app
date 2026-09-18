@@ -53,8 +53,8 @@ export function HomeHero() {
         <div className={styles.trustBar}>
           <div className={styles.trustBarInner}>
             <div className={styles.trustItem}>
-              <span className={styles.trustValue}>3-5 min</span>
-              <span className={styles.trustLabel}>Checkout time</span>
+              <span className={styles.trustValue}>$10 to $500</span>
+              <span className={styles.trustLabel}>Denominations</span>
             </div>
             <div className={styles.trustDivider} aria-hidden="true" />
             <div className={styles.trustItem}>
@@ -63,13 +63,13 @@ export function HomeHero() {
             </div>
             <div className={styles.trustDivider} aria-hidden="true" />
             <div className={styles.trustItem}>
-              <span className={styles.trustValue}>Instant</span>
-              <span className={styles.trustLabel}>User credit</span>
+              <span className={styles.trustValue}>3-5 min</span>
+              <span className={styles.trustLabel}>Start to finish</span>
             </div>
             <div className={styles.trustDivider} aria-hidden="true" />
             <div className={styles.trustItem}>
-              <span className={styles.trustValue}>Daily</span>
-              <span className={styles.trustLabel}>Reconciliation</span>
+              <span className={styles.trustValue}>Instant</span>
+              <span className={styles.trustLabel}>Card activation</span>
             </div>
           </div>
         </div>

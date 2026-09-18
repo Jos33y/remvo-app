@@ -8,14 +8,14 @@ export function HomeCheckout() {
       <div className={styles.checkoutInner}>
         <Reveal>
           <div className={styles.checkoutContent}>
-            <span className={styles.sectionLabel}>The checkout</span>
+            <span className={styles.sectionLabel}>Buying a card</span>
             <h2 id="checkout-heading" className={styles.checkoutHeading}>
-              See what your users see.
+              Three screens, start to finish.
             </h2>
             <p className={styles.checkoutDesc}>
-              A branded checkout page. Card denomination, Naira amount, bank
-              transfer details, copy button, 30-minute countdown. Three screens
-              from start to confirmed. No signup, no email, no account creation.
+              Pick your denomination. Give us your name, email and phone so we
+              know who bought the card. Copy the account number and transfer.
+              You get a reference and your card is active.
             </p>
             <div className={styles.checkoutStats}>
               <div className={styles.checkoutStat}>
@@ -23,8 +23,8 @@ export function HomeCheckout() {
                 <span className={styles.checkoutStatLabel}>Screens total</span>
               </div>
               <div className={styles.checkoutStat}>
-                <span className={styles.checkoutStatValue}>0</span>
-                <span className={styles.checkoutStatLabel}>Fields to fill</span>
+                <span className={styles.checkoutStatValue}>30 min</span>
+                <span className={styles.checkoutStatLabel}>To transfer</span>
               </div>
               <div className={styles.checkoutStat}>
                 <span className={styles.checkoutStatValue}>&lt;5s</span>
@@ -36,7 +36,6 @@ export function HomeCheckout() {
 
         <Reveal delay={200}>
           <div className={styles.checkoutMockup}>
-            <div className={styles.mockupGlow} aria-hidden="true" />
             <CheckoutMockup />
           </div>
         </Reveal>

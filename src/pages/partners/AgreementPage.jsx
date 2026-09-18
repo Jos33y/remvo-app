@@ -56,7 +56,7 @@ export function AgreementPage() {
         </>
       }
       footerNote={
-        <>
+        <> 
           This agreement is reviewed periodically. The current version is
           always available at this URL. Questions or amendments should be
           directed to <a href={`mailto:${BRAND.EMAIL}`}>{BRAND.EMAIL}</a>.
