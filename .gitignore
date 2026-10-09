@@ -41,3 +41,5 @@ dev_logs
 *.log
 npm-debug.log*
 yarn-error.log*
+scripts/
+payload
