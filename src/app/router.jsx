@@ -1,54 +1,35 @@
 import { createBrowserRouter } from 'react-router';
 import { PageShell } from '@components/layout/marketing/PageShell';
 import { HomePage } from '@pages/home/HomePage';
+import { HowItWorksPage } from '@pages/how-it-works/HowItWorksPage';
+import { PricingPage } from '@pages/pricing/PricingPage';
 import { TermsPage } from '@pages/legal/TermsPage';
 import { PrivacyPage } from '@pages/legal/PrivacyPage';
-import { AMLPage } from '@pages/legal/AMLPage';
 import { RefundsPage } from '@pages/legal/RefundsPage';
+import { CreditsPage } from '@pages/legal/CreditsPage';
 import { ContactPage } from '@pages/contact/ContactPage';
 import { NotFoundPage } from '@pages/not-found/NotFoundPage';
 import { ROUTES } from '@utils/constants';
 
 /* Marketing router for remvo.app.
  *
- * Partners + Agreement routes intentionally removed. The integration
- * material now lives on partners.remvo.app (see partnersRouter.jsx).
- * If a stale link hits /partners or /partners/agreement here, the
- * catch-all NotFoundPage serves a 404 — exactly what we want when a
- * PSP automated reviewer probes the old URLs.
+ * /aml, /partners and /partners/agreement are gone with the paused
+ * corridor. A stale link to any of them reaches the catch-all and is
+ * served the 404 page.
  */
 export const router = createBrowserRouter([
   {
     element: <PageShell />,
     children: [
-      {
-        path: ROUTES.HOME,
-        element: <HomePage />,
-      },
-      {
-        path: ROUTES.TERMS,
-        element: <TermsPage />,
-      },
-      {
-        path: ROUTES.PRIVACY,
-        element: <PrivacyPage />,
-      },
-      {
-        path: ROUTES.AML,
-        element: <AMLPage />,
-      },
-      {
-        path: ROUTES.REFUNDS,
-        element: <RefundsPage />,
-      },
-      {
-        path: ROUTES.CONTACT,
-        element: <ContactPage />,
-      },
-      {
-        path: '*',
-        element: <NotFoundPage />,
-      },
+      { path: ROUTES.HOME, element: <HomePage /> },
+      { path: ROUTES.HOW, element: <HowItWorksPage /> },
+      { path: ROUTES.PRICING, element: <PricingPage /> },
+      { path: ROUTES.TERMS, element: <TermsPage /> },
+      { path: ROUTES.PRIVACY, element: <PrivacyPage /> },
+      { path: ROUTES.REFUNDS, element: <RefundsPage /> },
+      { path: ROUTES.CREDITS, element: <CreditsPage /> },
+      { path: ROUTES.CONTACT, element: <ContactPage /> },
+      { path: '*', element: <NotFoundPage /> },
     ],
   },
 ]);

@@ -1,7 +1,11 @@
+/* Obsidian behind everything, so the translucent header reads as
+ * obsidian over the hero rather than as grey over the body's warm
+ * white. Each section sets its own surface. */
 .shell {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background-color: var(--color-obsidian);
 }
 
 .main {

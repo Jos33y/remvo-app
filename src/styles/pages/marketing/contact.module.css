@@ -2,6 +2,9 @@
    CONTACT PAGE
    Full-height atmospheric dark surface.
    Direct contact methods, no form.
+
+   October 2026: muted text raised to
+   0.5 to 0.62 white for AA contrast.
    ═══════════════════════════════════════ */
 
 .contact {
@@ -26,7 +29,7 @@
 .label {
   display: block;
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-gold);
@@ -46,7 +49,7 @@
 .sub {
   font-size: var(--text-base);
   line-height: var(--leading-relaxed);
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.62);
   max-width: 480px;
   margin-bottom: var(--space-10);
 }
@@ -100,7 +103,7 @@
 
 .cardMeta {
   font-size: 0.8125rem;
-  color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 /* ── Inquiry guidance ── */
@@ -123,7 +126,7 @@
 .guidanceText {
   font-size: var(--text-sm);
   line-height: var(--leading-relaxed);
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(255, 255, 255, 0.62);
   margin-bottom: var(--space-5);
 }
 
@@ -156,7 +159,22 @@
 
 .guidanceDesc {
   font-size: var(--text-sm);
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ── Company line ── */
+
+.company {
+  margin-top: var(--space-8);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: var(--leading-relaxed);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@media (prefers-contrast: more) {
+  .sub, .cardMeta, .guidanceText, .guidanceDesc, .company { color: var(--color-white); }
+  .card, .guidance { border-color: rgba(255, 255, 255, 0.5); }
 }
 
 /* ═══════════════════════════════════════

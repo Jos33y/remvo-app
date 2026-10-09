@@ -1,21 +1,23 @@
+import { Link } from 'react-router';
 import { Reveal } from '@components/ui/marketing/Reveal';
+import { ROUTES, PRICING } from '@utils/constants';
 import styles from '@styles/pages/marketing/homepage.module.css';
 
-const FEATURES = [
+const STEPS = [
   {
     num: '01',
-    title: 'Choose a card',
-    desc: 'Denominations from $10 to $500, or enter your own amount. You see the Naira price before you pay. That price is the whole cost.',
+    title: 'Top up',
+    desc: `Buy credits from £5. No subscription and nothing to cancel. Credits last ${PRICING.EXPIRY_MONTHS} months, and every top-up extends the lot.`,
   },
   {
     num: '02',
-    title: 'Pay by bank transfer',
-    desc: 'Copy the account number, send the transfer from your bank app. You have thirty minutes. No card, no USSD, no app to install.',
+    title: 'Give it a product',
+    desc: 'Type the barcode from the box, or paste the Amazon UK link for it. If the barcode matches more than one product, you pick, before any credits are used.',
   },
   {
     num: '03',
-    title: 'Use it immediately',
-    desc: 'Your card activates the moment payment confirms, and its value is applied to your account at the platform you bought it for.',
+    title: 'Copy it into eBay',
+    desc: 'Every field has its own copy button, or download the lot as a file. You publish it yourself. Remvo never touches your eBay account.',
   },
 ];
 
@@ -26,21 +28,29 @@ export function HomeFeatures() {
         <Reveal>
           <span className={styles.sectionLabel}>How it works</span>
           <h2 id="features-heading" className={styles.featuresHeading}>
-            Three steps. Zero complexity.
+            The typing, done before you open eBay.
           </h2>
         </Reveal>
 
-        <div className={styles.featureGrid}>
-          {FEATURES.map((f, i) => (
-            <Reveal key={f.num} delay={i * 100}>
-              <div className={styles.featureBlock}>
-                <span className={styles.featureNum}>{f.num}</span>
-                <h3 className={styles.featureTitle}>{f.title}</h3>
-                <p className={styles.featureDesc}>{f.desc}</p>
-              </div>
-            </Reveal>
+        <ol className={styles.featureGrid}>
+          {STEPS.map((s, i) => (
+            <li key={s.num}>
+              <Reveal delay={i * 80}>
+                <div className={styles.featureBlock}>
+                  <span className={styles.featureNum} aria-hidden="true">{s.num}</span>
+                  <h3 className={styles.featureTitle}>{s.title}</h3>
+                  <p className={styles.featureDesc}>{s.desc}</p>
+                </div>
+              </Reveal>
+            </li>
           ))}
-        </div>
+        </ol>
+
+        <Reveal>
+          <p className={styles.featuresMore}>
+            <Link to={ROUTES.HOW} className={styles.inlineLink}>What Remvo reads, what it writes, and what it never does</Link>
+          </p>
+        </Reveal>
       </div>
     </section>
   );

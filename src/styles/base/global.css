@@ -59,3 +59,31 @@ body {
   background: var(--color-text-dark-muted);
   border-radius: 3px;
 }
+
+/* ── Visitor settings (October 2026) ──
+ * More contrast: hairlines become real borders and the muted text
+ * steps up, everywhere the shared tokens are used. Reduced motion is
+ * handled once in reset.css. Reduced transparency is handled on the
+ * one translucent surface, the marketing header. */
+
+@media (prefers-contrast: more) {
+  :root {
+    --border-subtle: 1px solid rgba(255, 255, 255, 0.4);
+    --border-subtle-light: 1px solid rgba(0, 0, 0, 0.45);
+    --color-text-dark-muted: #4A4A4A;
+  }
+}
+
+/* ── Visually hidden, still read aloud ── */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

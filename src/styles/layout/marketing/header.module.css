@@ -1,19 +1,57 @@
+/* ═══════════════════════════════════════
+   HEADER
+   A translucent material over the page:
+   content scrolls beneath it. Solid when
+   the visitor asks for less transparency
+   or more contrast.
+   ═══════════════════════════════════════ */
+
 .header {
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: var(--color-obsidian);
+  background-color: rgba(26, 26, 26, 0.86);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
   border-bottom: var(--border-subtle);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .header { background-color: var(--color-obsidian); }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .header {
+    background-color: var(--color-obsidian);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .header {
+    background-color: var(--color-obsidian);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  }
 }
 
 .inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--space-4);
   max-width: var(--max-width-content);
   margin: 0 auto;
-  padding: var(--space-4) var(--gutter);
+  padding: 0 var(--gutter);
   height: 64px;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
 }
 
 .nav {
@@ -22,48 +60,32 @@
   gap: var(--space-8);
 }
 
+/* Text on a translucent surface: a touch more letter spacing and full
+ * contrast on the current page, so it holds over whatever is beneath. */
 .navLink {
   font-family: var(--font-sans);
   font-size: var(--text-sm);
   font-weight: var(--weight-regular);
-  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.005em;
+  color: rgba(255, 255, 255, 0.68);
   text-decoration: none;
   transition: color var(--transition-fast);
-  padding: var(--space-2) 0;
+  /* 44px touch target without changing the bar's rhythm */
+  padding: 12px 0;
 }
 
-.navLink:hover {
-  color: var(--color-white);
-}
-
+.navLink:hover,
 .navLink.active {
   color: var(--color-white);
 }
 
-@media (max-width: 480px) {
-  .inner {
-    height: 56px;
-  }
-
-  .nav {
-    gap: var(--space-4);
-  }
-
-  .navLink {
-    font-size: 0.8125rem;
-  }
+@media (max-width: 640px) {
+  .inner { height: 56px; }
+  .right { gap: var(--space-5); }
+  .wideOnly { display: none; }
 }
 
 @media (max-width: 360px) {
-  .inner {
-    padding: var(--space-3) var(--space-3);
-  }
-
-  .nav {
-    gap: var(--space-3);
-  }
-
-  .navLink {
-    font-size: 0.75rem;
-  }
+  .right { gap: var(--space-4); }
+  .navLink { font-size: 0.8125rem; }
 }

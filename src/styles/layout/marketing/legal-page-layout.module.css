@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════
    LEGAL PAGE LAYOUT
    Shared structure: dark hero + warm-white body.
-   Used by: Agreement, Terms, Privacy, AML, Refunds.
+   Used by: Terms, Privacy, Refunds, Credits.
    ═══════════════════════════════════════ */
 
 /* ── Hero (dark, atmospheric) ── */
@@ -208,14 +208,15 @@
 /* ── Document footer ── */
 
 .docFooter {
-  max-width: var(--max-width-narrow);
-  margin: 0 auto;
-  padding: 0 var(--gutter) var(--space-16);
+  background-color: var(--color-warm-white);
+  padding: 0 0 var(--space-16);
 }
 
 .docFooterInner {
-  padding-top: var(--space-6);
-  border-top: 0.5px solid rgba(0, 0, 0, 0.06);
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+  padding: var(--space-6) var(--gutter) 0;
+  border-top: 0.5px solid rgba(0, 0, 0, 0.1);
 }
 
 .footerNote {
@@ -232,6 +233,37 @@
 
 .footerNote a:hover {
   color: #b8983f;
+}
+
+/* ── Links inside clauses (October 2026) ──
+ * The reset strips colour and underline from every link, which left
+ * cross-references in the policies invisible. Dark text with a hairline
+ * underline, gold-dark on hover: gold itself is 2.1:1 on warm white. */
+
+.preamble a,
+.clause a {
+  color: var(--color-text-dark);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 0.5px;
+  transition: color var(--transition-fast);
+}
+
+.preamble a:hover,
+.clause a:hover {
+  color: #7A6220;
+}
+
+.footerNote a {
+  color: var(--color-text-dark);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 0.5px;
+}
+
+@media (prefers-contrast: more) {
+  .defDesc, .footerNote { color: var(--color-text-dark); }
+  .tocLink, .meta { color: rgba(255, 255, 255, 0.85); }
 }
 
 /* ═══════════════════════════════════════

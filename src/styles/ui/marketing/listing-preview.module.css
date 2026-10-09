@@ -1,0 +1,175 @@
+/* ═══════════════════════════════════════
+   LISTING PREVIEW
+   One finished job, as the result screen
+   shows it. Hairlines, no shadow. Gold is
+   spent once, on the price.
+   ═══════════════════════════════════════ */
+
+.preview {
+  width: 100%;
+  max-width: 440px;
+  margin: 0;
+  background-color: #141416;
+  border: 0.5px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+/* ── The input ── */
+
+.input {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.inputKind {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.inputValue {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-white);
+}
+
+.cost {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: rgba(255, 255, 255, 0.62);
+  padding: 3px 8px;
+  border: 0.5px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+/* ── Fields ── */
+
+.fields {
+  margin: 0;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 104px 1fr 14px;
+  align-items: start;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.06);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.label {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.value {
+  margin: 0;
+  min-width: 0;
+  font-size: var(--text-sm);
+  line-height: 1.4;
+  color: var(--color-white);
+  overflow-wrap: anywhere;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+
+.copy {
+  color: rgba(201, 168, 76, 0.55);
+  padding-top: 2px;
+}
+
+.count {
+  display: block;
+  margin-top: var(--space-1);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.sub {
+  display: block;
+  margin-top: var(--space-1);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.sep {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.price {
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-base);
+  color: var(--color-gold);
+}
+
+/* ── Item specifics ── */
+
+.specifics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.specific {
+  display: inline-flex;
+  gap: 6px;
+  padding: 3px 8px;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--color-white);
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+}
+
+.specificKey {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ── Caption ── */
+
+.caption {
+  padding: var(--space-3) var(--space-5);
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  border-top: 0.5px solid rgba(255, 255, 255, 0.08);
+}
+
+@media (prefers-contrast: more) {
+  .preview { border-color: rgba(255, 255, 255, 0.5); }
+  .row, .input, .caption { border-color: rgba(255, 255, 255, 0.3); }
+  .label, .sub, .count, .specificKey, .inputKind, .caption { color: rgba(255, 255, 255, 0.85); }
+}
+
+@media (max-width: 400px) {
+  .row {
+    grid-template-columns: 1fr 14px;
+    gap: var(--space-1) var(--space-3);
+  }
+  .label { grid-column: 1 / -1; }
+  .input { padding: var(--space-3) var(--space-4); }
+  .row { padding: var(--space-3) var(--space-4); }
+}

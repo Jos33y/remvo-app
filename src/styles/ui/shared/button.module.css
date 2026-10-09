@@ -1,3 +1,15 @@
+/* ═══════════════════════════════════════
+   BUTTON
+
+   October 2026: a press now answers on
+   pointer-down. The button settles to 0.97
+   over 100ms ease-out, so a tap is felt
+   before the page changes, then springs
+   back on release. Colour still shifts on
+   hover. touch-action removes the old
+   double-tap zoom delay on mobile.
+   ═══════════════════════════════════════ */
+
 .button {
   display: inline-flex;
   align-items: center;
@@ -10,9 +22,18 @@
   transition:
     background-color var(--transition-fast),
     color var(--transition-fast),
-    border-color var(--transition-fast);
+    border-color var(--transition-fast),
+    transform 160ms cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
   user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.button:active {
+  transform: scale(0.97);
+  transition-duration: 100ms;
+  transition-timing-function: ease-out;
 }
 
 /* ── Sizes ── */
@@ -85,4 +106,13 @@
 
 .ghost:hover {
   background-color: rgba(201, 168, 76, 0.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button:active { transform: none; }
+}
+
+@media (prefers-contrast: more) {
+  .secondary { border-color: rgba(255, 255, 255, 0.7); }
+  .outline { border-color: rgba(0, 0, 0, 0.6); }
 }

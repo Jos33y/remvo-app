@@ -1,29 +1,28 @@
 /* ──────────────────────────────────────────────────────────────────
  * Marketing routes (remvo.app)
  *
- * Partners + Agreement removed. They live on partners.remvo.app
- * now and are reached via the PARTNERS_ROUTES constant below.
+ * October 2026: remvo.app sells listing jobs to eBay sellers. The
+ * legal paths keep the addresses they already had, so nothing that
+ * was indexed breaks. /aml is gone with the corridor.
  * ────────────────────────────────────────────────────────────────── */
 
 export const ROUTES = {
   HOME: '/',
+  HOW: '/how-it-works',
+  PRICING: '/pricing',
   TERMS: '/terms',
   PRIVACY: '/privacy',
-  AML: '/aml',
   REFUNDS: '/refunds',
+  CREDITS: '/credits',
   CONTACT: '/contact',
 };
 
-/* ──────────────────────────────────────────────────────────────────
- * Partners routes (partners.remvo.app)
- *
- * Mounted via partnersRouter. The agreement is at /agreement on the
- * partners host (was /partners/agreement on the marketing host).
- * ────────────────────────────────────────────────────────────────── */
-
-export const PARTNERS_ROUTES = {
-  HOME: '/',
-  AGREEMENT: '/agreement',
+/* The seller app. Its own host, chosen by App.jsx, so nothing from it
+ * ships in the marketing chunk. */
+export const APP_URL = 'https://my.remvo.app';
+export const APP_LINKS = {
+  SIGN_IN: `${APP_URL}/sign-in`,
+  TOP_UP: `${APP_URL}/billing`,
 };
 
 export const BRAND = {
@@ -31,27 +30,63 @@ export const BRAND = {
   LEGAL_NAME: 'Remvo Labs Limited',
   RC_NUMBER: '9550568',
   DOMAIN: 'remvo.app',
+  /* Registered office, as on the CAC register. The Privacy Policy
+   * names it because a data controller has to give an address. */
+  ADDRESS: '5 Funmilayo Awodiya Close, Ige Estate, Lagos, Nigeria',
 
-  /* Customer-facing. Used on Terms, Privacy, Refunds, AML and
-   * anywhere a cardholder is told where to write. Never partners@ |
-   * a customer asking about their own money or their own data
-   * should not be routed to a partnerships mailbox. */
+  /* Sellers write here about their account, a job or a refund. */
   EMAIL: 'support@remvolabs.com',
 
-  /* Company, legal, data protection and compliance enquiries. This
-   * is the address on the CAC register. */
+  /* Company, legal and data protection enquiries. The address on the
+   * CAC register. */
   LEGAL_EMAIL: 'hello@remvolabs.com',
 
-  /* Merchants who want to accept Remvo Cards. */
+  /* Paused corridor only. Not used by the marketing site. Kept so the
+   * checkout and admin trees still build. */
   PARTNERS_EMAIL: 'partners@remvolabs.com',
 };
 
+/* Paused corridor only. Not used by the marketing site. */
 export const EXTERNAL = {
-  /* TODO: replace with the real number before this ships. The
-   * placeholder resolves to a dead WhatsApp link on a public page. */
   WHATSAPP: 'https://wa.me/2348162438553',
   EMAIL: 'mailto:partners@remvolabs.com',
 };
+
+/* ──────────────────────────────────────────────────────────────────
+ * Pricing (product-spec-02, sections 04 and 12)
+ *
+ * Every page that shows a price reads it from here, so the figure
+ * set by the metered run is a one-line change. Prices exclude VAT;
+ * Polar adds it at checkout where it applies.
+ * ────────────────────────────────────────────────────────────────── */
+
+export const PRICING = Object.freeze({
+  CREDIT_PENCE: 10,
+  PACKS: Object.freeze([
+    { pounds: 5, credits: 50, featured: false },
+    { pounds: 20, credits: 200, featured: true },
+    { pounds: 50, credits: 500, featured: false },
+  ]),
+  JOBS: Object.freeze({
+    LISTING: { name: 'Make a listing', credits: 3, live: true },
+    CHECK: { name: 'Check a product', credits: null, live: false },
+  }),
+  EXPIRY_MONTHS: 12,
+  REFUND_DAYS: 14,
+  RESULT_DAYS: 90,
+  /* Notice given before a job's credit cost changes. */
+  NOTICE_DAYS: 14,
+});
+
+/* Whole listings a pack buys at the current job cost. */
+export function listingsFor(credits) {
+  return Math.floor(credits / PRICING.JOBS.LISTING.credits);
+}
+
+/* The date shown on every legal page, and its machine form. */
+export const LEGAL_UPDATED = { label: '9 October 2026', iso: '2026-10-09', version: 'v2.0' };
+
+/* ── Paused corridor: checkout and admin trees only ── */
 
 export const DENOMINATIONS = [10, 25, 50, 100, 250, 500];
 

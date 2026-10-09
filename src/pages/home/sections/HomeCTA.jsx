@@ -1,12 +1,11 @@
 import { Button } from '@components/ui/shared/Button';
 import { Reveal } from '@components/ui/marketing/Reveal';
-import { ROUTES } from '@utils/constants';
+import { APP_LINKS } from '@utils/constants';
 import styles from '@styles/pages/marketing/homepage.module.css';
 
 export function HomeCTA() {
   return (
     <section className={styles.cta} aria-labelledby="cta-heading">
-      {/* Vault watermark */}
       <svg
         className={styles.ctaWatermark}
         viewBox="0 0 40 48"
@@ -22,15 +21,14 @@ export function HomeCTA() {
       <div className={styles.ctaInner}>
         <Reveal>
           <h2 id="cta-heading" className={styles.ctaHeading}>
-            Accept Remvo Cards.
+            Try it on the next thing you list.
           </h2>
           <p className={styles.ctaDesc}>
-            If your customers are in Nigeria and pay in Naira, they can buy a
-            Remvo Card and redeem it with you.
+            Sign in with your email, top up £5, and give it one barcode.
           </p>
           <div className={styles.ctaActions}>
-            <Button href={ROUTES.CONTACT} variant="primary" size="large">
-              Get in touch
+            <Button href={APP_LINKS.SIGN_IN} variant="primary" size="large">
+              Make your first listing
             </Button>
           </div>
         </Reveal>

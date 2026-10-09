@@ -1,27 +1,45 @@
 /* ═══════════════════════════════════════
    HOMEPAGE
-   Four sections: Hero, Features, Checkout, CTA.
-   Dark-Light-Dark-Dark rhythm.
+   Hero, How it works, Pricing, CTA.
+   Dark, light, dark, dark.
+
+   October 2026 rebuild for listing jobs.
+   Kept from the card site: the obsidian
+   hero, the gold mono section labels, the
+   editorial three-step grid on warm white,
+   the watermark CTA. Changed: the card
+   stack gives way to a finished listing;
+   section labels go from 10px to 11px;
+   secondary text on obsidian goes from
+   0.45 to 0.62 white, which takes it from
+   about 4:1 to 6.5:1.
    ═══════════════════════════════════════ */
-
-
-/* ── Shared section label ── */
 
 .sectionLabel {
   display: block;
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-gold);
   margin-bottom: var(--space-4);
 }
 
+/* Gold reads at 2.1:1 on warm white, so the label there is dark. */
+.features .sectionLabel {
+  color: #7A6220;
+}
+
+.inlineLink {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 0.5px;
+  transition: color var(--transition-fast);
+}
 
 /* ═══════════════════════════════════════
    HERO
-   Flat obsidian. The card stack and
-   typography carry the visual weight.
    ═══════════════════════════════════════ */
 
 .hero {
@@ -32,24 +50,22 @@
 
 .heroInner {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 400px);
   align-items: center;
   gap: var(--space-10);
   max-width: var(--max-width-content);
   margin: 0 auto;
-  padding: 0 var(--gutter);
+  padding: 0 var(--gutter) var(--space-12);
 }
 
-/* ── Content ── */
-
 .heroContent {
-  padding: var(--space-6) 0 var(--space-10);
+  padding: var(--space-4) 0;
 }
 
 .heroLabel {
   display: block;
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-gold);
@@ -59,8 +75,8 @@
 .heroHeading {
   font-family: var(--font-sans);
   font-weight: var(--weight-semibold);
-  font-size: var(--text-5xl);
-  line-height: 1.05;
+  font-size: clamp(2.25rem, 4.2vw, var(--text-4xl));
+  line-height: 1.06;
   letter-spacing: var(--tracking-tight);
   color: var(--color-white);
   margin-bottom: var(--space-5);
@@ -73,8 +89,8 @@
 .heroSub {
   font-size: var(--text-base);
   line-height: var(--leading-relaxed);
-  color: rgba(255, 255, 255, 0.5);
-  max-width: 380px;
+  color: rgba(255, 255, 255, 0.62);
+  max-width: 420px;
   margin-bottom: var(--space-8);
 }
 
@@ -84,62 +100,15 @@
   flex-wrap: wrap;
 }
 
-/* ── Card stack ── */
-
-.heroCards {
+.heroPreview {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: var(--space-6) 0;
-}
-
-.cardStack {
-  position: relative;
-  width: 420px;
-  height: 250px;
-}
-
-.cardBack,
-.cardMid,
-.cardFront {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.cardBack {
-  transform: translateX(-62%) translateY(-18px) rotate(-8deg);
-  z-index: 1;
-}
-
-.cardMid {
-  transform: translateX(-56%) translateY(-9px) rotate(-4deg);
-  z-index: 2;
-}
-
-.cardFront {
-  transform: translateX(-50%) rotate(0deg);
-  z-index: 3;
-}
-
-.cardStack:hover .cardBack {
-  transform: translateX(-76%) translateY(-22px) rotate(-14deg);
-}
-
-.cardStack:hover .cardMid {
-  transform: translateX(-62%) translateY(-12px) rotate(-7deg);
-}
-
-.cardStack:hover .cardFront {
-  transform: translateX(-40%) rotate(3deg);
+  justify-content: flex-end;
 }
 
 /* ── Trust bar ── */
 
 .trustBar {
-  border-top: 0.5px solid rgba(255, 255, 255, 0.06);
-  margin-top: var(--space-4);
+  border-top: 0.5px solid rgba(255, 255, 255, 0.08);
 }
 
 .trustBarInner {
@@ -152,23 +121,25 @@
   padding: var(--space-5) var(--gutter);
 }
 
+/* The label is first in the markup for screen readers; the value
+ * shows first on screen, as the figure is what is read at a glance. */
 .trustItem {
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   align-items: center;
   gap: 2px;
 }
 
 .trustValue {
+  margin: 0;
   font-family: var(--font-mono);
   font-size: var(--text-sm);
-  font-weight: var(--weight-regular);
   color: var(--color-white);
 }
 
 .trustLabel {
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.5);
@@ -180,11 +151,8 @@
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-
 /* ═══════════════════════════════════════
-   FEATURES
-   Editorial three-column on warm-white.
-   Gold mono numbers, vertical dividers.
+   HOW IT WORKS
    ═══════════════════════════════════════ */
 
 .features {
@@ -210,21 +178,25 @@
 
 .featureGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 0;
+  grid-template-columns: repeat(3, 1fr);
+  list-style: none;
+  margin: 0 0 var(--space-8);
+  padding: 0;
 }
 
-.featureBlock {
-  padding: var(--space-6) var(--space-6) var(--space-6) 0;
+.featureGrid > li {
   border-right: 0.5px solid rgba(0, 0, 0, 0.1);
-  transition: background-color var(--transition-fast);
 }
 
-.featureBlock:last-child {
+.featureGrid > li:last-child {
   border-right: none;
 }
 
-.featureBlock:first-child {
+.featureBlock {
+  padding: var(--space-6) var(--space-6) var(--space-6) var(--space-6);
+}
+
+.featureGrid > li:first-child .featureBlock {
   padding-left: 0;
 }
 
@@ -232,7 +204,7 @@
   display: block;
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  color: var(--color-gold);
+  color: #7A6220;
   margin-bottom: var(--space-4);
   letter-spacing: 0.05em;
 }
@@ -249,113 +221,53 @@
 .featureDesc {
   font-size: var(--text-sm);
   line-height: var(--leading-relaxed);
-  color: var(--color-text-dark-muted);
+  color: #5A5A5A;
 }
 
+.featuresMore {
+  font-size: var(--text-sm);
+  color: var(--color-text-dark);
+}
+
+.featuresMore .inlineLink:hover {
+  color: #7A6220;
+}
 
 /* ═══════════════════════════════════════
-   CHECKOUT
-   Flat obsidian. The CheckoutMockup and
-   its ambient glow own the visual space.
+   PRICING
    ═══════════════════════════════════════ */
 
-.checkout {
-  background-color: var(--color-obsidian-light);
+.pricing {
+  background-color: var(--color-obsidian);
   padding: var(--space-20) 0;
-  overflow: hidden;
 }
 
-.checkoutInner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: var(--space-10);
+.pricingInner {
   max-width: var(--max-width-content);
   margin: 0 auto;
   padding: 0 var(--gutter);
 }
 
-.checkoutContent {
-  padding: var(--space-4) 0;
-}
-
-.checkoutHeading {
+.pricingHeading {
   font-family: var(--font-sans);
   font-weight: var(--weight-semibold);
   font-size: var(--text-2xl);
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
   color: var(--color-white);
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-3);
 }
 
-.checkoutDesc {
+.pricingDesc {
   font-size: var(--text-sm);
   line-height: var(--leading-relaxed);
-  color: rgba(255, 255, 255, 0.45);
-  max-width: 400px;
-  margin-bottom: var(--space-8);
+  color: rgba(255, 255, 255, 0.62);
+  max-width: 560px;
+  margin-bottom: var(--space-10);
 }
-
-.checkoutStats {
-  display: flex;
-  gap: var(--space-8);
-  padding-top: var(--space-5);
-  border-top: 0.5px solid rgba(255, 255, 255, 0.08);
-}
-
-.checkoutStat {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.checkoutStatValue {
-  font-family: var(--font-mono);
-  font-size: var(--text-xl);
-  font-weight: var(--weight-regular);
-  color: var(--color-gold);
-  line-height: 1;
-}
-
-.checkoutStatLabel {
-  font-family: var(--font-mono);
-  font-size: 0.625rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
-}
-
-/* ── Mockup ── */
-
-.checkoutMockup {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.mockupGlow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 280px;
-  height: 280px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(201, 168, 76, 0.06) 0%,
-    rgba(201, 168, 76, 0) 70%
-  );
-  pointer-events: none;
-}
-
 
 /* ═══════════════════════════════════════
    CTA
-   Flat obsidian with vault watermark.
-   The watermark is the texture.
    ═══════════════════════════════════════ */
 
 .cta {
@@ -395,12 +307,13 @@
   letter-spacing: var(--tracking-tight);
   color: var(--color-white);
   margin-bottom: var(--space-4);
+  text-wrap: balance;
 }
 
 .ctaDesc {
   font-size: var(--text-base);
   line-height: var(--leading-relaxed);
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(255, 255, 255, 0.62);
   margin-bottom: var(--space-8);
 }
 
@@ -411,194 +324,77 @@
   flex-wrap: wrap;
 }
 
+@media (prefers-contrast: more) {
+  .heroSub, .pricingDesc, .ctaDesc, .trustLabel { color: var(--color-white); }
+  .featureDesc { color: var(--color-text-dark); }
+  .featureGrid > li { border-right-color: rgba(0, 0, 0, 0.5); }
+}
 
 /* ═══════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════ */
 
-/* ── 860px: Hero and Checkout stack ── */
 @media (max-width: 860px) {
   .heroInner {
-    grid-template-columns: 1fr;
-    gap: var(--space-4);
-  }
-
-  .heroContent {
-    padding: var(--space-4) 0 0;
-    text-align: left;
-  }
-
-  .heroCards {
-    justify-content: center;
-    padding: var(--space-4) 0 var(--space-6);
-  }
-
-  .cardStack {
-    width: 380px;
-    height: 240px;
-  }
-
-  .cardBack {
-    transform: translateX(-58%) translateY(-14px) rotate(-6deg);
-  }
-
-  .cardMid {
-    transform: translateX(-54%) translateY(-7px) rotate(-3deg);
-  }
-
-  .checkoutInner {
     grid-template-columns: 1fr;
     gap: var(--space-8);
   }
 
-  .checkoutMockup {
-    order: -1;
+  .heroPreview {
+    justify-content: flex-start;
   }
 }
 
-/* ── 760px: Features stack ── */
 @media (max-width: 760px) {
   .featureGrid {
     grid-template-columns: 1fr;
-    gap: 0;
   }
 
-  .featureBlock {
+  .featureGrid > li {
     border-right: none;
     border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
-    padding: var(--space-5) 0;
   }
 
-  .featureBlock:last-child {
+  .featureGrid > li:last-child {
     border-bottom: none;
   }
 
-  .featureBlock:first-child {
-    padding-left: 0;
+  .featureBlock,
+  .featureGrid > li:first-child .featureBlock {
+    padding: var(--space-5) 0;
   }
 }
 
-/* ── 640px: Tighter spacing ── */
 @media (max-width: 640px) {
-  .hero {
-    padding: var(--space-10) 0 0;
-  }
-
-  .features {
-    padding: var(--space-16) 0;
-  }
-
-  .checkout {
-    padding: var(--space-16) 0;
-  }
-
-  .cta {
-    padding: var(--space-16) 0;
-  }
-
-  .checkoutStats {
-    gap: var(--space-6);
-  }
-
-  .trustBarInner {
-    gap: var(--space-5);
-  }
-
-  .trustValue {
-    font-size: 0.8125rem;
-  }
-
-  .trustLabel {
-    font-size: 0.5625rem;
-  }
+  .hero { padding: var(--space-10) 0 0; }
+  .heroInner { padding-bottom: var(--space-10); }
+  .features, .pricing { padding: var(--space-16) 0; }
+  .cta { padding: var(--space-16) 0; }
+  .trustBarInner { gap: var(--space-5); }
 }
 
-/* ── 480px: Mobile ── */
 @media (max-width: 480px) {
-  .heroHeading {
-    font-size: var(--text-4xl);
-  }
-
-  .heroSub {
-    font-size: var(--text-sm);
-  }
+  .heroSub { font-size: var(--text-sm); }
 
   .heroCtas {
     flex-direction: column;
   }
 
-  .heroCards {
-    overflow: hidden;
-    margin: 0 calc(var(--gutter) * -1);
-    padding: var(--space-2) var(--gutter) var(--space-4);
+  .heroCtas > * {
+    width: 100%;
   }
 
-  .cardStack {
-    width: 340px;
-    height: 230px;
-  }
-
-  .cardBack {
-    transform: translateX(-56%) translateY(-14px) rotate(-6deg);
-  }
-
-  .cardMid {
-    transform: translateX(-53%) translateY(-7px) rotate(-3deg);
-  }
-
-  .cardFront {
-    transform: translateX(-50%) rotate(0deg);
-  }
-
-  .featuresHeading {
-    font-size: var(--text-xl);
-  }
-
-  .featureTitle {
-    font-size: var(--text-base);
-  }
-
-  .checkoutHeading {
-    font-size: var(--text-xl);
-  }
-
-  .checkoutStats {
-    flex-wrap: wrap;
-    gap: var(--space-5);
-  }
-
-  .ctaHeading {
-    font-size: var(--text-2xl);
-  }
-
-  .ctaWatermark {
-    width: 200px;
-  }
-
-  .ctaActions {
-    flex-direction: column;
-    align-items: center;
-  }
+  .featuresHeading, .pricingHeading { font-size: var(--text-xl); }
+  .featureTitle { font-size: var(--text-base); }
+  .ctaHeading { font-size: var(--text-2xl); }
+  .ctaWatermark { width: 200px; }
 
   .trustBarInner {
-    flex-wrap: wrap;
-    gap: var(--space-4) var(--space-5);
-    justify-content: flex-start;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
   }
 
-  .trustDivider {
-    display: none;
-  }
-}
-
-/* ── 360px: Small phones ── */
-@media (max-width: 360px) {
-  .heroHeading {
-    font-size: 2rem;
-  }
-
-  .cardStack {
-    width: 300px;
-    height: 200px;
-  }
+  .trustItem { align-items: flex-start; }
+  .trustDivider { display: none; }
 }

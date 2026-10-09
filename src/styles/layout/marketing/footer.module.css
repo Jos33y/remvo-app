@@ -1,7 +1,13 @@
 /* ═══════════════════════════════════════
    FOOTER
-   Structured three-column layout.
-   Dark atmospheric surface.
+   Three columns on obsidian, then the
+   merchant-of-record and independence
+   notes, then the logo bar.
+
+   October 2026: secondary text raised to
+   0.62 and meta text to 0.5 white. The
+   earlier 0.25 and 0.2 read at about 2:1
+   on #1A1A1A, under the 4.5:1 AA floor.
    ═══════════════════════════════════════ */
 
 .footer {
@@ -21,15 +27,12 @@
   padding: var(--space-12) var(--gutter) var(--space-8);
 }
 
-/* ── Column grid ── */
-
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: var(--space-10);
-  margin-bottom: var(--space-10);
   padding-bottom: var(--space-8);
-  border-bottom: 0.5px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
 }
 
 .col {
@@ -40,27 +43,25 @@
 .colTitle {
   font-family: var(--font-mono);
   font-weight: var(--weight-regular);
-  font-size: 0.625rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.5);
   margin-bottom: var(--space-4);
 }
 
 .colLink {
   display: block;
   font-size: var(--text-sm);
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.62);
   text-decoration: none;
-  padding: 3px 0;
+  padding: 6px 0;
   transition: color var(--transition-fast);
 }
 
 .colLink:hover {
   color: var(--color-white);
 }
-
-/* ── Company info ── */
 
 .companyInfo {
   display: flex;
@@ -69,14 +70,33 @@
 
 .companyName {
   font-size: var(--text-sm);
-  color: rgba(255, 255, 255, 0.5);
-  padding: 3px 0;
+  color: rgba(255, 255, 255, 0.62);
+  padding: 6px 0;
 }
 
 .companyMeta {
-  font-size: var(--text-sm);
-  color: rgba(255, 255, 255, 0.25);
-  padding: 3px 0;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 6px 0;
+}
+
+/* ── Notes ── */
+
+.notes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-10);
+  padding: var(--space-6) 0;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: var(--space-6);
+}
+
+.note {
+  font-size: 0.8125rem;
+  line-height: var(--leading-relaxed);
+  color: rgba(255, 255, 255, 0.5);
+  max-width: 420px;
 }
 
 /* ── Bottom bar ── */
@@ -84,12 +104,19 @@
 .bottom {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: var(--space-6);
 }
 
 .copy {
-  font-size: 0.8125rem;
-  color: rgba(255, 255, 255, 0.2);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@media (prefers-contrast: more) {
+  .colLink, .companyName, .companyMeta, .note, .copy, .colTitle { color: var(--color-white); }
+  .grid, .notes { border-bottom-color: rgba(255, 255, 255, 0.4); }
 }
 
 /* ═══════════════════════════════════════
@@ -104,7 +131,11 @@
   .grid {
     grid-template-columns: 1fr 1fr;
     gap: var(--space-8);
-    margin-bottom: var(--space-8);
+  }
+
+  .notes {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
   }
 }
 

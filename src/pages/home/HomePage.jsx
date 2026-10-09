@@ -1,19 +1,22 @@
 import { useEffect } from 'react';
 import { HomeHero } from './sections/HomeHero';
 import { HomeFeatures } from './sections/HomeFeatures';
-import { HomeCheckout } from './sections/HomeCheckout';
+import { HomePricing } from './sections/HomePricing';
 import { HomeCTA } from './sections/HomeCTA';
 
+/* Four sections, dark, light, dark, dark: what you get, how, what it
+ * costs, start. The hero leads with a finished listing because that is
+ * what a seller came for. */
 export function HomePage() {
   useEffect(() => {
-    document.title = 'Remvo | The digital value card';
+    document.title = 'Remvo | Finished eBay listings from a barcode';
   }, []);
 
   return (
     <>
       <HomeHero />
       <HomeFeatures />
-      <HomeCheckout />
+      <HomePricing />
       <HomeCTA />
     </>
   );

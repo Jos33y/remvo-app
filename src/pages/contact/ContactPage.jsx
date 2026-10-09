@@ -3,6 +3,9 @@ import { Reveal } from '@components/ui/marketing/Reveal';
 import { BRAND } from '@utils/constants';
 import styles from '@styles/pages/marketing/contact.module.css';
 
+/* Two addresses: one for anything about your account, a job, credits
+ * or a refund; one for company, legal and data protection. Answered
+ * within 48 hours, the time Polar holds merchants to. */
 export function ContactPage() {
   useEffect(() => {
     document.title = 'Remvo | Contact';
@@ -13,15 +16,15 @@ export function ContactPage() {
       <div className={styles.inner}>
         <Reveal>
           <span className={styles.label}>Contact</span>
-          <h1 className={styles.heading}>Talk to us directly.</h1>
+          <h1 className={styles.heading}>Write to the people who build it.</h1>
           <p className={styles.sub}>
-            No contact form, no ticket queue. Reach the team that builds and
-            operates {BRAND.NAME}.
+            No contact form and no ticket queue. Every message is read and
+            answered within 48 hours.
           </p>
         </Reveal>
 
         <div className={styles.channels}>
-          <Reveal delay={100}>
+          <Reveal delay={80}>
             <a href={`mailto:${BRAND.EMAIL}`} className={styles.card}>
               <div className={styles.cardIcon}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -29,66 +32,53 @@ export function ContactPage() {
                   <path d="M22 4L12 13 2 4" />
                 </svg>
               </div>
-              <h2 className={styles.cardTitle}>Bought a card</h2>
+              <h2 className={styles.cardTitle}>Your account, a job or a refund</h2>
               <p className={styles.cardValue}>{BRAND.EMAIL}</p>
-              <p className={styles.cardMeta}>Include your transaction reference</p>
+              <p className={styles.cardMeta}>Write from the email you sign in with</p>
             </a>
           </Reveal>
 
-          <Reveal delay={200}>
-            <a href={`mailto:${BRAND.PARTNERS_EMAIL}`} className={styles.card}>
-              <div className={styles.cardIcon}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <rect x="2" y="7" width="20" height="14" rx="2" />
-                  <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
-                </svg>
-              </div>
-              <h2 className={styles.cardTitle}>Accept Remvo Cards</h2>
-              <p className={styles.cardValue}>{BRAND.PARTNERS_EMAIL}</p>
-              <p className={styles.cardMeta}>Response within 1 business day</p>
-            </a>
-          </Reveal>
-
-          <Reveal delay={300}>
+          <Reveal delay={160}>
             <a href={`mailto:${BRAND.LEGAL_EMAIL}`} className={styles.card}>
               <div className={styles.cardIcon}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M12 3l8 4v5c0 4.5-3.2 7.9-8 9-4.8-1.1-8-4.5-8-9V7l8-4z" />
                 </svg>
               </div>
-              <h2 className={styles.cardTitle}>Legal and compliance</h2>
+              <h2 className={styles.cardTitle}>Company, legal and your data</h2>
               <p className={styles.cardValue}>{BRAND.LEGAL_EMAIL}</p>
-              <p className={styles.cardMeta}>Data protection, compliance, company enquiries</p>
+              <p className={styles.cardMeta}>Data requests, company enquiries</p>
             </a>
           </Reveal>
         </div>
 
-        <Reveal delay={400}>
+        <Reveal delay={240}>
           <div className={styles.guidance}>
-            <h3 className={styles.guidanceTitle}>Accepting Remvo Cards</h3>
+            <h2 className={styles.guidanceTitle}>Writing about a job</h2>
             <p className={styles.guidanceText}>
-              If your customers are in Nigeria and you want them to be able to
-              pay you with a {BRAND.NAME} Card, tell us:
+              It saves a reply if you include:
             </p>
-            <div className={styles.guidanceList}>
+            <dl className={styles.guidanceList}>
               <div className={styles.guidanceItem}>
-                <span className={styles.guidanceLabel}>Company and product</span>
-                <span className={styles.guidanceDesc}>Your registered company, product name, and URL</span>
+                <dt className={styles.guidanceLabel}>Job reference</dt>
+                <dd className={styles.guidanceDesc}>Shown at the top of every result</dd>
               </div>
               <div className={styles.guidanceItem}>
-                <span className={styles.guidanceLabel}>Where your customers are</span>
-                <span className={styles.guidanceDesc}>The countries your customers are based in</span>
+                <dt className={styles.guidanceLabel}>What you gave it</dt>
+                <dd className={styles.guidanceDesc}>The barcode or the link</dd>
               </div>
               <div className={styles.guidanceItem}>
-                <span className={styles.guidanceLabel}>How they pay you today</span>
-                <span className={styles.guidanceDesc}>What you currently accept, and what is missing</span>
+                <dt className={styles.guidanceLabel}>What was wrong</dt>
+                <dd className={styles.guidanceDesc}>The field, and what it should have said</dd>
               </div>
-              <div className={styles.guidanceItem}>
-                <span className={styles.guidanceLabel}>Timeline</span>
-                <span className={styles.guidanceDesc}>When you would like to start accepting cards</span>
-              </div>
-            </div>
+            </dl>
           </div>
+        </Reveal>
+
+        <Reveal delay={300}>
+          <p className={styles.company}>
+            {BRAND.LEGAL_NAME} | RC {BRAND.RC_NUMBER} | {BRAND.ADDRESS}
+          </p>
         </Reveal>
       </div>
     </section>

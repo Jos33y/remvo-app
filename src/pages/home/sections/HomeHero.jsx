@@ -1,77 +1,68 @@
-import { RemvoCard } from '@components/ui/shared/RemvoCard';
 import { Button } from '@components/ui/shared/Button';
 import { Reveal } from '@components/ui/marketing/Reveal';
-import { ROUTES } from '@utils/constants';
+import { ListingPreview } from '@components/ui/marketing/ListingPreview';
+import { ROUTES, APP_LINKS, PRICING } from '@utils/constants';
 import styles from '@styles/pages/marketing/homepage.module.css';
 
 export function HomeHero() {
+  const credits = PRICING.JOBS.LISTING.credits;
+
   return (
     <section className={styles.hero} aria-labelledby="hero-heading">
       <div className={styles.heroInner}>
         <Reveal>
           <div className={styles.heroContent}>
-            <span className={styles.heroLabel}>The digital value card</span>
+            <span className={styles.heroLabel}>For eBay sellers</span>
             <h1 id="hero-heading" className={styles.heroHeading}>
-              Buy a card.<br />
-              <span className={styles.heroGold}>Activate instantly.</span>
+              Give us a barcode.<br />
+              <span className={styles.heroGold}>Get back a finished listing.</span>
             </h1>
             <p className={styles.heroSub}>
-              A digital value card for the platforms you already use. Pay in
-              Naira by bank transfer. Your card activates the moment payment
-              confirms.
+              Title, description, category, item specifics, parcel size and
+              weight, and a price taken from what sells on eBay UK today.
+              Ready to copy into eBay.
             </p>
             <div className={styles.heroCtas}>
-              <Button href={ROUTES.CONTACT} variant="primary" size="large">
-                Get in touch
+              <Button href={APP_LINKS.SIGN_IN} variant="primary" size="default">
+                Make your first listing
               </Button>
-              <Button href={ROUTES.TERMS} variant="secondary" size="large">
-                Read terms
+              <Button href={ROUTES.PRICING} variant="secondary" size="default">
+                See pricing
               </Button>
             </div>
           </div>
         </Reveal>
 
-        <Reveal delay={200}>
-          <div className={styles.heroCards} aria-hidden="true">
-            <div className={styles.cardStack}>
-              <div className={styles.cardBack}>
-                <RemvoCard amount={100} />
-              </div>
-              <div className={styles.cardMid}>
-                <RemvoCard amount={50} />
-              </div>
-              <div className={styles.cardFront}>
-                <RemvoCard amount={25} reference="RMV-2026-0031-7A4F" />
-              </div>
-            </div>
+        <Reveal delay={150}>
+          <div className={styles.heroPreview}>
+            <ListingPreview />
           </div>
         </Reveal>
       </div>
 
-      {/* Trust bar */}
-      <Reveal delay={350}>
+      <Reveal delay={300}>
         <div className={styles.trustBar}>
-          <div className={styles.trustBarInner}>
+          <dl className={styles.trustBarInner}>
             <div className={styles.trustItem}>
-              <span className={styles.trustValue}>$10 to $500</span>
-              <span className={styles.trustLabel}>Denominations</span>
+              <dt className={styles.trustLabel}>Per listing</dt>
+              <dd className={styles.trustValue}>{credits} credits</dd>
             </div>
             <div className={styles.trustDivider} aria-hidden="true" />
             <div className={styles.trustItem}>
-              <span className={styles.trustValue}>Any bank</span>
-              <span className={styles.trustLabel}>Nigerian accounts</span>
+              <dt className={styles.trustLabel}>Subscription</dt>
+              <dd className={styles.trustValue}>None</dd>
             </div>
             <div className={styles.trustDivider} aria-hidden="true" />
             <div className={styles.trustItem}>
-              <span className={styles.trustValue}>3-5 min</span>
-              <span className={styles.trustLabel}>Start to finish</span>
+              <dt className={styles.trustLabel}>Your eBay login</dt>
+              <dd className={styles.trustValue}>Never asked for</dd>
             </div>
             <div className={styles.trustDivider} aria-hidden="true" />
             <div className={styles.trustItem}>
-              <span className={styles.trustValue}>Instant</span>
-              <span className={styles.trustLabel}>Card activation</span>
+              <dt className={styles.trustLabel}>A job that fails</dt>
+              <dd className={styles.trustValue}>Credits back</dd>
             </div>
-          </div>
+          </dl>
         </div>
       </Reveal>
     </section>

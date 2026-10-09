@@ -1,0 +1,301 @@
+/* ═══════════════════════════════════════
+   INFO PAGES
+   How it works and Pricing. A dark intro
+   that answers the page's question in one
+   line, then warm-white sections with the
+   heading on the left and the answer on
+   the right, so the page can be scanned
+   by its headings alone.
+   ═══════════════════════════════════════ */
+
+.intro {
+  background-color: var(--color-obsidian);
+  padding: var(--space-16) 0 var(--space-12);
+}
+
+.introInner {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: var(--space-4);
+}
+
+.title {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: clamp(2rem, 4vw, var(--text-4xl));
+  line-height: 1.08;
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-white);
+  max-width: 640px;
+  margin-bottom: var(--space-4);
+  text-wrap: balance;
+}
+
+.lede {
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: rgba(255, 255, 255, 0.62);
+  max-width: 560px;
+}
+
+/* A dark band under the intro, for the pack grid. */
+.band {
+  background-color: var(--color-obsidian);
+  padding: 0 0 var(--space-16);
+}
+
+.bandInner {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* ── Warm sections ── */
+
+.body {
+  background-color: var(--color-warm-white);
+  padding: var(--space-8) 0 var(--space-16);
+}
+
+.bodyInner {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.section {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: var(--space-10);
+  padding: var(--space-10) 0;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+}
+
+.section:last-child {
+  border-bottom: none;
+}
+
+.sectionHeading {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-lg);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.01em;
+  color: var(--color-text-dark);
+}
+
+.sectionBody {
+  max-width: 560px;
+}
+
+.sectionBody p {
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-dark);
+}
+
+.sectionBody p + p {
+  margin-top: var(--space-3);
+}
+
+.muted {
+  color: #5A5A5A !important;
+}
+
+.after {
+  margin-top: var(--space-4);
+}
+
+/* ── Field list: a term and what it means ── */
+
+.fields {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.field {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: var(--space-4);
+  padding: var(--space-4) 0;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.08);
+}
+
+.field:first-child {
+  padding-top: 0;
+}
+
+.field:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.fieldTerm {
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-sm);
+  color: var(--color-text-dark);
+}
+
+.fieldDesc {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: #5A5A5A;
+}
+
+/* ── Plain list with hairline ticks ── */
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.list li {
+  position: relative;
+  padding-left: var(--space-5);
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-dark);
+}
+
+.list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.8em;
+  width: 8px;
+  height: 1px;
+  background-color: #7A6220;
+}
+
+/* ── Job table (pricing) ── */
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: var(--space-4) 0;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+  font-size: var(--text-sm);
+  vertical-align: top;
+}
+
+.table thead th {
+  font-family: var(--font-mono);
+  font-weight: var(--weight-regular);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5A5A5A;
+  padding-top: 0;
+}
+
+.table tbody th {
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-dark);
+}
+
+.table td {
+  color: var(--color-text-dark);
+}
+
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  text-align: right !important;
+  white-space: nowrap;
+}
+
+.soon {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: #5A5A5A;
+}
+
+.link {
+  color: var(--color-text-dark);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 0.5px;
+}
+
+.link:hover {
+  color: #7A6220;
+}
+
+/* ── Closing call to action ── */
+
+.close {
+  background-color: var(--color-obsidian);
+  border-top: var(--border-subtle);
+  padding: var(--space-16) 0;
+}
+
+.closeInner {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.closeHeading {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-white);
+}
+
+@media (prefers-contrast: more) {
+  .lede { color: var(--color-white); }
+  .muted, .fieldDesc, .table thead th, .soon { color: var(--color-text-dark) !important; }
+  .section, .field, .table th, .table td { border-bottom-color: rgba(0, 0, 0, 0.45); }
+}
+
+@media (max-width: 760px) {
+  .section {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+    padding: var(--space-8) 0;
+  }
+
+  .field {
+    grid-template-columns: 1fr;
+    gap: var(--space-1);
+  }
+}
+
+@media (max-width: 640px) {
+  .intro { padding: var(--space-10) 0 var(--space-8); }
+  .band { padding-bottom: var(--space-10); }
+  .body { padding: var(--space-4) 0 var(--space-10); }
+  .close { padding: var(--space-10) 0; }
+
+  .closeInner > a {
+    width: 100%;
+  }
+}
