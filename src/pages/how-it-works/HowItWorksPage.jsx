@@ -2,23 +2,60 @@ import { useEffect } from 'react';
 import { Link } from 'react-router';
 import { Reveal } from '@components/ui/marketing/Reveal';
 import { Button } from '@components/ui/shared/Button';
-import { ROUTES, APP_LINKS, PRICING } from '@utils/constants';
+import { useMarket } from '@hooks/useMarket';
+import { MARKETPLACES, money } from '@lib/market';
+import { ROUTES, APP_LINKS, BRAND, PRICING, creditsCost } from '@utils/constants';
 import styles from '@styles/pages/marketing/info-page.module.css';
 
 const FIELDS = [
-  ['Title', 'Up to 80 characters, the limit eBay takes, in the words buyers search with for this product.'],
+  ['Title', 'Up to 80 characters, the limit eBay takes, in the words buyers on your eBay site search with for this product.'],
   ['Description', 'What it is, its key features, what is in the box, its size and weight, and anything a buyer should know. Plain text, ready to paste.'],
-  ['Category', 'The eBay UK category it belongs in.'],
+  ['Category', 'The category it belongs in on your eBay site.'],
   ['Item specifics', 'Every detail that category asks for, filled from the product, in the values eBay accepts. Anything the product does not tell us is left empty for you rather than guessed.'],
-  ['Parcel', 'Size and packed weight, and the Royal Mail parcel it fits.'],
-  ['Price', 'A price set from what the same product sells for on eBay UK today, with how many listings it was taken from.'],
+  ['Parcel', 'Size and packed weight, and the parcel service it fits where you post from.'],
+  ['Price', 'A price set from what the same product sells for on your eBay site today, with how many listings it was taken from.'],
 ];
 
-function Section({ heading, children }) {
+/* Answers to what a seller asks before paying anything. Each one is
+ * true of the product as built; nothing here is a plan. */
+function faq(currency) {
+  return [
+    {
+      q: 'What if my barcode is not on Amazon?',
+      a: 'The job stops, the credits go straight back to your balance, and you can try the product link instead. Nothing is charged for a product we cannot find.',
+    },
+    {
+      q: 'What about sizes and colours?',
+      a: 'One listing per barcode. Each size or colour usually has its own barcode, so give each one in turn. Listings with several variations in one are not made yet.',
+    },
+    {
+      q: 'Can I list used items?',
+      a: 'Yes, if they have a barcode. Choose the condition (New, New other or Used) before you start, and the listing is written for it. Vintage, handmade and one-off items without a barcode are not something Remvo does.',
+    },
+    {
+      q: 'Can I change the listing before I copy it?',
+      a: 'Yes. Every field can be edited in Remvo, and your version is what gets copied and downloaded. You can put any field back to how Remvo wrote it.',
+    },
+    {
+      q: 'Which language is the listing in?',
+      a: 'The language of your eBay site: English for the US, Canada and the UK, German for eBay.de, French for eBay.fr, Italian for eBay.it and Spanish for eBay.es.',
+    },
+    {
+      q: 'What happens to my data?',
+      a: `Each listing is kept for ${PRICING.RESULT_DAYS} days so you can come back to it, then deleted. You can delete any listing sooner. We never use your listings for anyone else.`,
+    },
+    {
+      q: 'Which currency do I pay in?',
+      a: `US dollars, euros or pounds. You choose; we suggest one from where you are. A listing costs ${money(creditsCost(PRICING.JOBS.LISTING.credits, currency), currency)} in the currency you have picked.`,
+    },
+  ];
+}
+
+function Section({ heading, children, id }) {
   return (
     <Reveal>
-      <section className={styles.section}>
-        <h2 className={styles.sectionHeading}>{heading}</h2>
+      <section className={styles.section} aria-labelledby={id}>
+        <h2 id={id} className={styles.sectionHeading}>{heading}</h2>
         <div className={styles.sectionBody}>{children}</div>
       </section>
     </Reveal>
@@ -26,9 +63,14 @@ function Section({ heading, children }) {
 }
 
 export function HowItWorksPage() {
+  const { currency } = useMarket();
+
   useEffect(() => {
     document.title = 'Remvo | How it works';
   }, []);
+
+  const perListing = money(creditsCost(PRICING.JOBS.LISTING.credits, currency), currency);
+  const from = money(PRICING.PACKS[0].price[currency], currency);
 
   return (
     <>
@@ -41,8 +83,9 @@ export function HowItWorksPage() {
             </h1>
             <p className={styles.lede}>
               You give Remvo a product you sell. It reads the product, looks at
-              how the same product is listed on eBay UK, and writes every field
-              eBay asks for. You check it and publish it.
+              how the same product is listed on your eBay site, and writes every
+              field eBay asks for, in that site&apos;s language. You check it and
+              publish it.
             </p>
           </Reveal>
         </div>
@@ -50,10 +93,11 @@ export function HowItWorksPage() {
 
       <div className={styles.body}>
         <div className={styles.bodyInner}>
-          <Section heading="What you give it">
+          <Section heading="What you give it" id="give">
             <p>
               The barcode from the box, the 8 to 14 digits under the stripes, or
-              the link to the product on Amazon UK.
+              the link to the product on Amazon. Then its condition: New, New
+              other (open box) or Used.
             </p>
             <p className={styles.muted}>
               If a barcode matches more than one product, you see them and pick
@@ -61,7 +105,49 @@ export function HowItWorksPage() {
             </p>
           </Section>
 
-          <Section heading="What comes back">
+          <Section heading="Who it is for" id="for">
+            <ul className={styles.list}>
+              <li>Sellers of products with a barcode: wholesale, retail arbitrage, overstock, returns.</li>
+              <li>Anyone listing the same kind of thing week after week, who would rather check a listing than type one.</li>
+            </ul>
+            <p className={`${styles.after}`}>
+              <strong>Not for vintage, handmade or one-off items.</strong> Without
+              a barcode or a product page there is nothing reliable to read, and
+              we would rather tell you now than take your money finding out.
+            </p>
+          </Section>
+
+          <Section heading="Your eBay site" id="sites">
+            <p>
+              Choose the eBay site you sell on. The listing is written in its
+              language, in its categories, with its parcel services and a price
+              from its live listings.
+            </p>
+            <table className={`${styles.table} ${styles.after}`}>
+              <thead>
+                <tr>
+                  <th scope="col">eBay site</th>
+                  <th scope="col">Language</th>
+                  <th scope="col">Parcel</th>
+                </tr>
+              </thead>
+              <tbody>
+                {MARKETPLACES.map((m) => (
+                  <tr key={m.id}>
+                    <th scope="row">{m.site}</th>
+                    <td>{m.lang}</td>
+                    <td>{m.carrier}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <p className={`${styles.muted} ${styles.after}`}>
+              Selling from somewhere else, such as Ireland, Portugal or the
+              Netherlands? Pick the eBay site your buyers use.
+            </p>
+          </Section>
+
+          <Section heading="What comes back" id="back">
             <dl className={styles.fields}>
               {FIELDS.map(([term, desc]) => (
                 <div key={term} className={styles.field}>
@@ -72,10 +158,10 @@ export function HowItWorksPage() {
             </dl>
           </Section>
 
-          <Section heading="How you use it">
+          <Section heading="How you use it" id="use">
             <p>
-              Each field has its own copy button. Copy them into eBay as you
-              create the listing, or download the whole listing as a file.
+              Read it, change anything you want, then copy each field into eBay
+              as you create the listing, or download the whole listing as a file.
             </p>
             <p className={styles.muted}>
               Read it before you publish. You know your stock; Remvo only knows
@@ -83,7 +169,7 @@ export function HowItWorksPage() {
             </p>
           </Section>
 
-          <Section heading="What Remvo never does">
+          <Section heading="What Remvo never does" id="never">
             <ul className={styles.list}>
               <li>Post, change or end anything on your eBay account.</li>
               <li>Ask for your eBay password or connect to your eBay account.</li>
@@ -91,20 +177,25 @@ export function HowItWorksPage() {
             </ul>
           </Section>
 
-          <Section heading="When a job fails">
+          <Section heading="When a job fails" id="fails">
             <p>
               If Remvo cannot produce the listing, the credits go straight back
               to your balance. Nothing to ask for.
             </p>
           </Section>
 
-          <Section heading="What happens to your listings">
-            <p>
-              Each job is kept for {PRICING.RESULT_DAYS} days so you can come
-              back to it, then deleted. You can delete any job sooner.
-            </p>
-            <p className={styles.muted}>
-              The detail is in the <Link to={ROUTES.PRIVACY} className={styles.link}>privacy policy</Link>.
+          <Section heading="Questions" id="faq">
+            <div className={styles.faq}>
+              {faq(currency).map((f) => (
+                <details key={f.q} className={styles.faqItem}>
+                  <summary className={styles.faqQ}>{f.q}</summary>
+                  <p className={styles.faqA}>{f.a}</p>
+                </details>
+              ))}
+            </div>
+            <p className={`${styles.muted} ${styles.after}`}>
+              Anything else: <a href={`mailto:${BRAND.EMAIL}`} className={styles.link}>{BRAND.EMAIL}</a>.
+              The detail on data is in the <Link to={ROUTES.PRIVACY} className={styles.link}>privacy policy</Link>.
             </p>
           </Section>
         </div>
@@ -113,7 +204,7 @@ export function HowItWorksPage() {
       <section className={styles.close} aria-label="Get started">
         <div className={styles.closeInner}>
           <p className={styles.closeHeading}>
-            {PRICING.JOBS.LISTING.credits} credits a listing, from a £5 top-up.
+            {perListing} a listing, from a {from} top‑up.
           </p>
           <Button href={APP_LINKS.SIGN_IN} variant="primary" size="large">
             Make your first listing

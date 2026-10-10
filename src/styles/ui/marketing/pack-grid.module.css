@@ -2,11 +2,17 @@
    PACK GRID
    Three top-ups on obsidian. The figure
    first, then what it buys. Gold is the
-   £20 pack's border and button only.
+   middle pack's border and button only.
    ═══════════════════════════════════════ */
 
 .wrap {
   width: 100%;
+}
+
+.head {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--space-5);
 }
 
 .grid {
@@ -73,8 +79,15 @@
   width: 100%;
 }
 
-.terms {
+.other {
   margin-top: var(--space-6);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--color-white);
+}
+
+.terms {
+  margin-top: var(--space-3);
   font-size: 0.8125rem;
   line-height: var(--leading-relaxed);
   color: rgba(255, 255, 255, 0.62);
@@ -94,10 +107,12 @@
 
 @media (prefers-contrast: more) {
   .pack { border-color: rgba(255, 255, 255, 0.5); }
-  .covers, .coversNote, .terms, .currency { color: var(--color-white); }
+  .covers, .coversNote, .terms, .other, .currency { color: var(--color-white); }
 }
 
 @media (max-width: 760px) {
+  .head { justify-content: flex-start; }
+
   .grid {
     grid-template-columns: 1fr;
   }

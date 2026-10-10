@@ -39,7 +39,7 @@ export function ContactPage() {
           </Reveal>
 
           <Reveal delay={160}>
-            <a href={`mailto:${BRAND.LEGAL_EMAIL}`} className={styles.card}>
+            <a href={`mailto:${BRAND.LEGAL_EMAIL}?subject=${encodeURIComponent('Data or legal request')}`} className={styles.card}>
               <div className={styles.cardIcon}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M12 3l8 4v5c0 4.5-3.2 7.9-8 9-4.8-1.1-8-4.5-8-9V7l8-4z" />

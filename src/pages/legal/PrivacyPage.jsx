@@ -73,7 +73,7 @@ export function PrivacyPage() {
       </Clause>
 
       <Clause id="transfers" heading="5. Where it is processed">
-        <p>5.1. Several of the companies above process data outside Nigeria, the United Kingdom and the European Union, including in the United States. Where data leaves those places, it is protected by contract terms that require the receiving company to keep it to the same standard.</p>
+        <p>5.1. Several of the companies above process data outside Nigeria, the United Kingdom, the European Union and Canada, including in the United States. Where data leaves those places, it is protected by contract terms that require the receiving company to keep it to the same standard.</p>
       </Clause>
 
       <Clause id="keep" heading="6. How long we keep it">
@@ -95,7 +95,8 @@ export function PrivacyPage() {
         <p>8.1. You can ask us for a copy of your data, to correct it, to delete it, to send it to you in a file you can take elsewhere, or to stop using it for a purpose you object to.</p>
         <p>8.2. Write to {BRAND.LEGAL_EMAIL} from the email address on your account. We answer within 30 days.</p>
         <p>8.3. Deleting your data closes your account. We keep only the purchase records described in clause 6, because the law requires them.</p>
-        <p>8.4. You can complain to the data protection authority where you live: in Nigeria the Nigeria Data Protection Commission, in the United Kingdom the Information Commissioner&apos;s Office, and in the European Union your national authority. We would like the chance to put it right first.</p>
+        <p>8.4. If you live in a US state with a consumer privacy law, such as California, you have the rights in 8.1, including to know what we hold and to have it deleted. We do not sell your personal information or share it for advertising, and we treat you the same whether or not you use these rights.</p>
+        <p>8.5. You can complain to the data protection authority where you live: in Nigeria the Nigeria Data Protection Commission, in the United Kingdom the Information Commissioner&apos;s Office, in the European Union your national authority, in Canada the Office of the Privacy Commissioner, and in the United States your state attorney general. We would like the chance to put it right first.</p>
       </Clause>
 
       <Clause id="security" heading="9. Security">

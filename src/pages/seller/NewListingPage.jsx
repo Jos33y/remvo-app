@@ -4,7 +4,7 @@ import { PageHeader } from '@components/ui/seller/PageHeader';
 import { MakeListingForm, TopUpSheet } from '@components/ui/seller/parts';
 import { IconAlert, IconCheck } from '@components/ui/seller/icons';
 import { useSellerData } from '@context/SellerData';
-import { NotEnoughCredits, STEPS } from '@lib/sellerData';
+import { CONDITION, NotEnoughCredits, stepsFor } from '@lib/sellerData';
 import { inputLabel } from '@lib/sellerFormat';
 import { PRICING, SELLER_ROUTES, listingPath } from '@utils/constants';
 import s from '@styles/pages/seller/app.module.css';
@@ -41,7 +41,9 @@ function NewListing() {
   const navigate = useNavigate();
   const location = useLocation();
   const raw = location.state?.raw ?? null;
-  const { lookUp, makeListing } = useSellerData();
+  const condition = location.state?.condition ?? 'new';
+  const { lookUp, makeListing, settings } = useSellerData();
+  const steps = stepsFor(settings?.marketplace);
 
   const [stage, setStage] = useState(raw ? 'looking' : 'enter');
   const [input, setInput] = useState(null);
@@ -58,7 +60,7 @@ function NewListing() {
     setStage('running');
     setDone(-1);
     try {
-      const job = await makeListing({ kind: read.kind, value: read.value, matchKey }, (i) => setDone(i));
+      const job = await makeListing({ kind: read.kind, value: read.value, matchKey, condition }, (i) => setDone(i));
       if (job.status === 'failed') { setFailure(job.failure); setStage('failed'); return; }
       navigate(listingPath(job.id), { replace: true });
     } catch (err) {
@@ -95,7 +97,12 @@ function NewListing() {
           <h2 className={s.jobTitle}>
             {stage === 'running' ? 'Making your listing' : stage === 'pick' ? 'Which product?' : stage === 'failed' ? 'This one did not work' : stage === 'short' ? 'Not enough credits' : 'New listing'}
           </h2>
-          {input && <p className={`${s.jobMeta} ${s.mono}`}>{inputLabel(input)}</p>}
+          {input && (
+            <p className={s.jobMeta}>
+              <span className={s.mono}>{inputLabel(input)}</span>
+              <span>{CONDITION[condition].label}</span>
+            </p>
+          )}
         </div>
 
         {stage === 'enter' && (
@@ -116,7 +123,7 @@ function NewListing() {
         {stage === 'pick' && (
           <div className={s.section}>
             <p className={`${s.groupNote} ${s.lead}`}>
-              Amazon UK lists more than one product for this barcode. Choose the one you sell. Nothing is spent yet.
+              Amazon lists more than one product for this barcode. Choose the one you sell. Nothing is spent yet.
             </p>
             <div className={s.packs} role="radiogroup" aria-label="Products for this barcode">
               {matches.map((m) => (
@@ -138,7 +145,7 @@ function NewListing() {
           <div className={s.section}>
             <div className={s.card} aria-live="polite">
               <ol className={s.steps}>
-                {STEPS.map((label, i) => {
+                {steps.map((label, i) => {
                   const state = i <= done ? s.stepDone : i === done + 1 ? s.stepNow : '';
                   return (
                     <li key={label} className={`${s.step} ${state}`}>

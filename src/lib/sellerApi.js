@@ -35,7 +35,9 @@ const FALLBACK = {
   400: 'Check what you entered and try again.',
   401: 'Sign in to continue.',
   403: 'That is not allowed.',
+  404: 'That could not be found.',
   429: 'Too many attempts. Wait a minute and try again.',
+  503: 'Checkout is not answering. Try again in a minute.',
 };
 
 async function call(method, path, body) {
@@ -71,4 +73,12 @@ export const sellerApi = Object.freeze({
   verifyCode: (email, code) => call('POST', '/auth/verify-code', { email, code }),
   signOut: () => call('POST', '/auth/sign-out'),
   me: () => call('GET', '/me'),
+
+  // Wallet (modules/credits in remvo-api)
+  wallet: () => call('GET', '/wallet'),
+  history: (before) => call('GET', `/wallet/history${before ? `?before=${encodeURIComponent(before)}` : ''}`),
+  updateSettings: (patch) => call('PATCH', '/settings', patch),
+  /** { pack: 50|200|500 } or { amount: 37 }, with currency. Returns { checkoutId, url, credits }. */
+  startTopUp: (body) => call('POST', '/topups', body),
+  topUpStatus: (checkoutId) => call('GET', `/topups/${encodeURIComponent(checkoutId)}`),
 });

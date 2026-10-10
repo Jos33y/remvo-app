@@ -1,26 +1,38 @@
 import { Button } from '@components/ui/shared/Button';
 import { Reveal } from '@components/ui/marketing/Reveal';
 import { ListingPreview } from '@components/ui/marketing/ListingPreview';
-import { ROUTES, APP_LINKS, PRICING } from '@utils/constants';
+import { useMarket } from '@hooks/useMarket';
+import { MARKETPLACES, money } from '@lib/market';
+import { ROUTES, APP_LINKS, PRICING, creditsCost } from '@utils/constants';
 import styles from '@styles/pages/marketing/homepage.module.css';
 
+/* The hero says the job, says who it is for (and who it is not for,
+ * so a vintage seller does not spend money finding out), and puts the
+ * three reassurances a careful seller looks for directly under the
+ * button rather than in the footer. */
 export function HomeHero() {
-  const credits = PRICING.JOBS.LISTING.credits;
+  const { currency, site } = useMarket();
+  const perListing = money(creditsCost(PRICING.JOBS.LISTING.credits, currency), currency);
 
   return (
     <section className={styles.hero} aria-labelledby="hero-heading">
       <div className={styles.heroInner}>
         <Reveal>
           <div className={styles.heroContent}>
-            <span className={styles.heroLabel}>For eBay sellers</span>
+            <span className={styles.heroLabel}>For marketplace sellers, starting with eBay</span>
             <h1 id="hero-heading" className={styles.heroHeading}>
-              Give us a barcode.<br />
-              <span className={styles.heroGold}>Get back a finished listing.</span>
+              Paste a barcode.<br />
+              <span className={styles.heroGold}>Get a finished eBay listing.</span>
             </h1>
             <p className={styles.heroSub}>
               Title, description, category, item specifics, parcel size and
-              weight, and a price taken from what sells on eBay UK today.
-              Ready to copy into eBay.
+              weight, and a price from what sells on {site.site} today.
+              Ready to copy in.
+            </p>
+            <p className={styles.heroFit}>
+              Built for products with a barcode: wholesale, retail arbitrage,
+              overstock, returns. <strong>Not for vintage, handmade or one-off
+              items.</strong>
             </p>
             <div className={styles.heroCtas}>
               <Button href={APP_LINKS.SIGN_IN} variant="primary" size="default">
@@ -30,6 +42,11 @@ export function HomeHero() {
                 See pricing
               </Button>
             </div>
+            <ul className={styles.heroTrust} aria-label="Before you start">
+              <li>Payments by Polar</li>
+              <li>Never asks for your eBay login</li>
+              <li>You publish it yourself</li>
+            </ul>
           </div>
         </Reveal>
 
@@ -45,7 +62,7 @@ export function HomeHero() {
           <dl className={styles.trustBarInner}>
             <div className={styles.trustItem}>
               <dt className={styles.trustLabel}>Per listing</dt>
-              <dd className={styles.trustValue}>{credits} credits</dd>
+              <dd className={styles.trustValue}>{perListing}</dd>
             </div>
             <div className={styles.trustDivider} aria-hidden="true" />
             <div className={styles.trustItem}>
@@ -54,8 +71,8 @@ export function HomeHero() {
             </div>
             <div className={styles.trustDivider} aria-hidden="true" />
             <div className={styles.trustItem}>
-              <dt className={styles.trustLabel}>Your eBay login</dt>
-              <dd className={styles.trustValue}>Never asked for</dd>
+              <dt className={styles.trustLabel}>eBay sites</dt>
+              <dd className={styles.trustValue}>{MARKETPLACES.length}</dd>
             </div>
             <div className={styles.trustDivider} aria-hidden="true" />
             <div className={styles.trustItem}>

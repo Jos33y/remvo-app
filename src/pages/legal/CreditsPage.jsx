@@ -1,7 +1,10 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router';
 import { LegalPageLayout, Clause } from '@components/layout/marketing/LegalPageLayout';
+import { money } from '@lib/market';
 import { BRAND, ROUTES, PRICING, LEGAL_UPDATED } from '@utils/constants';
+
+const list = (xs) => xs.join(', ').replace(/, ([^,]*)$/, ' or $1');
 
 export function CreditsPage() {
   useEffect(() => {
@@ -25,9 +28,10 @@ export function CreditsPage() {
       }
     >
       <Clause id="what" heading="1. What a credit is">
-        <p>1.1. A credit is a prepaid unit for running jobs on {BRAND.NAME}. One credit costs {PRICING.CREDIT_PENCE}p before VAT.</p>
-        <p>1.2. You buy credits in top-ups of {PRICING.PACKS.map((p) => `£${p.pounds}`).join(', ').replace(/, ([^,]*)$/, ' or $1')}, giving {PRICING.PACKS.map((p) => p.credits).join(', ').replace(/, ([^,]*)$/, ' or $1')} credits.</p>
-        <p>1.3. Credits have no cash value. They cannot be withdrawn, exchanged for money, or moved to another account.</p>
+        <p>1.1. A credit is a prepaid unit for running jobs on {BRAND.NAME}. One credit costs {money(PRICING.CREDIT.USD, 'USD')} in US dollars, {money(PRICING.CREDIT.EUR, 'EUR')} in euros or {money(PRICING.CREDIT.GBP, 'GBP')} in pounds. Any VAT or sales tax is worked out by Polar at checkout.</p>
+        <p>1.2. You buy credits in top-ups of {list(PRICING.PACKS.map((p) => p.credits))} credits, priced at {list(PRICING.PACKS.map((p) => money(p.price.USD, 'USD')))} in US dollars, {list(PRICING.PACKS.map((p) => money(p.price.EUR, 'EUR')))} in euros, or {list(PRICING.PACKS.map((p) => money(p.price.GBP, 'GBP')))} in pounds. You can also top up any whole amount from {money(PRICING.CUSTOM.min.USD, 'USD')} to {money(PRICING.CUSTOM.max.USD, 'USD', { whole: true })} ({money(PRICING.CUSTOM.min.EUR, 'EUR')} to {money(PRICING.CUSTOM.max.EUR, 'EUR', { whole: true })}, or {money(PRICING.CUSTOM.min.GBP, 'GBP')} to {money(PRICING.CUSTOM.max.GBP, 'GBP', { whole: true })}) at the same price per credit.</p>
+        <p>1.3. You pay in US dollars, euros or pounds. Outside the eurozone and the United Kingdom, prices are in US dollars.</p>
+        <p>1.4. Credits have no cash value. They cannot be withdrawn, exchanged for money, or moved to another account.</p>
       </Clause>
 
       <Clause id="use" heading="2. What a job uses">

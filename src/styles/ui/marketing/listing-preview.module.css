@@ -15,6 +15,66 @@
   overflow: hidden;
 }
 
+/* ── The marketplace bar ──
+ * A native select under the visual, so every platform gives it the
+ * right picker and screen readers announce it properly. */
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+}
+
+.barLabel {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.selectWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  min-height: 32px;
+  padding: 4px 28px 4px 10px;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-white);
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 0.5px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.select:hover {
+  border-color: var(--gold-edge-soft);
+}
+
+.select:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring-iridescent);
+}
+
+.select option {
+  color: #1A1A1A;
+  background-color: #FFFFFF;
+}
+
+.chevron {
+  position: absolute;
+  right: 9px;
+  pointer-events: none;
+  color: rgba(255, 255, 255, 0.62);
+}
+
 /* ── The input ── */
 
 .input {
@@ -51,6 +111,12 @@
   border: 0.5px solid rgba(255, 255, 255, 0.16);
   border-radius: var(--radius-sm);
   white-space: nowrap;
+}
+
+.condition {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.62);
 }
 
 /* ── Fields ── */
@@ -160,8 +226,8 @@
 
 @media (prefers-contrast: more) {
   .preview { border-color: rgba(255, 255, 255, 0.5); }
-  .row, .input, .caption { border-color: rgba(255, 255, 255, 0.3); }
-  .label, .sub, .count, .specificKey, .inputKind, .caption { color: rgba(255, 255, 255, 0.85); }
+  .row, .input, .bar, .caption { border-color: rgba(255, 255, 255, 0.3); }
+  .label, .sub, .count, .specificKey, .inputKind, .caption, .barLabel, .condition { color: rgba(255, 255, 255, 0.85); }
 }
 
 @media (max-width: 400px) {
@@ -170,6 +236,6 @@
     gap: var(--space-1) var(--space-3);
   }
   .label { grid-column: 1 / -1; }
-  .input { padding: var(--space-3) var(--space-4); }
+  .input, .bar { padding: var(--space-3) var(--space-4); }
   .row { padding: var(--space-3) var(--space-4); }
 }

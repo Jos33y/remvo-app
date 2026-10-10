@@ -58,39 +58,34 @@ export const BRAND = {
    * names it because a data controller has to give an address. */
   ADDRESS: '5 Funmilayo Awodiya Close, Ige Estate, Lagos, Nigeria',
 
-  /* Sellers write here about their account, a job or a refund. */
-  EMAIL: 'support@remvolabs.com',
-
-  /* Company, legal and data protection enquiries. The address on the
-   * CAC register. */
-  LEGAL_EMAIL: 'hello@remvolabs.com',
-
-  /* Paused corridor only. Not used by the marketing site. Kept so the
-   * checkout and admin trees still build. */
-  PARTNERS_EMAIL: 'partners@remvolabs.com',
-};
-
-/* Paused corridor only. Not used by the marketing site. */
-export const EXTERNAL = {
-  WHATSAPP: 'https://wa.me/2348162438553',
-  EMAIL: 'mailto:partners@remvolabs.com',
+  /* One address for sellers, legal and data protection requests. On
+   * the same domain as the site, as Polar requires; Cloudflare routes
+   * it to the team inbox. */
+  EMAIL: 'support@remvo.app',
+  LEGAL_EMAIL: 'support@remvo.app',
 };
 
 /* ──────────────────────────────────────────────────────────────────
- * Pricing (product-spec-02, sections 04 and 12)
+ * Pricing
  *
- * Every page that shows a price reads it from here, so the figure
- * set by the metered run is a one-line change. Prices exclude VAT;
- * Polar adds it at checkout where it applies.
+ * Every page that shows a price reads it from here, so the figure set
+ * by the metered run is a one-line change. Three currencies, the same
+ * credits in each: US dollars by default, euros, and pounds set a
+ * little lower so a UK seller pays about the same as everyone else.
+ * The Polar products carry the same prices; any VAT or sales tax is
+ * worked out by Polar at checkout.
  * ────────────────────────────────────────────────────────────────── */
 
 export const PRICING = Object.freeze({
-  CREDIT_PENCE: 10,
+  /* What one credit costs in each currency. */
+  CREDIT: Object.freeze({ USD: 0.1, EUR: 0.1, GBP: 0.08 }),
   PACKS: Object.freeze([
-    { pounds: 5, credits: 50, featured: false },
-    { pounds: 20, credits: 200, featured: true },
-    { pounds: 50, credits: 500, featured: false },
+    { credits: 50, price: { USD: 5, EUR: 5, GBP: 4 }, featured: false },
+    { credits: 200, price: { USD: 20, EUR: 20, GBP: 16 }, featured: true },
+    { credits: 500, price: { USD: 50, EUR: 50, GBP: 40 }, featured: false },
   ]),
+  /* Any whole amount between these, in the app. */
+  CUSTOM: Object.freeze({ min: { USD: 5, EUR: 5, GBP: 4 }, max: { USD: 1000, EUR: 1000, GBP: 800 } }),
   JOBS: Object.freeze({
     LISTING: { name: 'Make a listing', credits: 3, live: true },
     CHECK: { name: 'Check a product', credits: null, live: false },
@@ -107,8 +102,18 @@ export function listingsFor(credits) {
   return Math.floor(credits / PRICING.JOBS.LISTING.credits);
 }
 
+/* What a number of credits costs in a currency. */
+export function creditsCost(credits, currency) {
+  return Math.round(credits * PRICING.CREDIT[currency] * 100) / 100;
+}
+
+/* Credits a whole amount buys in a currency. */
+export function creditsFor(amount, currency) {
+  return Math.floor(Math.round(amount * 100) / Math.round(PRICING.CREDIT[currency] * 100));
+}
+
 /* The date shown on every legal page, and its machine form. */
-export const LEGAL_UPDATED = { label: '9 October 2026', iso: '2026-10-09', version: 'v2.0' };
+export const LEGAL_UPDATED = { label: '11 October 2026', iso: '2026-10-11', version: 'v2.1' };
 
 /* ── Paused corridor: checkout and admin trees only ── */
 

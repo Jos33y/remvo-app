@@ -5,6 +5,7 @@ import { BalanceCard, MakeListingForm, StatusPill, TopUpSheet } from '@component
 import { IconChevronRight, IconListings } from '@components/ui/seller/icons';
 import { useSellerData } from '@context/SellerData';
 import { inputLabel, when } from '@lib/sellerFormat';
+import { withEdits } from '@lib/sellerData';
 import { SELLER_ROUTES, listingPath } from '@utils/constants';
 import s from '@styles/pages/seller/app.module.css';
 
@@ -17,7 +18,7 @@ import s from '@styles/pages/seller/app.module.css';
  * ────────────────────────────────────────────────────────────────── */
 
 export function JobRow({ job }) {
-  const title = job.listing?.title ?? inputLabel(job.input);
+  const title = withEdits(job)?.title ?? inputLabel(job.input);
   return (
     <Link to={listingPath(job.id)} className={s.row}>
       <span className={s.rowMain}>

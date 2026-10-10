@@ -3,7 +3,9 @@ import { Link } from 'react-router';
 import { Reveal } from '@components/ui/marketing/Reveal';
 import { Button } from '@components/ui/shared/Button';
 import { PackGrid } from '@components/ui/marketing/PackGrid';
-import { ROUTES, APP_LINKS, PRICING, listingsFor } from '@utils/constants';
+import { useMarket } from '@hooks/useMarket';
+import { money } from '@lib/market';
+import { ROUTES, APP_LINKS, PRICING, listingsFor, creditsCost } from '@utils/constants';
 import styles from '@styles/pages/marketing/info-page.module.css';
 
 function Section({ heading, children }) {
@@ -17,9 +19,10 @@ function Section({ heading, children }) {
   );
 }
 
-const pence = (credits) => `${credits * PRICING.CREDIT_PENCE}p`;
-
 export function PricingPage() {
+  const { currency } = useMarket();
+  const cost = (credits) => money(creditsCost(credits, currency), currency);
+  const first = PRICING.PACKS[0];
   useEffect(() => {
     document.title = 'Remvo | Pricing';
   }, []);
@@ -69,7 +72,7 @@ export function PricingPage() {
                     {j.live ? (
                       <>
                         <td className={styles.num}>{j.credits}</td>
-                        <td className={styles.num}>{pence(j.credits)}</td>
+                        <td className={styles.num}>{cost(j.credits)}</td>
                       </>
                     ) : (
                       <td className={styles.num} colSpan={2}>
@@ -82,10 +85,21 @@ export function PricingPage() {
             </table>
           </Section>
 
-          <Section heading="VAT and receipts">
+          <Section heading="Currencies">
             <p>
-              Prices exclude VAT. Where VAT or sales tax applies, it is added at
-              checkout and shown before you pay.
+              Pay in US dollars, euros or pounds. We suggest one from where you
+              are and you can change it at any time. The credits are the same in
+              each: one credit is {money(PRICING.CREDIT.USD, 'USD')}, {money(PRICING.CREDIT.EUR, 'EUR')} or {money(PRICING.CREDIT.GBP, 'GBP')}.
+            </p>
+            <p className={styles.muted}>
+              Outside the eurozone and the UK, prices are in US dollars.
+            </p>
+          </Section>
+
+          <Section heading="Tax and receipts">
+            <p>
+              Any VAT or sales tax is worked out at checkout for where you are,
+              and shown before you pay.
             </p>
             <p className={styles.muted}>
               Payments are processed by Polar, our merchant of record. Your
@@ -127,7 +141,7 @@ export function PricingPage() {
       <section className={styles.close} aria-label="Get started">
         <div className={styles.closeInner}>
           <p className={styles.closeHeading}>
-            Start with £{PRICING.PACKS[0].pounds}. That is {listingsFor(PRICING.PACKS[0].credits)} listings.
+            Start with {money(first.price[currency], currency)}. That is {listingsFor(first.credits)} listings.
           </p>
           <Button href={APP_LINKS.SIGN_IN} variant="primary" size="large">
             Make your first listing

@@ -1,11 +1,14 @@
 import { Reveal } from '@components/ui/marketing/Reveal';
 import { PackGrid } from '@components/ui/marketing/PackGrid';
-import { PRICING } from '@utils/constants';
+import { useMarket } from '@hooks/useMarket';
+import { money } from '@lib/market';
+import { PRICING, creditsCost } from '@utils/constants';
 import styles from '@styles/pages/marketing/homepage.module.css';
 
 export function HomePricing() {
+  const { currency } = useMarket();
   const listing = PRICING.JOBS.LISTING;
-  const pence = listing.credits * PRICING.CREDIT_PENCE;
+  const each = money(creditsCost(listing.credits, currency), currency);
 
   return (
     <section className={styles.pricing} aria-labelledby="pricing-heading">
@@ -13,7 +16,7 @@ export function HomePricing() {
         <Reveal>
           <span className={styles.sectionLabel}>Pricing</span>
           <h2 id="pricing-heading" className={styles.pricingHeading}>
-            {pence}p a listing. Pay only for what you list.
+            {each} a listing. Pay only for what you list.
           </h2>
           <p className={styles.pricingDesc}>
             {listing.name} uses {listing.credits} credits. A job that fails gives

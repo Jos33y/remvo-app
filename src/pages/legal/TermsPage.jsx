@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router';
 import { LegalPageLayout, Clause } from '@components/layout/marketing/LegalPageLayout';
+import { money } from '@lib/market';
 import { BRAND, ROUTES, PRICING, LEGAL_UPDATED } from '@utils/constants';
 
 const TOC = [
@@ -60,7 +61,7 @@ export function TermsPage() {
       </Clause>
 
       <Clause id="credits" heading="4. Credits and payment">
-        <p>4.1. Jobs are paid for with credits. You buy credits in top-ups shown on the <Link to={ROUTES.PRICING}>pricing page</Link>. One credit is {PRICING.CREDIT_PENCE}p before VAT.</p>
+        <p>4.1. Jobs are paid for with credits. You buy credits in top-ups shown on the <Link to={ROUTES.PRICING}>pricing page</Link>. One credit is {money(PRICING.CREDIT.USD, 'USD')} in US dollars, {money(PRICING.CREDIT.EUR, 'EUR')} in euros or {money(PRICING.CREDIT.GBP, 'GBP')} in pounds.</p>
         <p>4.2. Purchases are processed by Polar Software, Inc. (&quot;Polar&quot;), which acts as merchant of record and reseller. Polar takes the payment, issues the receipt, and charges and accounts for any VAT or sales tax. Polar&apos;s buyer terms apply to the payment itself.</p>
         <p>4.3. Credits are a prepaid right to use {BRAND.NAME}. They are not money, have no cash value, cannot be withdrawn, and cannot be transferred to another account.</p>
         <p>4.4. How long credits last, and the order they are used in, is set out in the <Link to={ROUTES.CREDITS}>credit terms</Link>, which form part of these terms.</p>

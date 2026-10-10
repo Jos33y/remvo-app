@@ -51,3 +51,5 @@ export const IconLink = ({ size = 20 }) => (<svg {...base(size)}><path d="M10 14
 export const IconAlert = ({ size = 20 }) => (<svg {...base(size)}><circle cx="12" cy="12" r="8.5" /><path d="M12 7.5v5.5M12 16.2v.1" /></svg>);
 export const IconMail = ({ size = 20 }) => (<svg {...base(size)}><rect x="3.5" y="5.5" width="17" height="13" rx="2" /><path d="m4 7 8 6 8-6" /></svg>);
 export const IconExternal = ({ size = 16 }) => (<svg {...base(size)}><path d="M14 5h5v5M19 5l-8 8M17 14v4a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h4" /></svg>);
+export const IconEdit = ({ size = 20 }) => (<svg {...base(size)}><path d="M14.5 5.5 18.5 9.5M4.5 19.5l1-4.2L15.8 5a1.4 1.4 0 0 1 2 0l1.2 1.2a1.4 1.4 0 0 1 0 2L8.7 18.5z" /></svg>);
+export const IconGlobe = ({ size = 20 }) => (<svg {...base(size)}><circle cx="12" cy="12" r="8.5" /><path d="M3.5 12h17M12 3.5c2.3 2.4 3.4 5.2 3.4 8.5s-1.1 6.1-3.4 8.5c-2.3-2.4-3.4-5.2-3.4-8.5s1.1-6.1 3.4-8.5z" /></svg>);

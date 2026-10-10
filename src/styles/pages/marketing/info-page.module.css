@@ -183,6 +183,64 @@
   background-color: #7A6220;
 }
 
+/* ── Questions: native disclosure, so it opens with a keyboard,
+ *    a screen reader and find-in-page without any script. ── */
+
+.faq {
+  border-top: 0.5px solid rgba(0, 0, 0, 0.1);
+}
+
+.faqItem {
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+}
+
+.faqQ {
+  position: relative;
+  display: block;
+  min-height: 44px;
+  padding: var(--space-4) var(--space-8) var(--space-4) 0;
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--color-text-dark);
+  cursor: pointer;
+  list-style: none;
+}
+
+.faqQ::-webkit-details-marker { display: none; }
+
+.faqQ::after {
+  content: '';
+  position: absolute;
+  right: 4px;
+  top: calc(var(--space-4) + 0.5em);
+  width: 8px;
+  height: 8px;
+  border-right: 1.5px solid #7A6220;
+  border-bottom: 1.5px solid #7A6220;
+  transform: rotate(45deg);
+  transition: transform var(--transition-fast);
+}
+
+.faqItem[open] > .faqQ::after {
+  transform: translateY(3px) rotate(-135deg);
+}
+
+.faqQ:focus-visible {
+  outline: 2px solid #7A6220;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.faqA {
+  padding-bottom: var(--space-5);
+  color: #5A5A5A !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faqQ::after { transition: none; }
+}
+
 /* ── Job table (pricing) ── */
 
 .table {
@@ -197,6 +255,11 @@
   border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
   font-size: var(--text-sm);
   vertical-align: top;
+}
+
+.table th:not(:last-child),
+.table td:not(:last-child) {
+  padding-right: var(--space-4);
 }
 
 .table thead th {
@@ -268,6 +331,7 @@
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
   color: var(--color-white);
+  text-wrap: balance;
 }
 
 @media (prefers-contrast: more) {

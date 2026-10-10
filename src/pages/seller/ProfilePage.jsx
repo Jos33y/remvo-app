@@ -4,6 +4,7 @@ import { PageHeader } from '@components/ui/seller/PageHeader';
 import { Sheet } from '@components/ui/seller/Sheet';
 import { useToast } from '@components/ui/seller/Toast';
 import { IconChevronRight, IconExternal, IconMail } from '@components/ui/seller/icons';
+import { CURRENCIES, MARKETPLACES, MARKETPLACE } from '@lib/market';
 import { useSellerSession } from '@context/SellerSession';
 import { useSellerData } from '@context/SellerData';
 import { longDate } from '@lib/sellerFormat';
@@ -42,9 +43,22 @@ export function ProfilePage() {
   const navigate = useNavigate();
   const toast = useToast();
   const { account, signOut } = useSellerSession();
-  const { preview, resetPreview } = useSellerData();
+  const { preview, resetPreview, settings, updateSettings } = useSellerData();
   const [leaving, setLeaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [choosing, setChoosing] = useState(null); // 'site' | 'currency' | null
+  const site = MARKETPLACE[settings?.marketplace ?? 'US'];
+  const cur = CURRENCIES.find((c) => c.id === (settings?.currency ?? 'USD'));
+
+  async function choose(patch, said) {
+    try {
+      await updateSettings(patch);
+      setChoosing(null);
+      toast(said);
+    } catch (err) {
+      toast(err.message);
+    }
+  }
 
   useEffect(() => { document.title = 'Remvo | Profile'; }, []);
 
@@ -70,6 +84,26 @@ export function ProfilePage() {
             </span>
           </div>
         </div>
+
+        <section className={s.section} aria-labelledby="selling-heading">
+          <div className={s.groupHead}><h2 id="selling-heading" className={s.groupTitle}>Selling</h2></div>
+          <div className={s.group}>
+            <button type="button" className={s.row} onClick={() => setChoosing('site')}>
+              <span className={s.rowMain}>
+                <span className={s.rowTitle}>eBay site</span>
+                <span className={s.rowSub}>Listings written in {site.lang}</span>
+              </span>
+              <span className={s.rowValue}>{site.site}</span>
+              <span className={s.chevron}><IconChevronRight /></span>
+            </button>
+            <button type="button" className={s.row} onClick={() => setChoosing('currency')}>
+              <span className={s.rowMain}><span className={s.rowTitle}>Currency</span></span>
+              <span className={s.rowValue}>{cur.symbol} {cur.id}</span>
+              <span className={s.chevron}><IconChevronRight /></span>
+            </button>
+          </div>
+          <p className={s.groupNote}>The eBay site sets the language, categories, parcel services and prices of new listings. The currency is what you pay in.</p>
+        </section>
 
         <section className={s.section} aria-labelledby="account-heading">
           <div className={s.groupHead}><h2 id="account-heading" className={s.groupTitle}>Account</h2></div>
@@ -115,10 +149,10 @@ export function ProfilePage() {
           <section className={s.section} aria-labelledby="preview-heading">
             <div className={s.groupHead}><h2 id="preview-heading" className={s.groupTitle}>Preview</h2></div>
             <div className={s.group}>
-              <button type="button" className={s.row} onClick={() => { resetPreview(); toast('Preview data reset'); }}>
+              <button type="button" className={s.row} onClick={() => { resetPreview(); toast('Example listings reset'); }}>
                 <span className={s.rowMain}>
-                  <span className={`${s.rowTitle} ${s.accent}`}>Reset preview data</span>
-                  <span className={s.rowSub}>Back to the starting balance and listings</span>
+                  <span className={`${s.rowTitle} ${s.accent}`}>Reset example listings</span>
+                  <span className={s.rowSub}>Your balance and top-ups are not touched</span>
                 </span>
               </button>
             </div>
@@ -138,6 +172,51 @@ export function ProfilePage() {
 
         <p className={s.version}>Remvo {APP_VERSION}{preview ? ' (preview)' : ''}. {BRAND.LEGAL_NAME}</p>
       </div>
+
+      <Sheet open={choosing === 'site'} onClose={() => setChoosing(null)} title="eBay site">
+        <div className={s.packs} role="radiogroup" aria-label="eBay site">
+          {MARKETPLACES.map((m) => (
+            <button
+              key={m.id}
+              type="button"
+              role="radio"
+              aria-checked={settings?.marketplace === m.id}
+              className={s.pack}
+              onClick={() => choose({ marketplace: m.id }, `New listings for ${m.site}`)}
+              data-autofocus={settings?.marketplace === m.id ? '' : undefined}
+            >
+              <span className={s.packMain}>
+                <span className={s.packCredits}>{m.site}</span>
+                <br />
+                <span className={s.packSub}>{m.name}, in {m.lang}</span>
+              </span>
+              <span className={s.radio} aria-hidden="true" />
+            </button>
+          ))}
+        </div>
+        <p className={`${s.small} ${s.after}`}>Listings you have already made stay as they are.</p>
+      </Sheet>
+
+      <Sheet open={choosing === 'currency'} onClose={() => setChoosing(null)} title="Currency">
+        <div className={s.packs} role="radiogroup" aria-label="Currency">
+          {CURRENCIES.map((c) => (
+            <button
+              key={c.id}
+              type="button"
+              role="radio"
+              aria-checked={settings?.currency === c.id}
+              className={s.pack}
+              onClick={() => choose({ currency: c.id }, `Paying in ${c.name.toLowerCase()}`)}
+              data-autofocus={settings?.currency === c.id ? '' : undefined}
+            >
+              <span className={s.packPrice}>{c.symbol}</span>
+              <span className={s.packMain}><span className={s.packCredits}>{c.name}</span></span>
+              <span className={s.radio} aria-hidden="true" />
+            </button>
+          ))}
+        </div>
+        <p className={`${s.small} ${s.after}`}>Your credits are the same in any currency. This only changes what top-ups are priced in.</p>
+      </Sheet>
 
       <Sheet
         open={deleting}

@@ -1,27 +1,33 @@
 import { Link } from 'react-router';
 import { Reveal } from '@components/ui/marketing/Reveal';
+import { useMarket } from '@hooks/useMarket';
+import { money } from '@lib/market';
 import { ROUTES, PRICING } from '@utils/constants';
 import styles from '@styles/pages/marketing/homepage.module.css';
 
-const STEPS = [
-  {
-    num: '01',
-    title: 'Top up',
-    desc: `Buy credits from £5. No subscription and nothing to cancel. Credits last ${PRICING.EXPIRY_MONTHS} months, and every top-up extends the lot.`,
-  },
-  {
-    num: '02',
-    title: 'Give it a product',
-    desc: 'Type the barcode from the box, or paste the Amazon UK link for it. If the barcode matches more than one product, you pick, before any credits are used.',
-  },
-  {
-    num: '03',
-    title: 'Copy it into eBay',
-    desc: 'Every field has its own copy button, or download the lot as a file. You publish it yourself. Remvo never touches your eBay account.',
-  },
-];
+function steps(currency, site) {
+  return [
+    {
+      num: '01',
+      title: 'Top up',
+      desc: `Buy credits from ${money(PRICING.PACKS[0].price[currency], currency)}. No subscription and nothing to cancel. Credits last ${PRICING.EXPIRY_MONTHS} months, and every top-up extends the lot.`,
+    },
+    {
+      num: '02',
+      title: 'Give it a product',
+      desc: `Type the barcode from the box, or paste its ${site.amazon} link, and say what condition it is in. If the barcode matches more than one product, you pick before any credits are used.`,
+    },
+    {
+      num: '03',
+      title: 'Check it, copy it in',
+      desc: 'Change anything you like, then copy each field into eBay or download the lot as a file. You publish it yourself. Remvo never touches your eBay account.',
+    },
+  ];
+}
 
 export function HomeFeatures() {
+  const { currency, site } = useMarket();
+  const STEPS = steps(currency, site);
   return (
     <section className={styles.features} aria-labelledby="features-heading">
       <div className={styles.featuresInner}>

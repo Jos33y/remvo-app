@@ -9,7 +9,7 @@ import { HomeCTA } from './sections/HomeCTA';
  * what a seller came for. */
 export function HomePage() {
   useEffect(() => {
-    document.title = 'Remvo | Finished eBay listings from a barcode';
+    document.title = 'Remvo | A finished eBay listing from a barcode';
   }, []);
 
   return (

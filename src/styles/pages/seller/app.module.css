@@ -269,6 +269,11 @@ button.row:focus-visible {
   color: var(--card-gold);
 }
 
+.balancePending {
+  color: var(--card-text-2);
+  letter-spacing: 0.08em;
+}
+
 .balanceUnit {
   font-size: 1rem;
   color: var(--card-text-2);
@@ -502,7 +507,8 @@ button.row:focus-visible {
   transition: background-color 150ms ease, color 150ms ease;
 }
 
-.segment[aria-pressed='true'] {
+.segment[aria-pressed='true'],
+.segment[aria-checked='true'] {
   color: var(--app-text);
   background-color: var(--app-card);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 0 0 0.5px var(--app-sep);
@@ -645,6 +651,12 @@ button.row:focus-visible {
   margin-bottom: 4px;
 }
 
+.fieldLabelText {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .fieldCount {
   font-family: var(--font-mono);
   font-size: 0.75rem;
@@ -760,6 +772,67 @@ button.row:focus-visible {
   font-variant-numeric: tabular-nums;
 }
 
+.noticeBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.noticeBody strong {
+  font-weight: 600;
+}
+
+.noticeDone {
+  color: var(--app-text);
+}
+
+.noticeDone svg {
+  flex: none;
+  color: var(--app-success);
+}
+
+.noticeClose {
+  flex: none;
+  align-self: center;
+  min-height: 36px;
+  padding: 0 10px;
+  margin: -6px -6px -6px 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--app-accent);
+  border-radius: 8px;
+}
+
+.noticeClose:focus-visible {
+  outline: none;
+  box-shadow: var(--app-focus);
+}
+
+/* A slow pulse beside "Adding your credits": the words carry the
+ * meaning, the dot only says the page is still listening. */
+.pulse {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  margin: 6px 5px 0;
+  border-radius: 50%;
+  background-color: var(--app-gold);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.35; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse { animation: none; opacity: 0.8; }
+}
+
+.sheetNotice {
+  margin-bottom: 16px;
+  background-color: var(--app-fill);
+}
+
 .notice {
   display: flex;
   gap: 10px;
@@ -790,6 +863,108 @@ button.row:focus-visible {
   .actionsRow {
     grid-template-columns: 1fr 1fr;
   }
+}
+
+/* ── Choice label, inline links ── */
+
+.choiceLabel {
+  margin-bottom: 8px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.inlineLink {
+  color: var(--app-accent);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 10px 2px;
+  margin: -10px -2px;
+}
+
+.inlineLink:active { opacity: 0.5; }
+
+.inlineLink:focus-visible {
+  outline: none;
+  box-shadow: var(--app-focus);
+  border-radius: 4px;
+}
+
+/* ── Editing a field ── */
+
+.textarea {
+  height: auto;
+  min-height: 200px;
+  padding: 12px 14px;
+  line-height: 1.45;
+  resize: vertical;
+}
+
+.inputMono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.inputMoney {
+  padding-left: 34px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.inputPrefix {
+  left: 14px;
+  font-family: var(--font-mono);
+  font-size: 1.0625rem;
+  color: var(--app-text-2);
+}
+
+.editActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.compact {
+  min-height: 40px;
+  padding: 0 18px;
+  font-size: 0.9375rem;
+}
+
+.fieldTools {
+  display: flex;
+  align-items: center;
+  gap: 4px 12px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.fieldTool {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 32px;
+  padding: 0 2px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--app-accent);
+  touch-action: manipulation;
+}
+
+.fieldTool:active { opacity: 0.5; }
+
+.fieldTool:focus-visible {
+  outline: none;
+  box-shadow: var(--app-focus);
+  border-radius: 6px;
+}
+
+.editedMark {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--app-text-2);
+  padding: 2px 7px;
+  border-radius: 6px;
+  background-color: var(--app-fill);
 }
 
 /* ── Packs (top-up) ── */

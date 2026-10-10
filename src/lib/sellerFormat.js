@@ -1,10 +1,26 @@
-/* Formatting for the seller app. British English, pounds, dates the
- * way people say them. One place, so every screen reads alike. */
+/* Formatting for the seller app. British English, dates the way
+ * people say them. One place, so every screen reads alike.
+ *
+ * Two kinds of money: what the seller pays us (money() from market.js:
+ * $, €, £) and the suggested selling price on their eBay site, written
+ * the way that site writes it (listingPrice). */
 
-const gbp = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' });
+export { money } from '@lib/market';
 
-export const pounds = (n) => gbp.format(n);
-export const penceAsPounds = (p) => gbp.format(p / 100);
+const PRICE_FORMAT = {
+  USD: (n) => `$${n.toFixed(2)}`,
+  CAD: (n) => `C$${n.toFixed(2)}`,
+  GBP: (n) => `£${n.toFixed(2)}`,
+  EUR: (n) => `${n.toFixed(2).replace('.', ',')} €`,
+};
+
+/** A suggested selling price, as the eBay site shows it: $19.99, C$24.99, £14.99, 16,99 €. */
+export const listingPrice = (value, currency) => (PRICE_FORMAT[currency] ?? PRICE_FORMAT.USD)(Number(value));
+
+/** "28 x 10 x 10 cm, 0.45 kg" or "11 x 4 x 4 in, 1 lb". */
+export const parcel = (p) => p.units === 'imperial'
+  ? `${p.l} x ${p.w} x ${p.h} in, ${p.weight} lb`
+  : `${p.l} x ${p.w} x ${p.h} cm, ${p.weight} kg`;
 export const credits = (n) => `${n} ${Math.abs(n) === 1 ? 'credit' : 'credits'}`;
 export const signed = (n) => (n > 0 ? `+${n}` : `${n}`).replace('-', '−');
 

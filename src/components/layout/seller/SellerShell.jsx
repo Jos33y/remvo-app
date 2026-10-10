@@ -79,13 +79,13 @@ export function SellerShell() {
             {TABS.map((t) => <TabLink key={t.to} {...t} variant="railItem" />)}
           </nav>
           <div className={styles.railFoot}>
-            {preview && <span className={styles.preview}>Preview data</span>}
+            {preview && <span className={styles.preview}>Example listings</span>}
             <span className={styles.railEmail} title={account?.email}>{account?.email}</span>
           </div>
         </aside>
 
         <main id="seller-main" className={styles.main}>
-          {preview && <p className={styles.previewBar}>Preview data. Nothing here is charged or real.</p>}
+          {preview && <p className={styles.previewBar}>Listings here are examples and use no credits.</p>}
           <AnimatePresence mode="wait" initial={false}>
             <motion.div key={location.pathname} className={styles.page} {...pageMotion}>
               {outlet}

@@ -1,10 +1,12 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { PageHeader } from '@components/ui/seller/PageHeader';
 import { BalanceCard, TopUpSheet } from '@components/ui/seller/parts';
-import { IconChevronRight } from '@components/ui/seller/icons';
+import { IconAlert, IconCheck, IconChevronRight } from '@components/ui/seller/icons';
+import { useToast } from '@components/ui/seller/Toast';
 import { useSellerData } from '@context/SellerData';
 import { signed, when } from '@lib/sellerFormat';
+import { money } from '@lib/market';
 import { PRICING, listingPath, siteUrl } from '@utils/constants';
 import s from '@styles/pages/seller/app.module.css';
 
@@ -18,7 +20,68 @@ import s from '@styles/pages/seller/app.module.css';
  *
  * ?topup=1 (from the marketing site's Top up, via /billing) opens the
  * top-up sheet on arrival.
+ *
+ * ?checkout_id=... is Polar sending the seller back after paying. The
+ * credits arrive separately, by webhook, usually within seconds; the
+ * page says it is waiting, checks every couple of seconds, and says
+ * when they are in. If Polar is slow it says that too, plainly: the
+ * payment is safe and the credits will appear here by themselves.
  * ────────────────────────────────────────────────────────────────── */
+
+const POLL_MS = 2000;
+const PATIENT_MS = 45_000;
+const GIVE_UP_MS = 5 * 60_000;
+
+function TopUpReturn({ checkoutId, onDone }) {
+  const { topUpStatus, refreshWallet } = useSellerData();
+  const toast = useToast();
+  const [state, setState] = useState({ phase: 'waiting', credits: null });
+  const started = useRef(Date.now());
+
+  useEffect(() => {
+    let stop = false;
+    let timer;
+    async function check() {
+      try {
+        const st = await topUpStatus(checkoutId);
+        if (stop) return;
+        if (st.status === 'credited') {
+          setState({ phase: 'done', credits: st.credits });
+          await refreshWallet();
+          toast(`${st.credits} credits added`);
+          return;
+        }
+        const waited = Date.now() - started.current;
+        if (waited > GIVE_UP_MS) { setState({ phase: 'slow', credits: st.credits }); return; }
+        setState({ phase: waited > PATIENT_MS ? 'slow' : 'waiting', credits: st.credits });
+      } catch (err) {
+        if (stop) return;
+        if (err.status === 404) { setState({ phase: 'unknown', credits: null }); return; }
+      }
+      timer = setTimeout(check, POLL_MS);
+    }
+    check();
+    return () => { stop = true; clearTimeout(timer); };
+  }, [checkoutId]);
+
+  const { phase, credits } = state;
+  return (
+    <div className={s.section}>
+      <div className={`${s.notice} ${phase === 'done' ? s.noticeDone : ''} ${phase === 'unknown' ? s.noticeDanger : ''}`} role="status" aria-live="polite">
+        {phase === 'done' ? <IconCheck size={20} /> : phase === 'unknown' ? <IconAlert size={20} /> : <span className={s.pulse} aria-hidden="true" />}
+        <span className={s.noticeBody}>
+          {phase === 'waiting' && <><strong>Payment received.</strong> Adding {credits ? `${credits} credits` : 'your credits'} to your balance.</>}
+          {phase === 'slow' && <><strong>Payment received.</strong> Polar is taking longer than usual to confirm it. Your credits will appear here on their own; you can leave this page.</>}
+          {phase === 'done' && <><strong>{credits} credits added.</strong> Thank you.</>}
+          {phase === 'unknown' && <>We could not find that top-up on this account. If you paid, write to us and we will sort it out.</>}
+        </span>
+        {(phase === 'done' || phase === 'unknown') && (
+          <button type="button" className={s.noticeClose} onClick={onDone}>Done</button>
+        )}
+      </div>
+    </div>
+  );
+}
 
 function groupByMonth(rows) {
   const out = [];
@@ -33,9 +96,12 @@ function groupByMonth(rows) {
 }
 
 export function CreditsPage() {
-  const { history } = useSellerData();
+  const { history, settings } = useSellerData();
+  const currency = settings?.currency ?? 'USD';
   const [params, setParams] = useSearchParams();
   const [topUp, setTopUp] = useState(params.get('topup') === '1');
+  const checkoutId = params.get('checkout_id');
+  const clearReturn = () => { params.delete('checkout_id'); setParams(params, { replace: true }); };
   const months = useMemo(() => groupByMonth(history), [history]);
 
   useEffect(() => { document.title = 'Remvo | Credits'; }, []);
@@ -49,6 +115,8 @@ export function CreditsPage() {
     <>
       <PageHeader title="Credits" />
       <div className={s.content}>
+        {checkoutId && <TopUpReturn key={checkoutId} checkoutId={checkoutId} onDone={clearReturn} />}
+
         <div className={s.section}>
           <BalanceCard onTopUp={() => setTopUp(true)} />
         </div>
@@ -58,7 +126,7 @@ export function CreditsPage() {
           <div className={s.group}>
             <div className={s.row}>
               <span className={s.rowMain}><span className={s.rowTitle}>A credit</span></span>
-              <span className={`${s.rowValue} ${s.rowValueMono}`}>{PRICING.CREDIT_PENCE}p</span>
+              <span className={`${s.rowValue} ${s.rowValueMono}`}>{money(PRICING.CREDIT[currency], currency)}</span>
             </div>
             <div className={s.row}>
               <span className={s.rowMain}><span className={s.rowTitle}>A listing</span></span>

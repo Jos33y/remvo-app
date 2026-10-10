@@ -3,12 +3,13 @@ import { useNavigate, useParams } from 'react-router';
 import { PageHeader } from '@components/ui/seller/PageHeader';
 import { Sheet } from '@components/ui/seller/Sheet';
 import { useToast } from '@components/ui/seller/Toast';
-import { CopyField, StatusPill } from '@components/ui/seller/parts';
+import { CopyField, EditableField, StatusPill } from '@components/ui/seller/parts';
 import { IconAlert, IconCopy, IconDownload, IconTrash } from '@components/ui/seller/icons';
 import { useSellerData } from '@context/SellerData';
 import { useClipboard } from '@hooks/useClipboard';
-import { listingCsv } from '@lib/sellerData';
-import { inputLabel, longDate, pounds, when } from '@lib/sellerFormat';
+import { listingCsv, withEdits } from '@lib/sellerData';
+import { MARKETPLACE } from '@lib/market';
+import { inputLabel, listingPrice, longDate, parcel, when } from '@lib/sellerFormat';
 import { PRICING, SELLER_ROUTES } from '@utils/constants';
 import s from '@styles/pages/seller/app.module.css';
 
@@ -19,6 +20,10 @@ import s from '@styles/pages/seller/app.module.css';
  * form asks for them, each with its own copy button, so a seller
  * moving between this and eBay copies exactly what the next box needs.
  *
+ * Every field the seller is likely to change (title, description, item
+ * specific values, price) can be edited here; what they copy and
+ * download is their version, and any field can be put back.
+ *
  * Copy all and Download put everything in one go. Delete removes it
  * now rather than in 90 days; its credits stay spent, because the work
  * was done.
@@ -27,16 +32,19 @@ import s from '@styles/pages/seller/app.module.css';
 const DAY = 86_400_000;
 
 function allText(job) {
-  const l = job.listing;
+  const l = withEdits(job);
   return [
     `Title\n${l.title}`,
+    `Condition\n${l.condition}`,
     `Description\n${l.description}`,
     `Category\n${l.category.path} (${l.category.id})`,
     `Item specifics\n${l.specifics.map(([k, v]) => `${k}: ${v}`).join('\n')}`,
-    `Parcel\n${l.parcel.l} x ${l.parcel.w} x ${l.parcel.h} cm, ${l.parcel.kg} kg, ${l.parcel.band}`,
-    `Price\n${pounds(l.price.value)}`,
+    `Parcel\n${parcel(l.parcel)}, ${l.parcel.band}`,
+    `Price\n${listingPrice(l.price.value, l.price.currency)}`,
   ].join('\n\n');
 }
+
+const priceProblem = (v) => (/^\d{1,6}([.,]\d{1,2})?$/.test(v) && Number(v.replace(',', '.')) > 0 ? '' : 'Enter a price such as 19.99.');
 
 function download(job) {
   const blob = new Blob([listingCsv(job)], { type: 'text/csv;charset=utf-8' });
@@ -54,7 +62,7 @@ export function ListingPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const toast = useToast();
-  const { job: find, deleteJob } = useSellerData();
+  const { job: find, deleteJob, editJob, preview } = useSellerData();
   const { copy } = useClipboard({ resetMs: 1500 });
   const [confirm, setConfirm] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -76,7 +84,11 @@ export function ListingPage() {
     );
   }
 
-  const l = job.listing;
+  const l = withEdits(job);
+  const o = job.listing;
+  const site = MARKETPLACE[job.marketplace] ?? MARKETPLACE.US;
+  const lang = site.langCode === 'en' ? undefined : site.langCode;
+  const save = (field) => (value) => editJob(job.id, field, value);
   const keptUntil = new Date(Date.parse(job.createdAt) + PRICING.RESULT_DAYS * DAY).toISOString();
 
   async function remove() {
@@ -95,6 +107,7 @@ export function ListingPage() {
           <p className={s.jobMeta}>
             <StatusPill status={job.status} />
             <span>{when(job.createdAt)}</span>
+            <span>{site.site}</span>
             <span className={s.mono}>{job.ref}</span>
             <span>{job.credits ? `${job.credits} credits` : 'No credits used'}</span>
           </p>
@@ -111,33 +124,59 @@ export function ListingPage() {
 
         {l && (
           <>
+            {preview && site.langCode !== 'en' && (
+              <div className={s.section}>
+                <p className={s.notice}>This example is in English. A real listing for {site.site} is written in {site.lang}.</p>
+              </div>
+            )}
             <section className={s.section} aria-label="The listing">
               <div className={s.group}>
-                <CopyField label="Title" value={l.title} count={`${l.title.length}/80`} />
-                <CopyField label="Description" value={l.description} clamp />
+                <EditableField
+                  label="Title"
+                  value={l.title}
+                  original={o.title}
+                  onSave={save('title')}
+                  count={(v) => `${String(v).length}/80`}
+                  validate={(v) => (!v ? 'A listing needs a title.' : v.length > 80 ? `eBay takes 80 characters; this is ${v.length}.` : '')}
+                  lang={lang}
+                />
+                <CopyField label="Condition" value={l.condition} />
+                <EditableField label="Description" value={l.description} original={o.description} onSave={save('description')} multiline clamp lang={lang} />
                 <CopyField label="Category" value={l.category.path} copyText={l.category.id}>
-                  <p className={s.fieldValue}>{l.category.path}</p>
+                  <p className={s.fieldValue} lang={lang}>{l.category.path}</p>
                   <p className={`${s.small} ${s.mono}`}>ID {l.category.id}, copied by the button</p>
                 </CopyField>
                 <CopyField label="Item specifics" copyText={l.specifics.map(([k, v]) => `${k}: ${v}`).join('\n')}>
-                  <dl className={s.specifics}>
-                    {l.specifics.map(([k, v]) => (
-                      <div key={k} className={s.pair}><dt>{k}</dt><dd>{v}</dd></div>
-                    ))}
-                  </dl>
+                  <p className={s.small}>Each one below can be copied or changed on its own. This button copies them all.</p>
                 </CopyField>
-                <CopyField
-                  label="Parcel"
-                  mono
-                  value={`${l.parcel.l} x ${l.parcel.w} x ${l.parcel.h} cm, ${l.parcel.kg} kg`}
-                >
-                  <p className={`${s.fieldValue} ${s.fieldValueMono}`}>{l.parcel.l} x {l.parcel.w} x {l.parcel.h} cm, {l.parcel.kg} kg</p>
+                {l.specifics.map(([k, v], i) => (
+                  <EditableField
+                    key={k}
+                    label={k}
+                    value={v}
+                    original={o.specifics[i][1]}
+                    onSave={save(`spec:${k}`)}
+                    compact
+                    validate={(x) => (x ? '' : `${k} cannot be empty. Put it back instead.`)}
+                    lang={lang}
+                  />
+                ))}
+                <CopyField label="Parcel" mono value={parcel(l.parcel)}>
+                  <p className={`${s.fieldValue} ${s.fieldValueMono}`}>{parcel(l.parcel)}</p>
                   <p className={s.small}>{l.parcel.band}</p>
                 </CopyField>
-                <CopyField label="Price" copyText={l.price.value.toFixed(2)}>
-                  <p className={s.price}>{pounds(l.price.value)}</p>
-                  <p className={s.small}>Middle of {l.price.listings} live UK listings is {pounds(l.price.median)}</p>
-                </CopyField>
+                <EditableField
+                  label="Price"
+                  value={l.price.value}
+                  original={o.price.value}
+                  onSave={async (v) => save('price')(v === null ? null : Number(String(v).replace(',', '.')))}
+                  inputMode="decimal"
+                  mono
+                  validate={priceProblem}
+                >
+                  <p className={s.price}>{listingPrice(l.price.value, l.price.currency)}</p>
+                  <p className={s.small}>Middle of {l.price.listings} live {site.site} listings is {listingPrice(l.price.median, l.price.currency)}</p>
+                </EditableField>
               </div>
               <p className={s.groupNote}>Check it against your stock before you publish. Kept until {longDate(keptUntil)}.</p>
             </section>

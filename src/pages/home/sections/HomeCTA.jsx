@@ -1,9 +1,12 @@
 import { Button } from '@components/ui/shared/Button';
 import { Reveal } from '@components/ui/marketing/Reveal';
-import { APP_LINKS } from '@utils/constants';
+import { useMarket } from '@hooks/useMarket';
+import { money } from '@lib/market';
+import { APP_LINKS, PRICING } from '@utils/constants';
 import styles from '@styles/pages/marketing/homepage.module.css';
 
 export function HomeCTA() {
+  const { currency } = useMarket();
   return (
     <section className={styles.cta} aria-labelledby="cta-heading">
       <svg
@@ -24,7 +27,7 @@ export function HomeCTA() {
             Try it on the next thing you list.
           </h2>
           <p className={styles.ctaDesc}>
-            Sign in with your email, top up £5, and give it one barcode.
+            Sign in with your email, top up {money(PRICING.PACKS[0].price[currency], currency)}, and give it one barcode.
           </p>
           <div className={styles.ctaActions}>
             <Button href={APP_LINKS.SIGN_IN} variant="primary" size="large">
