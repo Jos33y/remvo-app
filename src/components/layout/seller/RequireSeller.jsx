@@ -2,6 +2,7 @@ import { Navigate, Outlet, useLocation } from 'react-router';
 import { Button } from '@components/ui/shared/Button';
 import { useSellerSession } from '@context/SellerSession';
 import { SELLER_ROUTES } from '@utils/constants';
+import theme from '@styles/layout/seller/app-theme.module.css';
 import styles from '@styles/layout/seller/seller-shell.module.css';
 
 /* The gate for every signed-in route. Sends a signed-out seller to
@@ -13,7 +14,7 @@ export function RequireSeller() {
   const location = useLocation();
 
   if (status === 'loading') {
-    return <div className={styles.loading} role="status" aria-live="polite"><span className="sr-only">Loading your account</span></div>;
+    return <div className={`${theme.theme} ${styles.loading}`} role="status" aria-live="polite"><span className="sr-only">Loading your account</span></div>;
   }
 
   if (status === 'unreachable') {

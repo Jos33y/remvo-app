@@ -1,0 +1,100 @@
+/* ═══════════════════════════════════════
+   SELLER APP THEME
+   The colours every app screen reads, as
+   variables on one class. Applied to the
+   app root and to the sheet layer (which
+   renders outside it), so both match.
+
+   Light by default, dark when the phone is
+   set to dark, as a native app would. The
+   balance card stays obsidian and gold in
+   both: it is the one object that carries
+   the brand.
+
+   Contrast, every text pair at or over
+   WCAG AA 4.5:1:
+     light  text-2 #565656 on #F4F1EC  6.6
+            text-3 #6B6B6B on #FFFFFF  5.3
+            accent #7A6220 on #FFFFFF  6.1
+     dark   text-2 0.66 white on #1C1C1E  7.4
+            text-3 0.52 white on #1C1C1E  5.1
+            accent #C9A84C on #1C1C1E  7.1
+   ═══════════════════════════════════════ */
+
+.theme {
+  --app-bg: #F4F1EC;
+  --app-card: #FFFFFF;
+  --app-card-pressed: #ECE8E1;
+  --app-fill: rgba(0, 0, 0, 0.05);
+  --app-text: #1A1A1A;
+  --app-text-2: #565656;
+  --app-text-3: #6B6B6B;
+  --app-sep: rgba(0, 0, 0, 0.1);
+  --app-accent: #7A6220;
+  --app-gold: #C9A84C;
+  --app-on-gold: #1A1A1A;
+  --app-success: #1F6B40;
+  --app-success-fill: rgba(31, 107, 64, 0.1);
+  --app-danger: #B82A2A;
+  --app-danger-fill: rgba(184, 42, 42, 0.08);
+  --app-bar: rgba(247, 245, 241, 0.92);
+  --app-bar-solid: #F7F5F1;
+  --app-scrim: rgba(0, 0, 0, 0.32);
+  --app-focus: 0 0 0 2px var(--app-bg), 0 0 0 4px #7A6220;
+
+  /* The balance card, the same in both appearances. */
+  --card-obsidian: #161618;
+  --card-text: #FFFFFF;
+  --card-text-2: rgba(255, 255, 255, 0.66);
+  --card-gold: #C9A84C;
+
+  --tabbar-h: 50px;
+  --navbar-h: 44px;
+  --rail-w: 248px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+
+  color: var(--app-text);
+  -webkit-tap-highlight-color: transparent;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  .theme {
+    --app-bg: #0E0E10;
+    --app-card: #1C1C1E;
+    --app-card-pressed: #2A2A2D;
+    --app-fill: rgba(255, 255, 255, 0.08);
+    --app-text: #FFFFFF;
+    --app-text-2: rgba(255, 255, 255, 0.66);
+    --app-text-3: rgba(255, 255, 255, 0.52);
+    --app-sep: rgba(255, 255, 255, 0.1);
+    --app-accent: #C9A84C;
+    --app-success: #5CC48C;
+    --app-success-fill: rgba(92, 196, 140, 0.14);
+    --app-danger: #F08A8A;
+    --app-danger-fill: rgba(240, 138, 138, 0.12);
+    --app-bar: rgba(22, 22, 24, 0.9);
+    --app-bar-solid: #161618;
+    --app-scrim: rgba(0, 0, 0, 0.55);
+    --app-focus: 0 0 0 2px var(--app-bg), 0 0 0 4px #C9A84C;
+    --card-obsidian: #1C1C1E;
+    color-scheme: dark;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .theme {
+    --app-text-2: var(--app-text);
+    --app-text-3: var(--app-text);
+    --app-sep: rgba(127, 127, 127, 0.6);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .theme {
+    --app-bar: var(--app-bar-solid);
+  }
+}

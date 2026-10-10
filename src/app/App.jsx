@@ -91,6 +91,10 @@ const DEV_HOST_KEY = 'remvo.devHost';
 function isSellerHost() {
   if (typeof window === 'undefined') return false;
 
+  // A build for the phone app (Capacitor) is only ever the seller app:
+  // inside the app the address is capacitor://localhost, not my.remvo.app.
+  if (import.meta.env.VITE_APP_TARGET === 'seller') return true;
+
   if (window.location.hostname.startsWith('my.')) return true;
 
   if (import.meta.env.DEV) {

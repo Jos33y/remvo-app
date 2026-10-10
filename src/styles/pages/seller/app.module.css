@@ -1,0 +1,921 @@
+/* ═══════════════════════════════════════
+   SELLER APP SCREENS
+   One stylesheet for every signed-in
+   screen, so a row is a row everywhere.
+
+   The grammar is iOS's inset grouped list:
+   rounded cards on the grouped background,
+   rows separated by hairlines that stop
+   short of the leading edge, a small
+   uppercase-free heading above each group.
+
+   Type: 34/1.12 large titles (in the
+   header), 17 body, 15 secondary, 13
+   captions. Tight tracking on large text,
+   none on body, a little open on small.
+   Numbers in IBM Plex Mono, tabular.
+
+   Every pressable thing: 44px or more,
+   responds on pointer-down (scale or
+   highlight), never waits for release.
+   ═══════════════════════════════════════ */
+
+.content {
+  padding: 0 16px;
+}
+
+@media (min-width: 900px) {
+  .content {
+    padding: 0;
+  }
+}
+
+.section {
+  margin-top: 28px;
+}
+
+.section:first-child {
+  margin-top: 8px;
+}
+
+.groupHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 4px 8px;
+}
+
+.groupTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.groupLink {
+  font-size: 0.9375rem;
+  color: var(--app-accent);
+  text-decoration: none;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.groupLink:active {
+  opacity: 0.5;
+}
+
+.groupNote.lead {
+  padding: 0 4px 12px;
+}
+
+.groupNote {
+  padding: 8px 4px 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  letter-spacing: 0.005em;
+  color: var(--app-text-3);
+}
+
+/* ── Group and rows ── */
+
+.group {
+  background-color: var(--app-card);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 52px;
+  padding: 10px 16px;
+  text-align: left;
+  color: inherit;
+  text-decoration: none;
+  background-color: transparent;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: background-color 120ms ease;
+}
+
+/* Hairline that starts where the text starts, as iOS draws it. */
+.row + .row::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 16px;
+  right: 0;
+  height: 0.5px;
+  background-color: var(--app-sep);
+}
+
+.rowIcon + .rowMain {
+  margin-left: 0;
+}
+
+.group .row:has(.rowIcon) + .row::before {
+  left: 60px;
+}
+
+a.row:active,
+button.row:active:not(:disabled) {
+  background-color: var(--app-card-pressed);
+}
+
+a.row:focus-visible,
+button.row:focus-visible {
+  outline: none;
+  box-shadow: inset var(--app-focus);
+}
+
+.rowIcon {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  color: var(--app-accent);
+  background-color: var(--app-fill);
+}
+
+.rowMain {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rowTitle {
+  font-size: 1.0625rem;
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+}
+
+.rowTitleClamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.rowSub {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 0.875rem;
+  line-height: 1.35;
+  color: var(--app-text-2);
+}
+
+.rowValue {
+  flex: none;
+  font-size: 1rem;
+  color: var(--app-text-2);
+  text-align: right;
+}
+
+.rowValueMono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.9375rem;
+}
+
+.chevron {
+  flex: none;
+  color: var(--app-text-3);
+  margin-right: -6px;
+}
+
+.danger {
+  color: var(--app-danger);
+}
+
+.accent {
+  color: var(--app-accent);
+}
+
+.plus {
+  color: var(--app-success);
+}
+
+/* ── Status pill ── */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.5;
+}
+
+.pillReady { color: var(--app-success); background-color: var(--app-success-fill); }
+.pillFailed { color: var(--app-danger); background-color: var(--app-danger-fill); }
+.pillRunning { color: var(--app-accent); background-color: var(--app-fill); }
+
+/* ── Balance card (obsidian in both appearances) ── */
+
+.balance {
+  position: relative;
+  padding: 20px 20px 18px;
+  border-radius: 18px;
+  color: var(--card-text);
+  background:
+    radial-gradient(120% 140% at 100% 0%, rgba(201, 168, 76, 0.16) 0%, rgba(201, 168, 76, 0) 55%),
+    var(--card-obsidian);
+  overflow: hidden;
+}
+
+.balance::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 0.5px solid rgba(201, 168, 76, 0.28);
+  pointer-events: none;
+}
+
+.balanceLabel {
+  font-size: 0.8125rem;
+  letter-spacing: 0.01em;
+  color: var(--card-text-2);
+}
+
+.balanceFigure {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 4px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.balanceNumber {
+  font-size: 2.75rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--card-gold);
+}
+
+.balanceUnit {
+  font-size: 1rem;
+  color: var(--card-text-2);
+}
+
+.balanceMeta {
+  margin-top: 10px;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--card-text-2);
+}
+
+.balanceMeta strong {
+  font-weight: 600;
+  color: var(--card-text);
+}
+
+.balanceActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+/* ── Buttons ── */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 50px;
+  padding: 0 20px;
+  border-radius: 12px;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  text-decoration: none;
+  white-space: nowrap;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1), background-color 150ms ease, opacity 150ms ease;
+}
+
+.button:active:not(:disabled) {
+  transform: scale(0.97);
+  transition-duration: 100ms;
+}
+
+.button:focus-visible {
+  outline: none;
+  box-shadow: var(--app-focus);
+}
+
+.button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.block {
+  width: 100%;
+}
+
+.primary {
+  color: var(--app-on-gold);
+  background-color: var(--app-gold);
+}
+
+.primary:hover:not(:disabled) {
+  background-color: #BE9E44;
+}
+
+.secondary {
+  color: var(--app-text);
+  background-color: var(--app-fill);
+}
+
+.onCard {
+  min-height: 44px;
+  padding: 0 18px;
+  font-size: 0.9375rem;
+}
+
+.onCardGhost {
+  color: var(--card-text);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.destructive {
+  color: #FFFFFF;
+  background-color: #B82A2A;
+}
+
+.iconButton {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--app-accent);
+  touch-action: manipulation;
+  transition: transform 100ms ease-out;
+}
+
+.iconButton:active {
+  transform: scale(0.9);
+}
+
+.iconButton:focus-visible {
+  outline: none;
+  box-shadow: var(--app-focus);
+}
+
+.textButton {
+  min-height: 44px;
+  padding: 0 4px;
+  font-size: 1rem;
+  color: var(--app-accent);
+  touch-action: manipulation;
+}
+
+.textButton:active {
+  opacity: 0.5;
+}
+
+/* ── Fields ── */
+
+.card {
+  padding: 16px;
+  background-color: var(--app-card);
+  border-radius: 14px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.inputWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 12px;
+  color: var(--app-text-3);
+  pointer-events: none;
+}
+
+.input {
+  width: 100%;
+  height: 50px;
+  padding: 0 14px 0 42px;
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  color: var(--app-text);
+  background-color: var(--app-fill);
+  border: 1px solid transparent;
+  border-radius: 12px;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+}
+
+.input::placeholder {
+  color: var(--app-text-3);
+}
+
+.input:focus {
+  outline: none;
+  background-color: var(--app-card);
+  border-color: var(--app-accent);
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.22);
+}
+
+.input[aria-invalid='true'] {
+  border-color: var(--app-danger);
+}
+
+.inputPlain {
+  padding-left: 14px;
+}
+
+.fieldError {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--app-danger);
+}
+
+.fieldError svg {
+  flex: none;
+  margin-top: 1px;
+}
+
+.hint {
+  margin-top: 8px;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--app-text-3);
+}
+
+.cardActions {
+  margin-top: 14px;
+}
+
+/* ── Segmented control ── */
+
+.segmented {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  padding: 2px;
+  border-radius: 10px;
+  background-color: var(--app-fill);
+}
+
+.segment {
+  min-height: 36px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--app-text-2);
+  touch-action: manipulation;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.segment[aria-pressed='true'] {
+  color: var(--app-text);
+  background-color: var(--app-card);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 0 0 0.5px var(--app-sep);
+}
+
+.segment:focus-visible {
+  outline: none;
+  box-shadow: var(--app-focus);
+}
+
+.search {
+  margin-top: 12px;
+}
+
+/* ── Empty states ── */
+
+.empty {
+  padding: 40px 24px;
+  text-align: center;
+  background-color: var(--app-card);
+  border-radius: 14px;
+}
+
+.emptyIcon {
+  display: inline-grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 14px;
+  border-radius: 16px;
+  color: var(--app-accent);
+  background-color: var(--app-fill);
+}
+
+.emptyTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.emptyText {
+  max-width: 320px;
+  margin: 6px auto 18px;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--app-text-2);
+}
+
+/* ── Steps (a listing being made) ── */
+
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  font-size: 1rem;
+  color: var(--app-text-3);
+  transition: color 200ms ease;
+}
+
+.stepDone {
+  color: var(--app-text);
+}
+
+.stepNow {
+  color: var(--app-text);
+  font-weight: 600;
+}
+
+.stepMark {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1.5px solid var(--app-sep);
+  color: transparent;
+  transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
+}
+
+.stepDone .stepMark {
+  color: var(--app-on-gold);
+  background-color: var(--app-gold);
+  border-color: var(--app-gold);
+}
+
+.stepNow .stepMark {
+  border-color: var(--app-gold);
+  animation: breathe 1.4s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201, 168, 76, 0.35); }
+  50% { box-shadow: 0 0 0 6px rgba(201, 168, 76, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stepNow .stepMark { animation: none; }
+}
+
+/* ── Copy fields (a finished listing) ── */
+
+.field {
+  position: relative;
+  display: flex;
+  gap: 8px;
+  padding: 14px 8px 14px 16px;
+}
+
+.field + .field::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 16px;
+  right: 0;
+  height: 0.5px;
+  background-color: var(--app-sep);
+}
+
+.fieldMain {
+  flex: 1;
+  min-width: 0;
+}
+
+.fieldLabel {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.8125rem;
+  letter-spacing: 0.01em;
+  color: var(--app-text-3);
+  margin-bottom: 4px;
+}
+
+.fieldCount {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.fieldValue {
+  font-size: 1rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.fieldValueMono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.9375rem;
+}
+
+.fieldClamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.fieldMore {
+  margin-top: 6px;
+  min-height: 32px;
+  font-size: 0.9375rem;
+  color: var(--app-accent);
+}
+
+.copy {
+  flex: none;
+  align-self: flex-start;
+  width: 44px;
+  height: 44px;
+  margin-top: -6px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  color: var(--app-accent);
+  touch-action: manipulation;
+  transition: transform 100ms ease-out, background-color 120ms ease;
+}
+
+.copy:active {
+  transform: scale(0.9);
+  background-color: var(--app-fill);
+}
+
+.copy:focus-visible {
+  outline: none;
+  box-shadow: var(--app-focus);
+}
+
+.copied {
+  color: var(--app-success);
+}
+
+.specifics {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 14px;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+}
+
+.specifics dt {
+  color: var(--app-text-2);
+}
+
+.specifics dd {
+  margin: 0;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.price {
+  font-family: var(--font-mono);
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--app-accent);
+}
+
+/* ── Job summary ── */
+
+.jobHead {
+  padding: 4px 4px 0;
+}
+
+.jobTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.018em;
+}
+
+.jobMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin-top: 10px;
+  font-size: 0.875rem;
+  color: var(--app-text-2);
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.notice {
+  display: flex;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  background-color: var(--app-card);
+}
+
+.noticeDanger {
+  color: var(--app-text);
+  background-color: var(--app-danger-fill);
+}
+
+.noticeDanger svg {
+  color: var(--app-danger);
+  flex: none;
+  margin-top: 1px;
+}
+
+.actions {
+  display: grid;
+  gap: 10px;
+}
+
+@media (min-width: 560px) {
+  .actionsRow {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ── Packs (top-up) ── */
+
+.packs {
+  display: grid;
+  gap: 10px;
+}
+
+.pack {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 64px;
+  padding: 12px 16px;
+  text-align: left;
+  border-radius: 14px;
+  background-color: var(--app-fill);
+  border: 1.5px solid transparent;
+  touch-action: manipulation;
+  transition: border-color 150ms ease, background-color 150ms ease, transform 100ms ease-out;
+}
+
+.pack:active {
+  transform: scale(0.985);
+}
+
+.pack[aria-checked='true'] {
+  border-color: var(--app-gold);
+  background-color: var(--app-card);
+}
+
+.pack:focus-visible {
+  outline: none;
+  box-shadow: var(--app-focus);
+}
+
+.packPrice {
+  min-width: 56px;
+  font-family: var(--font-mono);
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.packMain {
+  flex: 1;
+  min-width: 0;
+}
+
+.packCredits {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.packSub {
+  font-size: 0.875rem;
+  color: var(--app-text-2);
+}
+
+.radio {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid var(--app-sep);
+  display: grid;
+  place-items: center;
+}
+
+.pack[aria-checked='true'] .radio {
+  border-color: var(--app-gold);
+  background-color: var(--app-gold);
+  box-shadow: inset 0 0 0 4px var(--app-card);
+}
+
+.small {
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--app-text-3);
+}
+
+/* ── Profile ── */
+
+.profileHead {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background-color: var(--app-card);
+  border-radius: 14px;
+}
+
+.avatar {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--card-gold);
+  background-color: var(--card-obsidian);
+}
+
+.profileEmail {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  overflow-wrap: break-word;
+}
+
+.version {
+  margin-top: 28px;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--app-text-3);
+}
+
+/* ── Small layout helpers ── */
+
+.centred { margin-top: 10px; text-align: center; }
+.after { margin-top: 14px; }
+.pair { display: contents; }
+.sheetText { font-size: 0.9375rem; line-height: 1.5; color: var(--app-text-2); }
+.month { margin-top: 12px; }
+.monthLabel { padding: 0 4px 8px; font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.01em; color: var(--app-text-3); }
+.rowValueTruncate { max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

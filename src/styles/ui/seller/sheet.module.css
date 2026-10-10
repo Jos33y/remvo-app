@@ -1,0 +1,127 @@
+/* ═══════════════════════════════════════
+   SHEET
+   Phone: rises from the bottom, rounded
+   top, grabber, follows the finger.
+   Wide: a centred panel over a scrim.
+   The scrim dims and the panel is lighter
+   than the page, so it reads as in front.
+   ═══════════════════════════════════════ */
+
+.layer {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: transparent;
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background-color: var(--app-scrim);
+}
+
+.panel {
+  position: relative;
+  width: 100%;
+  max-height: calc(100dvh - var(--safe-top) - 24px);
+  display: flex;
+  flex-direction: column;
+  background-color: var(--app-card);
+  border-radius: 16px 16px 0 0;
+  padding-bottom: var(--safe-bottom);
+  outline: none;
+  touch-action: none;
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.18);
+}
+
+.head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: 14px 56px 10px;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+.head:active {
+  cursor: grabbing;
+}
+
+.grabber {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  width: 36px;
+  height: 5px;
+  margin-left: -18px;
+  border-radius: 3px;
+  background-color: var(--app-sep);
+}
+
+.title {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+
+.close {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  margin-top: -20px;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--app-text-2);
+  background-color: var(--app-fill);
+  touch-action: manipulation;
+}
+
+.close:active {
+  transform: scale(0.94);
+}
+
+.close:focus-visible {
+  outline: none;
+  box-shadow: var(--app-focus);
+}
+
+.body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 8px 20px 20px;
+  touch-action: pan-y;
+}
+
+.footer {
+  padding: 12px 20px 16px;
+  border-top: 0.5px solid var(--app-sep);
+}
+
+@media (min-width: 900px) {
+  .layer {
+    align-items: center;
+  }
+
+  .panel {
+    width: 480px;
+    border-radius: 16px;
+    padding-bottom: 0;
+    max-height: min(720px, calc(100dvh - 64px));
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.24);
+  }
+
+  .head {
+    cursor: default;
+  }
+}

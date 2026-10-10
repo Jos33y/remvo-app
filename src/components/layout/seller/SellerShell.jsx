@@ -1,52 +1,102 @@
-import { useState } from 'react';
-import { Outlet, useNavigate } from 'react-router';
+import { useEffect } from 'react';
+import { NavLink, useLocation, useOutlet } from 'react-router';
+import { AnimatePresence, motion } from 'motion/react';
 import { Logo } from '@components/ui/shared/Logo';
+import { ToastProvider } from '@components/ui/seller/Toast';
+import { IconHome, IconListings, IconCredits, IconProfile } from '@components/ui/seller/icons';
 import { useSellerSession } from '@context/SellerSession';
-import { SELLER_ROUTES, siteUrl, BRAND } from '@utils/constants';
+import { useSellerData } from '@context/SellerData';
+import { move, fade, useReducedMotion } from '@lib/sellerMotion';
+import { SELLER_ROUTES } from '@utils/constants';
+import theme from '@styles/layout/seller/app-theme.module.css';
 import styles from '@styles/layout/seller/seller-shell.module.css';
 
-/* The frame around every signed-in page: the mark, who is signed in,
- * and the way out. The balance and the job navigation join the bar
- * with the dashboard. */
-export function SellerShell() {
-  const { account, signOut } = useSellerSession();
-  const navigate = useNavigate();
-  const [leaving, setLeaving] = useState(false);
+/* ──────────────────────────────────────────────────────────────────
+ * SellerShell
+ *
+ * The app frame. On a phone: content edge to edge, a translucent tab
+ * bar along the bottom above the home indicator. From 900px: the same
+ * four places in a rail on the left, content in a reading column.
+ *
+ * Tabs are the four places a seller goes. Making a listing is not a
+ * place but an action, so it lives on Home and in the Listings bar,
+ * not as a fifth tab.
+ *
+ * Screens that cover the tabs (making a listing, a listing's detail)
+ * set hideTabs via the route handle, as an iOS pushed or modal screen
+ * does, so a phone screen is never short of room for the work.
+ * ────────────────────────────────────────────────────────────────── */
 
-  async function onSignOut() {
-    setLeaving(true);
-    await signOut();
-    navigate(SELLER_ROUTES.SIGN_IN, { replace: true });
-  }
+export const TABS = [
+  { to: SELLER_ROUTES.HOME, label: 'Home', Icon: IconHome, end: true },
+  { to: SELLER_ROUTES.LISTINGS, label: 'Listings', Icon: IconListings },
+  { to: SELLER_ROUTES.CREDITS, label: 'Credits', Icon: IconCredits },
+  { to: SELLER_ROUTES.PROFILE, label: 'Profile', Icon: IconProfile },
+];
+
+function TabLink({ to, label, Icon, end, variant }) {
+  return (
+    <NavLink to={to} end={end} className={({ isActive }) => `${styles[variant]} ${isActive ? styles.active : ''}`}>
+      {({ isActive }) => (
+        <>
+          <Icon size={variant === 'tab' ? 26 : 22} filled={isActive} />
+          <span>{label}</span>
+        </>
+      )}
+    </NavLink>
+  );
+}
+
+export function SellerShell() {
+  const location = useLocation();
+  // The element, not <Outlet />: an exiting page must keep showing
+  // itself, not the page being navigated to.
+  const outlet = useOutlet();
+  const { account } = useSellerSession();
+  const { preview } = useSellerData();
+  const reduced = useReducedMotion();
+  const covered = /^\/listings\/(new|[^/]+)$/.test(location.pathname);
+
+  // iOS Safari only shows :active on touch when a touch listener exists.
+  useEffect(() => {
+    const noop = () => {};
+    document.addEventListener('touchstart', noop, { passive: true });
+    return () => document.removeEventListener('touchstart', noop);
+  }, []);
+
+  const pageMotion = reduced
+    ? { initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 }, transition: fade }
+    : { initial: { opacity: 0, y: 8 }, animate: { opacity: 1, y: 0, transition: move }, exit: { opacity: 0, transition: { duration: 0.1 } } };
 
   return (
-    <div className={styles.shell}>
-      <a href="#seller-main" className="skip-link">Skip to content</a>
-      <header className={styles.header}>
-        <div className={styles.inner}>
-          <Logo variant="gold" size="default" href={SELLER_ROUTES.HOME} />
-          <div className={styles.account}>
-            <span className={styles.email} title={account?.email}>{account?.email}</span>
-            <button type="button" className={styles.signOut} onClick={onSignOut} disabled={leaving}>
-              {leaving ? 'Signing out' : 'Sign out'}
-            </button>
-          </div>
-        </div>
-      </header>
-      <main id="seller-main" className={styles.main}>
-        <Outlet />
-      </main>
-      <footer className={styles.footer}>
-        <div className={styles.inner}>
-          <span>{BRAND.LEGAL_NAME}</span>
-          <nav aria-label="Legal" className={styles.footerLinks}>
-            <a href={siteUrl('/terms')}>Terms</a>
-            <a href={siteUrl('/privacy')}>Privacy</a>
-            <a href={siteUrl('/refunds')}>Refunds</a>
-            <a href={`mailto:${BRAND.EMAIL}`}>{BRAND.EMAIL}</a>
+    <ToastProvider>
+      <div className={`${theme.theme} ${styles.app} ${covered ? styles.covered : ''}`}>
+        <a href="#seller-main" className="skip-link">Skip to content</a>
+
+        <aside className={styles.rail} aria-label="Remvo">
+          <div className={styles.railBrand}><Logo variant="gold" size="default" href={SELLER_ROUTES.HOME} /></div>
+          <nav className={styles.railNav} aria-label="Main">
+            {TABS.map((t) => <TabLink key={t.to} {...t} variant="railItem" />)}
           </nav>
-        </div>
-      </footer>
-    </div>
+          <div className={styles.railFoot}>
+            {preview && <span className={styles.preview}>Preview data</span>}
+            <span className={styles.railEmail} title={account?.email}>{account?.email}</span>
+          </div>
+        </aside>
+
+        <main id="seller-main" className={styles.main}>
+          {preview && <p className={styles.previewBar}>Preview data. Nothing here is charged or real.</p>}
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div key={location.pathname} className={styles.page} {...pageMotion}>
+              {outlet}
+            </motion.div>
+          </AnimatePresence>
+        </main>
+
+        <nav className={styles.tabbar} aria-label="Main">
+          {TABS.map((t) => <TabLink key={t.to} {...t} variant="tab" />)}
+        </nav>
+      </div>
+    </ToastProvider>
   );
 }

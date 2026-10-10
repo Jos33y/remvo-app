@@ -1,35 +1,75 @@
-import { useEffect } from 'react';
-import { useSellerSession } from '@context/SellerSession';
-import styles from '@styles/layout/seller/seller-shell.module.css';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router';
+import { PageHeader } from '@components/ui/seller/PageHeader';
+import { BalanceCard, MakeListingForm, StatusPill, TopUpSheet } from '@components/ui/seller/parts';
+import { IconChevronRight, IconListings } from '@components/ui/seller/icons';
+import { useSellerData } from '@context/SellerData';
+import { inputLabel, when } from '@lib/sellerFormat';
+import { SELLER_ROUTES, listingPath } from '@utils/constants';
+import s from '@styles/pages/seller/app.module.css';
 
-/* Signed-in home. Holds the place the dashboard takes next: balance,
- * top-up, and "make a listing". Until then it confirms who is signed
- * in and since when, which is what proves sign-in end to end. */
+/* ──────────────────────────────────────────────────────────────────
+ * Home
+ *
+ * The three things a seller opens the app for, in the order they
+ * matter: what they have (balance), what they came to do (make a
+ * listing), what they did last (recent listings).
+ * ────────────────────────────────────────────────────────────────── */
+
+export function JobRow({ job }) {
+  const title = job.listing?.title ?? inputLabel(job.input);
+  return (
+    <Link to={listingPath(job.id)} className={s.row}>
+      <span className={s.rowMain}>
+        <span className={`${s.rowTitle} ${s.rowTitleClamp}`}>{title}</span>
+        <span className={s.rowSub}>
+          <span>{when(job.createdAt)}</span>
+          <StatusPill status={job.status} />
+        </span>
+      </span>
+      <span className={s.chevron}><IconChevronRight /></span>
+    </Link>
+  );
+}
+
 export function SellerHomePage() {
-  const { account } = useSellerSession();
+  const { jobs } = useSellerData();
+  const [topUp, setTopUp] = useState(false);
+  const recent = jobs.slice(0, 4);
 
-  useEffect(() => { document.title = 'Remvo | Your account'; }, []);
-
-  const since = account?.createdAt
-    ? new Date(account.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
-    : null;
+  useEffect(() => { document.title = 'Remvo'; }, []);
 
   return (
-    <section className={styles.home} aria-labelledby="home-heading">
-      <h1 id="home-heading" className={styles.homeHeading}>You are signed in</h1>
-      <dl className={styles.facts}>
-        <div className={styles.fact}>
-          <dt>Email</dt>
-          <dd>{account?.email}</dd>
+    <>
+      <PageHeader title="Home" />
+      <div className={s.content}>
+        <div className={s.section}>
+          <BalanceCard onTopUp={() => setTopUp(true)} />
         </div>
-        {since && (
-          <div className={styles.fact}>
-            <dt>Account since</dt>
-            <dd>{since}</dd>
+
+        <div className={s.section}>
+          <MakeListingForm />
+        </div>
+
+        <section className={s.section} aria-labelledby="recent-heading">
+          <div className={s.groupHead}>
+            <h2 id="recent-heading" className={s.groupTitle}>Recent</h2>
+            {jobs.length > recent.length && <Link to={SELLER_ROUTES.LISTINGS} className={s.groupLink}>See all</Link>}
           </div>
-        )}
-      </dl>
-      <p className={styles.homeNext}>Your balance, top-ups and listings will appear here.</p>
-    </section>
+          {recent.length ? (
+            <div className={s.group}>
+              {recent.map((j) => <JobRow key={j.id} job={j} />)}
+            </div>
+          ) : (
+            <div className={s.empty}>
+              <span className={s.emptyIcon}><IconListings size={28} /></span>
+              <p className={s.emptyTitle}>No listings yet</p>
+              <p className={s.emptyText}>Type a barcode above. Your first listing is back in about a minute.</p>
+            </div>
+          )}
+        </section>
+      </div>
+      <TopUpSheet open={topUp} onClose={() => setTopUp(false)} />
+    </>
   );
 }

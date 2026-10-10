@@ -38,7 +38,16 @@ export const SELLER_ROUTES = {
   HOME: '/',
   SIGN_IN: '/sign-in',
   VERIFY: '/sign-in/verify',
+  LISTINGS: '/listings',
+  NEW_LISTING: '/listings/new',
+  LISTING: '/listings/:id',
+  CREDITS: '/credits',
+  PROFILE: '/profile',
+  /* The marketing site's Top up links land here: sign in, then credits. */
+  BILLING: '/billing',
 };
+
+export const listingPath = (id) => `/listings/${id}`;
 
 export const BRAND = {
   NAME: 'Remvo',
