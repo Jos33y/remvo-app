@@ -43,7 +43,7 @@ export function ProfilePage() {
   const navigate = useNavigate();
   const toast = useToast();
   const { account, signOut } = useSellerSession();
-  const { preview, resetPreview, settings, updateSettings } = useSellerData();
+  const { settings, updateSettings } = useSellerData();
   const [leaving, setLeaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [choosing, setChoosing] = useState(null); // 'site' | 'currency' | null
@@ -145,20 +145,6 @@ export function ProfilePage() {
           </div>
         </section>
 
-        {preview && (
-          <section className={s.section} aria-labelledby="preview-heading">
-            <div className={s.groupHead}><h2 id="preview-heading" className={s.groupTitle}>Preview</h2></div>
-            <div className={s.group}>
-              <button type="button" className={s.row} onClick={() => { resetPreview(); toast('Example listings reset'); }}>
-                <span className={s.rowMain}>
-                  <span className={`${s.rowTitle} ${s.accent}`}>Reset example listings</span>
-                  <span className={s.rowSub}>Your balance and top-ups are not touched</span>
-                </span>
-              </button>
-            </div>
-          </section>
-        )}
-
         <div className={s.section}>
           <div className={s.group}>
             <button type="button" className={s.row} onClick={onSignOut} disabled={leaving}>
@@ -170,7 +156,7 @@ export function ProfilePage() {
           </div>
         </div>
 
-        <p className={s.version}>Remvo {APP_VERSION}{preview ? ' (preview)' : ''}. {BRAND.LEGAL_NAME}</p>
+        <p className={s.version}>Remvo {APP_VERSION}. {BRAND.LEGAL_NAME}</p>
       </div>
 
       <Sheet open={choosing === 'site'} onClose={() => setChoosing(null)} title="eBay site">

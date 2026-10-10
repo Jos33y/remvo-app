@@ -23,6 +23,7 @@ const LISTING = PRICING.JOBS.LISTING.credits;
 export function StatusPill({ status }) {
   if (status === 'ready') return <span className={`${s.pill} ${s.pillReady}`}>Ready</span>;
   if (status === 'failed') return <span className={`${s.pill} ${s.pillFailed}`}>Failed, credits back</span>;
+  if (status === 'queued') return <span className={`${s.pill} ${s.pillRunning}`}>Waiting</span>;
   return <span className={`${s.pill} ${s.pillRunning}`}>Working</span>;
 }
 
@@ -367,7 +368,7 @@ export function EditableField({ label, value, original, onSave, multiline = fals
   const editRef = useRef(null);
   const inputId = useId();
   const errId = useId();
-  const edited = String(value) !== String(original);
+  const edited = String(value ?? '') !== String(original ?? '');
 
   useEffect(() => {
     if (editing) {
@@ -377,27 +378,40 @@ export function EditableField({ label, value, original, onSave, multiline = fals
     }
   }, [editing]);
 
-  function start() { setDraft(String(value)); setError(''); setEditing(true); }
+  function start() { setDraft(String(value ?? '')); setError(''); setEditing(true); }
   function cancel() { setEditing(false); setError(''); requestAnimationFrame(() => editRef.current?.focus()); }
 
   async function save() {
     const next = multiline ? draft.replace(/\s+$/, '') : draft.trim();
     const problem = validate?.(next);
     if (problem) { setError(problem); return; }
-    await onSave(next === String(original) ? null : next);
+    try {
+      await onSave(next === String(original ?? '') ? null : next);
+    } catch (err) {
+      // The edit was not kept; say why, and leave the draft where it is.
+      setError(err?.message || 'That did not save. Try again.');
+      return;
+    }
     setEditing(false);
     toast(`${label} saved`);
     requestAnimationFrame(() => editRef.current?.focus());
   }
 
   async function revert() {
-    await onSave(null);
+    try {
+      await onSave(null);
+    } catch (err) {
+      const message = err?.message || 'That did not save. Try again.';
+      if (editing) setError(message); else toast(message);
+      return;
+    }
     setEditing(false);
     toast(`${label} put back`);
     requestAnimationFrame(() => editRef.current?.focus());
   }
 
   async function onCopy() {
+    if (value == null || value === '') return;
     if (await copy(String(value))) toast(`${label} copied`);
   }
 

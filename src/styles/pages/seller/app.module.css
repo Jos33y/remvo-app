@@ -758,6 +758,16 @@ button.row:focus-visible {
   letter-spacing: -0.018em;
 }
 
+/* Amazon's own titles run to 200 characters: three lines, the rest in the tooltip. */
+.jobTitleClamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 1.25rem;
+  line-height: 1.25;
+}
+
 .jobMeta {
   display: flex;
   flex-wrap: wrap;
@@ -1019,6 +1029,66 @@ button.row:focus-visible {
 .packCredits {
   font-size: 1rem;
   font-weight: 600;
+}
+
+/* ── A product to pick, when a barcode finds more than one ── */
+
+.match {
+  align-items: flex-start;
+}
+
+.matchImage {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  background-color: #fff;
+  border: 0.5px solid var(--app-sep);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+.matchImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.matchTitle {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.35;
+  margin-bottom: 2px;
+}
+
+/* ── The other title Remvo wrote, one tap to use ── */
+
+.altTitle {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  color: var(--app-text);
+  background-color: var(--app-fill);
+  border-radius: 10px;
+  touch-action: manipulation;
+}
+
+.altTitle:active { opacity: 0.6; }
+
+.altTitle:focus-visible {
+  outline: none;
+  box-shadow: var(--app-focus);
 }
 
 .packSub {

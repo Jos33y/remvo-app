@@ -4,9 +4,10 @@ import { PageHeader } from '@components/ui/seller/PageHeader';
 import { MakeListingForm, TopUpSheet } from '@components/ui/seller/parts';
 import { IconAlert, IconCheck } from '@components/ui/seller/icons';
 import { useSellerData } from '@context/SellerData';
-import { CONDITION, NotEnoughCredits, stepsFor } from '@lib/sellerData';
+import { CONDITION, readInput, stepsFor } from '@lib/sellerData';
+import { NotEnoughCredits, PickNeeded } from '@lib/sellerJobs';
 import { inputLabel } from '@lib/sellerFormat';
-import { PRICING, SELLER_ROUTES, listingPath } from '@utils/constants';
+import { SELLER_ROUTES, listingPath } from '@utils/constants';
 import s from '@styles/pages/seller/app.module.css';
 
 /* ──────────────────────────────────────────────────────────────────
@@ -16,18 +17,18 @@ import s from '@styles/pages/seller/app.module.css';
  * back that is always the same place. Stages:
  *
  *   enter    no input yet (opened from the + in Listings)
- *   looking  the input is being checked; nothing is spent
+ *   looking  the input is being checked on Amazon; nothing is spent
  *   pick     a barcode matched more than one product: choose, free
- *   running  credits reserved; each step ticks as it finishes. Never a
- *            spinner: the seller sees what is happening, in words.
- *   failed   what went wrong, and that the credits are back
+ *   running  credits taken; each step ticks as the API reports it.
+ *            Never a spinner: the seller sees what is happening, in
+ *            words. Leaving is fine: the listing carries on and turns
+ *            up in Listings.
+ *   failed   what went wrong, and whether any credits moved
  *   short    not enough credits, and a way to top up without leaving
  *
  * On success it replaces itself with the listing, so Back from the
  * listing goes to Listings, not to a finished progress screen.
  * ────────────────────────────────────────────────────────────────── */
-
-const LISTING = PRICING.JOBS.LISTING.credits;
 
 /* Each navigation here is a fresh attempt: trying again from the
  * failure screen navigates to this same path, so the page is keyed on
@@ -42,7 +43,7 @@ function NewListing() {
   const location = useLocation();
   const raw = location.state?.raw ?? null;
   const condition = location.state?.condition ?? 'new';
-  const { lookUp, makeListing, settings } = useSellerData();
+  const { lookUp, makeListing, settings, listingCredits: LISTING } = useSellerData();
   const steps = stepsFor(settings?.marketplace);
 
   const [stage, setStage] = useState(raw ? 'looking' : 'enter');
@@ -51,22 +52,31 @@ function NewListing() {
   const [pick, setPick] = useState(null);
   const [done, setDone] = useState(-1);
   const [failure, setFailure] = useState('');
+  // Whether credits were taken and given back, or never taken: the failure screen says which.
+  const [returned, setReturned] = useState(false);
   const [topUp, setTopUp] = useState(false);
   const started = useRef(false);
 
   useEffect(() => { document.title = 'Remvo | New listing'; }, []);
 
-  async function run(read, matchKey = null) {
+  function fail(message, creditsBack = false) {
+    setFailure(message);
+    setReturned(creditsBack);
+    setStage('failed');
+  }
+
+  async function run(read, asin = null) {
     setStage('running');
     setDone(-1);
     try {
-      const job = await makeListing({ kind: read.kind, value: read.value, matchKey, condition }, (i) => setDone(i));
-      if (job.status === 'failed') { setFailure(job.failure); setStage('failed'); return; }
+      const job = await makeListing({ input: read.value, asin, condition }, (j) => setDone(j.step - 1));
+      if (!job) { navigate(SELLER_ROUTES.LISTINGS, { replace: true }); return; }
+      if (job.status === 'failed') { fail(job.failure, true); return; }
       navigate(listingPath(job.id), { replace: true });
     } catch (err) {
       if (err instanceof NotEnoughCredits) { setStage('short'); return; }
-      setFailure('Something went wrong on our side. Your credits are back. Try again in a minute.');
-      setStage('failed');
+      if (err instanceof PickNeeded) { setMatches(err.matches); setPick(err.matches[0]?.asin ?? null); setStage('pick'); return; }
+      fail(err.message || 'Something went wrong on our side. Try again in a minute.');
     }
   }
 
@@ -74,21 +84,25 @@ function NewListing() {
     if (!raw || started.current) return;
     started.current = true;
     (async () => {
-      const read = await lookUp(raw);
-      if (read.error) { setFailure(read.error); setStage('failed'); return; }
+      const read = readInput(raw);
+      if (read.error) { fail(read.error); return; }
       setInput(read);
-      if (read.matches) { setMatches(read.matches); setPick(read.matches[0].key); setStage('pick'); return; }
-      run(read);
+      try {
+        const found = await lookUp(read.value);
+        if (found.matches) { setMatches(found.matches); setPick(found.matches[0].asin); setStage('pick'); return; }
+        setPick(found.product?.asin ?? null);
+        run(read, read.kind === 'barcode' ? found.product?.asin : null);
+      } catch (err) {
+        fail(err.message);
+      }
     })();
   }, [raw]);
-
-  const running = stage === 'running';
 
   return (
     <>
       <PageHeader
         title="New listing"
-        back={running ? undefined : SELLER_ROUTES.LISTINGS}
+        back={SELLER_ROUTES.LISTINGS}
         backLabel="Listings"
         large={false}
       />
@@ -127,8 +141,14 @@ function NewListing() {
             </p>
             <div className={s.packs} role="radiogroup" aria-label="Products for this barcode">
               {matches.map((m) => (
-                <button key={m.key} type="button" role="radio" aria-checked={pick === m.key} className={s.pack} onClick={() => setPick(m.key)}>
-                  <span className={s.packMain}><span className={s.packCredits}>{m.title}</span></span>
+                <button key={m.asin} type="button" role="radio" aria-checked={pick === m.asin} className={`${s.pack} ${s.match}`} onClick={() => setPick(m.asin)}>
+                  <span className={s.matchImage} aria-hidden="true">
+                    {m.image && <img src={m.image} alt="" loading="lazy" referrerPolicy="no-referrer" onError={(e) => { e.currentTarget.hidden = true; }} />}
+                  </span>
+                  <span className={s.packMain}>
+                    <span className={s.matchTitle}>{m.title}</span>
+                    <span className={`${s.small} ${s.mono}`}>{m.asin}</span>
+                  </span>
                   <span className={s.radio} aria-hidden="true" />
                 </button>
               ))}
@@ -158,7 +178,8 @@ function NewListing() {
               </ol>
             </div>
             <p className={s.groupNote}>
-              {LISTING} credits are set aside. If this does not finish, they come straight back.
+              {LISTING} credits are taken. If this does not finish, they come straight back. You can leave this screen;
+              the listing carries on and appears in Listings.
             </p>
           </div>
         )}
@@ -169,7 +190,7 @@ function NewListing() {
               <IconAlert size={20} />
               <span>{failure}</span>
             </div>
-            {input && <p className={s.groupNote}>No credits were used.</p>}
+            {input && <p className={s.groupNote}>{returned ? `The ${LISTING} credits went back to your balance.` : 'No credits were used.'}</p>}
             <div className={s.section}><MakeListingForm autoFocus /></div>
           </div>
         )}
@@ -177,7 +198,7 @@ function NewListing() {
         {stage === 'short' && (
           <div className={s.section}>
             <div className={s.notice}>
-              A listing uses {LISTING} credits and your balance is lower. Top up, then it runs straight away.
+              A listing uses {LISTING} credits and your balance is lower. Top up, then make it again from Home.
             </div>
             <div className={s.section}>
               <button type="button" className={`${s.button} ${s.primary} ${s.block}`} onClick={() => setTopUp(true)}>Top up</button>
@@ -185,7 +206,7 @@ function NewListing() {
           </div>
         )}
       </div>
-      <TopUpSheet open={topUp} onClose={() => { setTopUp(false); if (stage === 'short' && input) run(input, pick); }} />
+      <TopUpSheet open={topUp} onClose={() => setTopUp(false)} />
     </>
   );
 }

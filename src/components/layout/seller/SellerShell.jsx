@@ -5,7 +5,6 @@ import { Logo } from '@components/ui/shared/Logo';
 import { ToastProvider } from '@components/ui/seller/Toast';
 import { IconHome, IconListings, IconCredits, IconProfile } from '@components/ui/seller/icons';
 import { useSellerSession } from '@context/SellerSession';
-import { useSellerData } from '@context/SellerData';
 import { move, fade, useReducedMotion } from '@lib/sellerMotion';
 import { SELLER_ROUTES } from '@utils/constants';
 import theme from '@styles/layout/seller/app-theme.module.css';
@@ -53,7 +52,6 @@ export function SellerShell() {
   // itself, not the page being navigated to.
   const outlet = useOutlet();
   const { account } = useSellerSession();
-  const { preview } = useSellerData();
   const reduced = useReducedMotion();
   const covered = /^\/listings\/(new|[^/]+)$/.test(location.pathname);
 
@@ -79,13 +77,11 @@ export function SellerShell() {
             {TABS.map((t) => <TabLink key={t.to} {...t} variant="railItem" />)}
           </nav>
           <div className={styles.railFoot}>
-            {preview && <span className={styles.preview}>Example listings</span>}
             <span className={styles.railEmail} title={account?.email}>{account?.email}</span>
           </div>
         </aside>
 
         <main id="seller-main" className={styles.main}>
-          {preview && <p className={styles.previewBar}>Listings here are examples and use no credits.</p>}
           <AnimatePresence mode="wait" initial={false}>
             <motion.div key={location.pathname} className={styles.page} {...pageMotion}>
               {outlet}

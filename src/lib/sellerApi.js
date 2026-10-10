@@ -22,12 +22,14 @@ export class SellerApiError extends Error {
    * @param {number} status   0 when the request never got an answer
    * @param {string} code
    * @param {string} message  safe to show as is
+   * @param {object|null} details  what the API sent with it (a balance, the products to pick from)
    */
-  constructor(status, code, message) {
+  constructor(status, code, message, details = null) {
     super(message);
     this.name = 'SellerApiError';
     this.status = status;
     this.code = code;
+    this.details = details;
   }
 }
 
@@ -37,7 +39,8 @@ const FALLBACK = {
   403: 'That is not allowed.',
   404: 'That could not be found.',
   429: 'Too many attempts. Wait a minute and try again.',
-  503: 'Checkout is not answering. Try again in a minute.',
+  402: 'Not enough credits. Top up and try again.',
+  503: 'Remvo is not answering just now. Try again in a minute.',
 };
 
 async function call(method, path, body) {
@@ -64,7 +67,7 @@ async function call(method, path, body) {
   // the raw internal error. Anything else from the API is written for sellers.
   const ours = 'Something went wrong on our side. Try again in a minute.';
   const message = res.status === 500 ? ours : (issue || err.message || FALLBACK[res.status] || ours);
-  throw new SellerApiError(res.status, err.code ?? 'unknown', message);
+  throw new SellerApiError(res.status, err.code ?? 'unknown', message, err.details ?? null);
 }
 
 export const sellerApi = Object.freeze({
@@ -81,4 +84,14 @@ export const sellerApi = Object.freeze({
   /** { pack: 50|200|500 } or { amount: 37 }, with currency. Returns { checkoutId, url, credits }. */
   startTopUp: (body) => call('POST', '/topups', body),
   topUpStatus: (checkoutId) => call('GET', `/topups/${encodeURIComponent(checkoutId)}`),
+
+  // Listings (modules/jobs in remvo-api)
+  /** { input, marketplace? } -> { kind, value, amazon, product, matches } */
+  lookUp: (body) => call('POST', '/jobs/lookup', body),
+  /** { input, asin?, condition } -> { job }; credits taken */
+  createJob: (body) => call('POST', '/jobs', body),
+  jobs: (before) => call('GET', `/jobs${before ? `?before=${encodeURIComponent(before)}` : ''}`),
+  job: (id) => call('GET', `/jobs/${encodeURIComponent(id)}`),
+  editJob: (id, field, value) => call('PATCH', `/jobs/${encodeURIComponent(id)}/edits`, { field, value }),
+  deleteJob: (id) => call('DELETE', `/jobs/${encodeURIComponent(id)}`),
 });

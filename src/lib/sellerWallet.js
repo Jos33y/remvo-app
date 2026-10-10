@@ -7,9 +7,8 @@
  * change it (a top-up landing, a settings change, coming back to the
  * tab).
  *
- * Listings are still preview data (lib/sellerData.js) until the
- * listing engine ships; they read the balance from here but never
- * spend from it.
+ * Listings (lib/sellerJobs.js) spend from it on the server; the jobs
+ * store asks for a refresh whenever one is made or fails.
  * ────────────────────────────────────────────────────────────────── */
 
 import { sellerApi } from '@lib/sellerApi';

@@ -4,10 +4,10 @@ import { PageHeader } from '@components/ui/seller/PageHeader';
 import { Sheet } from '@components/ui/seller/Sheet';
 import { useToast } from '@components/ui/seller/Toast';
 import { CopyField, EditableField, StatusPill } from '@components/ui/seller/parts';
-import { IconAlert, IconCopy, IconDownload, IconTrash } from '@components/ui/seller/icons';
+import { IconAlert, IconCheck, IconCopy, IconDownload, IconTrash } from '@components/ui/seller/icons';
 import { useSellerData } from '@context/SellerData';
 import { useClipboard } from '@hooks/useClipboard';
-import { listingCsv, withEdits } from '@lib/sellerData';
+import { barcodeLabel, listingCsv, productName, stepsFor, withEdits } from '@lib/sellerData';
 import { MARKETPLACE } from '@lib/market';
 import { inputLabel, listingPrice, longDate, parcel, when } from '@lib/sellerFormat';
 import { PRICING, SELLER_ROUTES } from '@utils/constants';
@@ -27,21 +27,27 @@ import s from '@styles/pages/seller/app.module.css';
  * Copy all and Download put everything in one go. Delete removes it
  * now rather than in 90 days; its credits stay spent, because the work
  * was done.
+ *
+ * Anything Remvo could not find (a category, a parcel the page does
+ * not give, a price with no live listings to go by, a required item
+ * specific) is said plainly where it would be, never left blank.
  * ────────────────────────────────────────────────────────────────── */
 
 const DAY = 86_400_000;
 
 function allText(job) {
   const l = withEdits(job);
+  const id = l.identifiers ?? {};
   return [
     `Title\n${l.title}`,
     `Condition\n${l.condition}`,
     `Description\n${l.description}`,
-    `Category\n${l.category.path} (${l.category.id})`,
-    `Item specifics\n${l.specifics.map(([k, v]) => `${k}: ${v}`).join('\n')}`,
-    `Parcel\n${parcel(l.parcel)}, ${l.parcel.band}`,
-    `Price\n${listingPrice(l.price.value, l.price.currency)}`,
-  ].join('\n\n');
+    l.category && `Category\n${l.category.path} (${l.category.id})`,
+    [id.brand && `Brand: ${id.brand}`, id.mpn && `MPN: ${id.mpn}`, id.gtin && `${barcodeLabel(job.marketplace)}: ${id.gtin}`].filter(Boolean).join('\n'),
+    l.specifics.length && `Item specifics\n${l.specifics.map(([k, v]) => `${k}: ${v}`).join('\n')}`,
+    l.parcel && `Parcel\n${parcel(l.parcel)}, ${l.parcel.band}`,
+    l.price.value != null && `Price\n${listingPrice(l.price.value, l.price.currency)}`,
+  ].filter(Boolean).join('\n\n');
 }
 
 const priceProblem = (v) => (/^\d{1,6}([.,]\d{1,2})?$/.test(v) && Number(v.replace(',', '.')) > 0 ? '' : 'Enter a price such as 19.99.');
@@ -62,23 +68,38 @@ export function ListingPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const toast = useToast();
-  const { job: find, deleteJob, editJob, preview } = useSellerData();
+  const { job: find, fetchJob, deleteJob, editJob, jobsStatus } = useSellerData();
   const { copy } = useClipboard({ resetMs: 1500 });
   const [confirm, setConfirm] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [missing, setMissing] = useState(false);
   const job = find(id);
 
   useEffect(() => { document.title = 'Remvo | Listing'; }, []);
+
+  // Opened straight from a link, or older than the first page: ask for it.
+  useEffect(() => {
+    if (job || jobsStatus === 'loading') return;
+    let live = true;
+    fetchJob(id).catch(() => { if (live) setMissing(true); });
+    return () => { live = false; };
+  }, [id, Boolean(job), jobsStatus]);
 
   if (!job) {
     return (
       <>
         <PageHeader title="Listing" back={SELLER_ROUTES.LISTINGS} backLabel="Listings" large={false} />
         <div className={s.content}>
-          <div className={s.empty}>
-            <p className={s.emptyTitle}>This listing is not here</p>
-            <p className={s.emptyText}>It may have been deleted, or passed its 90 days.</p>
-          </div>
+          {missing ? (
+            <div className={s.empty}>
+              <p className={s.emptyTitle}>This listing is not here</p>
+              <p className={s.emptyText}>It may have been deleted, or passed its 90 days.</p>
+            </div>
+          ) : (
+            <div className={s.empty} aria-busy="true">
+              <p className={s.emptyText}>Opening the listing</p>
+            </div>
+          )}
         </div>
       </>
     );
@@ -88,12 +109,22 @@ export function ListingPage() {
   const o = job.listing;
   const site = MARKETPLACE[job.marketplace] ?? MARKETPLACE.US;
   const lang = site.langCode === 'en' ? undefined : site.langCode;
+  const ids = l?.identifiers ?? {};
+  const needs = (l?.missing ?? []).filter((m) => m !== 'category');
+  const making = job.status === 'queued' || job.status === 'running';
   const save = (field) => (value) => editJob(job.id, field, value);
   const keptUntil = new Date(Date.parse(job.createdAt) + PRICING.RESULT_DAYS * DAY).toISOString();
 
   async function remove() {
     setBusy(true);
-    await deleteJob(job.id);
+    try {
+      await deleteJob(job.id);
+    } catch (err) {
+      setBusy(false);
+      setConfirm(false);
+      toast(err.message || 'That did not delete. Try again.');
+      return;
+    }
     toast('Listing deleted');
     navigate(SELLER_ROUTES.LISTINGS, { replace: true });
   }
@@ -103,7 +134,9 @@ export function ListingPage() {
       <PageHeader title={l ? 'Listing' : 'Failed listing'} back={SELLER_ROUTES.LISTINGS} backLabel="Listings" large={false} />
       <div className={s.content}>
         <header className={s.jobHead}>
-          <h2 className={s.jobTitle}>{job.source ?? inputLabel(job.input)}</h2>
+          <h2 className={`${s.jobTitle} ${productName(job) ? s.jobTitleClamp : ''}`} title={productName(job) ?? undefined}>
+            {productName(job) ?? inputLabel(job.input)}
+          </h2>
           <p className={s.jobMeta}>
             <StatusPill status={job.status} />
             <span>{when(job.createdAt)}</span>
@@ -112,6 +145,26 @@ export function ListingPage() {
             <span>{job.credits ? `${job.credits} credits` : 'No credits used'}</span>
           </p>
         </header>
+
+        {making && (
+          <div className={s.section}>
+            <div className={s.card} aria-live="polite">
+              <ol className={s.steps}>
+                {stepsFor(job.marketplace).map((label, i) => {
+                  const state = i < job.step ? s.stepDone : i === job.step ? s.stepNow : '';
+                  return (
+                    <li key={label} className={`${s.step} ${state}`}>
+                      <span className={s.stepMark}>{i < job.step && <IconCheck size={14} />}</span>
+                      {label}
+                      {i < job.step && <span className="sr-only">, done</span>}
+                    </li>
+                  );
+                })}
+              </ol>
+            </div>
+            <p className={s.groupNote}>{job.status === 'queued' ? 'Waiting for your previous listing to finish.' : 'Being made now. This page fills in when it is ready.'}</p>
+          </div>
+        )}
 
         {job.status === 'failed' && (
           <div className={s.section}>
@@ -124,11 +177,6 @@ export function ListingPage() {
 
         {l && (
           <>
-            {preview && site.langCode !== 'en' && (
-              <div className={s.section}>
-                <p className={s.notice}>This example is in English. A real listing for {site.site} is written in {site.lang}.</p>
-              </div>
-            )}
             <section className={s.section} aria-label="The listing">
               <div className={s.group}>
                 <EditableField
@@ -139,16 +187,38 @@ export function ListingPage() {
                   count={(v) => `${String(v).length}/80`}
                   validate={(v) => (!v ? 'A listing needs a title.' : v.length > 80 ? `eBay takes 80 characters; this is ${v.length}.` : '')}
                   lang={lang}
-                />
+                >
+                  <p className={s.fieldValue} lang={lang}>{l.title}</p>
+                  {o.alternative && l.title !== o.alternative && (
+                    <button type="button" className={s.altTitle} onClick={() => save('title')(o.alternative).then(() => toast('Other title used'))}>
+                      <span className={s.small}>Or use</span>
+                      <span lang={lang}>{o.alternative}</span>
+                    </button>
+                  )}
+                </EditableField>
                 <CopyField label="Condition" value={l.condition} />
                 <EditableField label="Description" value={l.description} original={o.description} onSave={save('description')} multiline clamp lang={lang} />
-                <CopyField label="Category" value={l.category.path} copyText={l.category.id}>
-                  <p className={s.fieldValue} lang={lang}>{l.category.path}</p>
-                  <p className={`${s.small} ${s.mono}`}>ID {l.category.id}, copied by the button</p>
-                </CopyField>
-                <CopyField label="Item specifics" copyText={l.specifics.map(([k, v]) => `${k}: ${v}`).join('\n')}>
-                  <p className={s.small}>Each one below can be copied or changed on its own. This button copies them all.</p>
-                </CopyField>
+                {l.category ? (
+                  <CopyField label="Category" value={l.category.path} copyText={l.category.id}>
+                    <p className={s.fieldValue} lang={lang}>{l.category.path}</p>
+                    <p className={`${s.small} ${s.mono}`}>ID {l.category.id}, copied by the button</p>
+                  </CopyField>
+                ) : (
+                  <div className={s.field}>
+                    <div className={s.fieldMain}>
+                      <p className={s.fieldLabel}><span>Category</span></p>
+                      <p className={s.fieldValue}>eBay did not suggest one. Type the title into eBay&apos;s category search and pick the closest.</p>
+                    </div>
+                  </div>
+                )}
+                {ids.brand && <CopyField label="Brand" value={ids.brand} />}
+                {ids.mpn && <CopyField label="MPN" mono value={ids.mpn} />}
+                {ids.gtin && <CopyField label={barcodeLabel(job.marketplace)} mono value={ids.gtin} />}
+                {l.specifics.length > 0 && (
+                  <CopyField label="Item specifics" copyText={l.specifics.map(([k, v]) => `${k}: ${v}`).join('\n')}>
+                    <p className={s.small}>Each one below can be copied or changed on its own. This button copies them all.</p>
+                  </CopyField>
+                )}
                 {l.specifics.map(([k, v], i) => (
                   <EditableField
                     key={k}
@@ -161,10 +231,28 @@ export function ListingPage() {
                     lang={lang}
                   />
                 ))}
-                <CopyField label="Parcel" mono value={parcel(l.parcel)}>
-                  <p className={`${s.fieldValue} ${s.fieldValueMono}`}>{parcel(l.parcel)}</p>
-                  <p className={s.small}>{l.parcel.band}</p>
-                </CopyField>
+                {needs.length > 0 && (
+                  <div className={s.field}>
+                    <div className={s.fieldMain}>
+                      <p className={s.fieldLabel}><span>Still needed on eBay</span></p>
+                      <p className={s.fieldValue} lang={lang}>{needs.join(', ')}</p>
+                      <p className={s.small}>eBay asks for {needs.length === 1 ? 'this' : 'these'} and the product page does not say. Fill {needs.length === 1 ? 'it' : 'them'} in from the item in your hand.</p>
+                    </div>
+                  </div>
+                )}
+                {l.parcel?.weight != null ? (
+                  <CopyField label="Parcel" mono value={parcel(l.parcel)}>
+                    <p className={`${s.fieldValue} ${s.fieldValueMono}`}>{parcel(l.parcel)}</p>
+                    <p className={s.small}>{l.parcel.band}{l.parcel.l == null ? '. The page gives no size: measure the box.' : ''}</p>
+                  </CopyField>
+                ) : (
+                  <div className={s.field}>
+                    <div className={s.fieldMain}>
+                      <p className={s.fieldLabel}><span>Parcel</span></p>
+                      <p className={s.fieldValue}>The product page gives no size or weight. Weigh and measure it packed.</p>
+                    </div>
+                  </div>
+                )}
                 <EditableField
                   label="Price"
                   value={l.price.value}
@@ -174,8 +262,14 @@ export function ListingPage() {
                   mono
                   validate={priceProblem}
                 >
-                  <p className={s.price}>{listingPrice(l.price.value, l.price.currency)}</p>
-                  <p className={s.small}>Middle of {l.price.listings} live {site.site} listings is {listingPrice(l.price.median, l.price.currency)}</p>
+                  {l.price.value != null
+                    ? <p className={s.price}>{listingPrice(l.price.value, l.price.currency)}</p>
+                    : <p className={s.fieldValue}>Not set</p>}
+                  <p className={s.small}>
+                    {o.price.listings
+                      ? `Middle of ${o.price.listings} live ${site.site} ${o.price.listings === 1 ? 'listing' : 'listings'} is ${listingPrice(o.price.median, o.price.currency)}`
+                      : `No live ${site.site} listings of this product to price from. Set your own.`}
+                  </p>
                 </EditableField>
               </div>
               <p className={s.groupNote}>Check it against your stock before you publish. Kept until {longDate(keptUntil)}.</p>
