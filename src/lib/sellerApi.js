@@ -1,0 +1,74 @@
+/* ──────────────────────────────────────────────────────────────────
+ * lib/sellerApi.js
+ *
+ * The seller app's only door to remvo-api: /v1/my/*. Every call sends
+ * the session cookie (credentials: 'include'); the cookie itself is
+ * HttpOnly and never touched here.
+ *
+ * API address: VITE_API_URL when set, otherwise localhost:8080 in dev
+ * and api.remvo.app in production.
+ *
+ * Every failure becomes a SellerApiError with a message a seller can
+ * read: the API's own message when it sent one, a plain fallback when
+ * it did not, and a connection message when nothing came back.
+ * ────────────────────────────────────────────────────────────────── */
+
+const ROOT = (import.meta.env.VITE_API_URL
+  ?? (import.meta.env.DEV ? 'http://localhost:8080' : 'https://api.remvo.app')).replace(/\/+$/, '');
+const BASE = `${ROOT}/v1/my`;
+
+export class SellerApiError extends Error {
+  /**
+   * @param {number} status   0 when the request never got an answer
+   * @param {string} code
+   * @param {string} message  safe to show as is
+   */
+  constructor(status, code, message) {
+    super(message);
+    this.name = 'SellerApiError';
+    this.status = status;
+    this.code = code;
+  }
+}
+
+const FALLBACK = {
+  400: 'Check what you entered and try again.',
+  401: 'Sign in to continue.',
+  403: 'That is not allowed.',
+  429: 'Too many attempts. Wait a minute and try again.',
+};
+
+async function call(method, path, body) {
+  let res;
+  try {
+    res = await fetch(`${BASE}${path}`, {
+      method,
+      credentials: 'include',
+      headers: body ? { 'content-type': 'application/json' } : {},
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  } catch {
+    throw new SellerApiError(0, 'network', 'We could not reach Remvo. Check your connection and try again.');
+  }
+
+  if (res.status === 204) return null;
+  const data = await res.json().catch(() => null);
+  if (res.ok) return data;
+
+  const err = data?.error ?? {};
+  // A validation failure carries the field's own message; show that.
+  const issue = Array.isArray(err.details?.issues) ? err.details.issues[0]?.message : null;
+  // A 500 is never shown as the server worded it: in development that is
+  // the raw internal error. Anything else from the API is written for sellers.
+  const ours = 'Something went wrong on our side. Try again in a minute.';
+  const message = res.status === 500 ? ours : (issue || err.message || FALLBACK[res.status] || ours);
+  throw new SellerApiError(res.status, err.code ?? 'unknown', message);
+}
+
+export const sellerApi = Object.freeze({
+  start: (email) => call('POST', '/auth/start', { email }),
+  verifyLink: (token) => call('POST', '/auth/verify-link', { token }),
+  verifyCode: (email, code) => call('POST', '/auth/verify-code', { email, code }),
+  signOut: () => call('POST', '/auth/sign-out'),
+  me: () => call('GET', '/me'),
+});

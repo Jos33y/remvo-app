@@ -18,11 +18,26 @@ export const ROUTES = {
 };
 
 /* The seller app. Its own host, chosen by App.jsx, so nothing from it
- * ships in the marketing chunk. */
-export const APP_URL = 'https://my.remvo.app';
+ * ships in the marketing chunk. In dev it is the same Vite server with
+ * ?my (see App.jsx), so links never leave localhost. */
+export const APP_URL = import.meta.env.DEV ? 'http://localhost:5173' : 'https://my.remvo.app';
+const DEV_FLAG = import.meta.env.DEV ? '?my' : '';
 export const APP_LINKS = {
-  SIGN_IN: `${APP_URL}/sign-in`,
-  TOP_UP: `${APP_URL}/billing`,
+  SIGN_IN: `${APP_URL}/sign-in${DEV_FLAG}`,
+  TOP_UP: `${APP_URL}/billing${DEV_FLAG}`,
+};
+
+/* The marketing site, for links from the seller app back to it. In dev
+ * it is the same Vite server, and ?site switches the browser back from
+ * the seller app (see App.jsx). */
+export const SITE_URL = import.meta.env.DEV ? 'http://localhost:5173' : 'https://remvo.app';
+export const siteUrl = (path = '/') => `${SITE_URL}${path}${import.meta.env.DEV ? '?site' : ''}`;
+
+/* Routes inside the seller app (my.remvo.app). */
+export const SELLER_ROUTES = {
+  HOME: '/',
+  SIGN_IN: '/sign-in',
+  VERIFY: '/sign-in/verify',
 };
 
 export const BRAND = {

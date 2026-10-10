@@ -1,0 +1,198 @@
+/* ═══════════════════════════════════════
+   SELLER SIGN-IN
+   One panel on obsidian. One field, one
+   action. Fields are 48px tall at 16px
+   text, so iOS never zooms on focus and
+   every target clears 44px.
+   ═══════════════════════════════════════ */
+
+.page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-10) var(--gutter);
+  background: radial-gradient(ellipse 60% 50% at 50% 30%, #1E1E1E 0%, #1A1A1A 45%, #151515 100%);
+}
+
+.panel {
+  width: 100%;
+  max-width: 400px;
+}
+
+.brand {
+  margin-bottom: var(--space-10);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.heading {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-2xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-white);
+  margin-bottom: var(--space-3);
+}
+
+.sub {
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: rgba(255, 255, 255, 0.62);
+  margin-bottom: var(--space-8);
+}
+
+.address {
+  color: var(--color-white);
+  overflow-wrap: anywhere;
+}
+
+.label {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-white);
+  margin-bottom: var(--space-2);
+}
+
+.input {
+  height: 48px;
+  width: 100%;
+  padding: 0 var(--space-4);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--color-white);
+  background-color: #141416;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.input:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.input:focus-visible {
+  outline: none;
+  border-color: var(--color-gold);
+  box-shadow: var(--focus-ring-iridescent);
+}
+
+.input[aria-invalid='true'] {
+  border-color: #E06A6A;
+}
+
+.input:disabled {
+  opacity: 0.6;
+}
+
+/* The code: mono, spaced, so it reads like the email shows it. */
+.code {
+  font-family: var(--font-mono);
+  font-size: var(--text-xl);
+  letter-spacing: 0.3em;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  padding-left: calc(var(--space-4) + 0.3em);
+}
+
+/* On obsidian, the token red is 3.3:1. This one is 5.4:1. */
+.error {
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: #F08A8A;
+}
+
+.note {
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.submit {
+  width: 100%;
+  margin-top: var(--space-6);
+}
+
+.submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.submit:disabled:active {
+  transform: none;
+}
+
+.links {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+}
+
+.textButton {
+  min-height: 44px;
+  padding: 0;
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.78);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 0.5px;
+  touch-action: manipulation;
+}
+
+.textButton:hover:not(:disabled) {
+  color: var(--color-white);
+}
+
+.textButton:disabled {
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  cursor: default;
+}
+
+.hint,
+.legal {
+  margin-top: var(--space-6);
+  font-size: 0.8125rem;
+  line-height: var(--leading-relaxed);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.legalLink {
+  color: rgba(255, 255, 255, 0.78);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 0.5px;
+}
+
+.legalLink:hover {
+  color: var(--color-white);
+}
+
+@media (prefers-contrast: more) {
+  .sub, .note, .hint, .legal { color: var(--color-white); }
+  .input { border-color: rgba(255, 255, 255, 0.6); }
+}
+
+@media (max-width: 480px) {
+  .page {
+    align-items: flex-start;
+    padding-top: var(--space-12);
+  }
+
+  .brand {
+    margin-bottom: var(--space-8);
+  }
+
+  .heading {
+    font-size: var(--text-xl);
+  }
+}
