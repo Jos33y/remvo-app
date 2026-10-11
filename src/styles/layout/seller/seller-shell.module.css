@@ -47,7 +47,7 @@
   bottom: 0;
   z-index: 50;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   height: calc(var(--tabbar-h) + var(--safe-bottom));
   padding: 0 var(--safe-right) var(--safe-bottom) var(--safe-left);
   background-color: var(--app-bar);
@@ -95,6 +95,32 @@
   outline: none;
   box-shadow: inset var(--app-focus);
   border-radius: 10px;
+}
+
+/* ── A count on a tab: a reply not yet seen ── */
+
+.iconWrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.badge {
+  position: absolute;
+  top: -4px;
+  right: -9px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  display: grid;
+  place-items: center;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--app-on-gold);
+  background-color: var(--app-gold);
+  border: 2px solid var(--app-bar-solid);
+  border-radius: 9px;
 }
 
 /* ── Rail (wide) ── */

@@ -48,7 +48,10 @@ export function ChatThread({ messages, onSend, intro = null, placeholder = 'Writ
     const el = boxRef.current;
     if (!el) return;
     el.style.height = 'auto';
-    el.style.height = `${Math.min(el.scrollHeight, 148)}px`;
+    const full = el.scrollHeight + (el.offsetHeight - el.clientHeight);
+    el.style.height = `${Math.min(full, 148)}px`;
+    // No scrollbar until the box has grown as far as it will.
+    el.style.overflowY = full > 148 ? 'auto' : 'hidden';
   }, [draft]);
 
   async function submit(e) {

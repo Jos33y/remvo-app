@@ -38,6 +38,13 @@ export const IconProfile = ({ size = 24, filled = false }) => (
   </svg>
 );
 
+export const IconSupport = ({ size = 24, filled = false }) => (
+  <svg {...base(size)}>
+    <path d="M4.5 18.8V7a2.5 2.5 0 0 1 2.5-2.5h10A2.5 2.5 0 0 1 19.5 7v7.5A2.5 2.5 0 0 1 17 17H8.3z" fill={filled ? 'currentColor' : 'none'} />
+    <path d="M8.5 9.5h7M8.5 12.5h4.5" stroke={filled ? 'var(--app-bg, #fff)' : 'currentColor'} />
+  </svg>
+);
+
 export const IconPlus = ({ size = 24 }) => (<svg {...base(size)}><path d="M12 5v14M5 12h14" /></svg>);
 export const IconChevronRight = ({ size = 20 }) => (<svg {...base(size)}><path d="m9.5 6 6 6-6 6" /></svg>);
 export const IconChevronLeft = ({ size = 24 }) => (<svg {...base(size)}><path d="m14.5 6-6 6 6 6" /></svg>);

@@ -3,7 +3,8 @@ import { NavLink, useLocation, useOutlet } from 'react-router';
 import { AnimatePresence, motion } from 'motion/react';
 import { Logo } from '@components/ui/shared/Logo';
 import { ToastProvider } from '@components/ui/seller/Toast';
-import { IconHome, IconListings, IconCredits, IconProfile } from '@components/ui/seller/icons';
+import { IconHome, IconListings, IconCredits, IconProfile, IconSupport } from '@components/ui/seller/icons';
+import { useSupportUnread } from '@hooks/useSupportUnread';
 import { useSellerSession } from '@context/SellerSession';
 import { move, fade, useReducedMotion } from '@lib/sellerMotion';
 import { SELLER_ROUTES } from '@utils/constants';
@@ -15,11 +16,13 @@ import styles from '@styles/layout/seller/seller-shell.module.css';
  *
  * The app frame. On a phone: content edge to edge, a translucent tab
  * bar along the bottom above the home indicator. From 900px: the same
- * four places in a rail on the left, content in a reading column.
+ * same places in a rail on the left, content in a reading column.
  *
- * Tabs are the four places a seller goes. Making a listing is not a
- * place but an action, so it lives on Home and in the Listings bar,
- * not as a fifth tab.
+ * Tabs are the places a seller goes. Support is one of them, in plain
+ * sight from the first visit: before anyone buys a credit they look for
+ * a way to reach a person. A reply they have not seen puts a count on
+ * it. Making a listing is not a place but an action, so it lives on
+ * Home and in the Listings bar.
  *
  * Screens that cover the tabs (making a listing, a listing's detail)
  * set hideTabs via the route handle, as an iOS pushed or modal screen
@@ -30,15 +33,24 @@ export const TABS = [
   { to: SELLER_ROUTES.HOME, label: 'Home', Icon: IconHome, end: true },
   { to: SELLER_ROUTES.LISTINGS, label: 'Listings', Icon: IconListings },
   { to: SELLER_ROUTES.CREDITS, label: 'Credits', Icon: IconCredits },
+  { to: SELLER_ROUTES.SUPPORT, label: 'Support', Icon: IconSupport },
   { to: SELLER_ROUTES.PROFILE, label: 'Profile', Icon: IconProfile },
 ];
 
-function TabLink({ to, label, Icon, end, variant }) {
+function TabLink({ to, label, Icon, end, variant, badge = 0 }) {
   return (
-    <NavLink to={to} end={end} className={({ isActive }) => `${styles[variant]} ${isActive ? styles.active : ''}`}>
+    <NavLink
+      to={to}
+      end={end}
+      className={({ isActive }) => `${styles[variant]} ${isActive ? styles.active : ''}`}
+      aria-label={badge ? `${label}, ${badge} new ${badge === 1 ? 'reply' : 'replies'}` : undefined}
+    >
       {({ isActive }) => (
         <>
-          <Icon size={variant === 'tab' ? 26 : 22} filled={isActive} />
+          <span className={styles.iconWrap}>
+            <Icon size={variant === 'tab' ? 26 : 22} filled={isActive} />
+            {badge > 0 && <span className={styles.badge} aria-hidden="true">{badge > 9 ? '9+' : badge}</span>}
+          </span>
           <span>{label}</span>
         </>
       )}
@@ -53,9 +65,10 @@ export function SellerShell() {
   const outlet = useOutlet();
   const { account } = useSellerSession();
   const reduced = useReducedMotion();
-  const covered = /^\/listings\/(new|[^/]+)$|^\/support$/.test(location.pathname);
-  // Support is a chat: the box to write in sits on the screen's edge, with no padding under it.
+  const covered = /^\/listings\/(new|[^/]+)$/.test(location.pathname);
+  // Support is a chat: the box to write in sits just above the tabs, with no padding under it.
   const flush = location.pathname === SELLER_ROUTES.SUPPORT;
+  const unread = useSupportUnread({ enabled: Boolean(account), onSupport: flush });
 
   // iOS Safari only shows :active on touch when a touch listener exists.
   useEffect(() => {
@@ -76,7 +89,7 @@ export function SellerShell() {
         <aside className={styles.rail} aria-label="Remvo">
           <div className={styles.railBrand}><Logo variant="gold" size="default" href={SELLER_ROUTES.HOME} /></div>
           <nav className={styles.railNav} aria-label="Main">
-            {TABS.map((t) => <TabLink key={t.to} {...t} variant="railItem" />)}
+            {TABS.map((t) => <TabLink key={t.to} {...t} variant="railItem" badge={t.to === SELLER_ROUTES.SUPPORT ? unread : 0} />)}
           </nav>
           <div className={styles.railFoot}>
             <span className={styles.railEmail} title={account?.email}>{account?.email}</span>
@@ -92,7 +105,7 @@ export function SellerShell() {
         </main>
 
         <nav className={styles.tabbar} aria-label="Main">
-          {TABS.map((t) => <TabLink key={t.to} {...t} variant="tab" />)}
+          {TABS.map((t) => <TabLink key={t.to} {...t} variant="tab" badge={t.to === SELLER_ROUTES.SUPPORT ? unread : 0} />)}
         </nav>
       </div>
     </ToastProvider>

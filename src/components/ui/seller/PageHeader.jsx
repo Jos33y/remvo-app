@@ -27,12 +27,13 @@ export function PageHeader({ title, back, backLabel = 'Back', action, large = tr
   useEffect(() => {
     const el = sentinel.current;
     if (!el) return undefined;
-    const io = new IntersectionObserver(([e]) => setScrolled(!e.isIntersecting), {
+    // Without a large title the small one is the page's name: always shown.
+    const io = new IntersectionObserver(([e]) => setScrolled(!large || !e.isIntersecting), {
       rootMargin: `-${44 + 1}px 0px 0px 0px`,
     });
     io.observe(el);
     return () => io.disconnect();
-  }, []);
+  }, [large]);
 
   const goBack = () => (back === -1 ? navigate(-1) : navigate(back));
 

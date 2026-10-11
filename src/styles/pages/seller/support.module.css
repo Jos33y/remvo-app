@@ -8,8 +8,8 @@
 .page {
   display: flex;
   flex-direction: column;
-  height: calc(100dvh - var(--navbar-h) - var(--safe-top));
-  padding-bottom: var(--safe-bottom);
+  /* Under the bar, above the tabs. */
+  height: calc(100dvh - var(--navbar-h) - var(--safe-top) - var(--tabbar-h) - var(--safe-bottom));
 }
 
 .intro {
