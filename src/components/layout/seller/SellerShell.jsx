@@ -53,7 +53,9 @@ export function SellerShell() {
   const outlet = useOutlet();
   const { account } = useSellerSession();
   const reduced = useReducedMotion();
-  const covered = /^\/listings\/(new|[^/]+)$/.test(location.pathname);
+  const covered = /^\/listings\/(new|[^/]+)$|^\/support$/.test(location.pathname);
+  // Support is a chat: the box to write in sits on the screen's edge, with no padding under it.
+  const flush = location.pathname === SELLER_ROUTES.SUPPORT;
 
   // iOS Safari only shows :active on touch when a touch listener exists.
   useEffect(() => {
@@ -68,7 +70,7 @@ export function SellerShell() {
 
   return (
     <ToastProvider>
-      <div className={`${theme.theme} ${styles.app} ${covered ? styles.covered : ''}`}>
+      <div className={`${theme.theme} ${styles.app} ${covered ? styles.covered : ''} ${flush ? styles.flush : ''}`}>
         <a href="#seller-main" className="skip-link">Skip to content</a>
 
         <aside className={styles.rail} aria-label="Remvo">

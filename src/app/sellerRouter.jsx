@@ -10,6 +10,7 @@ import { NewListingPage } from '@pages/seller/NewListingPage';
 import { ListingPage } from '@pages/seller/ListingPage';
 import { CreditsPage } from '@pages/seller/CreditsPage';
 import { ProfilePage } from '@pages/seller/ProfilePage';
+import { SupportPage } from '@pages/seller/SupportPage';
 import { SellerNotFoundPage } from '@pages/seller/SellerNotFoundPage';
 import { SELLER_ROUTES } from '@utils/constants';
 
@@ -46,6 +47,7 @@ export const sellerRouter = createBrowserRouter([
               { path: SELLER_ROUTES.LISTING, element: <ListingPage /> },
               { path: SELLER_ROUTES.CREDITS, element: <CreditsPage /> },
               { path: SELLER_ROUTES.PROFILE, element: <ProfilePage /> },
+              { path: SELLER_ROUTES.SUPPORT, element: <SupportPage /> },
               { path: SELLER_ROUTES.BILLING, element: <Navigate to={`${SELLER_ROUTES.CREDITS}?topup=1`} replace /> },
             ],
           },

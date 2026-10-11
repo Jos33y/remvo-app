@@ -52,4 +52,6 @@ export const IconAlert = ({ size = 20 }) => (<svg {...base(size)}><circle cx="12
 export const IconMail = ({ size = 20 }) => (<svg {...base(size)}><rect x="3.5" y="5.5" width="17" height="13" rx="2" /><path d="m4 7 8 6 8-6" /></svg>);
 export const IconExternal = ({ size = 16 }) => (<svg {...base(size)}><path d="M14 5h5v5M19 5l-8 8M17 14v4a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h4" /></svg>);
 export const IconEdit = ({ size = 20 }) => (<svg {...base(size)}><path d="M14.5 5.5 18.5 9.5M4.5 19.5l1-4.2L15.8 5a1.4 1.4 0 0 1 2 0l1.2 1.2a1.4 1.4 0 0 1 0 2L8.7 18.5z" /></svg>);
+export const IconChat = ({ size = 24 }) => (<svg {...base(size)}><path d="M5 18.5V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2H8.2z" /><path d="M9 10h6M9 13h3.5" /></svg>);
+export const IconSend = ({ size = 20 }) => (<svg {...base(size)}><path d="M12 19V5.5M6.5 11 12 5.5l5.5 5.5" /></svg>);
 export const IconGlobe = ({ size = 20 }) => (<svg {...base(size)}><circle cx="12" cy="12" r="8.5" /><path d="M3.5 12h17M12 3.5c2.3 2.4 3.4 5.2 3.4 8.5s-1.1 6.1-3.4 8.5c-2.3-2.4-3.4-5.2-3.4-8.5s1.1-6.1 3.4-8.5z" /></svg>);

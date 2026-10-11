@@ -1,0 +1,54 @@
+/* ═══════════════════════════════════════
+   SUPPORT
+   The chat fills the screen under the bar,
+   with the box to write in at the bottom.
+   On a desktop it is a card in the column.
+   ═══════════════════════════════════════ */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  height: calc(100dvh - var(--navbar-h) - var(--safe-top));
+  padding-bottom: var(--safe-bottom);
+}
+
+.intro {
+  margin: auto 0 12px;
+  padding: 20px 4px 8px;
+  text-align: center;
+}
+
+.introTitle {
+  margin: 0 0 6px;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.introText {
+  max-width: 34ch;
+  margin: 0 auto;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--app-text-2);
+}
+
+.notice {
+  margin: 12px 16px 0;
+  padding: 12px 14px;
+  font-size: 0.875rem;
+  color: var(--app-danger);
+  background-color: var(--app-danger-fill);
+  border-radius: 12px;
+}
+
+@media (min-width: 900px) {
+  .page {
+    height: min(720px, calc(100dvh - var(--navbar-h) - 64px));
+    padding-bottom: 0;
+    overflow: hidden;
+    border: 0.5px solid var(--app-sep);
+    border-radius: 18px;
+    background-color: var(--app-bg);
+  }
+}

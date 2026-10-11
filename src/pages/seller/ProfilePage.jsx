@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { PageHeader } from '@components/ui/seller/PageHeader';
 import { Sheet } from '@components/ui/seller/Sheet';
 import { useToast } from '@components/ui/seller/Toast';
-import { IconChevronRight, IconExternal, IconMail } from '@components/ui/seller/icons';
+import { IconChat, IconChevronRight, IconExternal, IconMail } from '@components/ui/seller/icons';
 import { CURRENCIES, MARKETPLACES, MARKETPLACE } from '@lib/market';
 import { useSellerSession } from '@context/SellerSession';
 import { useSellerData } from '@context/SellerData';
@@ -123,10 +123,18 @@ export function ProfilePage() {
         <section className={s.section} aria-labelledby="help-heading">
           <div className={s.groupHead}><h2 id="help-heading" className={s.groupTitle}>Help</h2></div>
           <div className={s.group}>
+            <Link to={SELLER_ROUTES.SUPPORT} className={s.row}>
+              <span className={s.rowIcon}><IconChat size={18} /></span>
+              <span className={s.rowMain}>
+                <span className={s.rowTitle}>Chat with us</span>
+                <span className={s.rowSub}>A person answers, usually within a few hours</span>
+              </span>
+              <span className={s.chevron}><IconChevronRight /></span>
+            </Link>
             <a href={`mailto:${BRAND.EMAIL}`} className={s.row}>
               <span className={s.rowIcon}><IconMail size={18} /></span>
               <span className={s.rowMain}>
-                <span className={s.rowTitle}>Contact support</span>
+                <span className={s.rowTitle}>Email support</span>
                 <span className={s.rowSub}>{BRAND.EMAIL}, answered within 48 hours</span>
               </span>
             </a>

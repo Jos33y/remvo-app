@@ -43,6 +43,7 @@ export const SELLER_ROUTES = {
   LISTING: '/listings/:id',
   CREDITS: '/credits',
   PROFILE: '/profile',
+  SUPPORT: '/support',
   /* The marketing site's Top up links land here: sign in, then credits. */
   BILLING: '/billing',
 };
