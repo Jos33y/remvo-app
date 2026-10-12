@@ -90,6 +90,11 @@
   padding: 4px 20px 12px;
 }
 
+/* What sits under a large title (filters, a search, a line of facts) keeps clear of it. */
+.large > .largeTitle + * {
+  margin-top: 14px;
+}
+
 .largeTitle {
   font-size: 2.125rem;
   font-weight: 600;

@@ -27,7 +27,8 @@ jobStore.onCreditsMoved(() => {
 function labelFor(row) {
   const paid = row.amountCents != null && row.currency ? money(row.amountCents / 100, row.currency) : null;
   switch (row.kind) {
-    case 'topup': return paid ? `Top-up ${paid}` : 'Top-up';
+    // A 100% discount code pays nothing: say so, not "Top-up $0".
+    case 'topup': return row.amountCents === 0 ? 'Top-up, free with a code' : paid ? `Top-up ${paid}` : 'Top-up';
     case 'refund': return paid ? `Refunded ${paid}` : 'Refunded';
     case 'expiry': return 'Expired';
     case 'job': return row.note ? `Listing ${row.note}` : 'Listing';

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { PageHeader } from '@components/ui/seller/PageHeader';
 import { Sheet } from '@components/ui/seller/Sheet';
@@ -64,6 +64,8 @@ function download(job) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
+const BRAND = /^(brand|marke|marque|marca)$/i;
+
 export function ListingPage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -73,13 +75,15 @@ export function ListingPage() {
   const [confirm, setConfirm] = useState(false);
   const [busy, setBusy] = useState(false);
   const [missing, setMissing] = useState(false);
+  // Set as a delete starts: the listing leaving the store is not a reason to ask the server for it.
+  const deleting = useRef(false);
   const job = find(id);
 
   useEffect(() => { document.title = 'Remvo | Listing'; }, []);
 
   // Opened straight from a link, or older than the first page: ask for it.
   useEffect(() => {
-    if (job || jobsStatus === 'loading') return;
+    if (job || jobsStatus === 'loading' || deleting.current) return;
     let live = true;
     fetchJob(id).catch(() => { if (live) setMissing(true); });
     return () => { live = false; };
@@ -117,9 +121,11 @@ export function ListingPage() {
 
   async function remove() {
     setBusy(true);
+    deleting.current = true;
     try {
       await deleteJob(job.id);
     } catch (err) {
+      deleting.current = false;
       setBusy(false);
       setConfirm(false);
       toast(err.message || 'That did not delete. Try again.');
@@ -211,7 +217,8 @@ export function ListingPage() {
                     </div>
                   </div>
                 )}
-                {ids.brand && <CopyField label="Brand" value={ids.brand} />}
+                {/* Brand shows once: in the specifics when it is there, otherwise here. */}
+                {ids.brand && !l.specifics.some(([k, v]) => BRAND.test(k) && v === ids.brand) && <CopyField label="Brand" value={ids.brand} />}
                 {ids.mpn && <CopyField label="MPN" mono value={ids.mpn} />}
                 {ids.gtin && <CopyField label={barcodeLabel(job.marketplace)} mono value={ids.gtin} />}
                 {l.specifics.length > 0 && (

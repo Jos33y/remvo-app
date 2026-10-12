@@ -33,6 +33,13 @@ import s from '@styles/pages/seller/app.module.css';
 /* Each navigation here is a fresh attempt: trying again from the
  * failure screen navigates to this same path, so the page is keyed on
  * the navigation, not the path. */
+const HEADINGS = {
+  running: 'Making your listing',
+  pick: 'Which product?',
+  failed: 'This one did not work',
+  short: 'Not enough credits',
+};
+
 export function NewListingPage() {
   const location = useLocation();
   return <NewListing key={location.key} />;
@@ -100,25 +107,16 @@ function NewListing() {
 
   return (
     <>
-      <PageHeader
-        title="New listing"
-        back={SELLER_ROUTES.LISTINGS}
-        backLabel="Listings"
-        large={false}
-      />
+      {/* The large title is what is happening now; it shrinks into the bar on scroll, like every tab. */}
+      <PageHeader title={HEADINGS[stage] ?? 'New listing'} back={SELLER_ROUTES.LISTINGS} backLabel="Listings">
+        {input && (
+          <p className={s.jobMeta}>
+            <span className={s.mono}>{inputLabel(input)}</span>
+            <span>{CONDITION[condition].label}</span>
+          </p>
+        )}
+      </PageHeader>
       <div className={s.content}>
-        <div className={s.jobHead}>
-          <h2 className={s.jobTitle}>
-            {stage === 'running' ? 'Making your listing' : stage === 'pick' ? 'Which product?' : stage === 'failed' ? 'This one did not work' : stage === 'short' ? 'Not enough credits' : 'New listing'}
-          </h2>
-          {input && (
-            <p className={s.jobMeta}>
-              <span className={s.mono}>{inputLabel(input)}</span>
-              <span>{CONDITION[condition].label}</span>
-            </p>
-          )}
-        </div>
-
         {stage === 'enter' && (
           <div className={s.section}><MakeListingForm autoFocus /></div>
         )}
