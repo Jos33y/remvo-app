@@ -94,4 +94,28 @@ export const sellerApi = Object.freeze({
   job: (id) => call('GET', `/jobs/${encodeURIComponent(id)}`),
   editJob: (id, field, value) => call('PATCH', `/jobs/${encodeURIComponent(id)}/edits`, { field, value }),
   deleteJob: (id) => call('DELETE', `/jobs/${encodeURIComponent(id)}`),
+
+  // Bulk listing (modules/batches in remvo-api)
+  /** { text, marketplace?, condition } -> every line read, the cost; free */
+  checkBatch: (body) => call('POST', '/batches/check', body),
+  /** { text, marketplace?, condition, limit? } -> { batch }; credits taken */
+  startBatch: (body) => call('POST', '/batches', body),
+  batches: () => call('GET', '/batches'),
+  batch: (id) => call('GET', `/batches/${encodeURIComponent(id)}`),
+  /** The eBay drafts file ('ebay') or the full CSV ('csv'), as a Blob. */
+  batchFile: (id, format) => download(`/batches/${encodeURIComponent(id)}/export?format=${format}`),
 });
+
+/** A file from the API, as a Blob, with the same errors as call(). */
+async function download(path) {
+  let res;
+  try {
+    res = await fetch(`${BASE}${path}`, { credentials: 'include' });
+  } catch {
+    throw new SellerApiError(0, 'network', 'We could not reach Remvo. Check your connection and try again.');
+  }
+  if (res.ok) return res.blob();
+  const data = await res.json().catch(() => null);
+  const err = data?.error ?? {};
+  throw new SellerApiError(res.status, err.code ?? 'unknown', res.status === 500 ? 'Something went wrong on our side. Try again in a minute.' : (err.message || FALLBACK[res.status] || 'That did not download. Try again.'));
+}

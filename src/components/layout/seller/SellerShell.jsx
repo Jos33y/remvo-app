@@ -65,7 +65,7 @@ export function SellerShell() {
   const outlet = useOutlet();
   const { account } = useSellerSession();
   const reduced = useReducedMotion();
-  const covered = /^\/listings\/(new|[^/]+)$/.test(location.pathname);
+  const covered = /^\/(listings\/[^/]+|batches\/[^/]+)$/.test(location.pathname);
   // Support is a chat: the box to write in sits just above the tabs, with no padding under it.
   const flush = location.pathname === SELLER_ROUTES.SUPPORT;
   const unread = useSupportUnread({ enabled: Boolean(account), onSupport: flush });

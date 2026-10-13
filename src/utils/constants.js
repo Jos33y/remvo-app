@@ -40,6 +40,8 @@ export const SELLER_ROUTES = {
   VERIFY: '/sign-in/verify',
   LISTINGS: '/listings',
   NEW_LISTING: '/listings/new',
+  BULK: '/listings/bulk',
+  BATCH: '/batches/:id',
   LISTING: '/listings/:id',
   CREDITS: '/credits',
   PROFILE: '/profile',
@@ -49,6 +51,7 @@ export const SELLER_ROUTES = {
 };
 
 export const listingPath = (id) => `/listings/${id}`;
+export const batchPath = (id) => `/batches/${id}`;
 
 export const BRAND = {
   NAME: 'Remvo',

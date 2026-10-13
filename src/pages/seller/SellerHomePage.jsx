@@ -50,6 +50,9 @@ export function SellerHomePage() {
 
         <div className={s.section}>
           <MakeListingForm />
+          <p className={s.groupNote}>
+            Listing a stack? <Link to={SELLER_ROUTES.BULK} className={s.inlineLink}>Paste a column or upload a CSV</Link>, up to 500 at a time.
+          </p>
         </div>
 
         <section className={s.section} aria-labelledby="recent-heading">

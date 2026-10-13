@@ -8,6 +8,8 @@ import { SellerHomePage } from '@pages/seller/SellerHomePage';
 import { ListingsPage } from '@pages/seller/ListingsPage';
 import { NewListingPage } from '@pages/seller/NewListingPage';
 import { ListingPage } from '@pages/seller/ListingPage';
+import { BulkPage } from '@pages/seller/BulkPage';
+import { BatchPage } from '@pages/seller/BatchPage';
 import { CreditsPage } from '@pages/seller/CreditsPage';
 import { ProfilePage } from '@pages/seller/ProfilePage';
 import { SupportPage } from '@pages/seller/SupportPage';
@@ -21,6 +23,8 @@ import { SELLER_ROUTES } from '@utils/constants';
  *   /listings                    every listing, filter and search
  *   /listings/new                making one (covers the tabs)
  *   /listings/:id                one listing, field by field (covers the tabs)
+ *   /listings/bulk               many at once: paste a column or upload a CSV (covers the tabs)
+ *   /batches/:id                 a bulk run: progress, lines, the eBay file (covers the tabs)
  *   /credits                     balance, top-up, history
  *   /profile                     account, help, legal, sign out, delete
  *   /billing                     the marketing site's Top up: credits with the sheet open
@@ -44,7 +48,9 @@ export const sellerRouter = createBrowserRouter([
               { path: SELLER_ROUTES.HOME, element: <SellerHomePage /> },
               { path: SELLER_ROUTES.LISTINGS, element: <ListingsPage /> },
               { path: SELLER_ROUTES.NEW_LISTING, element: <NewListingPage /> },
+              { path: SELLER_ROUTES.BULK, element: <BulkPage /> },
               { path: SELLER_ROUTES.LISTING, element: <ListingPage /> },
+              { path: SELLER_ROUTES.BATCH, element: <BatchPage /> },
               { path: SELLER_ROUTES.CREDITS, element: <CreditsPage /> },
               { path: SELLER_ROUTES.PROFILE, element: <ProfilePage /> },
               { path: SELLER_ROUTES.SUPPORT, element: <SupportPage /> },

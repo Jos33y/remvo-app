@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useSyncExternalStore } from 'react';
 import { useSellerSession } from '@context/SellerSession';
 import * as walletStore from '@lib/sellerWallet';
 import * as jobStore from '@lib/sellerJobs';
+import { sellerApi } from '@lib/sellerApi';
 import { money } from '@lib/market';
 import { PRICING } from '@utils/constants';
 
@@ -31,7 +32,8 @@ function labelFor(row) {
     case 'topup': return row.amountCents === 0 ? 'Top-up, free with a code' : paid ? `Top-up ${paid}` : 'Top-up';
     case 'refund': return paid ? `Refunded ${paid}` : 'Refunded';
     case 'expiry': return 'Expired';
-    case 'job': return row.note ? `Listing ${row.note}` : 'Listing';
+    // A bulk run takes its credits in one line, under the batch's reference.
+    case 'job': return row.note?.startsWith('B-') ? `Bulk listing ${row.note}` : row.note ? `Listing ${row.note}` : 'Listing';
     case 'job_return': return row.note ? `Returned: listing ${row.note} failed` : 'Returned: listing failed';
     case 'grant': return 'Added by Remvo';
     default: return 'Correction';
@@ -92,6 +94,19 @@ export function useSellerData() {
   const editJob = useCallback((jobId, field, value) => jobStore.edit(jobId, field, value), []);
   const loadMoreJobs = useCallback(() => jobStore.loadMore(), []);
 
+  // Bulk listing. A started batch has taken credits and queued listings: both are read again.
+  const checkBatch = useCallback((body) => sellerApi.checkBatch(body), []);
+  const startBatch = useCallback(async (body) => {
+    const { batch } = await sellerApi.startBatch(body);
+    walletStore.refresh(id);
+    jobStore.refresh(id);
+    return batch;
+  }, [id]);
+  const fetchBatch = useCallback((batchId) => sellerApi.batch(batchId).then((r) => r.batch), []);
+  const listBatches = useCallback(() => sellerApi.batches().then((r) => r.items), []);
+  const batchFile = useCallback((batchId, format) => sellerApi.batchFile(batchId, format), []);
+  const refreshAll = useCallback(() => { if (id) { walletStore.refresh(id); jobStore.refresh(id); } }, [id]);
+
   const topUp = useCallback((what) => walletStore.startTopUp({ ...what, currency: walletStore.getState().wallet?.settings?.currency ?? 'USD' }), []);
   const topUpStatus = useCallback((checkoutId) => walletStore.topUpStatus(checkoutId), []);
   const updateSettings = useCallback((patch) => walletStore.updateSettings(id, patch), [id]);
@@ -109,5 +124,6 @@ export function useSellerData() {
     summary, jobs, history, settings, job,
     fetchJob, lookUp, makeListing, watchJob, deleteJob, editJob, loadMoreJobs,
     topUp, topUpStatus, updateSettings, refreshWallet,
+    checkBatch, startBatch, fetchBatch, listBatches, batchFile, refreshAll,
   };
 }
