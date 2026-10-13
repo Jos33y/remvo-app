@@ -3,6 +3,7 @@ import { Header } from '@components/layout/marketing/Header';
 import { Footer } from '@components/layout/marketing/Footer';
 import { ScrollToTop } from '@components/layout/shared/ScrollToTop';
 import { SiteChat } from '@components/ui/support/SiteChat';
+import { CampaignBanner } from '@components/ui/marketing/CampaignBanner';
 import styles from '@styles/layout/marketing/page-shell.module.css';
 
 export function PageShell() {
@@ -12,6 +13,7 @@ export function PageShell() {
       <a href="#main-content" className="skip-link">
         Skip to content
       </a>
+      <CampaignBanner />
       <Header />
       <main id="main-content" className={styles.main}>
         <Outlet />

@@ -1,0 +1,102 @@
+/* ═══════════════════════════════════════
+   CAMPAIGN BANNER
+   One quiet line above the header: the
+   date in white, the reason in grey, the
+   action in gold. Obsidian, a shade lifted
+   from the page, so it reads as a notice
+   and not as part of the brand bar.
+   ═══════════════════════════════════════ */
+
+.banner {
+  position: relative;
+  z-index: 101;
+  background-color: var(--color-obsidian-light);
+  border-bottom: var(--border-subtle);
+  font-family: var(--font-sans);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  min-height: 44px;
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 10px;
+  border-radius: 50%;
+  background-color: var(--color-gold);
+  vertical-align: 2px;
+}
+
+.when {
+  font-weight: 600;
+  color: var(--color-white, #FFFFFF);
+}
+
+.action {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-gold);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.action:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+.action:focus-visible,
+.close:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.close {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-right: -12px;
+  color: rgba(255, 255, 255, 0.55);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.close:hover { color: #FFFFFF; }
+
+/* Phones: a shorter date and action on one line; the reason waits for a wider screen. */
+.narrow { display: none; }
+
+@media (max-width: 639px) {
+  .wide { display: none; }
+  .narrow { display: inline; }
+  .text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .inner { gap: var(--space-2); }
+  .text, .action { font-size: 0.8125rem; }
+}
+
+@media print {
+  .banner { display: none; }
+}
