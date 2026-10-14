@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Link } from 'react-router';
 import { LegalPageLayout, Clause } from '@components/layout/marketing/LegalPageLayout';
 import { money } from '@lib/market';
@@ -7,9 +6,6 @@ import { BRAND, ROUTES, PRICING, LEGAL_UPDATED } from '@utils/constants';
 const list = (xs) => xs.join(', ').replace(/, ([^,]*)$/, ' or $1');
 
 export function CreditsPage() {
-  useEffect(() => {
-    document.title = 'Remvo | Credit terms';
-  }, []);
 
   const months = PRICING.EXPIRY_MONTHS;
   const jobs = Object.values(PRICING.JOBS).filter((j) => j.live);

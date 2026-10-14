@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Link } from 'react-router';
 import { Reveal } from '@components/ui/marketing/Reveal';
 import { Button } from '@components/ui/shared/Button';
@@ -77,9 +76,6 @@ function Section({ heading, children, id }) {
 export function HowItWorksPage() {
   const { currency } = useMarket();
 
-  useEffect(() => {
-    document.title = 'Remvo | How it works';
-  }, []);
 
   const perListing = money(creditsCost(PRICING.JOBS.LISTING.credits, currency), currency);
   const from = money(PRICING.PACKS[0].price[currency], currency);

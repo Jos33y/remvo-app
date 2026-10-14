@@ -1,0 +1,73 @@
+/* ──────────────────────────────────────────────────────────────────
+ * lib/seo.js
+ *
+ * What each marketing page says about itself to Google and to a link
+ * preview: title, description, whether it is in the sitemap. One
+ * place, read by the build (prerender/run.mjs writes it into each
+ * page's HTML) and by PageShell (keeps it right as a visitor moves
+ * between pages without a reload).
+ *
+ * Titles: what the page is first, then "| Remvo"; the home page leads
+ * with the brand. Descriptions: one or two plain sentences, under 160
+ * characters, true of the product as built. No dashes.
+ * ────────────────────────────────────────────────────────────────── */
+
+import { LEGAL_UPDATED, ROUTES } from '@utils/constants';
+
+export const SITE_ORIGIN = 'https://remvo.app';
+export const OG_IMAGE = `${SITE_ORIGIN}/og-listing-1200x630.png`;
+
+export const PAGES = Object.freeze({
+  [ROUTES.HOME]: {
+    title: 'Remvo | Finished eBay listings from a barcode',
+    description: 'Give Remvo a barcode and get back a finished eBay listing: title, description, category, item specifics, parcel and a price. $0.30 a listing.',
+  },
+  [ROUTES.HOW]: {
+    title: 'How it works | Remvo',
+    description: 'A barcode in, every eBay field back: title, category, item specifics, parcel and a price from live listings. One at a time, or 500 in bulk.',
+  },
+  [ROUTES.EXAMPLE]: {
+    title: 'A real eBay listing made from one barcode | Remvo',
+    description: 'Every field Remvo wrote for a JBL Flip 6 from its barcode: title, category, 9 item specifics, parcel, a price from live eBay.com listings.',
+  },
+  [ROUTES.PRICING]: {
+    title: 'Pricing | Remvo',
+    description: '$0.30 a listing with prepaid credits. No subscription. Your first listing is on us, and a listing that fails gives its credits back.',
+  },
+  [ROUTES.CONTACT]: {
+    title: 'Contact | Remvo',
+    description: 'Write to the people who build Remvo. Every message is read and answered within 48 hours.',
+  },
+  [ROUTES.TERMS]: {
+    title: 'Terms of service | Remvo',
+    description: 'The agreement between you and Remvo Labs Limited for using Remvo, the software that prepares eBay listings.',
+    updated: LEGAL_UPDATED.iso,
+  },
+  [ROUTES.PRIVACY]: {
+    title: 'Privacy policy | Remvo',
+    description: 'What Remvo collects, why, who else handles it, how long it is kept, and what you can ask us to do with it.',
+    updated: LEGAL_UPDATED.iso,
+  },
+  [ROUTES.REFUNDS]: {
+    title: 'Refund policy | Remvo',
+    description: 'A failed listing gives its credits back on its own. Unused credits are refunded in full within 14 days of buying them.',
+    updated: LEGAL_UPDATED.iso,
+  },
+  [ROUTES.CREDITS]: {
+    title: 'Credit terms | Remvo',
+    description: 'How Remvo credits work: what they cost, what a listing uses, which are spent first, and when they expire.',
+    updated: LEGAL_UPDATED.iso,
+  },
+});
+
+export const NOT_FOUND = Object.freeze({
+  title: 'Page not found | Remvo',
+  description: 'This page does not exist.',
+  noindex: true,
+});
+
+/** The page's own address, never with a trailing slash (the home page is "/"). */
+export const canonical = (path) => `${SITE_ORIGIN}${path === '/' ? '/' : path.replace(/\/+$/, '')}`;
+
+/** What a path says about itself; unknown paths are the 404 page. */
+export const pageMeta = (path) => PAGES[path.replace(/(.)\/+$/, '$1')] ?? NOT_FOUND;

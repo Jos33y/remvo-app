@@ -4,6 +4,16 @@ import { resolve } from 'path';
 
 export default defineConfig({
   plugins: [react()],
+  // When the build was made: the Black Friday banner counts days from it
+  // in the pre-rendered pages and in the browser's first render.
+  define: {
+    __REMVO_BUILT_AT__: JSON.stringify(Date.now()),
+  },
+  // dist/.vite/manifest.json tells prerender/run.mjs which stylesheets and
+  // chunks each page needs; it removes the file afterwards.
+  build: {
+    manifest: true,
+  },
   resolve: {
     alias: {
       '@': resolve(__dirname, './src'),

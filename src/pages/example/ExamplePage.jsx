@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Link } from 'react-router';
 import { Reveal } from '@components/ui/marketing/Reveal';
 import { Button } from '@components/ui/shared/Button';
@@ -34,9 +33,6 @@ export function ExamplePage() {
   const e = EXAMPLE;
   const listingCost = money(creditsCost(PRICING.JOBS.LISTING.credits, currency), currency);
 
-  useEffect(() => {
-    document.title = 'Remvo | A real listing, made from one barcode';
-  }, []);
 
   return (
     <>

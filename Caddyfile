@@ -1,0 +1,94 @@
+# ─────────────────────────────────────────────────────────────────────
+# Caddyfile: how remvo-web's dist/ is served (Coolify, Nixpacks, Caddy 2.8)
+#
+# Coolify, Start command:
+#   caddy run --config /app/Caddyfile --adapter caddyfile
+#
+# One build serves several hosts. Cloudflare and Coolify's proxy end
+# TLS and pass the Host header through; this answers plain HTTP on $PORT.
+#
+#   www.remvo.app      -> 301 to https://remvo.app, same path
+#   my., admin.        -> the app shell (app.html) for every path but its
+#                         files; noindex; a robots.txt that says keep out
+#   remvo.app, else    -> the pre-rendered page for the path
+#                         (prerender/run.mjs), or 404.html with status 404
+#
+# Hashed files under /assets are cached for a year; HTML is checked on
+# every visit, so a deploy shows at once.
+# ─────────────────────────────────────────────────────────────────────
+{
+	admin off
+	auto_https off
+	persist_config off
+	log {
+		format json
+	}
+}
+
+:{$PORT:3000} {
+	root * {$REMVO_WEB_ROOT:/app/dist}
+	encode zstd gzip
+
+	@assets path /assets/*
+	header @assets Cache-Control "public, max-age=31536000, immutable"
+	@notAssets not path /assets/*
+	header @notAssets Cache-Control "no-cache"
+	header X-Content-Type-Options "nosniff"
+
+	@www host www.remvo.app
+	handle @www {
+		redir https://remvo.app{uri} permanent
+	}
+
+	# REMVO_APP_HOSTS is only for local tests (my.localhost); production uses the default.
+	@app host {$REMVO_APP_HOSTS:my.remvo.app admin.remvo.app}
+	handle @app {
+		header X-Robots-Tag "noindex, nofollow"
+		handle /robots.txt {
+			respond "User-agent: *
+Disallow: /
+" 200
+		}
+		@file {
+			path /assets/* /favicon/* /dark/*
+			file
+		}
+		handle @file {
+			file_server
+		}
+		handle {
+			rewrite * /app.html
+			file_server
+		}
+	}
+
+	handle {
+		# A trailing slash is the same page: send it to the one address.
+		@slash path_regexp slash ^(.+)/$
+		redir @slash {re.slash.1} permanent
+
+		# Never serve the app shell or build files on the public site.
+		@private path /app.html /404.html
+		handle @private {
+			rewrite * /404.html
+			file_server {
+				status 404
+			}
+		}
+
+		@page file {
+			try_files {path} {path}/index.html
+		}
+		handle @page {
+			rewrite * {file_match.relative}
+			file_server
+		}
+
+		handle {
+			rewrite * /404.html
+			file_server {
+				status 404
+			}
+		}
+	}
+}

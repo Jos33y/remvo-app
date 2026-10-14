@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { HomeHero } from './sections/HomeHero';
 import { HomeFeatures } from './sections/HomeFeatures';
 import { HomeBulk } from './sections/HomeBulk';
@@ -9,9 +8,6 @@ import { HomeCTA } from './sections/HomeCTA';
  * many at once, what it costs, start. The hero leads with a finished listing because that is
  * what a seller came for. */
 export function HomePage() {
-  useEffect(() => {
-    document.title = 'Remvo | A finished eBay listing from a barcode';
-  }, []);
 
   return (
     <>

@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import { App } from './app/App';
+import { createRoot, hydrateRoot } from 'react-dom/client';
+import { App, hostApp } from './app/App';
 
 /* ── Fonts (self-hosted via fontsource, no external CDN) ── */
 import '@fontsource-variable/geist';
@@ -70,8 +70,24 @@ if (document.fonts && document.fonts.ready) {
   });
 }
 
-createRoot(document.getElementById('root')).render(
+/* A marketing page arrives pre-rendered (prerender/run.mjs): React
+ * takes over the HTML that is already there instead of drawing it
+ * again. Everything else (my.remvo.app, admin, the dev server) starts
+ * from an empty root, as before. */
+const rootEl = document.getElementById('root');
+const tree = (
   <StrictMode>
     <App />
   </StrictMode>
 );
+if (rootEl.hasChildNodes() && hostApp() === 'marketing') {
+  hydrateRoot(rootEl, tree, {
+    // Logged so a page that drifts from its pre-render is noticed; React has already recovered.
+    onRecoverableError: (err) => console.warn('remvo: hydration', err?.message ?? err),
+  });
+} else {
+  // Any other app starts clean, even if a server handed it a marketing
+  // page (a host the Caddyfile does not route to app.html).
+  rootEl.replaceChildren();
+  createRoot(rootEl).render(tree);
+}

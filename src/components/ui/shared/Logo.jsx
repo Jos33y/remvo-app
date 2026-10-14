@@ -1,7 +1,7 @@
-import { motion } from 'motion/react';
-import { useReducedMotion } from '@hooks/useReducedMotion';
-import { easeOut } from '@utils/motion';
+import { Suspense, lazy } from 'react';
 import styles from '@styles/ui/shared/logo.module.css';
+
+const LogoAnimatedMark = lazy(() => import('./LogoAnimatedMark'));
 
 /**
  * Remvo logomark + wordmark.
@@ -39,7 +39,6 @@ export function Logo({
   href = '/',
   animated = false,
 }) {
-  const reduced = useReducedMotion();
   const markFill = variant === 'gold' ? '#C9A84C' : '#FFFFFF';
   const className = [
     styles.logo,
@@ -63,39 +62,10 @@ export function Logo({
     </svg>
   );
 
-  // Animated path: each plane is its own motion.polygon, drawn in
-  // sequence from base to top. Final opacities match the static
-  // hierarchy (1 / 0.55 / 0.25) so the resting state is identical.
-  const AnimatedMark = (
-    <svg
-      className={styles.mark}
-      viewBox="0 0 40 40"
-      fill={markFill}
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      <motion.polygon
-        points="20,18 32,25 20,32 8,25"
-        initial={reduced ? { opacity: 0.25 } : { opacity: 0 }}
-        animate={{ opacity: 0.25 }}
-        transition={{ duration: reduced ? 0 : 0.2, delay: reduced ? 0 : 0, ease: easeOut }}
-      />
-      <motion.polygon
-        points="20,12 32,19 20,26 8,19"
-        initial={reduced ? { opacity: 0.55 } : { opacity: 0 }}
-        animate={{ opacity: 0.55 }}
-        transition={{ duration: reduced ? 0 : 0.2, delay: reduced ? 0 : 0.2, ease: easeOut }}
-      />
-      <motion.polygon
-        points="20,6 32,13 20,20 8,13"
-        initial={reduced ? { opacity: 1 } : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: reduced ? 0 : 0.2, delay: reduced ? 0 : 0.4, ease: easeOut }}
-      />
-    </svg>
-  );
-
-  const Mark = animated ? AnimatedMark : StaticMark;
+  // The animated mark is its own chunk; the still mark shows until it arrives.
+  const Mark = animated
+    ? <Suspense fallback={StaticMark}><LogoAnimatedMark markFill={markFill} /></Suspense>
+    : StaticMark;
 
   // Wordmark: when animated, wrap in a span carrying the gold sweep
   // class so the CSS keyframe runs. Reduced motion skips the sweep

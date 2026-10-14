@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Link } from 'react-router';
 import { Reveal } from '@components/ui/marketing/Reveal';
 import { Button } from '@components/ui/shared/Button';
@@ -23,9 +22,6 @@ export function PricingPage() {
   const { currency } = useMarket();
   const cost = (credits) => money(creditsCost(credits, currency), currency);
   const first = PRICING.PACKS[0];
-  useEffect(() => {
-    document.title = 'Remvo | Pricing';
-  }, []);
 
   const jobs = Object.values(PRICING.JOBS);
 

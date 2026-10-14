@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Link } from 'react-router';
 import { LegalPageLayout, Clause } from '@components/layout/marketing/LegalPageLayout';
 import { money } from '@lib/market';
@@ -22,9 +21,6 @@ const TOC = [
 ];
 
 export function TermsPage() {
-  useEffect(() => {
-    document.title = 'Remvo | Terms of Service';
-  }, []);
 
   return (
     <LegalPageLayout

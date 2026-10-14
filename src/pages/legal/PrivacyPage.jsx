@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Link } from 'react-router';
 import { LegalPageLayout, Clause, DefList, DefItem } from '@components/layout/marketing/LegalPageLayout';
 import { BRAND, ROUTES, PRICING, LEGAL_UPDATED } from '@utils/constants';
@@ -17,9 +16,6 @@ const TOC = [
 ];
 
 export function PrivacyPage() {
-  useEffect(() => {
-    document.title = 'Remvo | Privacy Policy';
-  }, []);
 
   return (
     <LegalPageLayout

@@ -1,12 +1,8 @@
-import { useEffect } from 'react';
 import { Button } from '@components/ui/shared/Button';
 import { ROUTES } from '@utils/constants';
 import styles from '@styles/pages/marketing/not-found.module.css';
 
 export function NotFoundPage() {
-  useEffect(() => {
-    document.title = 'Remvo | Page not found';
-  }, []);
 
   return (
     <section className={styles.container}>

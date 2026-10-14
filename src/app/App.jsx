@@ -1,4 +1,5 @@
-import { Suspense, lazy, useEffect } from 'react';
+import { Suspense, lazy } from 'react';
+import { LoaderDismisser } from './LoaderDismisser';
 
 /* ──────────────────────────────────────────────────────────────────
  * Hostname-based router selection + per-host code splitting.
@@ -31,24 +32,6 @@ const MarketingApp = lazy(() => import('./MarketingApp'));
 const CheckoutApp  = lazy(() => import('./CheckoutApp'));
 const AdminApp     = lazy(() => import('./AdminApp'));
 const SellerApp    = lazy(() => import('./SellerApp'));
-
-/* Signals main.jsx that the lazy chunk has mounted, so the
- * app-loader element in index.html can fade out. Lives inside the
- * Suspense boundary so its useEffect fires only AFTER the chunk
- * resolves and renders real content. main.jsx coordinates this
- * with the fonts.ready signal so the loader dismisses only when
- * BOTH conditions are met. */
-function LoaderDismisser() {
-  useEffect(() => {
-    if (
-      typeof window !== 'undefined' &&
-      typeof window.__remvoSignalAppMounted === 'function'
-    ) {
-      window.__remvoSignalAppMounted();
-    }
-  }, []);
-  return null;
-}
 
 function isAdminHost() {
   if (typeof window === 'undefined') return false;
@@ -111,17 +94,19 @@ function isSellerHost() {
   return false;
 }
 
+/** Which app this host runs: 'admin' | 'checkout' | 'seller' | 'marketing'. */
+export function hostApp() {
+  if (isAdminHost()) return 'admin';
+  if (isCheckoutHost()) return 'checkout';
+  if (isSellerHost()) return 'seller';
+  return 'marketing';
+}
+
+const APPS = { admin: AdminApp, checkout: CheckoutApp, seller: SellerApp, marketing: MarketingApp };
+
 export function App() {
-  let routerChunk;
-  if (isAdminHost()) {
-    routerChunk = <AdminApp />;
-  } else if (isCheckoutHost()) {
-    routerChunk = <CheckoutApp />;
-  } else if (isSellerHost()) {
-    routerChunk = <SellerApp />;
-  } else {
-    routerChunk = <MarketingApp />;
-  }
+  const Chosen = APPS[hostApp()];
+  const routerChunk = <Chosen />;
 
   return (
     <Suspense fallback={null}>

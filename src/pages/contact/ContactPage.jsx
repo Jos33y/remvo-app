@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Reveal } from '@components/ui/marketing/Reveal';
 import { BRAND } from '@utils/constants';
 import styles from '@styles/pages/marketing/contact.module.css';
@@ -7,9 +6,6 @@ import styles from '@styles/pages/marketing/contact.module.css';
  * or a refund; one for company, legal and data protection. Answered
  * within 48 hours, the time Polar holds merchants to. */
 export function ContactPage() {
-  useEffect(() => {
-    document.title = 'Remvo | Contact';
-  }, []);
 
   return (
     <section className={styles.contact}>

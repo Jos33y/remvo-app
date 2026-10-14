@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
+  <!-- seo:start: each marketing page's own head goes here at build (prerender/run.mjs) -->
   <!-- ── SEO ── -->
   <title>Remvo | Finished eBay listings from a barcode</title>
   <meta name="description"
@@ -30,6 +31,7 @@
   <meta name="twitter:title" content="Remvo | Finished eBay listings from a barcode" />
   <meta name="twitter:description"
     content="Give Remvo a barcode and get back a finished eBay listing: title, description, category, item specifics, parcel size and a price. Pay per listing, no subscription." />
+  <!-- seo:end -->
 
   <!-- ── Favicon: light mode (default) ── -->
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
@@ -49,6 +51,7 @@
   <meta name="theme-color" content="#1A1A1A" />
   <meta name="msapplication-TileColor" content="#1A1A1A" />
 
+  <!-- loader:start: the app shell's loader; pre-rendered marketing pages have none -->
   <!-- ══════════════════════════════════════════
          INLINE LOADER
          Shows instantly before React mounts.
@@ -192,9 +195,11 @@
       }
     }
   </style>
+  <!-- loader:end -->
 </head>
 
 <body>
+  <!-- loader:start -->
   <!-- ── Loader (visible before React) ── -->
   <div id="app-loader" aria-live="polite" aria-label="Loading Remvo">
     <div class="loader-logo">
@@ -209,6 +214,7 @@
       <div class="loader-bar-fill"></div>
     </div>
   </div>
+  <!-- loader:end -->
 
   <!-- ── React mount point ── -->
   <div id="root"></div>

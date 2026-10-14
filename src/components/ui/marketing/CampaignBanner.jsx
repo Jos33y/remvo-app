@@ -31,6 +31,12 @@ export const CAMPAIGN = {
 };
 
 const DAY = 86_400_000;
+
+/* When this build was made (vite.config.js). The pre-rendered page and
+ * the browser's first render both count days from it, so they match;
+ * the browser then counts from now. */
+/* global __REMVO_BUILT_AT__ */
+const BUILT_AT = typeof __REMVO_BUILT_AT__ === 'number' ? __REMVO_BUILT_AT__ : Date.now();
 const storeKey = (id) => `remvo.banner.${id}`;
 
 /** Whole days from today (London) to the campaign day. */
@@ -53,12 +59,16 @@ export function whenShort(name, days) {
 }
 
 export function CampaignBanner({ campaign = CAMPAIGN }) {
-  const [hidden, setHidden] = useState(true);
-  const days = daysTo(campaign.day);
-  const over = daysTo(campaign.lastDay) < 0;
+  // Shown in the pre-rendered page, so it takes its space before any
+  // script runs and nothing below it jumps. A visitor who hid it sees
+  // it go once the page has loaded.
+  const [hidden, setHidden] = useState(false);
+  const [now, setNow] = useState(BUILT_AT);
+  const days = daysTo(campaign.day, now);
+  const over = daysTo(campaign.lastDay, now) < 0;
 
-  // Read after mount, so the server render and a blocked storage both show nothing until checked.
   useEffect(() => {
+    setNow(Date.now());
     let dismissed = false;
     try { dismissed = window.localStorage.getItem(storeKey(campaign.id)) === '1'; } catch { /* storage blocked */ }
     setHidden(dismissed);

@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { LegalPageLayout, Clause } from '@components/layout/marketing/LegalPageLayout';
 import { BRAND, PRICING, LEGAL_UPDATED } from '@utils/constants';
 
@@ -7,9 +6,6 @@ import { BRAND, PRICING, LEGAL_UPDATED } from '@utils/constants';
  * policy full of conditions is the most common reason a merchant of
  * record turns an application down. */
 export function RefundsPage() {
-  useEffect(() => {
-    document.title = 'Remvo | Refund Policy';
-  }, []);
 
   const days = PRICING.REFUND_DAYS;
 
