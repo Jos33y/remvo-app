@@ -110,8 +110,12 @@ export function PricingPage() {
           <Section heading="How long credits last">
             <p>
               {PRICING.EXPIRY_MONTHS} months from the top-up that bought them.
-              Every new top-up extends your whole balance to{' '}
+              Every new top-up extends all the credits you have bought to{' '}
               {PRICING.EXPIRY_MONTHS} months from that day.
+            </p>
+            <p>
+              The {PRICING.WELCOME.credits} welcome credits every new account starts with
+              last {PRICING.WELCOME.days} days, and a top-up does not change that.
             </p>
             <p className={styles.muted}>
               We email you 30 days and 7 days before any credits expire.
@@ -141,7 +145,7 @@ export function PricingPage() {
       <section className={styles.close} aria-label="Get started">
         <div className={styles.closeInner}>
           <p className={styles.closeHeading}>
-            Start with {money(first.price[currency], currency)}. That is {listingsFor(first.credits)} listings.
+            Your first listing is on us. After that, {money(first.price[currency], currency)} is {listingsFor(first.credits)} listings.
           </p>
           <Button href={APP_LINKS.SIGN_IN} variant="primary" size="large">
             Make your first listing

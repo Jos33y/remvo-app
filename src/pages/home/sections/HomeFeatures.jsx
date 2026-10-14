@@ -9,8 +9,8 @@ function steps(currency, site) {
   return [
     {
       num: '01',
-      title: 'Top up',
-      desc: `Buy credits from ${money(PRICING.PACKS[0].price[currency], currency)}. No subscription and nothing to cancel. Credits last ${PRICING.EXPIRY_MONTHS} months, and every top-up extends the lot.`,
+      title: 'Sign in',
+      desc: `With your email. Your first listing is on us; after that, credits from ${money(PRICING.PACKS[0].price[currency], currency)}. No subscription and nothing to cancel. Credits you buy last ${PRICING.EXPIRY_MONTHS} months, and every top-up extends them.`,
     },
     {
       num: '02',

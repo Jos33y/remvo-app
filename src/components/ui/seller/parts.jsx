@@ -55,7 +55,8 @@ export function BalanceCard({ onTopUp, compact = false }) {
       </section>
     );
   }
-  const { balance, worth, currency, listingsLeft, expiresAt } = summary;
+  const { balance, worth, currency, listingsLeft, expiresAt, welcome } = summary;
+  const onlyWelcome = welcome && welcome.credits === balance;
 
   return (
     <section className={s.balance} aria-label="Balance">
@@ -64,10 +65,18 @@ export function BalanceCard({ onTopUp, compact = false }) {
         <span className={s.balanceNumber}>{balance}</span>
         <span className={s.balanceUnit}>{balance === 1 ? 'credit' : 'credits'}</span>
       </p>
-      <p className={s.balanceMeta}>
-        Worth {money(worth, currency)}. Enough for <strong>{listingsLeft} {listingsLeft === 1 ? 'listing' : 'listings'}</strong>.
-        {expiresAt && !compact && <><br />Lasts until {longDate(expiresAt)}.</>}
-      </p>
+      {onlyWelcome ? (
+        <p className={s.balanceMeta}>
+          <strong>Your first listing is on us.</strong>
+          {!compact && <><br />These {welcome.credits} credits last until {longDate(welcome.expiresAt)}.</>}
+        </p>
+      ) : (
+        <p className={s.balanceMeta}>
+          Worth {money(worth, currency)}. Enough for <strong>{listingsLeft} {listingsLeft === 1 ? 'listing' : 'listings'}</strong>.
+          {expiresAt && !compact && <><br />Lasts until {longDate(expiresAt)}.</>}
+          {welcome && !compact && <><br />Includes {welcome.credits} welcome {welcome.credits === 1 ? 'credit' : 'credits'}, until {longDate(welcome.expiresAt)}.</>}
+        </p>
+      )}
       {onTopUp && (
         <div className={s.balanceActions}>
           <button type="button" className={`${s.button} ${s.primary} ${s.onCard}`} onClick={onTopUp}>
@@ -270,7 +279,7 @@ export function TopUpSheet({ open, onClose }) {
       )}
 
       <p className={`${s.small} ${s.after}`}>
-        Credits last {PRICING.EXPIRY_MONTHS} months, and every top-up extends your whole balance. Unused credits are refunded in full if you ask within {PRICING.REFUND_DAYS} days.
+        Credits last {PRICING.EXPIRY_MONTHS} months, and every top-up extends all the credits you have bought. Unused credits are refunded in full if you ask within {PRICING.REFUND_DAYS} days.
       </p>
     </Sheet>
   );

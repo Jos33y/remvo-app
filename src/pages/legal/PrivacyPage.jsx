@@ -48,6 +48,7 @@ export function PrivacyPage() {
           <DefItem term="Your purchases">From Polar: your name, email address, country, what you bought, the amount, any tax, and the order reference. We never see or store your card details.</DefItem>
           <DefItem term="Your credits">Every top-up, every job that used credits, every refund and every expiry.</DefItem>
           <DefItem term="Technical records">Your IP address, browser type, and the time of each request, kept in our server logs.</DefItem>
+          <DefItem term="Welcome credits">When your account is made, a keyed hash of your IP address: a scrambled form that cannot be turned back into the address. It lets us give welcome credits once a day per connection.</DefItem>
           <DefItem term="Messages">What you send us when you write to support.</DefItem>
         </DefList>
       </Clause>
@@ -57,6 +58,7 @@ export function PrivacyPage() {
         <p>3.2. To keep the service secure and working, and to stop fraud and abuse. This is in our legitimate interest and yours.</p>
         <p>3.3. To keep the financial records tax law requires of us. This is a legal obligation.</p>
         <p>3.4. We do not use your data for advertising, we do not sell it, and we do not build a profile of you.</p>
+        <p>3.5. To give welcome credits once: the hashed IP address in clause 2 stops one connection collecting them for many accounts. This is in our legitimate interest.</p>
       </Clause>
 
       <Clause id="share" heading="4. Who we share it with">
@@ -82,6 +84,7 @@ export function PrivacyPage() {
           <DefItem term="Your account">Until you close it, then 30 days, then deleted.</DefItem>
           <DefItem term="Purchases and credits">Six years from the end of the financial year they fall in, as tax law requires. These records hold amounts and dates, not your jobs.</DefItem>
           <DefItem term="Server logs">30 days.</DefItem>
+          <DefItem term="Welcome credits">The hashed IP address: 30 days, then removed. That your account had welcome credits: as long as the account.</DefItem>
           <DefItem term="Messages">Two years from your last message.</DefItem>
         </DefList>
       </Clause>

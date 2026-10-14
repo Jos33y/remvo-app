@@ -202,7 +202,7 @@
 .defDesc {
   font-size: var(--text-sm);
   line-height: var(--leading-relaxed);
-  color: var(--color-text-dark-muted);
+  color: #5E5E5E; /* 5.7:1 on warm white, as .footerNote */
 }
 
 /* ── Document footer ── */
@@ -222,7 +222,9 @@
 .footerNote {
   font-size: 0.8125rem;
   line-height: var(--leading-relaxed);
-  color: var(--color-text-dark-muted);
+  /* #5E5E5E on warm white is 5.7:1; the muted token (#7A7A7A) is 3.8:1,
+     under the 4.5:1 that text this size needs (WCAG 2.2 AA). */
+  color: #5E5E5E;
 }
 
 .footerNote a {

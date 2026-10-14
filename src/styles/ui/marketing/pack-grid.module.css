@@ -15,6 +15,18 @@
   margin-bottom: var(--space-5);
 }
 
+.welcome {
+  margin: 0 0 var(--space-5);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.welcome strong {
+  font-weight: 600;
+  color: var(--color-white);
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

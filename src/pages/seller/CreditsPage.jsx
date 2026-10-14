@@ -141,7 +141,7 @@ export function CreditsPage() {
               <span className={s.chevron}><IconChevronRight /></span>
             </a>
           </div>
-          <p className={s.groupNote}>Every top-up extends your whole balance. A listing that fails gives its credits back on its own.</p>
+          <p className={s.groupNote}>Every top-up extends all the credits you have bought. Welcome credits last {PRICING.WELCOME.days} days. A listing that fails gives its credits back on its own.</p>
         </section>
 
         <section className={s.section} aria-labelledby="history-heading">

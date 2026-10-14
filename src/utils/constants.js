@@ -95,6 +95,9 @@ export const PRICING = Object.freeze({
     CHECK: { name: 'Check a product', credits: null, live: false },
   }),
   EXPIRY_MONTHS: 12,
+  /* A new account's first listing, on us: one listing's credits, for
+   * this many days. Not extended by a top-up. The API gives them. */
+  WELCOME: Object.freeze({ credits: 3, days: 30 }),
   REFUND_DAYS: 14,
   RESULT_DAYS: 90,
   /* Notice given before a job's credit cost changes. */
@@ -117,7 +120,7 @@ export function creditsFor(amount, currency) {
 }
 
 /* The date shown on every legal page, and its machine form. */
-export const LEGAL_UPDATED = { label: '11 October 2026', iso: '2026-10-11', version: 'v2.1' };
+export const LEGAL_UPDATED = { label: '14 October 2026', iso: '2026-10-14', version: 'v2.2' };
 
 /* ── Paused corridor: checkout and admin trees only ── */
 

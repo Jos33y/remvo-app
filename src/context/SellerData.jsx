@@ -31,7 +31,8 @@ function labelFor(row) {
     // A 100% discount code pays nothing: say so, not "Top-up $0".
     case 'topup': return row.amountCents === 0 ? 'Top-up, free with a code' : paid ? `Top-up ${paid}` : 'Top-up';
     case 'refund': return paid ? `Refunded ${paid}` : 'Refunded';
-    case 'expiry': return 'Expired';
+    case 'expiry': return row.note?.startsWith('Welcome') ? 'Welcome credits expired' : 'Expired';
+    case 'welcome': return 'Welcome credits';
     // A bulk run takes its credits in one line, under the batch's reference.
     case 'job': return row.note?.startsWith('B-') ? `Bulk listing ${row.note}` : row.note ? `Listing ${row.note}` : 'Listing';
     case 'job_return': return row.note ? `Returned: listing ${row.note} failed` : 'Returned: listing failed';
@@ -74,6 +75,7 @@ export function useSellerData() {
       currency: wallet.worth.currency,
       listingsLeft: Math.floor(wallet.balance / listingCredits),
       expiresAt: wallet.expiresAt,
+      welcome: wallet.welcome ?? null,
       ready: jobs.filter((j) => j.status === 'ready').length,
       thisMonth: jobs.filter((j) => j.status === 'ready' && Date.parse(j.createdAt) >= monthStart.getTime()).length,
     };

@@ -19,7 +19,7 @@ export function RefundsPage() {
       date={LEGAL_UPDATED.label}
       dateTime={LEGAL_UPDATED.iso}
       version={LEGAL_UPDATED.version}
-      preamble={<>Three rules. They are the whole policy.</>}
+      preamble={<>Three rules, and a note on free credits. That is the whole policy.</>}
     >
       <Clause id="failed" heading="1. A job that fails">
         <p>If a job cannot produce a listing, its credits go back to your balance automatically. You do not need to ask.</p>
@@ -31,6 +31,10 @@ export function RefundsPage() {
 
       <Clause id="listing" heading="3. A listing you are not happy with">
         <p>Tell us within {days} days of the job and we return the credits it used to your balance.</p>
+      </Clause>
+
+      <Clause id="welcome" heading="4. Welcome credits">
+        <p>The {PRICING.WELCOME.credits} credits a new account starts with are free, so there is nothing to refund. A listing that fails gives them back to your balance, as it does any credits.</p>
       </Clause>
 
       <Clause id="how" heading="How to ask">

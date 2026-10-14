@@ -31,6 +31,10 @@ export function PackGrid({ headingLevel = 3 }) {
         <CurrencySwitch />
       </div>
 
+      <p className={styles.welcome}>
+        <strong>Your first listing is on us.</strong> Every new account starts with {PRICING.WELCOME.credits} free credits.
+      </p>
+
       <ul className={styles.grid} role="list">
         {PRICING.PACKS.map((p) => {
           const price = p.price[currency];
@@ -66,8 +70,8 @@ export function PackGrid({ headingLevel = 3 }) {
 
       <p className={styles.terms}>
         Any VAT or sales tax is worked out at checkout for where you are, and shown before you pay.
-        Credits last {PRICING.EXPIRY_MONTHS} months, and every top-up extends your whole
-        balance. <Link to={ROUTES.CREDITS} className={styles.link}>Credit terms</Link>
+        Credits last {PRICING.EXPIRY_MONTHS} months, and every top-up extends all the credits
+        you have bought. <Link to={ROUTES.CREDITS} className={styles.link}>Credit terms</Link>
       </p>
     </div>
   );

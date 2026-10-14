@@ -66,6 +66,7 @@ export function TermsPage() {
         <p>4.3. Credits are a prepaid right to use {BRAND.NAME}. They are not money, have no cash value, cannot be withdrawn, and cannot be transferred to another account.</p>
         <p>4.4. How long credits last, and the order they are used in, is set out in the <Link to={ROUTES.CREDITS}>credit terms</Link>, which form part of these terms.</p>
         <p>4.5. Refunds are set out in the <Link to={ROUTES.REFUNDS}>refund policy</Link>, which forms part of these terms.</p>
+        <p>4.6. A new account starts with free welcome credits, as the <Link to={ROUTES.CREDITS}>credit terms</Link> describe. They have no cash value.</p>
       </Clause>
 
       <Clause id="jobs" heading="5. Jobs">
@@ -92,7 +93,7 @@ export function TermsPage() {
       </Clause>
 
       <Clause id="changes" heading="9. Changes to the service">
-        <p>9.1. We may change, add or remove features. If we stop offering the service altogether, we refund your unused credits.</p>
+        <p>9.1. We may change, add or remove features. If we stop offering the service altogether, we refund the unused credits you paid for.</p>
         <p>9.2. We may change how many credits a job uses. We email you at least {PRICING.NOTICE_DAYS} days before the change takes effect. The change applies to jobs run after that date.</p>
       </Clause>
 
@@ -105,7 +106,7 @@ export function TermsPage() {
 
       <Clause id="closing" heading="11. Closing an account">
         <p>11.1. You can close your account at any time from your account settings or by writing to {BRAND.EMAIL}. Credits still within the refund window are refunded as the <Link to={ROUTES.REFUNDS}>refund policy</Link> describes.</p>
-        <p>11.2. We may suspend or close an account that breaks clause 6. We tell you why, unless the law prevents us. If we close your account for any other reason, we refund your unused credits.</p>
+        <p>11.2. We may suspend or close an account that breaks clause 6. We tell you why, unless the law prevents us. If we close your account for any other reason, we refund the unused credits you paid for.</p>
       </Clause>
 
       <Clause id="terms" heading="12. Changes to these terms">

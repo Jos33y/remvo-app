@@ -32,6 +32,8 @@ export function CreditsPage() {
         <p>1.2. You buy credits in top-ups of {list(PRICING.PACKS.map((p) => p.credits))} credits, priced at {list(PRICING.PACKS.map((p) => money(p.price.USD, 'USD')))} in US dollars, {list(PRICING.PACKS.map((p) => money(p.price.EUR, 'EUR')))} in euros, or {list(PRICING.PACKS.map((p) => money(p.price.GBP, 'GBP')))} in pounds. You can also top up any whole amount from {money(PRICING.CUSTOM.min.USD, 'USD')} to {money(PRICING.CUSTOM.max.USD, 'USD', { whole: true })} ({money(PRICING.CUSTOM.min.EUR, 'EUR')} to {money(PRICING.CUSTOM.max.EUR, 'EUR', { whole: true })}, or {money(PRICING.CUSTOM.min.GBP, 'GBP')} to {money(PRICING.CUSTOM.max.GBP, 'GBP', { whole: true })}) at the same price per credit.</p>
         <p>1.3. You pay in US dollars, euros or pounds. Outside the eurozone and the United Kingdom, prices are in US dollars.</p>
         <p>1.4. Credits have no cash value. They cannot be withdrawn, exchanged for money, or moved to another account.</p>
+        <p>1.5. Every new account starts with {PRICING.WELCOME.credits} welcome credits, enough for one listing. They are free.</p>
+        <p>1.6. Welcome credits are given once per account, and once a day per internet connection. An account made from a connection that has already had them that day starts without them.</p>
       </Clause>
 
       <Clause id="use" heading="2. What a job uses">
@@ -48,12 +50,14 @@ export function CreditsPage() {
 
       <Clause id="expiry" heading="4. When credits expire">
         <p>4.1. Credits expire {months} months after the top-up that bought them.</p>
-        <p>4.2. Every new top-up extends your whole balance, including older credits, to {months} months from the day of that top-up.</p>
-        <p>4.3. We email you 30 days and 7 days before any credits expire, with how many and the date.</p>
+        <p>4.2. Every new top-up extends all the credits you have bought, including older ones, to {months} months from the day of that top-up.</p>
+        <p>4.3. We email you 30 days and 7 days before any credits you have bought expire, with how many and the date.</p>
+        <p>4.4. Welcome credits expire {PRICING.WELCOME.days} days after your account is made. A top-up does not extend them.</p>
       </Clause>
 
       <Clause id="refunds" heading="5. Refunds">
         <p>5.1. Refunds of credits are set out in the <Link to={ROUTES.REFUNDS}>refund policy</Link>.</p>
+        <p>5.2. Welcome credits are free, so there is nothing to refund. A listing that fails gives them back, as it does any credits.</p>
       </Clause>
     </LegalPageLayout>
   );
