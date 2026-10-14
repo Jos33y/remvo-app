@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import { HomeHero } from './sections/HomeHero';
 import { HomeFeatures } from './sections/HomeFeatures';
+import { HomeBulk } from './sections/HomeBulk';
 import { HomePricing } from './sections/HomePricing';
 import { HomeCTA } from './sections/HomeCTA';
 
-/* Four sections, dark, light, dark, dark: what you get, how, what it
- * costs, start. The hero leads with a finished listing because that is
+/* Five sections, dark, light, light, dark, dark: what you get, how,
+ * many at once, what it costs, start. The hero leads with a finished listing because that is
  * what a seller came for. */
 export function HomePage() {
   useEffect(() => {
@@ -16,6 +17,7 @@ export function HomePage() {
     <>
       <HomeHero />
       <HomeFeatures />
+      <HomeBulk />
       <HomePricing />
       <HomeCTA />
     </>

@@ -15,6 +15,7 @@ export const ROUTES = {
   REFUNDS: '/refunds',
   CREDITS: '/credits',
   CONTACT: '/contact',
+  EXAMPLE: '/example',
 };
 
 /* The seller app. Its own host, chosen by App.jsx, so nothing from it
@@ -25,6 +26,7 @@ const DEV_FLAG = import.meta.env.DEV ? '?my' : '';
 export const APP_LINKS = {
   SIGN_IN: `${APP_URL}/sign-in${DEV_FLAG}`,
   TOP_UP: `${APP_URL}/billing${DEV_FLAG}`,
+  BULK: `${APP_URL}/listings/bulk${DEV_FLAG}`,
 };
 
 /* The marketing site, for links from the seller app back to it. In dev

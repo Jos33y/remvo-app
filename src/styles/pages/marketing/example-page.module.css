@@ -1,0 +1,196 @@
+/* ═══════════════════════════════════════
+   EXAMPLE LISTING
+   One real listing on warm white, as a
+   sheet of labelled rows. The listing's
+   own words in the main text colour; our
+   notes on them smaller and grey. Figures
+   in Plex Mono. Built on info-page.
+   ═══════════════════════════════════════ */
+
+/* ── What it was given, in the dark intro ── */
+
+.given {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-8);
+  margin-top: var(--space-8);
+}
+
+.given > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.given dt {
+  font-size: var(--text-xs);
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.given dd {
+  margin: 0;
+  font-size: var(--text-base);
+  color: var(--color-white);
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── The listing ── */
+
+.listingSection {
+  align-items: start;
+}
+
+.sheet {
+  min-width: 0;
+  background-color: #FFFFFF;
+  border: 0.5px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2) var(--space-6);
+}
+
+.rows {
+  margin: 0;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 128px minmax(0, 1fr);
+  gap: var(--space-4);
+  padding: var(--space-5) 0;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.08);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.term {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: #5E5E5E;
+  padding-top: 2px;
+}
+
+.value {
+  margin: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--color-text-dark);
+  overflow-wrap: anywhere;
+}
+
+.title {
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-lg);
+  line-height: var(--leading-tight);
+  text-wrap: pretty;
+}
+
+.note {
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: #5E5E5E;
+}
+
+.price {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+}
+
+/* ── Item specifics: name and value in two columns ── */
+
+.specifics {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.specifics th,
+.specifics td {
+  text-align: left;
+  vertical-align: top;
+  padding: 6px 0;
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.06);
+}
+
+.specifics tr:last-child th,
+.specifics tr:last-child td {
+  border-bottom: none;
+}
+
+.specifics th {
+  width: 48%;
+  padding-right: var(--space-4);
+  font-weight: var(--weight-regular);
+  color: #5E5E5E;
+}
+
+.specifics td {
+  color: var(--color-text-dark);
+}
+
+/* ── Description, laid out as the eBay drafts file lays it out ── */
+
+.description {
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-dark);
+}
+
+.description p {
+  margin: 0;
+}
+
+.description p + p,
+.description ul + p,
+.description p + ul {
+  margin-top: var(--space-3);
+}
+
+.description .descHeading {
+  font-weight: var(--weight-semibold);
+  margin-top: var(--space-5);
+}
+
+.description ul {
+  margin: var(--space-2) 0 0;
+  padding-left: var(--space-5);
+  list-style: disc;
+}
+
+.description li::marker {
+  color: #5E5E5E;
+}
+
+.description li + li {
+  margin-top: 2px;
+}
+
+@media (max-width: 640px) {
+  .sheet {
+    padding: var(--space-1) var(--space-4);
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+    padding: var(--space-4) 0;
+  }
+
+  .given {
+    gap: var(--space-3) var(--space-6);
+  }
+}
+
+@media (prefers-contrast: more) {
+  .term, .note, .specifics th { color: var(--color-text-dark); }
+}

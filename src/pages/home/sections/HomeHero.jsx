@@ -38,8 +38,8 @@ export function HomeHero() {
               <Button href={APP_LINKS.SIGN_IN} variant="primary" size="default">
                 Make your first listing
               </Button>
-              <Button href={ROUTES.PRICING} variant="secondary" size="default">
-                See pricing
+              <Button href={ROUTES.EXAMPLE} variant="secondary" size="default">
+                See a real listing
               </Button>
             </div>
             <ul className={styles.heroTrust} aria-label="Before you start">

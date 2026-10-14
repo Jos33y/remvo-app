@@ -25,6 +25,7 @@ export function Footer() {
             <h2 className={styles.colTitle}>Product</h2>
             <nav aria-label="Product links">
               <Link to={ROUTES.HOW} className={styles.colLink}>How it works</Link>
+              <Link to={ROUTES.EXAMPLE} className={styles.colLink}>A real listing</Link>
               <Link to={ROUTES.PRICING} className={styles.colLink}>Pricing</Link>
               <Link to={ROUTES.CREDITS} className={styles.colLink}>Credit terms</Link>
               <Link to={ROUTES.CONTACT} className={styles.colLink}>Contact</Link>

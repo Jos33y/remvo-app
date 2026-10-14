@@ -37,6 +37,18 @@ function faq(currency) {
       a: 'Yes. Every field can be edited in Remvo, and your version is what gets copied and downloaded. You can put any field back to how Remvo wrote it.',
     },
     {
+      q: 'Can I list a whole spreadsheet?',
+      a: 'Yes, up to 500 lines at a time. Paste the barcode column or upload the file saved as a CSV. Remvo checks every line for free and tells you what will run and what it will cost before anything is spent. When the listings are made you get an email, an eBay drafts file to upload in Seller Hub, and a full file with every field.',
+    },
+    {
+      q: 'Does it add photos?',
+      a: 'No. You add your own photos in eBay, as you do now. Remvo writes everything else.',
+    },
+    {
+      q: 'Can it publish to eBay for me?',
+      a: 'Not yet. You copy the fields in, or upload the drafts file in Seller Hub and add photos there. Remvo never needs your eBay login.',
+    },
+    {
       q: 'Which language is the listing in?',
       a: 'The language of your eBay site: English for the US, Canada and the UK, German for eBay.de, French for eBay.fr, Italian for eBay.it and Spanish for eBay.es.',
     },
@@ -156,6 +168,9 @@ export function HowItWorksPage() {
                 </div>
               ))}
             </dl>
+            <p className={`${styles.after}`}>
+              <Link to={ROUTES.EXAMPLE} className={styles.link}>See one in full</Link>: a real listing, every field as it came back.
+            </p>
           </Section>
 
           <Section heading="How you use it" id="use">
@@ -167,6 +182,20 @@ export function HowItWorksPage() {
               Read it before you publish. You know your stock; Remvo only knows
               what the product page and the market say.
             </p>
+          </Section>
+
+          <Section heading="In bulk" id="bulk">
+            <p>
+              Paste a column of barcodes or upload your spreadsheet, up to 500 lines. Remvo checks every
+              line for free and tells you what will run and what it will cost. Start, and get on with
+              something else: you get an email when they are done.
+            </p>
+            <ul className={`${styles.list} ${styles.after}`}>
+              <li>One listing at a time, about 20 seconds each, so 300 lines take about 100 minutes.</li>
+              <li>A line that does not work gives its credits back.</li>
+              <li>Where a barcode finds more than one product, the product on its own is taken over bundles, and the line is marked for you to check.</li>
+              <li>An eBay drafts file to upload in Seller Hub, with the title, category, condition, price and description. eBay&apos;s drafts file has no room for item specifics, so they come in a second, full file, to fill in on each draft.</li>
+            </ul>
           </Section>
 
           <Section heading="What Remvo never does" id="never">

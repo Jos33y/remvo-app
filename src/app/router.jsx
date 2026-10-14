@@ -8,6 +8,7 @@ import { PrivacyPage } from '@pages/legal/PrivacyPage';
 import { RefundsPage } from '@pages/legal/RefundsPage';
 import { CreditsPage } from '@pages/legal/CreditsPage';
 import { ContactPage } from '@pages/contact/ContactPage';
+import { ExamplePage } from '@pages/example/ExamplePage';
 import { NotFoundPage } from '@pages/not-found/NotFoundPage';
 import { ROUTES } from '@utils/constants';
 
@@ -29,6 +30,7 @@ export const router = createBrowserRouter([
       { path: ROUTES.REFUNDS, element: <RefundsPage /> },
       { path: ROUTES.CREDITS, element: <CreditsPage /> },
       { path: ROUTES.CONTACT, element: <ContactPage /> },
+      { path: ROUTES.EXAMPLE, element: <ExamplePage /> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },
