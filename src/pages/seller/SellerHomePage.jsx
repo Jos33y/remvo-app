@@ -68,7 +68,7 @@ export function SellerHomePage() {
             <div className={s.empty}>
               <span className={s.emptyIcon}><IconListings size={28} /></span>
               <p className={s.emptyTitle}>No listings yet</p>
-              <p className={s.emptyText}>Type a barcode above. Your first listing is back in about a minute.</p>
+              <p className={s.emptyText}>Type a barcode above. Your first listing is usually back in under 30 seconds.</p>
             </div>
           )}
         </section>

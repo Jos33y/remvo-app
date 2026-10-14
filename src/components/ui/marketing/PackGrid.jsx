@@ -50,6 +50,7 @@ export function PackGrid({ headingLevel = 3 }) {
                 variant={p.featured ? 'primary' : 'secondary'}
                 size="default"
                 className={styles.buy}
+                data-chat-clear=""
               >
                 Top up {money(price, currency)}
               </Button>

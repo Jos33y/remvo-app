@@ -178,11 +178,11 @@ function Verdict({ checked, each, balance, short, canStart, busy, onStart, onTop
       <div className={b.tally}>
         <div className={b.tallyCell}>
           <span className={`${b.tallyNumber} ${b.tallyGood}`}>{n}</span>
-          <span className={b.tallyLabel}>ready to make</span>
+          <span className={b.tallyLabel}>ready</span>
         </div>
         <div className={b.tallyCell}>
           <span className={b.tallyNumber}>{checked.duplicates}</span>
-          <span className={b.tallyLabel}>repeat an earlier line, left out</span>
+          <span className={b.tallyLabel}>{checked.duplicates === 1 ? 'repeat' : 'repeats'}</span>
         </div>
         <div className={b.tallyCell}>
           <span className={`${b.tallyNumber} ${problems.length ? b.tallyWarn : ''}`}>{problems.length}</span>
@@ -190,6 +190,11 @@ function Verdict({ checked, each, balance, short, canStart, busy, onStart, onTop
         </div>
       </div>
 
+      {checked.duplicates > 0 && (
+        <p className={s.groupNote}>
+          {checked.duplicates === 1 ? 'One line repeats' : `${checked.duplicates} lines repeat`} an earlier line and {checked.duplicates === 1 ? 'is' : 'are'} left out, so nothing is listed twice.
+        </p>
+      )}
       {checked.tooMany && (
         <p className={`${s.notice} ${s.section}`}>Only the first {checked.maxRows} lines are read. Start these, then the rest as a second batch.</p>
       )}

@@ -9,7 +9,7 @@ import { useSellerData } from '@context/SellerData';
 import { useClipboard } from '@hooks/useClipboard';
 import { barcodeLabel, listingCsv, productName, stepsFor, withEdits } from '@lib/sellerData';
 import { MARKETPLACE } from '@lib/market';
-import { inputLabel, listingPrice, longDate, parcel, when } from '@lib/sellerFormat';
+import { hasParcel, inputLabel, listingPrice, longDate, parcel, when } from '@lib/sellerFormat';
 import { PRICING, SELLER_ROUTES } from '@utils/constants';
 import s from '@styles/pages/seller/app.module.css';
 
@@ -45,7 +45,7 @@ function allText(job) {
     l.category && `Category\n${l.category.path} (${l.category.id})`,
     [id.brand && `Brand: ${id.brand}`, id.mpn && `MPN: ${id.mpn}`, id.gtin && `${barcodeLabel(job.marketplace)}: ${id.gtin}`].filter(Boolean).join('\n'),
     l.specifics.length && `Item specifics\n${l.specifics.map(([k, v]) => `${k}: ${v}`).join('\n')}`,
-    l.parcel && `Parcel\n${parcel(l.parcel)}, ${l.parcel.band}`,
+    hasParcel(l.parcel) && `Parcel\n${parcel(l.parcel)}, ${l.parcel.band}`,
     l.price.value != null && `Price\n${listingPrice(l.price.value, l.price.currency)}`,
   ].filter(Boolean).join('\n\n');
 }
@@ -247,10 +247,14 @@ export function ListingPage() {
                     </div>
                   </div>
                 )}
-                {l.parcel?.weight != null ? (
+                {hasParcel(l.parcel) ? (
                   <CopyField label="Parcel" mono value={parcel(l.parcel)}>
                     <p className={`${s.fieldValue} ${s.fieldValueMono}`}>{parcel(l.parcel)}</p>
-                    <p className={s.small}>{l.parcel.band}{l.parcel.l == null ? '. The page gives no size: measure the box.' : ''}</p>
+                    <p className={s.small}>
+                      {l.parcel.band}
+                      {l.parcel.l == null ? '. The page gives no size: measure the box.' : ''}
+                      {l.parcel.weight == null ? '. The page gives no weight: weigh it packed.' : ''}
+                    </p>
                   </CopyField>
                 ) : (
                   <div className={s.field}>

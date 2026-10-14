@@ -19,7 +19,7 @@ export function HomePricing() {
             {each} a listing. Pay only for what you list.
           </h2>
           <p className={styles.pricingDesc}>
-            {listing.name} uses {listing.credits} credits. A job that fails gives
+            A listing uses {listing.credits} credits. A job that fails gives
             its credits back on its own, and unused credits are refunded in full
             within {PRICING.REFUND_DAYS} days of buying them.
           </p>

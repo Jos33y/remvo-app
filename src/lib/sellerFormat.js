@@ -17,10 +17,18 @@ const PRICE_FORMAT = {
 /** A suggested selling price, as the eBay site shows it: $19.99, C$24.99, £14.99, 16,99 €. */
 export const listingPrice = (value, currency) => (PRICE_FORMAT[currency] ?? PRICE_FORMAT.USD)(Number(value));
 
-/** "28 x 10 x 10 cm, 0.45 kg" or "11 x 4 x 4 in, 1 lb". */
-export const parcel = (p) => p.units === 'imperial'
-  ? `${p.l} x ${p.w} x ${p.h} in, ${p.weight} lb`
-  : `${p.l} x ${p.w} x ${p.h} cm, ${p.weight} kg`;
+/** "28 x 10 x 10 cm, 0.45 kg" or "11 x 4 x 4 in, 1 lb". Only what is known:
+ *  "3 lb" when the page gives no size, "8 x 4 x 4 in" when it gives no weight. */
+export function parcel(p) {
+  if (!p) return '';
+  const imperial = p.units === 'imperial';
+  const size = p.l != null && p.w != null && p.h != null ? `${p.l} x ${p.w} x ${p.h} ${imperial ? 'in' : 'cm'}` : null;
+  const weight = p.weight != null ? `${p.weight} ${imperial ? 'lb' : 'kg'}` : null;
+  return [size, weight].filter(Boolean).join(', ');
+}
+
+/** True when the parcel has a size or a weight to show. */
+export const hasParcel = (p) => Boolean(p && (p.weight != null || (p.l != null && p.w != null && p.h != null)));
 export const credits = (n) => `${n} ${Math.abs(n) === 1 ? 'credit' : 'credits'}`;
 export const signed = (n) => (n > 0 ? `+${n}` : `${n}`).replace('-', '−');
 

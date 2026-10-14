@@ -21,6 +21,42 @@ import s from '@styles/ui/support/site-chat.module.css';
  * ────────────────────────────────────────────────────────────────── */
 
 const STORE = 'remvo.chat';
+
+/* The strip at the bottom of a phone screen the round button covers:
+ * 56px button, 16px margin, and room for the safe area. */
+const STRIP = 104;
+
+/* True while any [data-chat-clear] element (the pricing Top up buttons)
+ * is in that strip, on a phone. The button steps aside rather than sit
+ * on a button the visitor is about to press. Desktop never needs it:
+ * the pill sits in the margin beside the content. */
+function useStepAside(pathname) {
+  const [aside, setAside] = useState(false);
+  useEffect(() => {
+    const phone = window.matchMedia('(max-width: 559px)');
+    if (typeof IntersectionObserver === 'undefined') return undefined;
+    let io = null;
+    const under = new Set();
+    const watch = () => {
+      io?.disconnect();
+      io = null;
+      under.clear();
+      setAside(false);
+      const targets = document.querySelectorAll('[data-chat-clear]');
+      if (!phone.matches || targets.length === 0) return;
+      io = new IntersectionObserver((entries) => {
+        for (const e of entries) { if (e.isIntersecting) under.add(e.target); else under.delete(e.target); }
+        setAside(under.size > 0);
+      }, { rootMargin: `-${Math.max(0, window.innerHeight - STRIP)}px 0px 0px 0px` });
+      targets.forEach((t) => io.observe(t));
+    };
+    watch();
+    phone.addEventListener('change', watch);
+    window.addEventListener('resize', watch);
+    return () => { io?.disconnect(); phone.removeEventListener('change', watch); window.removeEventListener('resize', watch); };
+  }, [pathname]);
+  return aside;
+}
 const read = () => { try { return JSON.parse(localStorage.getItem(STORE) ?? 'null'); } catch { return null; } };
 const keep = (v) => { try { if (v) localStorage.setItem(STORE, JSON.stringify(v)); else localStorage.removeItem(STORE); } catch { /* private mode */ } };
 
@@ -31,6 +67,7 @@ export function SiteChat() {
   const launcher = useRef(null);
   const panel = useRef(null);
   const titleId = useId();
+  const aside = useStepAside(location.pathname);
 
   // A reply email's link: take the chat, open it, tidy the address.
   useEffect(() => {
@@ -110,7 +147,7 @@ export function SiteChat() {
       <button
         ref={launcher}
         type="button"
-        className={`${s.launcher} ${open ? s.launcherOpen : ''}`}
+        className={`${s.launcher} ${open ? s.launcherOpen : ''} ${aside && !open ? s.launcherAside : ''}`}
         onClick={() => (open ? close() : setOpen(true))}
         aria-expanded={open}
         aria-label={open ? 'Close chat' : chat.unread ? `Chat with Remvo, ${chat.unread} new` : 'Chat with Remvo'}
