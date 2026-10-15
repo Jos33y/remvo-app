@@ -39,7 +39,8 @@ export function PackGrid({ headingLevel = 3 }) {
         {PRICING.PACKS.map((p) => {
           const price = p.price[currency];
           return (
-            <li key={p.credits} className={`${styles.pack} ${p.featured ? styles.featured : ''}`}>
+            // data-chat-clear: on a phone the chat button steps aside while any part of a pack is under it.
+            <li key={p.credits} className={`${styles.pack} ${p.featured ? styles.featured : ''}`} data-chat-clear="">
               <H className={styles.price}>
                 <span className={styles.currency}>{symbol}</span>{price}
                 <span className="sr-only"> top-up</span>
@@ -54,7 +55,6 @@ export function PackGrid({ headingLevel = 3 }) {
                 variant={p.featured ? 'primary' : 'secondary'}
                 size="default"
                 className={styles.buy}
-                data-chat-clear=""
               >
                 Top up {money(price, currency)}
               </Button>

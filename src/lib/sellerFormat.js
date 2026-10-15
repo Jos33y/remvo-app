@@ -17,13 +17,20 @@ const PRICE_FORMAT = {
 /** A suggested selling price, as the eBay site shows it: $19.99, C$24.99, £14.99, 16,99 €. */
 export const listingPrice = (value, currency) => (PRICE_FORMAT[currency] ?? PRICE_FORMAT.USD)(Number(value));
 
-/** "28 x 10 x 10 cm, 0.45 kg" or "11 x 4 x 4 in, 1 lb". Only what is known:
- *  "3 lb" when the page gives no size, "8 x 4 x 4 in" when it gives no weight. */
+/** eBay.com's weight: "2 lb 2 oz", "2 lb", "9 oz". Listings made before
+ *  ounces were kept have none, and read as whole pounds. */
+export const lbOz = (lb, oz) => {
+  const parts = [lb > 0 && `${lb} lb`, oz > 0 && `${oz} oz`].filter(Boolean);
+  return parts.length ? parts.join(' ') : `${lb ?? 0} lb`;
+};
+
+/** "28 x 10 x 10 cm, 0.45 kg" or "8 x 4 x 4 in, 1 lb 7 oz". Only what is known:
+ *  "2 lb 2 oz" when the page gives no size, "8 x 4 x 4 in" when it gives no weight. */
 export function parcel(p) {
   if (!p) return '';
   const imperial = p.units === 'imperial';
   const size = p.l != null && p.w != null && p.h != null ? `${p.l} x ${p.w} x ${p.h} ${imperial ? 'in' : 'cm'}` : null;
-  const weight = p.weight != null ? `${p.weight} ${imperial ? 'lb' : 'kg'}` : null;
+  const weight = p.weight == null ? null : imperial ? lbOz(p.weight, p.oz) : `${p.weight} kg`;
   return [size, weight].filter(Boolean).join(', ');
 }
 

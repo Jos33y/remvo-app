@@ -26,9 +26,10 @@ const STORE = 'remvo.chat';
  * 56px button, 16px margin, and room for the safe area. */
 const STRIP = 104;
 
-/* True while any [data-chat-clear] element (the pricing Top up buttons)
+/* True while any [data-chat-clear] element (the pricing pack cards)
  * is in that strip, on a phone. The button steps aside rather than sit
- * on a button the visitor is about to press. Desktop never needs it:
+ * on a price or a Top up button the visitor is about to read or press.
+ * Desktop never needs it:
  * the pill sits in the margin beside the content. */
 function useStepAside(pathname) {
   const [aside, setAside] = useState(false);

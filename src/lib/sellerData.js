@@ -116,7 +116,8 @@ const dims = (p) => (p?.l && p?.w && p?.h ? `${p.l} x ${p.w} x ${p.h}` : '');
 /** One row per field, readable in Excel or Numbers and easy to copy from. */
 export function listingCsv(j) {
   const l = withEdits(j);
-  const metric = l.parcel?.units !== 'imperial';
+  // The site's units, even with no parcel: eBay.com never reads "cm" or "kg".
+  const metric = (l.parcel?.units ?? (MARKETPLACE[j.marketplace] ?? MARKETPLACE.US).units) !== 'imperial';
   const id = l.identifiers ?? {};
   const rows = [
     ['Field', 'Value'],
@@ -132,7 +133,13 @@ export function listingCsv(j) {
     ...l.specifics.map(([k, v]) => [`Item specific: ${k}`, v]),
     ...(l.missing ?? []).filter((m) => m !== 'category').map((m) => [`Item specific: ${m}`, '']),
     [metric ? 'Parcel size (cm)' : 'Parcel size (in)', dims(l.parcel)],
-    [metric ? 'Parcel weight (kg)' : 'Parcel weight (lb)', l.parcel?.weight ?? ''],
+    ...(metric
+      ? [['Parcel weight (kg)', l.parcel?.weight ?? '']]
+      : [
+        // Seller Hub takes pounds and ounces in two boxes.
+        ['Parcel weight (lb)', l.parcel?.weight ?? ''],
+        ['Parcel weight (oz)', l.parcel?.weight != null ? l.parcel.oz ?? 0 : ''],
+      ]),
     ['Postage', l.parcel?.band ?? ''],
     [`Price (${l.price.currency})`, l.price.value != null ? Number(l.price.value).toFixed(2) : ''],
     ['Job reference', j.ref],
