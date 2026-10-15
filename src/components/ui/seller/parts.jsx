@@ -7,6 +7,7 @@ import { useSellerData } from '@context/SellerData';
 import { useClipboard } from '@hooks/useClipboard';
 import { CONDITION, CONDITIONS, readInput } from '@lib/sellerData';
 import { longDate } from '@lib/sellerFormat';
+import { count, num, plural } from '@lib/plural';
 import { CURRENCIES, MARKETPLACE, money } from '@lib/market';
 import { PRICING, SELLER_ROUTES, creditsFor, listingsFor } from '@utils/constants';
 import s from '@styles/pages/seller/app.module.css';
@@ -62,19 +63,19 @@ export function BalanceCard({ onTopUp, compact = false }) {
     <section className={s.balance} aria-label="Balance">
       <p className={s.balanceLabel}>Balance</p>
       <p className={s.balanceFigure}>
-        <span className={s.balanceNumber}>{balance}</span>
-        <span className={s.balanceUnit}>{balance === 1 ? 'credit' : 'credits'}</span>
+        <span className={s.balanceNumber}>{num(balance)}</span>
+        <span className={s.balanceUnit}>{plural(balance, 'credit')}</span>
       </p>
       {onlyWelcome ? (
         <p className={s.balanceMeta}>
           <strong>Your first listing is on us.</strong>
-          {!compact && <><br />These {welcome.credits} credits last until {longDate(welcome.expiresAt)}.</>}
+          {!compact && <><br />{plural(welcome.credits, 'This', 'These')} {count(welcome.credits, 'credit')} {plural(welcome.credits, 'lasts', 'last')} until {longDate(welcome.expiresAt)}.</>}
         </p>
       ) : (
         <p className={s.balanceMeta}>
-          Worth {money(worth, currency)}. Enough for <strong>{listingsLeft} {listingsLeft === 1 ? 'listing' : 'listings'}</strong>.
+          Worth {money(worth, currency)}. Enough for <strong>{count(listingsLeft, 'listing')}</strong>.
           {expiresAt && !compact && <><br />Lasts until {longDate(expiresAt)}.</>}
-          {welcome && !compact && <><br />Includes {welcome.credits} welcome {welcome.credits === 1 ? 'credit' : 'credits'}, until {longDate(welcome.expiresAt)}.</>}
+          {welcome && !compact && <><br />Includes {count(welcome.credits, 'welcome credit')}, until {longDate(welcome.expiresAt)}.</>}
         </p>
       )}
       {onTopUp && (
@@ -192,7 +193,7 @@ export function TopUpSheet({ open, onClose }) {
       footer={
         <>
           <button type="button" className={`${s.button} ${s.primary} ${s.block}`} onClick={pay} disabled={busy || !ready}>
-            {busy ? 'Opening checkout' : payLabel}
+            {busy ? 'Opening checkout…' : payLabel}
           </button>
           <p className={`${s.small} ${s.centred}`}>
             Payment by Polar, our merchant of record. Any tax is shown before you pay.
@@ -227,9 +228,9 @@ export function TopUpSheet({ open, onClose }) {
           >
             <span className={s.packPrice}>{money(p.price[currency], currency)}</span>
             <span className={s.packMain}>
-              <span className={s.packCredits}>{p.credits} credits</span>
+              <span className={s.packCredits}>{count(p.credits, 'credit')}</span>
               <br />
-              <span className={s.packSub}>About {listingsFor(p.credits)} listings</span>
+              <span className={s.packSub}>About {count(listingsFor(p.credits), 'listing')}</span>
             </span>
             <span className={s.radio} aria-hidden="true" />
           </button>
@@ -274,7 +275,7 @@ export function TopUpSheet({ open, onClose }) {
           </div>
           {error
             ? <p id={amountErr} className={s.fieldError} role="alert"><IconAlert size={16} />{error}</p>
-            : <p className={s.hint} aria-live="polite">{whole ? `${otherCredits} credits, about ${listingsFor(otherCredits)} listings` : `${money(PRICING.CREDIT[currency], currency)} a credit`}</p>}
+            : <p className={s.hint} aria-live="polite">{whole ? `${count(otherCredits, 'credit')}, about ${count(listingsFor(otherCredits), 'listing')}` : `${money(PRICING.CREDIT[currency], currency)} a credit`}</p>}
         </div>
       )}
 

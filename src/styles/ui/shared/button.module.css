@@ -23,7 +23,7 @@
     background-color var(--transition-fast),
     color var(--transition-fast),
     border-color var(--transition-fast),
-    transform 160ms cubic-bezier(0.16, 1, 0.3, 1);
+    transform 160ms var(--ease-out);
   white-space: nowrap;
   user-select: none;
   touch-action: manipulation;
@@ -63,8 +63,10 @@
   color: var(--color-obsidian);
 }
 
-.primary:hover {
-  background-color: #b8983f;
+@media (hover: hover) and (pointer: fine) {
+  .primary:hover {
+    background-color: #b8983f;
+  }
 }
 
 .primary:active {
@@ -79,9 +81,11 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.secondary:hover {
-  border-color: rgba(255, 255, 255, 0.4);
-  background-color: rgba(255, 255, 255, 0.04);
+@media (hover: hover) and (pointer: fine) {
+  .secondary:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+    background-color: rgba(255, 255, 255, 0.04);
+  }
 }
 
 /* ── Outline: for light backgrounds ── */
@@ -92,9 +96,11 @@
   border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
-.outline:hover {
-  border-color: rgba(0, 0, 0, 0.3);
-  background-color: rgba(0, 0, 0, 0.02);
+@media (hover: hover) and (pointer: fine) {
+  .outline:hover {
+    border-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.02);
+  }
 }
 
 /* ── Ghost ── */
@@ -104,8 +110,10 @@
   color: var(--color-gold);
 }
 
-.ghost:hover {
-  background-color: rgba(201, 168, 76, 0.08);
+@media (hover: hover) and (pointer: fine) {
+  .ghost:hover {
+    background-color: rgba(201, 168, 76, 0.08);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -62,7 +62,9 @@
   white-space: nowrap;
 }
 
-.action:hover { text-decoration: underline; text-underline-offset: 3px; }
+@media (hover: hover) and (pointer: fine) {
+  .action:hover { text-decoration: underline; text-underline-offset: 3px; }
+}
 
 .action:focus-visible,
 .close:focus-visible {
@@ -84,7 +86,9 @@
   cursor: pointer;
 }
 
-.close:hover { color: #FFFFFF; }
+@media (hover: hover) and (pointer: fine) {
+  .close:hover { color: #FFFFFF; }
+}
 
 /* Phones: a shorter date and action on one line; the reason waits for a wider screen. */
 .narrow { display: none; }

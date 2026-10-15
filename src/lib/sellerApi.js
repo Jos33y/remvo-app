@@ -44,6 +44,13 @@ const FALLBACK = {
 };
 
 async function call(method, path, body) {
+  // Development only: the break-the-UI fixtures (lib/devData.js), when
+  // ?data= picked one. Not in a production build.
+  if (import.meta.env.DEV) {
+    const { devAnswer } = await import('./devData.js');
+    const answer = await devAnswer(method, path, body, SellerApiError);
+    if (answer !== undefined) return answer;
+  }
   let res;
   try {
     res = await fetch(`${BASE}${path}`, {
@@ -108,6 +115,11 @@ export const sellerApi = Object.freeze({
 
 /** A file from the API, as a Blob, with the same errors as call(). */
 async function download(path) {
+  if (import.meta.env.DEV) {
+    const { devAnswer } = await import('./devData.js');
+    const answer = await devAnswer('GET', path, null, SellerApiError);
+    if (answer !== undefined) return answer;
+  }
   let res;
   try {
     res = await fetch(`${BASE}${path}`, { credentials: 'include' });

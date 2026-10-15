@@ -10,7 +10,9 @@ import { useClipboard } from '@hooks/useClipboard';
 import { barcodeLabel, listingCsv, productName, stepsFor, withEdits } from '@lib/sellerData';
 import { MARKETPLACE } from '@lib/market';
 import { hasParcel, inputLabel, listingPrice, longDate, parcel, when } from '@lib/sellerFormat';
+import { count, plural } from '@lib/plural';
 import { PRICING, SELLER_ROUTES } from '@utils/constants';
+import { Breakable } from '@components/ui/seller/Breakable';
 import s from '@styles/pages/seller/app.module.css';
 
 /* ──────────────────────────────────────────────────────────────────
@@ -101,7 +103,7 @@ export function ListingPage() {
             </div>
           ) : (
             <div className={s.empty} aria-busy="true">
-              <p className={s.emptyText}>Opening the listing</p>
+              <p className={s.emptyText}>Opening the listing…</p>
             </div>
           )}
         </div>
@@ -137,18 +139,18 @@ export function ListingPage() {
 
   return (
     <>
-      <PageHeader title={l ? 'Listing' : 'Failed listing'} back={SELLER_ROUTES.LISTINGS} backLabel="Listings" large={false} />
+      <PageHeader title={job.status === 'failed' ? 'Failed listing' : 'Listing'} back={SELLER_ROUTES.LISTINGS} backLabel="Listings" large={false} />
       <div className={s.content}>
         <header className={s.jobHead}>
           <h2 className={`${s.jobTitle} ${productName(job) ? s.jobTitleClamp : ''}`} title={productName(job) ?? undefined}>
-            {productName(job) ?? inputLabel(job.input)}
+            {productName(job) ?? <Breakable text={inputLabel(job.input)} />}
           </h2>
           <p className={s.jobMeta}>
             <StatusPill status={job.status} />
             <span>{when(job.createdAt)}</span>
             <span>{site.site}</span>
             <span className={s.mono}>{job.ref}</span>
-            <span>{job.credits ? `${job.credits} credits` : 'No credits used'}</span>
+            <span>{job.credits ? count(job.credits, 'credit') : 'No credits used'}</span>
           </p>
         </header>
 
@@ -243,7 +245,7 @@ export function ListingPage() {
                     <div className={s.fieldMain}>
                       <p className={s.fieldLabel}><span>Still needed on eBay</span></p>
                       <p className={s.fieldValue} lang={lang}>{needs.join(', ')}</p>
-                      <p className={s.small}>eBay asks for {needs.length === 1 ? 'this' : 'these'} and the product page does not say. Fill {needs.length === 1 ? 'it' : 'them'} in from the item in your hand.</p>
+                      <p className={s.small}>eBay asks for {plural(needs.length, 'this', 'these')} and the product page does not say. Fill {plural(needs.length, 'it', 'them')} in from the item in your hand.</p>
                     </div>
                   </div>
                 )}
@@ -278,7 +280,7 @@ export function ListingPage() {
                     : <p className={s.fieldValue}>Not set</p>}
                   <p className={s.small}>
                     {o.price.listings
-                      ? `Middle of ${o.price.listings} live ${site.site} ${o.price.listings === 1 ? 'listing' : 'listings'} is ${listingPrice(o.price.median, o.price.currency)}`
+                      ? `Middle of ${count(o.price.listings, `live ${site.site} listing`)} is ${listingPrice(o.price.median, o.price.currency)}`
                       : `No live ${site.site} listings of this product to price from. Set your own.`}
                   </p>
                 </EditableField>
@@ -314,7 +316,7 @@ export function ListingPage() {
         footer={
           <div className={s.actions}>
             <button type="button" className={`${s.button} ${s.destructive} ${s.block}`} onClick={remove} disabled={busy}>
-              {busy ? 'Deleting' : 'Delete listing'}
+              {busy ? 'Deleting…' : 'Delete listing'}
             </button>
             <button type="button" className={`${s.button} ${s.secondary} ${s.block}`} onClick={() => setConfirm(false)} disabled={busy}>
               Keep it

@@ -179,10 +179,10 @@
   color: var(--app-on-gold);
   background-color: var(--app-gold);
   touch-action: manipulation;
-  transition: transform 100ms ease-out, opacity 150ms ease;
+  transition: transform 100ms var(--ease-out), opacity 150ms ease;
 }
 
-.send:active:not(:disabled) { transform: scale(0.94); }
+.send:active:not(:disabled) { transform: scale(0.96); }
 .send:disabled { opacity: 0.35; }
 
 .send:focus-visible {

@@ -7,6 +7,7 @@ import { MARKETPLACE } from '@lib/market';
 import { JobRow } from '@pages/seller/SellerHomePage';
 import { SELLER_ROUTES, batchPath } from '@utils/constants';
 import { when } from '@lib/sellerFormat';
+import { count } from '@lib/plural';
 import s from '@styles/pages/seller/app.module.css';
 
 /* ──────────────────────────────────────────────────────────────────
@@ -127,7 +128,7 @@ export function ListingsPage() {
                 disabled={loadingMore}
                 onClick={async () => { setLoadingMore(true); try { await loadMoreJobs(); } finally { setLoadingMore(false); } }}
               >
-                {loadingMore ? 'Loading' : 'Show older listings'}
+                {loadingMore ? 'Loading…' : 'Show older listings'}
               </button>
             </div>
           )}
@@ -147,7 +148,7 @@ function BatchRow({ batch }) {
   return (
     <Link to={batchPath(batch.id)} className={s.row}>
       <span className={s.rowMain}>
-        <span className={s.rowTitle}>{batch.total} {batch.total === 1 ? 'listing' : 'listings'}</span>
+        <span className={s.rowTitle}>{count(batch.total, 'listing')}</span>
         <span className={s.rowSub}>
           <span>{when(batch.createdAt)}</span>
           <span>{sub}</span>

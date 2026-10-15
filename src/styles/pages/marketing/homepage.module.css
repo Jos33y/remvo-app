@@ -278,8 +278,10 @@
   color: var(--color-text-dark);
 }
 
-.featuresMore .inlineLink:hover {
-  color: #7A6220;
+@media (hover: hover) and (pointer: fine) {
+  .featuresMore .inlineLink:hover {
+    color: #7A6220;
+  }
 }
 
 /* ═══════════════════════════════════════

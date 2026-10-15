@@ -104,7 +104,7 @@ export function ChatThread({ messages, onSend, intro = null, placeholder = 'Writ
                     <button type="button" className={s.retry} onClick={() => retry(m)}>Send again</button>
                   </p>
                 ) : endOfRun && (
-                  <p className={s.meta}>{m.local ? 'Sending' : time(m.at)}</p>
+                  <p className={s.meta}>{m.local ? 'Sending…' : time(m.at)}</p>
                 )}
               </div>
             </div>

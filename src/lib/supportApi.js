@@ -17,6 +17,12 @@ const ROOT = (import.meta.env.VITE_API_URL
   ?? (import.meta.env.DEV ? 'http://localhost:8080' : 'https://api.remvo.app')).replace(/\/+$/, '');
 
 async function call(method, path, { body, key, cookie = false } = {}) {
+  // Development only: the seller's chat from the break-the-UI fixtures.
+  if (import.meta.env.DEV && cookie) {
+    const { devAnswer } = await import('./devData.js');
+    const answer = await devAnswer(method, path.replace(/^\/my/, ''), body, SellerApiError);
+    if (answer !== undefined) return answer;
+  }
   let res;
   try {
     res = await fetch(`${ROOT}/v1${path}`, {

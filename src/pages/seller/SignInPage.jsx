@@ -154,7 +154,7 @@ export function SignInPage() {
             {error && <p id={errorId} className={styles.error} role="alert">{error}</p>}
 
             <Button type="submit" variant="primary" size="default" className={styles.submit} disabled={busy}>
-              {busy ? 'Sending' : 'Email me a sign-in link'}
+              {busy ? 'Sending…' : 'Email me a sign-in link'}
             </Button>
 
             <p className={styles.legal}>
@@ -191,7 +191,7 @@ export function SignInPage() {
             {note && !error && <p className={styles.note} role="status">{note}</p>}
 
             <Button type="submit" variant="primary" size="default" className={styles.submit} disabled={busy}>
-              {busy ? 'Signing in' : 'Sign in'}
+              {busy ? 'Signing in…' : 'Sign in'}
             </Button>
 
             <div className={styles.links}>

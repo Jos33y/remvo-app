@@ -59,8 +59,10 @@
   transition: color var(--transition-fast);
 }
 
-.colLink:hover {
-  color: var(--color-white);
+@media (hover: hover) and (pointer: fine) {
+  .colLink:hover {
+    color: var(--color-white);
+  }
 }
 
 .companyInfo {

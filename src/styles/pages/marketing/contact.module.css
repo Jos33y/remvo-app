@@ -75,9 +75,11 @@
     background-color var(--transition-fast);
 }
 
-.card:hover {
-  border-color: rgba(201, 168, 76, 0.25);
-  background-color: rgba(255, 255, 255, 0.04);
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    border-color: rgba(201, 168, 76, 0.25);
+    background-color: rgba(255, 255, 255, 0.04);
+  }
 }
 
 .cardIcon {

@@ -26,7 +26,7 @@ import styles from '@styles/ui/seller/sheet.module.css';
  * ────────────────────────────────────────────────────────────────── */
 
 /* Leaving never bounces: a settle on the way out reads as hesitation. */
-const leave = { type: 'spring', bounce: 0, visualDuration: 0.24 };
+const leave = { type: 'spring', bounce: 0, visualDuration: 0.2 };
 
 const DISMISS_AT = 140; // px of projected travel past which a release closes
 

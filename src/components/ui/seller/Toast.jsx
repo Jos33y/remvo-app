@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { IconCheck } from '@components/ui/seller/icons';
-import { move, fade, useReducedMotion } from '@lib/sellerMotion';
+import { small, fade, useReducedMotion } from '@lib/sellerMotion';
 import styles from '@styles/ui/seller/toast.module.css';
 
 /* Short confirmations: "Copied", "Listing deleted". One at a time, two
@@ -23,7 +23,7 @@ export function ToastProvider({ children }) {
 
   const motionProps = reduced
     ? { initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 }, transition: fade }
-    : { initial: { opacity: 0, y: -12, scale: 0.96 }, animate: { opacity: 1, y: 0, scale: 1 }, exit: { opacity: 0, y: -8, scale: 0.98 }, transition: move };
+    : { initial: { opacity: 0, y: -12, scale: 0.96 }, animate: { opacity: 1, y: 0, scale: 1 }, exit: { opacity: 0, y: -8, scale: 0.98 }, transition: small };
 
   return (
     <ToastContext.Provider value={show}>

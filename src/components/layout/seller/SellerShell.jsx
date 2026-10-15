@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { NavLink, useLocation, useOutlet } from 'react-router';
-import { AnimatePresence, motion } from 'motion/react';
 import { Logo } from '@components/ui/shared/Logo';
 import { ToastProvider } from '@components/ui/seller/Toast';
 import { IconHome, IconListings, IconCredits, IconProfile, IconSupport } from '@components/ui/seller/icons';
 import { useSupportUnread } from '@hooks/useSupportUnread';
+import { useThemeColor } from '@hooks/useThemeColor';
+import { count } from '@lib/plural';
 import { useSellerSession } from '@context/SellerSession';
-import { move, fade, useReducedMotion } from '@lib/sellerMotion';
 import { SELLER_ROUTES } from '@utils/constants';
 import theme from '@styles/layout/seller/app-theme.module.css';
 import styles from '@styles/layout/seller/seller-shell.module.css';
@@ -43,7 +43,7 @@ function TabLink({ to, label, Icon, end, variant, badge = 0 }) {
       to={to}
       end={end}
       className={({ isActive }) => `${styles[variant]} ${isActive ? styles.active : ''}`}
-      aria-label={badge ? `${label}, ${badge} new ${badge === 1 ? 'reply' : 'replies'}` : undefined}
+      aria-label={badge ? `${label}, ${count(badge, 'new reply', 'new replies')}` : undefined}
     >
       {({ isActive }) => (
         <>
@@ -60,15 +60,14 @@ function TabLink({ to, label, Icon, end, variant, badge = 0 }) {
 
 export function SellerShell() {
   const location = useLocation();
-  // The element, not <Outlet />: an exiting page must keep showing
-  // itself, not the page being navigated to.
   const outlet = useOutlet();
   const { account } = useSellerSession();
-  const reduced = useReducedMotion();
   const covered = /^\/(listings\/[^/]+|batches\/[^/]+)$/.test(location.pathname);
   // Support is a chat: the box to write in sits just above the tabs, with no padding under it.
   const flush = location.pathname === SELLER_ROUTES.SUPPORT;
   const unread = useSupportUnread({ enabled: Boolean(account), onSupport: flush });
+  // The bars' own colours (app-theme.module.css --app-bar-solid).
+  useThemeColor('#F7F5F1', '#161618');
 
   // iOS Safari only shows :active on touch when a touch listener exists.
   useEffect(() => {
@@ -76,10 +75,6 @@ export function SellerShell() {
     document.addEventListener('touchstart', noop, { passive: true });
     return () => document.removeEventListener('touchstart', noop);
   }, []);
-
-  const pageMotion = reduced
-    ? { initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 }, transition: fade }
-    : { initial: { opacity: 0, y: 8 }, animate: { opacity: 1, y: 0, transition: move }, exit: { opacity: 0, transition: { duration: 0.1 } } };
 
   return (
     <ToastProvider>
@@ -97,11 +92,12 @@ export function SellerShell() {
         </aside>
 
         <main id="seller-main" className={styles.main}>
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div key={location.pathname} className={styles.page} {...pageMotion}>
-              {outlet}
-            </motion.div>
-          </AnimatePresence>
+          {/* Tabs change at once (motion spec 8): no fade, no wait for the
+            * old page to leave. A pushed screen (a listing, a batch) rises
+            * in briefly so the eye follows where it came from. */}
+          <div key={location.pathname} className={`${styles.page} ${covered ? styles.pushIn : ''}`}>
+            {outlet}
+          </div>
         </main>
 
         <nav className={styles.tabbar} aria-label="Main">

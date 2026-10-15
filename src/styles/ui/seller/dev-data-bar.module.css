@@ -1,0 +1,48 @@
+/* Development only. Above the phone's tab bar, centred; no motion. */
+.bar {
+  position: fixed;
+  z-index: 1000;
+  left: 50%;
+  bottom: calc(var(--tabbar-h, 49px) + var(--safe-bottom, 0px) + 8px);
+  transform: translateX(-50%);
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 4px;
+  max-width: calc(100vw - 16px);
+  padding: 4px;
+  border-radius: 8px;
+  background: #3A3A3C;
+  color: #FFFFFF;
+  font: 500 11px/1 system-ui, sans-serif;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.option {
+  min-height: 28px;
+  padding: 0 6px;
+  border-radius: 6px;
+  color: inherit;
+  background: transparent;
+}
+
+.option[aria-pressed='true'] {
+  background: #636366;
+}
+
+.balance {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 4px;
+}
+
+.balance select {
+  font: inherit;
+  color: #1A1A1A;
+}
+
+@media (min-width: 900px) {
+  .bar { bottom: 8px; }
+}

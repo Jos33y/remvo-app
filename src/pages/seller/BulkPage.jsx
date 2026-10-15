@@ -5,6 +5,7 @@ import { SegmentedChoice, TopUpSheet } from '@components/ui/seller/parts';
 import { IconAlert } from '@components/ui/seller/icons';
 import { useSellerData } from '@context/SellerData';
 import { MARKETPLACE } from '@lib/market';
+import { count, num, plural } from '@lib/plural';
 import { CONDITIONS, CONDITION } from '@lib/sellerData';
 import { SELLER_ROUTES, batchPath } from '@utils/constants';
 import s from '@styles/pages/seller/app.module.css';
@@ -143,7 +144,7 @@ export function BulkPage() {
             {!checked && (
               <div className={s.cardActions}>
                 <button type="submit" className={`${s.button} ${s.primary} ${s.block}`} disabled={busy === 'check'}>
-                  {busy === 'check' ? 'Checking every line' : 'Check, free'}
+                  {busy === 'check' ? 'Checking every line…' : 'Check, free'}
                 </button>
               </div>
             )}
@@ -182,17 +183,17 @@ function Verdict({ checked, each, balance, short, canStart, busy, onStart, onTop
         </div>
         <div className={b.tallyCell}>
           <span className={b.tallyNumber}>{checked.duplicates}</span>
-          <span className={b.tallyLabel}>{checked.duplicates === 1 ? 'repeat' : 'repeats'}</span>
+          <span className={b.tallyLabel}>{plural(checked.duplicates, 'repeat')}</span>
         </div>
         <div className={b.tallyCell}>
           <span className={`${b.tallyNumber} ${problems.length ? b.tallyWarn : ''}`}>{problems.length}</span>
-          <span className={b.tallyLabel}>{problems.length === 1 ? 'needs a look' : 'need a look'}</span>
+          <span className={b.tallyLabel}>{plural(problems.length, 'needs a look', 'need a look')}</span>
         </div>
       </div>
 
       {checked.duplicates > 0 && (
         <p className={s.groupNote}>
-          {checked.duplicates === 1 ? 'One line repeats' : `${checked.duplicates} lines repeat`} an earlier line and {checked.duplicates === 1 ? 'is' : 'are'} left out, so nothing is listed twice.
+          {checked.duplicates === 1 ? 'One line repeats' : `${num(checked.duplicates)} lines repeat`} an earlier line and {plural(checked.duplicates, 'is', 'are')} left out, so nothing is listed twice.
         </p>
       )}
       {checked.tooMany && (
@@ -200,7 +201,7 @@ function Verdict({ checked, each, balance, short, canStart, busy, onStart, onTop
       )}
       {checked.fixed?.length > 0 && (
         <p className={s.groupNote}>
-          {checked.fixed.length === 1 ? 'One barcode had' : `${checked.fixed.length} barcodes had`} lost the 0 a spreadsheet drops from the front; it is put back.
+          {checked.fixed.length === 1 ? 'One barcode had' : `${num(checked.fixed.length)} barcodes had`} lost the 0 a spreadsheet drops from the front; it is put back.
         </p>
       )}
 
@@ -217,7 +218,7 @@ function Verdict({ checked, each, balance, short, canStart, busy, onStart, onTop
             ))}
           </ul>
           <p className={s.groupNote}>
-            {problems.length > PROBLEMS_SHOWN ? `And ${problems.length - PROBLEMS_SHOWN} more. ` : ''}
+            {problems.length > PROBLEMS_SHOWN ? `And ${num(problems.length - PROBLEMS_SHOWN)} more. ` : ''}
             These are left out. Fix them in the box above and check again, or start without them.
           </p>
         </div>
@@ -226,24 +227,24 @@ function Verdict({ checked, each, balance, short, canStart, busy, onStart, onTop
       {n > 0 ? (
         <div className={s.section}>
           <div className={b.cost}>
-            <span>{n} {n === 1 ? 'listing' : 'listings'}, {each} credits each</span>
-            <span className={b.costFigure}>{n * each} credits</span>
+            <span>{count(n, 'listing')}, {count(each, 'credit')} each</span>
+            <span className={b.costFigure}>{count(n * each, 'credit')}</span>
           </div>
           <p className={s.groupNote}>
-            You have {balance} credits. A line that does not work gives its credits back. Where a barcode finds more than one
+            You have {count(balance, 'credit')}. A line that does not work gives its credits back. Where a barcode finds more than one
             product, the product on its own is taken over bundles, and the line is marked for you to check.
           </p>
           <div className={`${b.buttons} ${s.section}`}>
             {!short ? (
               <button type="button" className={`${s.button} ${s.primary} ${s.block}`} disabled={busy === 'start'} onClick={() => onStart()}>
-                {busy === 'start' ? 'Starting' : `Start ${n} ${n === 1 ? 'listing' : 'listings'}, ${n * each} credits`}
+                {busy === 'start' ? 'Starting…' : `Start ${count(n, 'listing')}, ${count(n * each, 'credit')}`}
               </button>
             ) : (
               <>
-                <button type="button" className={`${s.button} ${s.primary} ${s.block}`} onClick={onTopUp}>Top up to make all {n}</button>
+                <button type="button" className={`${s.button} ${s.primary} ${s.block}`} onClick={onTopUp}>Top up to make all {num(n)}</button>
                 {canStart > 0 && (
                   <button type="button" className={`${s.button} ${s.secondary} ${s.block}`} disabled={busy === 'start'} onClick={() => onStart(canStart)}>
-                    {busy === 'start' ? 'Starting' : `Start the first ${canStart}, ${canStart * each} credits`}
+                    {busy === 'start' ? 'Starting…' : `Start the first ${num(canStart)}, ${count(canStart * each, 'credit')}`}
                   </button>
                 )}
               </>

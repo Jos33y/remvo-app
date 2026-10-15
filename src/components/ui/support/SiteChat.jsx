@@ -199,7 +199,7 @@ function StartForm({ page, onStarted }) {
       {/* Hidden from people; a bot that fills it is turned away. */}
       <input className={s.trap} type="text" name="website" tabIndex={-1} autoComplete="off" value={trap} onChange={(e) => setTrap(e.target.value)} aria-hidden="true" />
       {error && <p id={ids.error} className={s.error} role="alert">{error}</p>}
-      <button type="submit" className={s.start} disabled={busy}>{busy ? 'Sending' : 'Start chat'}</button>
+      <button type="submit" className={s.start} disabled={busy}>{busy ? 'Sending…' : 'Start chat'}</button>
       <p className={s.small}>We use your email only to answer you. <Link to={ROUTES.PRIVACY}>Privacy policy</Link></p>
     </form>
   );

@@ -75,7 +75,7 @@ export function VerifyLinkPage() {
             <h1 className={styles.heading}>Sign in to Remvo</h1>
             <p className={styles.sub}>You opened a sign-in link. Continue to sign in on this device.</p>
             <Button type="button" variant="primary" size="default" className={styles.submit} onClick={signIn} disabled={busy} autoFocus>
-              {busy ? 'Signing in' : 'Sign in'}
+              {busy ? 'Signing in…' : 'Sign in'}
             </Button>
             <p className={styles.hint}>
               Did not ask for this? Close this page. <Link to={SELLER_ROUTES.SIGN_IN} className={styles.legalLink}>Sign in another way</Link>

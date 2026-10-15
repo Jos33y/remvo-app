@@ -141,7 +141,7 @@ function NewListing() {
               {matches.map((m) => (
                 <button key={m.asin} type="button" role="radio" aria-checked={pick === m.asin} className={`${s.pack} ${s.match}`} onClick={() => setPick(m.asin)}>
                   <span className={s.matchImage} aria-hidden="true">
-                    {m.image && <img src={m.image} alt="" loading="lazy" referrerPolicy="no-referrer" onError={(e) => { e.currentTarget.hidden = true; }} />}
+                    {m.image && <img src={m.image} alt="" width={56} height={56} loading="lazy" decoding="async" referrerPolicy="no-referrer" onError={(e) => { e.currentTarget.hidden = true; }} />}
                   </span>
                   <span className={s.packMain}>
                     <span className={s.matchTitle}>{m.title}</span>

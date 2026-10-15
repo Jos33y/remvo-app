@@ -7,11 +7,20 @@
 
 export { money } from '@lib/market';
 
+// Each site's own digit grouping, through Intl: $12,499.00, 12.499,00 €.
+const figures = (locale) => {
+  const f = new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return (n) => f.format(n);
+};
+const US = figures('en-US');
+const CA = figures('en-CA');
+const GB = figures('en-GB');
+const EU = figures('de-DE');
 const PRICE_FORMAT = {
-  USD: (n) => `$${n.toFixed(2)}`,
-  CAD: (n) => `C$${n.toFixed(2)}`,
-  GBP: (n) => `£${n.toFixed(2)}`,
-  EUR: (n) => `${n.toFixed(2).replace('.', ',')} €`,
+  USD: (n) => `$${US(n)}`,
+  CAD: (n) => `C$${CA(n)}`,
+  GBP: (n) => `£${GB(n)}`,
+  EUR: (n) => `${EU(n)}\u00a0€`,
 };
 
 /** A suggested selling price, as the eBay site shows it: $19.99, C$24.99, £14.99, 16,99 €. */
@@ -37,7 +46,8 @@ export function parcel(p) {
 /** True when the parcel has a size or a weight to show. */
 export const hasParcel = (p) => Boolean(p && (p.weight != null || (p.l != null && p.w != null && p.h != null)));
 export const credits = (n) => `${n} ${Math.abs(n) === 1 ? 'credit' : 'credits'}`;
-export const signed = (n) => (n > 0 ? `+${n}` : `${n}`).replace('-', '−');
+/** A ledger figure with its sign, grouped: "+100,000", "−1,500". */
+export const signed = (n) => `${n > 0 ? '+' : n < 0 ? '−' : ''}${new Intl.NumberFormat('en-GB').format(Math.abs(n))}`;
 
 export const longDate = (iso) =>
   new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -57,4 +67,15 @@ export function when(iso, now = Date.now()) {
 /** "5012 3456 7890 0", grouped the way it is printed on a box. */
 export const barcode = (v) => String(v).replace(/(\d{4})(?=\d)/g, '$1 ');
 
-export const inputLabel = (input) => (input.kind === 'barcode' ? barcode(input.value) : input.value.replace(/^https:\/\/www\./, ''));
+/** What a listing was made from, short enough for a row or a heading.
+ *  A barcode in groups; an Amazon link as its site and product number
+ *  (amazon.co.uk/dp/B0CB5MZXW8), since the product number is the part
+ *  that tells two links apart. */
+export function inputLabel(input) {
+  if (input.kind === 'barcode') return barcode(input.value);
+  const v = String(input.value);
+  const host = (/^https?:\/\/(?:www\.)?([^/?#]+)/i.exec(v) ?? [])[1];
+  const asin = (/\/(?:dp|gp\/product)\/([A-Z0-9]{10})/i.exec(v) ?? [])[1];
+  if (host && asin) return `${host}/dp/${asin.toUpperCase()}`;
+  return v.replace(/^https?:\/\/(?:www\.)?/i, '').replace(/[?#].*$/, '');
+}

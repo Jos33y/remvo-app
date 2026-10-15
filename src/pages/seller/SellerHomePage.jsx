@@ -7,6 +7,7 @@ import { useSellerData } from '@context/SellerData';
 import { inputLabel, when } from '@lib/sellerFormat';
 import { withEdits } from '@lib/sellerData';
 import { SELLER_ROUTES, listingPath } from '@utils/constants';
+import { Breakable } from '@components/ui/seller/Breakable';
 import s from '@styles/pages/seller/app.module.css';
 
 /* ──────────────────────────────────────────────────────────────────
@@ -22,7 +23,7 @@ export function JobRow({ job }) {
   return (
     <Link to={listingPath(job.id)} className={s.row}>
       <span className={s.rowMain}>
-        <span className={`${s.rowTitle} ${s.rowTitleClamp}`}>{title}</span>
+        <span className={`${s.rowTitle} ${s.rowTitleClamp}`}><Breakable text={title} /></span>
         <span className={s.rowSub}>
           <span>{when(job.createdAt)}</span>
           <StatusPill status={job.status} />

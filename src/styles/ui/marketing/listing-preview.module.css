@@ -54,8 +54,10 @@
   transition: border-color var(--transition-fast), background-color var(--transition-fast);
 }
 
-.select:hover {
-  border-color: var(--gold-edge-soft);
+@media (hover: hover) and (pointer: fine) {
+  .select:hover {
+    border-color: var(--gold-edge-soft);
+  }
 }
 
 .select:focus-visible {

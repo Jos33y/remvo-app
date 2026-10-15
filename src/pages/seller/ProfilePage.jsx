@@ -156,7 +156,7 @@ export function ProfilePage() {
         <div className={s.section}>
           <div className={s.group}>
             <button type="button" className={s.row} onClick={onSignOut} disabled={leaving}>
-              <span className={s.rowMain}><span className={`${s.rowTitle} ${s.accent}`}>{leaving ? 'Signing out' : 'Sign out'}</span></span>
+              <span className={s.rowMain}><span className={`${s.rowTitle} ${s.accent}`}>{leaving ? 'Signing out…' : 'Sign out'}</span></span>
             </button>
             <button type="button" className={s.row} onClick={() => setDeleting(true)}>
               <span className={s.rowMain}><span className={`${s.rowTitle} ${s.danger}`}>Delete account</span></span>

@@ -6,6 +6,7 @@ import { IconAlert, IconCheck, IconChevronRight } from '@components/ui/seller/ic
 import { useToast } from '@components/ui/seller/Toast';
 import { useSellerData } from '@context/SellerData';
 import { signed, when } from '@lib/sellerFormat';
+import { count } from '@lib/plural';
 import { money } from '@lib/market';
 import { PRICING, listingPath, siteUrl } from '@utils/constants';
 import s from '@styles/pages/seller/app.module.css';
@@ -48,7 +49,7 @@ function TopUpReturn({ checkoutId, onDone }) {
         if (st.status === 'credited') {
           setState({ phase: 'done', credits: st.credits });
           await refreshWallet();
-          toast(`${st.credits} credits added`);
+          toast(`${count(st.credits, 'credit')} added`);
           return;
         }
         const waited = Date.now() - started.current;
@@ -70,9 +71,9 @@ function TopUpReturn({ checkoutId, onDone }) {
       <div className={`${s.notice} ${phase === 'done' ? s.noticeDone : ''} ${phase === 'unknown' ? s.noticeDanger : ''}`} role="status" aria-live="polite">
         {phase === 'done' ? <IconCheck size={20} /> : phase === 'unknown' ? <IconAlert size={20} /> : <span className={s.pulse} aria-hidden="true" />}
         <span className={s.noticeBody}>
-          {phase === 'waiting' && <><strong>Payment received.</strong> Adding {credits ? `${credits} credits` : 'your credits'} to your balance.</>}
+          {phase === 'waiting' && <><strong>Payment received.</strong> Adding {credits ? count(credits, 'credit') : 'your credits'} to your balance.</>}
           {phase === 'slow' && <><strong>Payment received.</strong> Polar is taking longer than usual to confirm it. Your credits will appear here on their own; you can leave this page.</>}
-          {phase === 'done' && <><strong>{credits} credits added.</strong> Thank you.</>}
+          {phase === 'done' && <><strong>{count(credits, 'credit')} added.</strong> Thank you.</>}
           {phase === 'unknown' && <>We could not find that top-up on this account. If you paid, write to us and we will sort it out.</>}
         </span>
         {(phase === 'done' || phase === 'unknown') && (

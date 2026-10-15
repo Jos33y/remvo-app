@@ -74,8 +74,10 @@
   appearance: none;
 }
 
-.input:hover:not(:disabled) {
-  border-color: rgba(255, 255, 255, 0.28);
+@media (hover: hover) and (pointer: fine) {
+  .input:hover:not(:disabled) {
+    border-color: rgba(255, 255, 255, 0.28);
+  }
 }
 
 .input:focus-visible {
@@ -148,8 +150,10 @@
   touch-action: manipulation;
 }
 
-.textButton:hover:not(:disabled) {
-  color: var(--color-white);
+@media (hover: hover) and (pointer: fine) {
+  .textButton:hover:not(:disabled) {
+    color: var(--color-white);
+  }
 }
 
 .textButton:disabled {
@@ -173,8 +177,10 @@
   text-decoration-thickness: 0.5px;
 }
 
-.legalLink:hover {
-  color: var(--color-white);
+@media (hover: hover) and (pointer: fine) {
+  .legalLink:hover {
+    color: var(--color-white);
+  }
 }
 
 @media (prefers-contrast: more) {

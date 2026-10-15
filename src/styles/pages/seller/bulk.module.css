@@ -96,7 +96,8 @@
 .problem {
   position: relative;
   display: grid;
-  grid-template-columns: 3.25rem minmax(0, 1fr);
+  /* Room for "Line 500" on one line, the same in every row. */
+  grid-template-columns: 4.25rem minmax(0, 1fr);
   gap: 2px 10px;
   padding: 10px 16px;
 }
@@ -113,6 +114,7 @@
 
 .problemLine {
   grid-row: span 2;
+  white-space: nowrap;
   font-family: var(--font-mono);
   font-size: 0.8125rem;
   color: var(--app-text-3);
@@ -167,13 +169,16 @@
 
 .progressHead {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 12px;
+  gap: 4px 12px;
   margin-bottom: 12px;
 }
 
 .progressFigure {
+  /* "280 of 500" stays on one line; the time left moves under it. */
+  white-space: nowrap;
   font-size: 1.75rem;
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -192,22 +197,38 @@
   text-align: right;
 }
 
+/* Each part is the bar's full width, scaled to its share from the left
+ * edge (the failed part starts where the ready part ends). transform
+ * moves on the compositor; animating width would lay out every frame. */
 .bar {
-  display: flex;
+  position: relative;
   height: 8px;
   overflow: hidden;
   border-radius: 4px;
   background-color: var(--app-fill);
 }
 
+.barReady,
+.barFailed {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  transition: transform 250ms var(--ease-out);
+}
+
 .barReady {
   background-color: var(--app-gold);
-  transition: width 400ms ease;
+  transform: scaleX(var(--part, 0));
 }
 
 .barFailed {
   background-color: var(--app-danger);
-  transition: width 400ms ease;
+  transform: translateX(calc(var(--after, 0) * 100%)) scaleX(var(--part, 0));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .barReady,
+  .barFailed { transition: none; }
 }
 
 .legend {

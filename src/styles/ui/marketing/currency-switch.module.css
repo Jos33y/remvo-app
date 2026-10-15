@@ -40,7 +40,9 @@
   transition: color var(--transition-fast), background-color var(--transition-fast), transform 100ms ease-out;
 }
 
-.option:hover { color: var(--color-white); }
+@media (hover: hover) and (pointer: fine) {
+  .option:hover { color: var(--color-white); }
+}
 .option:active { transform: scale(0.97); }
 
 .option:focus-visible {

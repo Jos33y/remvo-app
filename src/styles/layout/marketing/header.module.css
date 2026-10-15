@@ -74,9 +74,11 @@
   padding: 12px 0;
 }
 
-.navLink:hover,
-.navLink.active {
-  color: var(--color-white);
+@media (hover: hover) and (pointer: fine) {
+  .navLink:hover,
+  .navLink.active {
+    color: var(--color-white);
+  }
 }
 
 @media (max-width: 640px) {

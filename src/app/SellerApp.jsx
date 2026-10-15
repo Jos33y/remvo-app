@@ -1,6 +1,9 @@
-import { useEffect } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
 import { RouterProvider } from 'react-router';
 import { sellerRouter } from './sellerRouter';
+
+// Development only: the break-the-UI data switch. Not in a build.
+const DevDataBar = import.meta.env.DEV ? lazy(() => import('@components/ui/seller/DevDataBar')) : null;
 
 /* Seller chunk entry point, my.remvo.app. Lazy-loaded by App.jsx so
  * none of it ships to remvo.app visitors. The account pages are not
@@ -14,5 +17,10 @@ export default function SellerApp() {
     return () => meta.remove();
   }, []);
 
-  return <RouterProvider router={sellerRouter} />;
+  return (
+    <>
+      <RouterProvider router={sellerRouter} />
+      {DevDataBar && <Suspense fallback={null}><DevDataBar /></Suspense>}
+    </>
+  );
 }

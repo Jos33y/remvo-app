@@ -40,7 +40,7 @@
   border: 0.5px solid rgba(201, 168, 76, 0.35);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22), 0 1px 3px rgba(0, 0, 0, 0.2);
   touch-action: manipulation;
-  transition: transform 100ms ease-out, opacity 180ms ease-out;
+  transition: transform 100ms var(--ease-out), opacity var(--dur-small) var(--ease-out);
 }
 
 .launcher:active { transform: scale(0.96); }
@@ -54,9 +54,9 @@
   visibility: hidden;
   pointer-events: none;
   transition:
-    transform 180ms cubic-bezier(0.23, 1, 0.32, 1),
-    opacity 180ms cubic-bezier(0.23, 1, 0.32, 1),
-    visibility 0s linear 180ms;
+    transform var(--dur-small) var(--ease-out),
+    opacity var(--dur-small) var(--ease-out),
+    visibility 0s linear var(--dur-small);
 }
 
 .launcher:focus-visible {
@@ -285,13 +285,16 @@
     width: 380px;
     /* Clear of the site header (and the button) on any laptop screen. */
     height: min(560px, calc(100vh - 200px));
+    height: min(560px, calc(100dvh - 200px));
     min-height: 320px;
     padding-bottom: 0;
     border-radius: 18px;
     overflow: hidden;
     border: 0.5px solid var(--app-sep);
     box-shadow: 0 24px 64px rgba(0, 0, 0, 0.24), 0 2px 8px rgba(0, 0, 0, 0.12);
-    animation: rise 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    /* Grows out of the button that opened it. */
+    transform-origin: bottom right;
+    animation: rise 200ms var(--ease-out);
   }
 
   .head { padding-top: 12px; }

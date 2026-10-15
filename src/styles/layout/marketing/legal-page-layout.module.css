@@ -33,8 +33,10 @@
   transition: color var(--transition-fast);
 }
 
-.backLink:hover {
-  color: var(--color-white);
+@media (hover: hover) and (pointer: fine) {
+  .backLink:hover {
+    color: var(--color-white);
+  }
 }
 
 .title {
@@ -118,8 +120,10 @@
   margin-right: 2px;
 }
 
-.tocLink:hover {
-  color: var(--color-white);
+@media (hover: hover) and (pointer: fine) {
+  .tocLink:hover {
+    color: var(--color-white);
+  }
 }
 
 /* ── Body (warm-white) ── */
@@ -233,8 +237,10 @@
   transition: color var(--transition-fast);
 }
 
-.footerNote a:hover {
-  color: #b8983f;
+@media (hover: hover) and (pointer: fine) {
+  .footerNote a:hover {
+    color: #b8983f;
+  }
 }
 
 /* ── Links inside clauses (October 2026) ──
@@ -251,9 +257,11 @@
   transition: color var(--transition-fast);
 }
 
-.preamble a:hover,
-.clause a:hover {
-  color: #7A6220;
+@media (hover: hover) and (pointer: fine) {
+  .preamble a:hover,
+  .clause a:hover {
+    color: #7A6220;
+  }
 }
 
 .footerNote a {
