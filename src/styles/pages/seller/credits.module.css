@@ -4,8 +4,9 @@
    a gauge of how far it goes (a hundred
    listings fills it); credits, their worth
    in gold, their date. Then the packs as
-   four tiles that go straight to checkout,
-   then the history.
+   tiles that go straight to checkout, your
+   own amount as a row under them, then the
+   history.
    ═══════════════════════════════════════ */
 
 .balance {
@@ -126,18 +127,23 @@
   list-style: none;
 }
 
+/* Three packs on a phone: the third takes the full row, not half of it. */
+.packs > li:last-child:nth-child(odd) { grid-column: 1 / -1; }
+
+/* Wide: one row, as many columns as there are packs, so three fill it too. */
 @media (min-width: 900px) {
-  .packs { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .packs { grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); }
+  .packs > li:last-child:nth-child(odd) { grid-column: auto; }
 }
 
 .pack {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 2px;
+  gap: 0;
   width: 100%;
   height: 100%;
-  min-height: 132px;
+  min-height: 148px;
   padding: 16px;
   text-align: left;
   border-radius: 14px;
@@ -166,21 +172,25 @@
   box-shadow: var(--app-focus);
 }
 
-.packTop {
+/* Every tile keeps this row, tag or not, so the lines below it line up
+ * across the row. */
+.packTags {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 4px 8px;
-  width: 100%;
+  gap: 4px 6px;
+  min-height: 22px;
+  margin: 6px 0 10px;
 }
+
+.packTags > span { margin: 0; }
 
 .fitsTag {
   padding: 1px 8px;
   border-radius: 999px;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  line-height: 1.6;
+  line-height: 1.5;
   color: var(--night-0);
   background-color: var(--ivory);
 }
@@ -190,11 +200,17 @@
 }
 
 .packEach {
-  margin-top: 4px;
-  font-family: var(--font-mono);
+  margin-top: auto;
+  padding-top: 10px;
   font-size: 0.8125rem;
   color: var(--ivory-2);
+  white-space: nowrap;
+}
+
+.packEachNum {
+  font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
+  color: var(--ivory);
 }
 
 .pace {
@@ -205,34 +221,85 @@
   color: var(--ivory);
 }
 
+/* Reassurance, quiet: it backs the packs up, it does not compete. */
 .assure {
   display: grid;
-  gap: 8px;
-  margin: 16px 0 0;
-  padding: 14px 16px;
+  gap: 6px;
+  margin: 18px 0 0;
+  padding: 0 4px;
   list-style: none;
-  border-radius: 14px;
-  background-color: var(--night-1);
-  box-shadow: inset 0 0 0 1px var(--night-line);
 }
 
 .assure li {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
-  font-size: 0.875rem;
+  gap: 8px;
+  font-size: 0.8125rem;
   line-height: 1.45;
-  color: var(--ivory-2);
+  color: var(--ivory-3);
 }
 
 .assure svg {
   flex: none;
-  margin-top: 2px;
+  margin-top: 1px;
   color: var(--verdigris-ink);
 }
 
 @media (min-width: 900px) {
   .assure { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; }
+}
+
+/* ── Your own amount ── */
+
+.own {
+  display: grid;
+  gap: 12px;
+  margin-top: 10px;
+  padding: 16px;
+  border-radius: 14px;
+  background-color: var(--app-card);
+  box-shadow: inset 0 0 0 1px var(--night-line);
+}
+
+.ownLabel {
+  display: block;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--ivory);
+}
+
+.ownHint {
+  margin: 4px 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--ivory-2);
+  font-variant-numeric: tabular-nums;
+}
+
+/* An error in the hint's place keeps the hint's spacing. */
+.ownError.ownError { margin-top: 4px; }
+
+.ownControls {
+  display: flex;
+  gap: 8px;
+}
+
+.ownField {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.ownButton {
+  flex: none;
+}
+
+@media (min-width: 900px) {
+  .own {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
+    align-items: center;
+    gap: 24px;
+    padding: 14px 16px 14px 20px;
+  }
 }
 
 .packPrice {
@@ -242,38 +309,19 @@
   letter-spacing: -0.02em;
 }
 
-.packCredits {
-  margin-top: 6px;
-  font-size: 0.9375rem;
+.packListings {
+  font-size: 1.0625rem;
   font-weight: 600;
+  line-height: 1.3;
+  color: var(--ivory);
+  font-variant-numeric: tabular-nums;
 }
 
-.packListings {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: auto;
-  padding-top: 6px;
+.packCredits {
+  margin-top: 2px;
   font-size: 0.8125rem;
   color: var(--ivory-2);
-}
-
-.other {
-  padding: 10px 2px;
-  margin: -10px -2px;
-  font: inherit;
-  font-weight: 600;
-  color: var(--ivory);
-  background: none;
-  text-decoration: underline;
-  text-decoration-color: var(--night-line-strong);
-  text-underline-offset: 3px;
-}
-
-.other:focus-visible {
-  outline: none;
-  box-shadow: var(--app-focus);
-  border-radius: 4px;
+  font-variant-numeric: tabular-nums;
 }
 
 .bonusValue {

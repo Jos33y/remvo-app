@@ -45,7 +45,9 @@ export function PageHeader({ title, back, backLabel = 'Back', action, titleActio
 
   return (
     <>
-      <div className={`${styles.bar} ${scrolled ? styles.barScrolled : ''}`}>
+      {/* A top-level screen (no back button) needs no bar on wide screens:
+          the sidebar names it. It stays in place there, clear and still. */}
+      <div className={`${styles.bar} ${scrolled ? styles.barScrolled : ''} ${back === undefined && (large || quiet) ? styles.barTop : ''}`}>
         <div className={styles.barInner}>
           <div className={styles.side}>
             {back !== undefined && (

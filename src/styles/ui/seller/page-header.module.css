@@ -120,6 +120,23 @@
   .barInner {
     padding: 0;
   }
+
+  /* Top-level screens: the sidebar already says where you are, so the
+   * bar does not follow the page down as a strip across the column. */
+  .barTop {
+    position: relative;
+  }
+
+  .barTop.barScrolled {
+    background-color: transparent;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border-bottom-color: transparent;
+  }
+
+  .barTop .smallTitle {
+    visibility: hidden;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
