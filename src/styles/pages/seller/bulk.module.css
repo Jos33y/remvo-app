@@ -1,32 +1,204 @@
 /* ═══════════════════════════════════════
    BULK LISTING
-   The paste box and its file button, the
-   check's verdict, a batch's progress and
-   its lines. Everything else comes from
-   app.module.css; colours from --app-*.
+   Bulk's own room, in plum. Two ideas:
+   the numbered sheet a seller pastes on
+   (Bulk), and the sheet of stamps a batch
+   fills as it runs (a batch). Everything
+   else comes from app.module.css.
    ═══════════════════════════════════════ */
 
+.serifNum {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+/* ── Bulk: the room ── */
+
+.room {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+}
+
+.sheetSide,
+.verdictSide {
+  min-width: 0;
+}
+
+@media (min-width: 900px) {
+  .room {
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+    align-items: start;
+    gap: 32px;
+  }
+
+  /* The verdict stays in view beside a long sheet. */
+  .verdictSide {
+    position: sticky;
+    top: 24px;
+  }
+}
+
+/* The sheet: plum paper, the line numbers in its margin. */
+.paper {
+  padding: 18px 16px 12px;
+  border-radius: 18px;
+  background:
+    radial-gradient(90% 70% at 0% 0%, rgba(91, 58, 94, 0.55), transparent 70%),
+    linear-gradient(160deg, rgba(91, 58, 94, 0.32), rgba(91, 58, 94, 0.12)),
+    var(--night-1);
+  box-shadow: inset 0 0 0 1px rgba(215, 179, 218, 0.18);
+}
+
+.paperLabel {
+  display: block;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ivory);
+}
+
+.paperHint {
+  margin: 4px 0 14px;
+  font-size: 0.875rem;
+  color: var(--app-plum-ink);
+}
+
+.lined {
+  --lh: 1.5rem;
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  border-radius: 12px;
+  background-color: rgba(20, 20, 24, 0.55);
+  box-shadow: inset 0 0 0 1px rgba(215, 179, 218, 0.14);
+  transition: box-shadow 150ms ease;
+}
+
+.lined:focus-within {
+  box-shadow: inset 0 0 0 1px var(--ivory), 0 0 0 3px rgba(244, 239, 230, 0.16);
+}
+
+.margin {
+  flex: none;
+  width: 3.25rem;
+  overflow: hidden;
+  padding: 12px 0;
+  border-right: 1px solid rgba(215, 179, 218, 0.16);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: var(--lh);
+  text-align: right;
+  color: rgba(215, 179, 218, 0.62);
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+}
+
+.marginInner {
+  display: grid;
+  padding-right: 10px;
+  will-change: transform;
+}
+
+.marginInner > span {
+  height: var(--lh);
+}
+
+/* A line the check could not read: its number in oxide. */
+.marginFlag {
+  font-weight: 600;
+  color: var(--oxide-ink);
+}
+
 .paste {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: calc(var(--lh) * 10 + 24px);
+  max-height: 60vh;
+  padding: 12px 14px;
+  border: 0;
+  outline: none;
+  resize: vertical;
   font-family: var(--font-mono);
   font-size: 0.9375rem;
+  line-height: var(--lh);
   font-variant-numeric: tabular-nums;
-  min-height: 220px;
   white-space: pre;
   overflow-wrap: normal;
-  overflow-x: auto;
+  overflow: auto;
+  color: var(--ivory);
+  background: transparent;
+}
+
+.paste::placeholder {
+  color: var(--ivory-3);
 }
 
 /* Empty, only the example lines show: they never need a scrollbar. */
 .paste:placeholder-shown {
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
-.tools {
+@media (min-width: 900px) {
+  .paste { min-height: calc(var(--lh) * 14 + 24px); }
+}
+
+.paperFoot {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px 12px;
-  margin-top: 10px;
+  justify-content: space-between;
+  gap: 4px 12px;
+  margin-top: 8px;
+  min-height: 44px;
+}
+
+.lineCount {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--ivory-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.lineCountOver {
+  color: var(--oxide-ink);
+}
+
+.fileBits {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.fileName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.8125rem;
+  color: var(--ivory-2);
+}
+
+.fileButton {
+  flex: none;
+  min-height: 44px;
+  padding: 0 4px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--app-plum-ink);
+  text-decoration: underline;
+  text-decoration-color: rgba(215, 179, 218, 0.4);
+  text-underline-offset: 3px;
+  touch-action: manipulation;
+}
+
+.fileButton:focus-visible {
+  outline: none;
+  box-shadow: var(--app-focus);
+  border-radius: 6px;
 }
 
 .file {
@@ -37,103 +209,174 @@
   pointer-events: none;
 }
 
-.fileName {
-  font-size: 0.875rem;
-  color: var(--app-text-2);
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* ── The check ── */
-
-.tally {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1px;
-  overflow: hidden;
-  border-radius: 14px;
-  background-color: var(--app-sep);
-}
-
-.tallyCell {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 14px 16px;
-  background-color: var(--app-card);
-}
-
-.tallyNumber {
-  font-size: 1.75rem;
-  font-weight: 600;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  font-variant-numeric: tabular-nums;
-}
-
-.tallyGood { color: var(--app-text); }
-.tallyWarn { color: var(--app-danger); }
-
-.tallyLabel {
+.spreadsheet {
+  margin: 10px 4px 0;
   font-size: 0.8125rem;
-  line-height: 1.3;
-  color: var(--app-text-2);
+  line-height: 1.45;
+  color: var(--ivory-3);
 }
 
-/* The smallest phones: a little less padding keeps each label on one line. */
-@media (max-width: 359px) {
-  .tallyCell { padding: 14px 12px; }
+.condition {
+  margin-top: 22px;
 }
 
-.problems {
+/* ── Bulk: before the check, and the verdict ── */
+
+.ready,
+.verdict {
+  padding: 20px 18px 18px;
+  border-radius: 18px;
+  background-color: var(--app-card);
+  box-shadow: inset 0 0 0 1px var(--night-line);
+}
+
+.readyFigure,
+.verdictFigure {
   margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--ivory-2);
+}
+
+.readyFigure .serifNum,
+.verdictFigure .serifNum {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 3rem;
+  line-height: 1;
+  color: var(--ivory);
+}
+
+.readyTitle {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--ivory);
+}
+
+.readyText {
+  margin: 12px 0 18px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--ivory-2);
+}
+
+.error {
+  margin: 0 0 12px;
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 14px 0 0;
   padding: 0;
   list-style: none;
 }
 
-.problem {
-  position: relative;
-  display: grid;
-  /* Room for "Line 500" on one line, the same in every row. */
-  grid-template-columns: 4.25rem minmax(0, 1fr);
-  gap: 2px 10px;
-  padding: 10px 16px;
+.facts li {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  color: var(--ivory-2);
+  background-color: var(--app-fill);
 }
 
-.problem + .problem::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 16px;
-  right: 0;
-  height: 0.5px;
-  background-color: var(--app-sep);
+.factNum {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--ivory);
+  font-variant-numeric: tabular-nums;
+}
+
+.facts .factWarn {
+  color: var(--oxide-ink);
+  background-color: var(--app-warn-fill);
+}
+
+.facts .factWarn .factNum {
+  color: var(--oxide-ink);
+}
+
+.gap {
+  margin-top: 18px;
+}
+
+.note {
+  margin: 10px 2px 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--ivory-3);
+}
+
+.problemsTitle {
+  margin: 0 0 8px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.problems {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+  border-radius: 12px;
+  background-color: var(--night-2);
+}
+
+.problems li + li {
+  border-top: 0.5px solid var(--app-sep);
+}
+
+/* A tap goes to the line in the sheet. */
+.problem {
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr);
+  gap: 2px 10px;
+  width: 100%;
+  padding: 10px 12px;
+  text-align: left;
+  color: inherit;
+  touch-action: manipulation;
+  transition: background-color 120ms ease;
+}
+
+.problem:active { background-color: var(--night-1); }
+
+.problem:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--ivory);
+  border-radius: 12px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .problem:hover { background-color: rgba(244, 239, 230, 0.04); }
 }
 
 .problemLine {
   grid-row: span 2;
-  white-space: nowrap;
   font-family: var(--font-mono);
   font-size: 0.8125rem;
-  color: var(--app-text-3);
+  font-weight: 600;
+  color: var(--oxide-ink);
   font-variant-numeric: tabular-nums;
 }
 
 .problemRaw {
   font-family: var(--font-mono);
-  font-size: 0.875rem;
-  color: var(--app-text);
+  font-size: 0.8125rem;
+  color: var(--ivory);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .problemWhy {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   line-height: 1.4;
-  color: var(--app-text-2);
+  color: var(--ivory-2);
 }
 
 .cost {
@@ -141,118 +384,225 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
-  padding: 14px 16px;
-  border-radius: 14px;
-  background-color: var(--app-card);
+  padding: 12px 14px;
+  border-radius: 12px;
+  background-color: var(--night-2);
   font-size: 0.9375rem;
 }
 
 .costFigure {
   font-family: var(--font-mono);
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
-  color: var(--app-text);
+  color: var(--ivory);
   white-space: nowrap;
 }
 
 .buttons {
   display: grid;
   gap: 10px;
+  margin-top: 16px;
 }
 
-/* ── A batch ── */
+/* ── A batch: the sheet of stamps ── */
 
-.progress {
-  padding: 18px 16px 16px;
-  border-radius: 14px;
-  background-color: var(--app-card);
+.sheetCard {
+  padding: 20px 18px 18px;
+  border-radius: 20px;
+  background:
+    radial-gradient(80% 90% at 100% 0%, rgba(91, 58, 94, 0.5), transparent 70%),
+    linear-gradient(160deg, rgba(91, 58, 94, 0.42), rgba(91, 58, 94, 0.14)),
+    var(--night-1);
+  box-shadow: inset 0 0 0 1px rgba(215, 179, 218, 0.18);
 }
 
-.progressHead {
+.sheetHead {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 4px 12px;
-  margin-bottom: 12px;
+  gap: 4px 16px;
+  margin-bottom: 16px;
 }
 
-.progressFigure {
-  /* "280 of 500" stays on one line; the time left moves under it. */
+.sheetFigure {
+  margin: 0;
   white-space: nowrap;
-  font-size: 1.75rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  font-variant-numeric: tabular-nums;
 }
 
-.progressOf {
+.sheetFigure .serifNum {
+  font-size: clamp(2.5rem, 9vw, 3.25rem);
+  line-height: 1;
+  color: var(--ivory);
+}
+
+.sheetOf {
   font-size: 1rem;
-  font-weight: 400;
-  color: var(--app-text-2);
+  color: var(--app-plum-ink);
 }
 
-.progressLeft {
+.sheetLeft {
+  margin: 0;
   font-size: 0.875rem;
-  color: var(--app-text-2);
-  text-align: right;
+  color: var(--ivory-2);
 }
 
-/* Each part is the bar's full width, scaled to its share from the left
- * edge (the failed part starts where the ready part ends). transform
- * moves on the compositor; animating width would lay out every frame. */
-.bar {
+.sheet {
+  --stamp: 10px;
+  --gap: 3px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, var(--stamp));
+  gap: var(--gap);
+  /* Full rows reach both edges of the sheet. */
+  justify-content: space-between;
+}
+
+.sheet_small { --stamp: 10px; --gap: 3px; }
+.sheet_medium { --stamp: 30px; --gap: 5px; }
+.sheet_large { --stamp: 64px; --gap: 8px; }
+
+@media (min-width: 900px) {
+  .sheet { --stamp: 12px; --gap: 4px; }
+  .sheet_small { --stamp: 12px; --gap: 4px; }
+  .sheet_medium { --stamp: 36px; --gap: 6px; }
+  .sheet_large { --stamp: 76px; --gap: 10px; }
+}
+
+.stamp {
   position: relative;
-  height: 8px;
+  display: block;
+  width: var(--stamp);
+  height: var(--stamp);
+  border-radius: 2px;
+}
+
+/* Waiting: a faint outline of the stamp to come. */
+.stamp_queued {
+  box-shadow: inset 0 0 0 1px rgba(215, 179, 218, 0.28);
+}
+
+/* Being made: lapis, breathing. */
+.stamp_running {
+  background-color: rgba(155, 180, 236, 0.35);
+  box-shadow: inset 0 0 0 1px var(--lapis-ink);
+  animation: breathe 1.6s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  50% { background-color: rgba(155, 180, 236, 0.12); }
+}
+
+/* Did not work: an empty stamp, dashed in oxide. */
+.stamp_failed {
+  border: 1px dashed var(--oxide-ink);
+  background-color: rgba(181, 85, 47, 0.14);
+}
+
+/* Made: a small stamp is a verdigris square. */
+.stamp_ready {
+  background-color: var(--verdigris-ink);
+}
+
+/* Medium and large: ivory paper with a perforated edge (the holes show
+ * the plum through), the product's photo in the middle when there is one. */
+.sheet_medium .stamp_ready,
+.sheet_large .stamp_ready {
+  --hole: 2px;
+  --pitch: 6px;
+  padding: 3px;
+  background:
+    radial-gradient(circle at center, transparent var(--hole), var(--ivory) calc(var(--hole) + 0.5px)) calc(var(--pitch) / -2) calc(var(--pitch) / -2) / var(--pitch) var(--pitch);
+}
+
+.sheet_large .stamp_ready {
+  --hole: 2.5px;
+  --pitch: 8px;
+  padding: 5px;
+}
+
+.stampFace {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
-  border-radius: 4px;
-  background-color: var(--app-fill);
+  background-color: #FFFFFF;
+  box-shadow: inset 0 0 0 1px rgba(20, 20, 24, 0.08);
 }
 
-.barReady,
-.barFailed {
+/* No photo: the stamp's face is a plain verdigris field. */
+.stampFace:empty {
+  background:
+    linear-gradient(135deg, rgba(111, 196, 174, 0.5), rgba(111, 196, 174, 0.22)),
+    var(--ivory);
+}
+
+.stampFace img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 8%;
+}
+
+/* Ready, with something to check: a small oxide corner. */
+.stampFlag::after {
+  content: '';
   position: absolute;
-  inset: 0;
-  transform-origin: left center;
-  transition: transform 250ms var(--ease-out);
-}
-
-.barReady {
-  background-color: var(--app-success);
-  transform: scaleX(var(--part, 0));
-}
-
-.barFailed {
-  background-color: var(--app-danger);
-  transform: translateX(calc(var(--after, 0) * 100%)) scaleX(var(--part, 0));
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .barReady,
-  .barFailed { transition: none; }
+  top: -3px;
+  right: -3px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background-color: var(--oxide-ink);
+  box-shadow: 0 0 0 2px #2b2230;
 }
 
 .legend {
   display: flex;
   flex-wrap: wrap;
   gap: 4px 16px;
-  margin-top: 12px;
+  margin: 16px 0 0;
   font-size: 0.875rem;
-  color: var(--app-text-2);
+  color: var(--ivory-2);
   font-variant-numeric: tabular-nums;
 }
 
-.dot {
+.key {
   display: inline-block;
-  width: 8px;
-  height: 8px;
-  margin-right: 6px;
-  border-radius: 50%;
-  vertical-align: 1px;
+  width: 10px;
+  height: 10px;
+  margin-right: 7px;
+  border-radius: 2px;
+  vertical-align: -1px;
 }
 
-.dotReady { background-color: var(--app-success); }
-.dotFailed { background-color: var(--app-danger); }
-.dotWaiting { background-color: var(--app-text-3); }
+.key_ready { background-color: var(--verdigris-ink); }
+.key_failed { border: 1px dashed var(--oxide-ink); background-color: rgba(181, 85, 47, 0.14); }
+.key_queued { box-shadow: inset 0 0 0 1px rgba(215, 179, 218, 0.5); }
+
+.sheetNote {
+  margin: 12px 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--ivory-3);
+}
+
+/* ── A batch: the files and the lines ── */
+
+/* Both columns start level, whatever app.module.css does to a section. */
+.batchCols > section,
+.batchCols > section:first-child {
+  margin-top: 28px;
+}
+
+@media (min-width: 900px) {
+  .batchCols {
+    display: grid;
+    grid-template-columns: minmax(300px, 380px) minmax(0, 1fr);
+    align-items: start;
+    gap: 32px;
+  }
+}
 
 .howTo {
   margin: 0;
@@ -272,6 +622,16 @@
   margin-top: 6px;
 }
 
+.lineRow {
+  min-height: 72px;
+  padding-left: 12px;
+}
+
+/* The hairline starts at the text, not under the photo. */
+.lineRow + .lineRow::before {
+  left: 72px;
+}
+
 .check {
   color: var(--app-warn);
   font-size: 0.8125rem;
@@ -284,9 +644,11 @@
   color: var(--app-text-3);
 }
 
+.more {
+  margin-top: 12px;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .barReady,
-  .barFailed {
-    transition: none;
-  }
+  .stamp_running { animation: none; }
+  .lined { transition: none; }
 }

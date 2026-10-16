@@ -61,8 +61,9 @@ function RailAccount() {
   );
 }
 
-// Screens that use a laptop's width: Home, and a listing (two panes).
-const WIDE = /^\/(?:$|listings\/(?!new$|bulk$)[^/]+$)/;
+// Screens that use a laptop's width: Home, a listing (two panes), Bulk
+// (the sheet beside the verdict) and a batch (the sheet of stamps).
+const WIDE = /^\/(?:$|listings\/(?!new$)[^/]+$|batches\/[^/]+$)/;
 
 export const TABS = [
   { to: SELLER_ROUTES.HOME, label: 'Home', Icon: IconHome, end: true },

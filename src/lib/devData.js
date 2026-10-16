@@ -149,6 +149,7 @@ function batchLines(total, batchId, mix) {
       id, ref: `L-B${i.toString(36).toUpperCase().padStart(5, '0')}`, status: k, condition: 'new', step: k === 'running' ? 3 : k === 'ready' ? 6 : 0,
       input: { kind: 'barcode', value: String(5000394000000 + i) },
       title: k === 'ready' ? (i % 7 === 0 ? 'Bosch Professional GSR 18V-55 Akku-Bohrschrauber 2x 2,0 Ah Akku Ladegerät L-BOXX' : 'Philips Norelco Shaver 3900 Wet Dry Electric Razor Pop-up Trimmer Blue S3311/85') : null,
+      image: k === 'queued' ? null : [SPEAKER, CHARGER, DRILL, null, 'https://example.invalid/broken.jpg'][i % 5],
       product: k === 'queued' ? null : 'Anker Portable Charger, Power Bank, 10,000mAh Battery Pack with PowerIQ Charging Technology and USB-C (Input Only) for iPhone 15/15 Pro/15 Pro Max, Samsung Galaxy S23, Pixel and More',
       price: k === 'ready' ? { value: i % 11 === 0 ? 12499 : 37.99, currency: 'USD' } : null,
       picked: k === 'ready' && i % 9 === 0 ? { of: 5 } : null,

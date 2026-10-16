@@ -28,9 +28,9 @@ import h from '@styles/pages/seller/home.module.css';
  * No greeting and no card: the work is the welcome.
  * ────────────────────────────────────────────────────────────────── */
 
-// ── A product's photo, or a parcel where there is none ──
+// ── A product's photo, or a parcel where there is none (also on a batch's lines) ──
 
-function Thumb({ src }) {
+export function Thumb({ src }) {
   const [broken, setBroken] = useState(false);
   if (!src || broken) {
     return (
