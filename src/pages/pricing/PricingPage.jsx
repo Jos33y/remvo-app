@@ -30,13 +30,12 @@ export function PricingPage() {
       <section className={styles.intro} aria-labelledby="pricing-heading">
         <div className={styles.introInner}>
           <Reveal>
-            <span className={styles.label}>Pricing</span>
             <h1 id="pricing-heading" className={styles.title}>
               Pay for what you list. Nothing else.
             </h1>
             <p className={styles.lede}>
-              Top up credits, spend them on jobs. No subscription, no monthly
-              fee, nothing to cancel.
+              Top up credits, spend them on listings. No subscription, no
+              monthly fee, nothing to cancel.
             </p>
           </Reveal>
         </div>
@@ -52,29 +51,22 @@ export function PricingPage() {
 
       <div className={styles.body}>
         <div className={styles.bodyInner}>
-          <Section heading="What each job uses">
+          <Section heading="What a listing uses">
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th scope="col">Job</th>
+                  <th scope="col">What you make</th>
                   <th scope="col" className={styles.num}>Credits</th>
                   <th scope="col" className={styles.num}>Cost</th>
                 </tr>
               </thead>
               <tbody>
-                {jobs.map((j) => (
+                {/* Only what is built: a job that is not live is not shown. */}
+                {jobs.filter((j) => j.live).map((j) => (
                   <tr key={j.name}>
-                    <th scope="row">{j.name}</th>
-                    {j.live ? (
-                      <>
-                        <td className={styles.num}>{j.credits}</td>
-                        <td className={styles.num}>{cost(j.credits)}</td>
-                      </>
-                    ) : (
-                      <td className={styles.num} colSpan={2}>
-                        <span className={styles.soon}>Coming soon</span>
-                      </td>
-                    )}
+                    <th scope="row">{j.name === 'Make a listing' ? 'A listing' : j.name}</th>
+                    <td className={styles.num}>{j.credits}</td>
+                    <td className={`${styles.num} ${styles.money}`}>{cost(j.credits)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -120,14 +112,14 @@ export function PricingPage() {
 
           <Section heading="Refunds">
             <ul className={styles.list}>
-              <li>A job that fails returns its credits on its own.</li>
+              <li>A listing that fails returns its credits on its own.</li>
               <li>
                 Unused credits are refunded in full if you ask within{' '}
                 {PRICING.REFUND_DAYS} days of buying them.
               </li>
               <li>
                 Not happy with a listing? Tell us within {PRICING.REFUND_DAYS} days
-                and we return the credits for that job.
+                and we return the credits for that listing.
               </li>
             </ul>
             <p className={`${styles.muted} ${styles.after}`}>
@@ -143,7 +135,7 @@ export function PricingPage() {
           <p className={styles.closeHeading}>
             Your first listing is on us. After that, {money(first.price[currency], currency)} is {listingsFor(first.credits)} listings.
           </p>
-          <Button href={APP_LINKS.SIGN_UP} variant="primary" size="large">
+          <Button href={APP_LINKS.SIGN_UP} variant="ivory" size="large">
             Make your first listing
           </Button>
         </div>

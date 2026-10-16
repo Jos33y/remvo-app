@@ -11,7 +11,6 @@ export function ContactPage() {
     <section className={styles.contact}>
       <div className={styles.inner}>
         <Reveal>
-          <span className={styles.label}>Contact</span>
           <h1 className={styles.heading}>Write to the people who build it.</h1>
           <p className={styles.sub}>
             No contact form and no ticket queue. Every message is read and

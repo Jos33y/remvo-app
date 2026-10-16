@@ -43,7 +43,7 @@ const FALLBACK = {
   503: 'Remvo is not answering just now. Try again in a minute.',
 };
 
-async function call(method, path, body) {
+async function call(method, path, body, { keepalive = false } = {}) {
   // Development only: the break-the-UI fixtures (lib/devData.js), when
   // ?data= picked one. Not in a production build.
   if (import.meta.env.DEV) {
@@ -58,6 +58,8 @@ async function call(method, path, body) {
       credentials: 'include',
       headers: body ? { 'content-type': 'application/json' } : {},
       body: body ? JSON.stringify(body) : undefined,
+      // A delete sent as the page closes still reaches the server.
+      ...(keepalive ? { keepalive: true } : {}),
     });
   } catch {
     throw new SellerApiError(0, 'network', 'We could not reach Remvo. Check your connection and try again.');
@@ -117,7 +119,7 @@ export const sellerApi = Object.freeze({
   jobs: (before) => call('GET', `/jobs${before ? `?before=${encodeURIComponent(before)}` : ''}`),
   job: (id) => call('GET', `/jobs/${encodeURIComponent(id)}`),
   editJob: (id, field, value) => call('PATCH', `/jobs/${encodeURIComponent(id)}/edits`, { field, value }),
-  deleteJob: (id) => call('DELETE', `/jobs/${encodeURIComponent(id)}`),
+  deleteJob: (id, opts) => call('DELETE', `/jobs/${encodeURIComponent(id)}`, undefined, opts),
 
   // Bulk listing (modules/batches in remvo-api)
   /** { text, marketplace?, condition } -> every line read, the cost; free */

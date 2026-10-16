@@ -25,7 +25,7 @@ export const CAMPAIGN = {
   lastDay: Date.UTC(2026, 10, 27),
   name: 'Black Friday',
   line: 'Your buyers have already started.',
-  action: 'List your stock now',
+  action: 'Get your listings up now',
   actionShort: 'List now',
   href: `${APP_URL}/listings/bulk${DEV}`,
 };

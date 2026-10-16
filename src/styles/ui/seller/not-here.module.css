@@ -1,0 +1,50 @@
+/* ═══════════════════════════════════════
+   NOT HERE
+   A parcel back with a "Return to sender"
+   stamp in oxide; the title in serif.
+   ═══════════════════════════════════════ */
+
+.wrap {
+  display: grid;
+  justify-items: center;
+  gap: 0;
+  max-width: 420px;
+  margin: 40px auto 0;
+  padding: 0 4px;
+  text-align: center;
+}
+
+.art {
+  width: 200px;
+  height: auto;
+  color: var(--ivory);
+}
+
+.stamp {
+  color: var(--oxide-ink);
+}
+
+.title {
+  margin: 18px 0 0;
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--ivory);
+}
+
+.text {
+  margin: 10px 0 0;
+  max-width: 34ch;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--ivory-2);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 24px;
+}

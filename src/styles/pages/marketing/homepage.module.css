@@ -1,41 +1,57 @@
 /* ═══════════════════════════════════════
-   HOMEPAGE
-   Hero, How it works, Pricing, CTA.
-   Dark, light, dark, dark.
-
-   October 2026 rebuild for listing jobs.
-   Kept from the card site: the obsidian
-   hero, the gold mono section labels, the
-   editorial three-step grid on warm white,
-   the watermark CTA. Changed: the card
-   stack gives way to a finished listing;
-   section labels go from 10px to 11px;
-   secondary text on obsidian goes from
-   0.45 to 0.62 white, which takes it from
-   about 4:1 to 6.5:1.
+   HOMEPAGE (site1, October 2026)
+   One night, as in the app and on
+   Instagram. Headlines in Instrument
+   Serif; reading text in Geist; figures
+   and codes in Plex Mono. Ivory is the
+   action; gold is only ever money; plum
+   is bulk. Sections are told apart by
+   space and a hairline, not by bands of
+   colour. The hero's real listing is the
+   one picture and the one moment.
    ═══════════════════════════════════════ */
 
-.sectionLabel {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--color-gold);
-  margin-bottom: var(--space-4);
+.inner {
+  max-width: var(--site-width);
+  margin: 0 auto;
+  padding: 0 var(--site-gutter);
 }
 
-/* Gold reads at 2.1:1 on warm white, so the label there is dark. */
-.features .sectionLabel {
-  color: #7A6220;
+.h2 {
+  max-width: 18ch;
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(2.25rem, 4.6vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  color: var(--site-text);
+  text-wrap: balance;
+}
+
+.lede {
+  max-width: 56ch;
+  margin: 16px 0 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--site-text-2);
+}
+
+.money {
+  color: var(--gold);
 }
 
 .inlineLink {
-  color: inherit;
+  color: var(--site-text);
   text-decoration: underline;
-  text-underline-offset: 4px;
-  text-decoration-thickness: 0.5px;
-  transition: color var(--transition-fast);
+  text-decoration-color: var(--site-line-strong);
+  text-underline-offset: 5px;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color var(--transition-fast);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .inlineLink:hover { text-decoration-color: var(--site-text); }
 }
 
 /* ═══════════════════════════════════════
@@ -43,344 +59,338 @@
    ═══════════════════════════════════════ */
 
 .hero {
-  background-color: var(--color-obsidian);
-  padding: var(--space-16) 0 0;
-  overflow: hidden;
+  position: relative;
+  padding-top: clamp(40px, 7vw, 96px);
+  /* A low glow behind the listing: the light the product sits in. */
+  background:
+    radial-gradient(60% 70% at 85% 40%, rgba(44, 74, 138, 0.16), transparent 70%),
+    var(--site-bg);
 }
 
 .heroInner {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 400px);
-  align-items: center;
-  gap: var(--space-10);
-  max-width: var(--max-width-content);
+  grid-template-columns: minmax(0, 1fr);
+  gap: 48px;
+  max-width: var(--site-width);
   margin: 0 auto;
-  padding: 0 var(--gutter) var(--space-12);
+  padding: 0 var(--site-gutter) clamp(48px, 7vw, 88px);
 }
 
-.heroContent {
-  padding: var(--space-4) 0;
+@media (min-width: 1024px) {
+  .heroInner {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 64px;
+  }
 }
 
-.heroLabel {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--color-gold);
-  margin-bottom: var(--space-5);
+.heroFor {
+  margin: 0 0 18px;
+  font-size: 0.9375rem;
+  color: var(--site-text-2);
 }
 
 .heroHeading {
-  font-family: var(--font-sans);
-  font-weight: var(--weight-semibold);
-  font-size: clamp(2.25rem, 4.2vw, var(--text-4xl));
-  line-height: 1.06;
-  letter-spacing: var(--tracking-tight);
-  color: var(--color-white);
-  margin-bottom: var(--space-5);
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(3rem, 7.4vw, 5.5rem);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.015em;
+  color: var(--site-text);
   text-wrap: balance;
 }
 
-.heroGold {
-  color: var(--color-gold);
+.line {
+  display: block;
 }
 
 .heroSub {
-  font-size: var(--text-base);
-  line-height: var(--leading-relaxed);
-  color: rgba(255, 255, 255, 0.62);
-  max-width: 420px;
-  margin-bottom: var(--space-4);
+  max-width: 46ch;
+  margin: 24px 0 0;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--site-text-2);
 }
 
-/* Who it is for. A hairline rule on the left marks it as a note, not
- * a second subheading; the "not for" half is the part a seller acts
- * on, so it carries the weight. */
+/* Who it is for. The "not for" half is the part a seller acts on, so it
+ * carries the weight. */
 .heroFit {
-  font-size: var(--text-sm);
-  line-height: var(--leading-normal);
-  color: rgba(255, 255, 255, 0.62);
-  max-width: 420px;
-  margin-bottom: var(--space-8);
-  padding-left: var(--space-3);
-  border-left: 1px solid var(--gold-edge-soft);
+  max-width: 46ch;
+  margin: 14px 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--site-text-2);
 }
 
 .heroFit strong {
-  font-weight: var(--weight-semibold);
-  color: var(--color-white);
+  font-weight: 600;
+  color: var(--site-text);
 }
 
-/* The three things a careful seller checks before trusting a tool
- * with their shop, under the button they are about to press. */
+.heroCtas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+/* The three things a careful seller checks before trusting a tool with
+ * their shop, under the button they are about to press. */
 .heroTrust {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2) var(--space-5);
-  margin: var(--space-5) 0 0;
+  gap: 8px 20px;
+  margin: 20px 0 0;
   padding: 0;
   list-style: none;
 }
 
 .heroTrust li {
-  position: relative;
-  padding-left: 18px;
-  font-size: 0.8125rem;
-  color: rgba(255, 255, 255, 0.62);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: var(--site-text-2);
 }
 
 .heroTrust li::before {
   content: '';
-  position: absolute;
-  left: 0;
-  top: 0.32em;
   width: 10px;
   height: 6px;
-  border-left: 1.5px solid var(--color-gold);
-  border-bottom: 1.5px solid var(--color-gold);
+  margin-top: -3px;
+  border-left: 1.5px solid var(--verdigris-ink);
+  border-bottom: 1.5px solid var(--verdigris-ink);
   transform: rotate(-45deg);
 }
 
-.heroCtas {
-  display: flex;
-  gap: var(--space-4);
-  flex-wrap: wrap;
-}
-
 .heroPreview {
-  display: flex;
-  justify-content: flex-end;
+  min-width: 0;
+  max-width: 560px;
 }
 
-/* ── Trust bar ── */
+@media (min-width: 1024px) {
+  .heroPreview { justify-self: end; width: 100%; }
+}
+
+/* ── The trust bar: four facts, one line, hairlines above and below ── */
 
 .trustBar {
-  border-top: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--site-line);
+  border-bottom: 1px solid var(--site-line);
 }
 
 .trustBarInner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-8);
-  max-width: var(--max-width-content);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: var(--site-width);
   margin: 0 auto;
-  padding: var(--space-5) var(--gutter);
+  padding: 0 var(--site-gutter);
 }
 
-/* The label is first in the markup for screen readers; the value
- * shows first on screen, as the figure is what is read at a glance. */
+@media (min-width: 720px) {
+  .trustBarInner { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
 .trustItem {
   display: flex;
   flex-direction: column-reverse;
-  align-items: center;
   gap: 2px;
+  padding: 20px 0;
+}
+
+@media (min-width: 720px) {
+  .trustItem + .trustItem {
+    padding-left: 24px;
+    border-left: 1px solid var(--site-line);
+  }
+}
+
+@media (max-width: 719px) {
+  .trustItem:nth-child(even) { padding-left: 16px; border-left: 1px solid var(--site-line); }
+  .trustItem:nth-child(n + 3) { border-top: 1px solid var(--site-line); }
 }
 
 .trustValue {
   margin: 0;
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  color: var(--color-white);
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  line-height: 1.1;
+  color: var(--site-text);
+}
+
+.trustMoney {
+  color: var(--gold);
 }
 
 .trustLabel {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.trustDivider {
-  width: 1px;
-  height: 28px;
-  background-color: rgba(255, 255, 255, 0.1);
+  font-size: 0.8125rem;
+  color: var(--site-text-3);
 }
 
 /* ═══════════════════════════════════════
-   HOW IT WORKS
+   HOW IT WORKS (three steps)
    ═══════════════════════════════════════ */
 
 .features {
-  background-color: var(--color-warm-white);
-  padding: var(--space-20) 0;
+  padding: clamp(64px, 9vw, 120px) 0;
 }
 
-.featuresInner {
-  max-width: var(--max-width-content);
-  margin: 0 auto;
-  padding: 0 var(--gutter);
-}
-
-.featuresHeading {
-  font-family: var(--font-sans);
-  font-weight: var(--weight-semibold);
-  font-size: var(--text-2xl);
-  line-height: var(--leading-tight);
-  letter-spacing: var(--tracking-tight);
-  color: var(--color-text-dark);
-  margin-bottom: var(--space-10);
-}
-
-.featureGrid {
+.steps {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  list-style: none;
-  margin: 0 0 var(--space-8);
+  grid-template-columns: minmax(0, 1fr);
+  gap: 32px;
+  margin: 48px 0 0;
   padding: 0;
+  list-style: none;
+  counter-reset: none;
 }
 
-.featureGrid > li {
-  border-right: 0.5px solid rgba(0, 0, 0, 0.1);
-}
-
-.featureGrid > li:last-child {
-  border-right: none;
-}
-
-.featureBlock {
-  padding: var(--space-6) var(--space-6) var(--space-6) var(--space-6);
-}
-
-.featureGrid > li:first-child .featureBlock {
-  padding-left: 0;
-}
-
-.featureNum {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: #7A6220;
-  margin-bottom: var(--space-4);
-  letter-spacing: 0.05em;
-}
-
-.featureTitle {
-  font-family: var(--font-sans);
-  font-weight: var(--weight-semibold);
-  font-size: var(--text-lg);
-  color: var(--color-text-dark);
-  margin-bottom: var(--space-3);
-  line-height: var(--leading-tight);
-}
-
-.featureDesc {
-  font-size: var(--text-sm);
-  line-height: var(--leading-relaxed);
-  color: #5A5A5A;
-}
-
-.featuresMore {
-  font-size: var(--text-sm);
-  color: var(--color-text-dark);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .featuresMore .inlineLink:hover {
-    color: #7A6220;
+@media (min-width: 820px) {
+  .steps {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 40px;
   }
 }
 
+.step {
+  padding-top: 20px;
+  border-top: 1px solid var(--site-line-strong);
+}
+
+.stepNum {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 2.75rem;
+  line-height: 1;
+  color: var(--site-text-3);
+  font-variant-numeric: lining-nums;
+}
+
+.stepTitle {
+  margin: 14px 0 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--site-text);
+}
+
+.stepDesc {
+  margin: 8px 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--site-text-2);
+}
+
+.more {
+  margin: 40px 0 0;
+  font-size: 0.9375rem;
+}
+
 /* ═══════════════════════════════════════
-   IN BULK
-   Warm white, after How it works, with a
-   hairline between. Plum (bulk and
-   batches) on the label only: 9.6:1 on
-   warm white.
+   BULK: plum, with the app's stamp sheet
    ═══════════════════════════════════════ */
 
 .bulk {
-  background-color: var(--color-warm-white);
-  padding: 0 0 var(--space-20);
+  padding: 0 0 clamp(64px, 9vw, 120px);
 }
 
-.bulkInner {
-  max-width: var(--max-width-content);
-  margin: 0 auto;
-  padding: 0 var(--gutter);
-}
-
-/* The hairline sits on the grid, so it lines up with the text, not the gutters. */
-.bulkGrid {
+.bulkPanel {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: var(--space-12);
-  align-items: start;
-  padding-top: var(--space-16);
-  border-top: 0.5px solid rgba(0, 0, 0, 0.1);
+  grid-template-columns: minmax(0, 1fr);
+  gap: 40px;
+  padding: clamp(28px, 5vw, 56px);
+  border-radius: 24px;
+  background:
+    radial-gradient(90% 80% at 0% 0%, rgba(91, 58, 94, 0.62), transparent 70%),
+    linear-gradient(160deg, rgba(91, 58, 94, 0.42), rgba(91, 58, 94, 0.14)),
+    var(--site-raised);
+  box-shadow: inset 0 0 0 1px rgba(215, 179, 218, 0.18);
 }
 
-.bulkLabel {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #5B3A5E;
-  margin-bottom: var(--space-4);
-}
-
-.bulkHeading {
-  font-family: var(--font-sans);
-  font-weight: var(--weight-semibold);
-  font-size: var(--text-2xl);
-  line-height: var(--leading-tight);
-  letter-spacing: var(--tracking-tight);
-  color: var(--color-text-dark);
-  margin-bottom: var(--space-4);
-  text-wrap: balance;
+@media (min-width: 900px) {
+  .bulkPanel {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+    gap: 56px;
+    align-items: start;
+  }
 }
 
 .bulkDesc {
-  font-size: var(--text-base);
-  line-height: var(--leading-relaxed);
-  color: var(--color-text-dark);
-  max-width: 520px;
-  margin-bottom: var(--space-6);
+  max-width: 50ch;
+  margin: 18px 0 28px;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--site-text-2);
+}
+
+.sheet {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.stamp {
+  aspect-ratio: 1;
+  border-radius: 2px;
+}
+
+.stamp_ready {
+  --hole: 1.5px;
+  --pitch: 5px;
+  background:
+    radial-gradient(circle at center, transparent var(--hole), var(--ivory) calc(var(--hole) + 0.5px)) calc(var(--pitch) / -2) calc(var(--pitch) / -2) / var(--pitch) var(--pitch);
+  padding: 2px;
+  position: relative;
+}
+
+.stamp_ready::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  background:
+    linear-gradient(135deg, rgba(111, 196, 174, 0.55), rgba(111, 196, 174, 0.25)),
+    var(--ivory);
+}
+
+.stamp_failed {
+  border: 1px dashed var(--oxide-ink);
+  background-color: rgba(181, 85, 47, 0.14);
+}
+
+.stamp_running {
+  background-color: rgba(155, 180, 236, 0.35);
+  box-shadow: inset 0 0 0 1px var(--lapis-ink);
+}
+
+.stamp_queued {
+  box-shadow: inset 0 0 0 1px rgba(215, 179, 218, 0.32);
 }
 
 .bulkFacts {
-  margin: 0;
-  border-top: 0.5px solid rgba(0, 0, 0, 0.1);
+  display: grid;
+  gap: 0;
+  margin: 28px 0 0;
 }
 
 .bulkFact {
   display: grid;
-  grid-template-columns: 120px minmax(0, 1fr);
-  gap: var(--space-4);
-  padding: var(--space-4) 0;
-  border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: 16px;
+  padding: 12px 0;
+  border-top: 1px solid rgba(215, 179, 218, 0.18);
 }
 
-.bulkFactTerm {
+.bulkFact dt {
   font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  font-variant-numeric: tabular-nums;
-  color: var(--color-text-dark);
+  font-size: 0.875rem;
+  color: var(--site-plum-ink);
 }
 
-.bulkFactDesc {
+.bulkFact dd {
   margin: 0;
-  font-size: var(--text-sm);
-  line-height: var(--leading-relaxed);
-  color: #5A5A5A;
-}
-
-@media (max-width: 760px) {
-  .bulkGrid {
-    grid-template-columns: 1fr;
-    gap: var(--space-8);
-    padding-top: var(--space-10);
-  }
-  .bulk { padding-bottom: var(--space-12); }
-  .bulkFact { grid-template-columns: 1fr; gap: var(--space-1); }
-}
-
-@media (prefers-contrast: more) {
-  .bulkFactDesc { color: var(--color-text-dark); }
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--site-text-2);
 }
 
 /* ═══════════════════════════════════════
@@ -388,163 +398,44 @@
    ═══════════════════════════════════════ */
 
 .pricing {
-  background-color: var(--color-obsidian);
-  padding: var(--space-20) 0;
+  padding: clamp(64px, 9vw, 120px) 0;
+  border-top: 1px solid var(--site-line);
 }
 
-.pricingInner {
-  max-width: var(--max-width-content);
-  margin: 0 auto;
-  padding: 0 var(--gutter);
-}
-
-.pricingHeading {
-  font-family: var(--font-sans);
-  font-weight: var(--weight-semibold);
-  font-size: var(--text-2xl);
-  line-height: var(--leading-tight);
-  letter-spacing: var(--tracking-tight);
-  color: var(--color-white);
-  margin-bottom: var(--space-3);
-}
-
-.pricingDesc {
-  font-size: var(--text-sm);
-  line-height: var(--leading-relaxed);
-  color: rgba(255, 255, 255, 0.62);
-  max-width: 560px;
-  margin-bottom: var(--space-10);
+.pricing .h2 {
+  max-width: 22ch;
 }
 
 /* ═══════════════════════════════════════
-   CTA
+   CLOSE
    ═══════════════════════════════════════ */
 
 .cta {
-  position: relative;
-  background-color: var(--color-obsidian);
-  border-top: var(--border-subtle);
-  padding: var(--space-24) 0;
+  padding: clamp(72px, 10vw, 136px) 0;
+  border-top: 1px solid var(--site-line);
   text-align: center;
-  overflow: hidden;
-}
-
-.ctaWatermark {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 360px;
-  height: auto;
-  opacity: 0.05;
-  pointer-events: none;
-  z-index: 0;
 }
 
 .ctaInner {
-  position: relative;
-  z-index: 1;
-  max-width: var(--max-width-narrow);
+  max-width: 720px;
   margin: 0 auto;
-  padding: 0 var(--gutter);
+  padding: 0 var(--site-gutter);
 }
 
 .ctaHeading {
-  font-family: var(--font-sans);
-  font-weight: var(--weight-semibold);
-  font-size: var(--text-4xl);
-  line-height: 1.1;
-  letter-spacing: var(--tracking-tight);
-  color: var(--color-white);
-  margin-bottom: var(--space-4);
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 6vw, 4.25rem);
+  font-weight: 400;
+  line-height: 1;
+  color: var(--site-text);
   text-wrap: balance;
 }
 
 .ctaDesc {
-  font-size: var(--text-base);
-  line-height: var(--leading-relaxed);
-  color: rgba(255, 255, 255, 0.62);
-  margin-bottom: var(--space-8);
-}
-
-.ctaActions {
-  display: flex;
-  gap: var(--space-4);
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-@media (prefers-contrast: more) {
-  .heroSub, .heroFit, .heroTrust li, .pricingDesc, .ctaDesc, .trustLabel { color: var(--color-white); }
-  .featureDesc { color: var(--color-text-dark); }
-  .featureGrid > li { border-right-color: rgba(0, 0, 0, 0.5); }
-}
-
-/* ═══════════════════════════════════════
-   RESPONSIVE
-   ═══════════════════════════════════════ */
-
-@media (max-width: 860px) {
-  .heroInner {
-    grid-template-columns: 1fr;
-    gap: var(--space-8);
-  }
-
-  .heroPreview {
-    justify-content: flex-start;
-  }
-}
-
-@media (max-width: 760px) {
-  .featureGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .featureGrid > li {
-    border-right: none;
-    border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
-  }
-
-  .featureGrid > li:last-child {
-    border-bottom: none;
-  }
-
-  .featureBlock,
-  .featureGrid > li:first-child .featureBlock {
-    padding: var(--space-5) 0;
-  }
-}
-
-@media (max-width: 640px) {
-  .hero { padding: var(--space-10) 0 0; }
-  .heroInner { padding-bottom: var(--space-10); }
-  .features, .pricing { padding: var(--space-16) 0; }
-  .cta { padding: var(--space-16) 0; }
-  .trustBarInner { gap: var(--space-5); }
-}
-
-@media (max-width: 480px) {
-  .heroSub { font-size: var(--text-sm); }
-
-  .heroCtas {
-    flex-direction: column;
-  }
-
-  .heroCtas > * {
-    width: 100%;
-  }
-
-  .featuresHeading, .pricingHeading { font-size: var(--text-xl); }
-  .featureTitle { font-size: var(--text-base); }
-  .ctaHeading { font-size: var(--text-2xl); }
-  .ctaWatermark { width: 200px; }
-
-  .trustBarInner {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-4);
-  }
-
-  .trustItem { align-items: flex-start; }
-  .trustDivider { display: none; }
+  max-width: 46ch;
+  margin: 20px auto 32px;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--site-text-2);
 }

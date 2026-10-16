@@ -20,7 +20,14 @@ import { sellerApi, SellerApiError } from '@lib/sellerApi';
 
 let state = { accountId: null, status: 'idle', jobs: [], next: null, error: null };
 const listeners = new Set();
-const set = (patch) => { state = { ...state, ...patch }; listeners.forEach((l) => l()); };
+// Listings deleted but still inside their Undo window: hidden from every
+// list, whatever the server sends back meanwhile (see removeSoon).
+const pending = new Map();
+const set = (patch) => {
+  const p = patch.jobs && pending.size ? { ...patch, jobs: patch.jobs.filter((j) => !pending.has(j.id)) } : patch;
+  state = { ...state, ...p };
+  listeners.forEach((l) => l());
+};
 
 export const subscribe = (fn) => { listeners.add(fn); return () => listeners.delete(fn); };
 export const getState = () => state;
@@ -177,6 +184,52 @@ export async function remove(id) {
   await sellerApi.deleteJob(id);
   set({ jobs: state.jobs.filter((j) => j.id !== id) });
 }
+
+/**
+ * Delete with Undo: the listing leaves every list at once; commit()
+ * deletes it on the server (the caller calls it when the Undo offer
+ * closes), undo() puts it back where it was. If neither comes within
+ * `ms` it commits on its own, and leaving the page commits at once
+ * (keepalive carries the request past the unload). If the server
+ * refuses, the listing comes back and onFail says so.
+ */
+export function removeSoon(id, ms, onFail = () => {}) {
+  const job = state.jobs.find((j) => j.id === id) ?? null;
+  const commit = () => {
+    const p = pending.get(id);
+    if (!p || p.sent) return;
+    p.sent = true;
+    clearTimeout(p.timer);
+    sellerApi.deleteJob(id, { keepalive: true })
+      .then(() => { pending.delete(id); })
+      .catch((err) => {
+        pending.delete(id);
+        if (err.status === 404) return; // already gone
+        if (job) put(job);
+        onFail(err);
+      });
+  };
+  pending.set(id, { timer: setTimeout(commit, ms), commit, sent: false });
+  set({ jobs: state.jobs.filter((j) => j.id !== id) });
+  return {
+    commit,
+    undo() {
+      const p = pending.get(id);
+      if (!p || p.sent) return false;
+      clearTimeout(p.timer);
+      pending.delete(id);
+      if (job) put(job);
+      return true;
+    },
+  };
+}
+
+/** Send every delete still waiting (the page is going away). */
+export function flushDeletes() {
+  for (const p of [...pending.values()]) p.commit();
+}
+
+if (typeof window !== 'undefined') window.addEventListener('pagehide', flushDeletes);
 
 export function clear() {
   stopAll();

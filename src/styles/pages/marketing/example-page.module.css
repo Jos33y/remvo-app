@@ -1,10 +1,13 @@
 /* ═══════════════════════════════════════
    EXAMPLE LISTING
-   One real listing on warm white, as a
-   sheet of labelled rows. The listing's
-   own words in the main text colour; our
-   notes on them smaller and grey. Figures
-   in Plex Mono. Built on info-page.
+   One real listing as a sheet of ivory
+   paper with a perforated stamp edge, the
+   product on white at its head and a
+   postmark in eBay.com's ink across the
+   corner. The listing's own words in the
+   main ink; our notes smaller and grey.
+   Money in a dark gold that reads on
+   paper. Built on info-page.
    ═══════════════════════════════════════ */
 
 /* ── What it was given, in the dark intro ── */
@@ -23,14 +26,14 @@
 }
 
 .given dt {
-  font-size: var(--text-xs);
-  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.8125rem;
+  color: var(--site-text-3);
 }
 
 .given dd {
   margin: 0;
-  font-size: var(--text-base);
-  color: var(--color-white);
+  font-size: 1rem;
+  color: var(--site-text);
 }
 
 .mono {
@@ -44,12 +47,63 @@
   align-items: start;
 }
 
+/* The perforated edge: the paper's colour with round holes along every
+ * side, the night showing through them; the sheet sits inside it. */
+.paper {
+  --ink: #141418;
+  --ink-2: rgba(20, 20, 24, 0.68);
+  --hole: 4px;
+  --pitch: 14px;
+  min-width: 0;
+  padding: 10px;
+  background:
+    radial-gradient(circle at center, transparent var(--hole), var(--ivory) calc(var(--hole) + 0.5px)) calc(var(--pitch) / -2) calc(var(--pitch) / -2) / var(--pitch) var(--pitch);
+}
+
 .sheet {
   min-width: 0;
+  padding: 8px 24px;
+  background-color: var(--ivory);
+  color: var(--ink);
+}
+
+.top {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 0 18px;
+  border-bottom: 1px solid rgba(20, 20, 24, 0.1);
+}
+
+.photo {
+  position: relative;
+  width: 132px;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 10px;
   background-color: #FFFFFF;
-  border: 0.5px solid rgba(0, 0, 0, 0.1);
-  border-radius: var(--radius-lg);
-  padding: var(--space-2) var(--space-6);
+  box-shadow: inset 0 0 0 1px rgba(20, 20, 24, 0.08);
+}
+
+.photo img {
+  position: absolute;
+  inset: 7%;
+  width: 86%;
+  height: 86%;
+  object-fit: contain;
+}
+
+/* eBay.com's postmark ink. Decoration: the date and site are in the text. */
+.postmark {
+  flex: none;
+  width: 112px;
+  height: 112px;
+  margin: 4px -4px 0 0;
+  color: #2C4A8A;
+  opacity: 0.86;
+  transform: rotate(-12deg);
 }
 
 .rows {
@@ -61,7 +115,7 @@
   grid-template-columns: 128px minmax(0, 1fr);
   gap: var(--space-4);
   padding: var(--space-5) 0;
-  border-bottom: 0.5px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(20, 20, 24, 0.1);
 }
 
 .row:last-child {
@@ -71,7 +125,7 @@
 .term {
   font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
-  color: #5E5E5E;
+  color: var(--ink-2);
   padding-top: 2px;
 }
 
@@ -83,7 +137,7 @@
   gap: var(--space-1);
   font-size: var(--text-base);
   line-height: var(--leading-normal);
-  color: var(--color-text-dark);
+  color: var(--ink);
   overflow-wrap: anywhere;
 }
 
@@ -97,12 +151,14 @@
 .note {
   font-size: var(--text-sm);
   line-height: var(--leading-normal);
-  color: #5E5E5E;
+  color: var(--ink-2);
 }
 
 .price {
   font-size: var(--text-xl);
   font-weight: var(--weight-semibold);
+  /* Gold, darkened to read on paper (5.5:1): it is money. */
+  color: #7A6220;
 }
 
 /* ── Item specifics: name and value in two columns ── */
@@ -119,7 +175,7 @@
   padding: 6px 0;
   font-size: var(--text-sm);
   line-height: var(--leading-normal);
-  border-bottom: 0.5px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid rgba(20, 20, 24, 0.08);
 }
 
 .specifics tr:last-child th,
@@ -131,11 +187,11 @@
   width: 48%;
   padding-right: var(--space-4);
   font-weight: var(--weight-regular);
-  color: #5E5E5E;
+  color: var(--ink-2);
 }
 
 .specifics td {
-  color: var(--color-text-dark);
+  color: var(--ink);
 }
 
 /* ── Description, laid out as the eBay drafts file lays it out ── */
@@ -143,7 +199,7 @@
 .description {
   font-size: var(--text-sm);
   line-height: var(--leading-relaxed);
-  color: var(--color-text-dark);
+  color: var(--ink);
 }
 
 .description p {
@@ -168,7 +224,7 @@
 }
 
 .description li::marker {
-  color: #5E5E5E;
+  color: var(--ink-2);
 }
 
 .description li + li {
@@ -177,8 +233,12 @@
 
 @media (max-width: 640px) {
   .sheet {
-    padding: var(--space-1) var(--space-4);
+    padding: 4px 16px;
   }
+
+  .paper { --hole: 3px; --pitch: 11px; padding: 8px; }
+  .photo { width: 104px; }
+  .postmark { width: 92px; height: 92px; }
 
   .row {
     grid-template-columns: 1fr;
@@ -192,5 +252,5 @@
 }
 
 @media (prefers-contrast: more) {
-  .term, .note, .specifics th { color: var(--color-text-dark); }
+  .term, .note, .specifics th { color: var(--ink); }
 }

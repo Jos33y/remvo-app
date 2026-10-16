@@ -1,25 +1,20 @@
 /* ═══════════════════════════════════════
    LEGAL PAGE LAYOUT
-   Shared structure: dark hero + warm-white body.
+   Shared structure: one night page (site1), a hero and the clauses.
    Used by: Terms, Privacy, Refunds, Credits.
    ═══════════════════════════════════════ */
 
 /* ── Hero (dark, atmospheric) ── */
 
 .hero {
-  background: radial-gradient(
-    ellipse 60% 60% at 50% 40%,
-    #1E1E1E 0%,
-    #1A1A1A 45%,
-    #151515 100%
-  );
+  background-color: var(--night-0);
   padding: var(--space-10) 0 var(--space-8);
 }
 
 .heroInner {
-  max-width: var(--max-width-narrow);
+  max-width: var(--site-width);
   margin: 0 auto;
-  padding: 0 var(--gutter);
+  padding: 0 var(--site-gutter);
 }
 
 .backLink {
@@ -27,7 +22,7 @@
   align-items: center;
   gap: var(--space-2);
   font-size: var(--text-sm);
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--ivory-3);
   text-decoration: none;
   margin-bottom: var(--space-6);
   transition: color var(--transition-fast);
@@ -35,17 +30,17 @@
 
 @media (hover: hover) and (pointer: fine) {
   .backLink:hover {
-    color: var(--color-white);
+    color: var(--ivory);
   }
 }
 
 .title {
-  font-family: var(--font-sans);
-  font-weight: var(--weight-semibold);
-  font-size: var(--text-2xl);
-  line-height: var(--leading-tight);
-  letter-spacing: var(--tracking-tight);
-  color: var(--color-white);
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(2.5rem, 5.6vw, 3.75rem);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--ivory);
   margin-bottom: var(--space-3);
 }
 
@@ -59,15 +54,15 @@
 .meta {
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--ivory-3);
 }
 
 .metaVersion {
   font-family: var(--font-mono);
   font-size: 0.625rem;
-  color: var(--color-gold);
+  color: var(--ivory-2);
   padding: 2px 8px;
-  border: 1px solid rgba(201, 168, 76, 0.3);
+  border: 1px solid var(--night-line-strong);
   border-radius: var(--radius-sm);
   line-height: 1;
 }
@@ -76,16 +71,16 @@
 
 .toc {
   padding: var(--space-4) var(--space-5);
-  background-color: rgba(255, 255, 255, 0.03);
+  background-color: rgba(244, 239, 230, 0.03);
   border-radius: var(--radius-md);
-  border: 0.5px solid rgba(255, 255, 255, 0.06);
+  border: 0.5px solid rgba(244, 239, 230, 0.06);
 }
 
 .tocTitle {
   font-family: var(--font-mono);
   font-weight: var(--weight-regular);
   font-size: 0.625rem;
-  color: var(--color-gold);
+  color: var(--ivory-2);
   margin-bottom: var(--space-3);
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -106,7 +101,7 @@
 .tocLink {
   display: block;
   font-size: 0.8125rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--ivory-3);
   text-decoration: none;
   padding: 3px 0;
   transition: color var(--transition-fast);
@@ -116,36 +111,36 @@
   content: counter(toc-counter) ". ";
   font-family: var(--font-mono);
   font-size: 0.6875rem;
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--ivory-3);
   margin-right: 2px;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .tocLink:hover {
-    color: var(--color-white);
+    color: var(--ivory);
   }
 }
 
-/* ── Body (warm-white) ── */
+/* ── Body ── */
 
 .body {
-  background-color: var(--color-warm-white);
+  background-color: var(--night-0);
   padding: var(--space-10) 0 var(--space-16);
 }
 
 .bodyInner {
-  max-width: var(--max-width-narrow);
+  max-width: var(--site-width);
   margin: 0 auto;
-  padding: 0 var(--gutter);
+  padding: 0 var(--site-gutter);
 }
 
 .preamble {
   font-size: var(--text-sm);
   line-height: var(--leading-relaxed);
-  color: var(--color-text-dark);
+  color: var(--ivory);
   margin-bottom: var(--space-10);
   padding-bottom: var(--space-8);
-  border-bottom: 0.5px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 0.5px solid var(--night-line);
 }
 
 /* ── Clauses ── */
@@ -159,17 +154,17 @@
   font-family: var(--font-sans);
   font-weight: var(--weight-semibold);
   font-size: var(--text-base);
-  color: var(--color-text-dark);
+  color: var(--ivory);
   margin-bottom: var(--space-3);
   line-height: var(--leading-tight);
   padding-left: var(--space-3);
-  border-left: 2px solid var(--color-gold);
+  border-left: 2px solid var(--night-line-strong);
 }
 
 .clause p {
   font-size: var(--text-sm);
   line-height: var(--leading-relaxed);
-  color: var(--color-text-dark);
+  color: var(--ivory);
   margin-bottom: var(--space-2);
 }
 
@@ -187,7 +182,7 @@
 
 .defItem {
   padding-bottom: var(--space-3);
-  border-bottom: 0.5px solid rgba(0, 0, 0, 0.04);
+  border-bottom: 0.5px solid var(--night-line);
 }
 
 .defItem:last-child {
@@ -199,28 +194,28 @@
   font-family: var(--font-mono);
   font-size: 0.8125rem;
   font-weight: var(--weight-regular);
-  color: var(--color-text-dark);
+  color: var(--ivory);
   margin-bottom: 2px;
 }
 
 .defDesc {
   font-size: var(--text-sm);
   line-height: var(--leading-relaxed);
-  color: #5E5E5E; /* 5.7:1 on warm white, as .footerNote */
+  color: var(--ivory-2); /* 5.7:1 on warm white, as .footerNote */
 }
 
 /* ── Document footer ── */
 
 .docFooter {
-  background-color: var(--color-warm-white);
+  background-color: var(--night-0);
   padding: 0 0 var(--space-16);
 }
 
 .docFooterInner {
-  max-width: var(--max-width-narrow);
+  max-width: var(--site-width);
   margin: 0 auto;
-  padding: var(--space-6) var(--gutter) 0;
-  border-top: 0.5px solid rgba(0, 0, 0, 0.1);
+  padding: var(--space-6) var(--site-gutter) 0;
+  border-top: 0.5px solid var(--night-line);
 }
 
 .footerNote {
@@ -228,29 +223,29 @@
   line-height: var(--leading-relaxed);
   /* #5E5E5E on warm white is 5.7:1; the muted token (#7A7A7A) is 3.8:1,
      under the 4.5:1 that text this size needs (WCAG 2.2 AA). */
-  color: #5E5E5E;
+  color: var(--ivory-2);
 }
 
 .footerNote a {
-  color: var(--color-gold);
+  color: var(--ivory-2);
   text-decoration: none;
   transition: color var(--transition-fast);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .footerNote a:hover {
-    color: #b8983f;
+    color: var(--ivory);
   }
 }
 
 /* ── Links inside clauses (October 2026) ──
  * The reset strips colour and underline from every link, which left
  * cross-references in the policies invisible. Dark text with a hairline
- * underline, gold-dark on hover: gold itself is 2.1:1 on warm white. */
+ * underline; on night, ivory with a hairline underline. */
 
 .preamble a,
 .clause a {
-  color: var(--color-text-dark);
+  color: var(--ivory);
   text-decoration: underline;
   text-underline-offset: 3px;
   text-decoration-thickness: 0.5px;
@@ -260,20 +255,20 @@
 @media (hover: hover) and (pointer: fine) {
   .preamble a:hover,
   .clause a:hover {
-    color: #7A6220;
+    color: var(--ivory);
   }
 }
 
 .footerNote a {
-  color: var(--color-text-dark);
+  color: var(--ivory);
   text-decoration: underline;
   text-underline-offset: 3px;
   text-decoration-thickness: 0.5px;
 }
 
 @media (prefers-contrast: more) {
-  .defDesc, .footerNote { color: var(--color-text-dark); }
-  .tocLink, .meta { color: rgba(255, 255, 255, 0.85); }
+  .defDesc, .footerNote { color: var(--ivory); }
+  .tocLink, .meta { color: rgba(244, 239, 230, 0.85); }
 }
 
 /* ═══════════════════════════════════════
@@ -291,9 +286,6 @@
     padding: var(--space-6) 0;
   }
 
-  .title {
-    font-size: var(--text-xl);
-  }
 
   .toc {
     padding: var(--space-3) var(--space-4);
@@ -321,9 +313,6 @@
 }
 
 @media (max-width: 360px) {
-  .title {
-    font-size: var(--text-lg);
-  }
 
   .metaRow {
     flex-direction: column;

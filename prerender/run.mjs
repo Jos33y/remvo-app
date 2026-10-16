@@ -60,6 +60,9 @@ const js = new Set();
 })('src/app/MarketingApp.jsx');
 
 const font = Object.values(manifest).flatMap((e) => e.assets ?? []).find((a) => /geist-latin-wght-normal-[\w-]+\.woff2$/.test(a));
+// The headlines' serif (site1): preloaded too, so the first headline is
+// drawn in it rather than swapped in after.
+const serif = Object.values(manifest).flatMap((e) => e.assets ?? []).find((a) => /instrument-serif-latin-400-normal-[\w-]+\.woff2$/.test(a));
 
 const { render, PAGES, NOT_FOUND, canonical, OG_IMAGE, structuredData } = await import(pathToFileURL(SSR).href);
 
@@ -73,7 +76,7 @@ function head(path, meta) {
     `<meta property="og:image" content="${OG_IMAGE}" />`,
     '<meta property="og:image:width" content="1200" />',
     '<meta property="og:image:height" content="630" />',
-    '<meta property="og:image:alt" content="A finished eBay listing prepared by Remvo from a barcode" />',
+    '<meta property="og:image:alt" content="Paste a product. Get a finished eBay listing. A real Remvo listing for an Energizer speaker, $137.99." />',
     '<meta property="og:type" content="website" />',
     `<meta property="og:title" content="${esc(meta.title)}" />`,
     `<meta property="og:description" content="${esc(meta.description)}" />`,
@@ -85,6 +88,7 @@ function head(path, meta) {
     `<meta name="twitter:title" content="${esc(meta.title)}" />`,
     `<meta name="twitter:description" content="${esc(meta.description)}" />`,
     ...(font ? [`<link rel="preload" href="/${font}" as="font" type="font/woff2" crossorigin />`] : []),
+    ...(serif ? [`<link rel="preload" href="/${serif}" as="font" type="font/woff2" crossorigin />`] : []),
     ...[...css].map((c) => `<link rel="stylesheet" crossorigin href="/${c}" />`),
     ...[...js].map((f) => `<link rel="modulepreload" crossorigin href="/${f}" />`),
   ];

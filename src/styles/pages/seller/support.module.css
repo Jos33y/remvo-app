@@ -13,15 +13,26 @@
 }
 
 .intro {
+  display: grid;
+  justify-items: center;
   margin: auto 0 12px;
-  padding: 20px 4px 8px;
+  padding: 20px 8px 8px;
   text-align: center;
+}
+
+.postbox {
+  width: 120px;
+  height: auto;
+  margin-bottom: 14px;
+  color: var(--lapis-ink);
 }
 
 .introTitle {
   margin: 0 0 6px;
-  font-size: 1.0625rem;
-  font-weight: 600;
+  font-family: var(--font-serif);
+  font-size: 1.875rem;
+  font-weight: 400;
+  line-height: 1.1;
   color: var(--app-text);
 }
 
@@ -31,6 +42,58 @@
   font-size: 0.9375rem;
   line-height: 1.45;
   color: var(--app-text-2);
+}
+
+/* The four things sellers write about: a tap starts the message. */
+.topics {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  max-width: 420px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.topic {
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--lapis-ink);
+  background-color: var(--app-info-fill);
+  box-shadow: inset 0 0 0 1px rgba(155, 180, 236, 0.28);
+  touch-action: manipulation;
+  transition: background-color 120ms ease, transform var(--dur-press) var(--ease-out);
+}
+
+/* 40 px drawn, 44 px to tap. */
+.topic {
+  position: relative;
+}
+
+.topic::before {
+  content: '';
+  position: absolute;
+  inset: -2px 0;
+}
+
+.topic:active { transform: scale(0.97); }
+
+.topic:focus-visible {
+  outline: none;
+  box-shadow: var(--app-focus);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .topic:hover { background-color: rgba(44, 74, 138, 0.4); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .topic { transition: none; }
+  .topic:active { transform: none; }
 }
 
 .notice {

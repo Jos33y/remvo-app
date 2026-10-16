@@ -1,162 +1,162 @@
 /* ═══════════════════════════════════════
-   PACK GRID
-   Four top-ups on obsidian. The figure
-   first, then what it buys. Gold is the
-   $20 pack's border and button only.
+   PACK GRID (site1)
+   The top-ups as the app's Credits page
+   shows them: the price, then what it
+   makes (listings, bold), the credits,
+   and the price of a listing at the foot.
+   Gold is the money: the price of a
+   listing. The $20 tile's button is the
+   ivory one.
    ═══════════════════════════════════════ */
 
 .wrap {
   width: 100%;
+  margin-top: 40px;
 }
 
 .head {
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: var(--space-5);
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  margin-bottom: 20px;
 }
 
 .welcome {
-  margin: 0 0 var(--space-5);
-  font-size: var(--text-base);
-  line-height: var(--leading-normal);
-  color: rgba(255, 255, 255, 0.78);
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--site-text-2);
 }
 
 .welcome strong {
   font-weight: 600;
-  color: var(--color-white);
+  color: var(--site-text);
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-4);
-  list-style: none;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
   margin: 0;
   padding: 0;
+  list-style: none;
+}
+
+@media (max-width: 1023px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 359px) {
+  .grid { grid-template-columns: minmax(0, 1fr); }
 }
 
 .pack {
   display: flex;
   flex-direction: column;
-  padding: var(--space-6);
-  background-color: rgba(255, 255, 255, 0.03);
-  border: 0.5px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-lg);
+  padding: 22px 20px 20px;
+  border-radius: 18px;
+  background-color: var(--site-raised);
+  box-shadow: inset 0 0 0 1px var(--site-line);
 }
 
 .featured {
-  border: 1px solid var(--gold-edge-strong);
-  background-color: rgba(201, 168, 76, 0.04);
+  box-shadow: inset 0 0 0 1.5px var(--ivory);
 }
 
 .price {
-  font-family: var(--font-mono);
-  font-weight: var(--weight-semibold);
-  font-size: var(--text-4xl);
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 3rem;
+  font-weight: 400;
   line-height: 1;
-  letter-spacing: var(--tracking-mono-tight);
-  font-variant-numeric: tabular-nums;
-  color: var(--color-white);
-  margin-bottom: var(--space-4);
+  color: var(--site-text);
+  font-variant-numeric: lining-nums;
 }
 
-.currency {
-  font-size: 0.6em;
-  vertical-align: 0.38em;
-  margin-right: 2px;
-  color: rgba(255, 255, 255, 0.62);
-}
-
-.credits {
-  font-family: var(--font-mono);
-  font-size: var(--text-base);
-  color: var(--color-white);
-  margin-bottom: var(--space-1);
-}
-
-.covers {
-  font-size: var(--text-sm);
-  line-height: var(--leading-normal);
-  color: rgba(255, 255, 255, 0.62);
-  margin-bottom: var(--space-6);
-}
-
-.coversNote {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.buy {
-  margin-top: auto;
-  width: 100%;
-}
-
-.other {
-  margin-top: var(--space-6);
-  font-size: var(--text-sm);
-  line-height: var(--leading-normal);
-  color: var(--color-white);
-}
-
-.terms {
-  margin-top: var(--space-3);
-  font-size: 0.8125rem;
-  line-height: var(--leading-relaxed);
-  color: rgba(255, 255, 255, 0.62);
-  max-width: 620px;
-}
-
-.link {
-  color: var(--color-gold);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  text-decoration-thickness: 0.5px;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .link:hover {
-    color: #d4b85c;
-  }
-}
-
-@media (prefers-contrast: more) {
-  .pack { border-color: rgba(255, 255, 255, 0.5); }
-  .covers, .coversNote, .terms, .other, .currency { color: var(--color-white); }
-}
-
-@media (max-width: 760px) {
-  .head { justify-content: flex-start; }
-
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
-  .pack {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-template-areas:
-      "price credits"
-      "price covers"
-      "buy buy";
-    column-gap: var(--space-6);
-    align-items: center;
-    padding: var(--space-5);
-  }
-
-  .price { grid-area: price; margin-bottom: 0; font-size: var(--text-3xl); }
-  .credits { grid-area: credits; align-self: end; }
-  .covers { grid-area: covers; align-self: start; margin-bottom: 0; }
-  .buy { grid-area: buy; margin-top: var(--space-5); }
+/* Every tile keeps this row, so the lines below line up. */
+.tag {
+  min-height: 24px;
+  margin: 10px 0 12px;
 }
 
 .bonus {
-  display: block;
-  margin-top: 2px;
+  display: inline-block;
+  padding: 1px 9px;
+  border-radius: 999px;
   font-size: 0.8125rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.66);
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--verdigris-ink);
+  background-color: rgba(47, 125, 109, 0.22);
 }
 
-@media (min-width: 761px) and (max-width: 1080px) {
-  .grid { grid-template-columns: repeat(2, 1fr); }
+.listings {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--site-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.credits {
+  margin: 2px 0 0;
+  font-size: 0.875rem;
+  color: var(--site-text-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.each {
+  margin: 14px 0 20px;
+  font-size: 0.875rem;
+  color: var(--site-text-2);
+}
+
+.eachNum {
+  font-family: var(--font-mono);
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+}
+
+.buy {
+  width: 100%;
+  margin-top: auto;
+}
+
+.other {
+  margin: 20px 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--site-text);
+}
+
+.terms {
+  max-width: 64ch;
+  margin: 8px 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--site-text-3);
+}
+
+.link {
+  color: var(--site-text);
+  text-decoration: underline;
+  text-decoration-color: var(--site-line-strong);
+  text-underline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link:hover { text-decoration-color: var(--site-text); }
+}
+
+@media (prefers-contrast: more) {
+  .pack { box-shadow: inset 0 0 0 1px var(--ivory); }
+  .credits, .each, .terms, .welcome { color: var(--ivory); }
+}
+
+/* Phones: two tiles a row, a little tighter. */
+@media (max-width: 479px) {
+  .pack { padding: 18px 14px 14px; }
+  .price { font-size: 2.5rem; }
 }

@@ -14,14 +14,14 @@
 
 .label {
   font-size: 0.8125rem;
-  color: rgba(255, 255, 255, 0.62);
+  color: rgba(244, 239, 230, 0.62);
 }
 
 .group {
   display: inline-flex;
   padding: 2px;
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 0.5px solid rgba(255, 255, 255, 0.12);
+  background-color: rgba(244, 239, 230, 0.05);
+  border: 0.5px solid rgba(244, 239, 230, 0.12);
   border-radius: 9px;
 }
 
@@ -32,7 +32,7 @@
   font-family: var(--font-mono);
   font-size: 0.8125rem;
   letter-spacing: 0.02em;
-  color: rgba(255, 255, 255, 0.62);
+  color: rgba(244, 239, 230, 0.62);
   background: transparent;
   border: 0;
   border-radius: 7px;
@@ -41,7 +41,7 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .option:hover { color: var(--color-white); }
+  .option:hover { color: var(--ivory); }
 }
 .option:active { transform: scale(0.97); }
 
@@ -51,15 +51,15 @@
 }
 
 .on {
-  color: var(--color-white);
-  background-color: rgba(255, 255, 255, 0.12);
+  color: var(--ivory);
+  background-color: rgba(244, 239, 230, 0.12);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 @media (prefers-contrast: more) {
-  .group { border-color: rgba(255, 255, 255, 0.5); }
-  .label, .option { color: var(--color-white); }
-  .on { outline: 1px solid var(--color-white); }
+  .group { border-color: rgba(244, 239, 230, 0.5); }
+  .label, .option { color: var(--ivory); }
+  .on { outline: 1px solid var(--ivory); }
 }
 
 @media (prefers-reduced-motion: reduce) {

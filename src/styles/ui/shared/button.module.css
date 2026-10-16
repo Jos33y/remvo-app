@@ -73,6 +73,24 @@
   background-color: #a88a38;
 }
 
+/* ── Ivory: the main action on the night site and in the app (site1,
+ * October 2026). Gold is kept for money; the action is ivory. ── */
+
+.ivory {
+  background-color: var(--ivory);
+  color: var(--night-0);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ivory:hover {
+    background-color: #FFFFFF;
+  }
+}
+
+.ivory:active {
+  background-color: #E9E3D8;
+}
+
 /* ── Secondary: outline on dark ── */
 
 .secondary {

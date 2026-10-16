@@ -1,12 +1,44 @@
-/* Obsidian behind everything, so the translucent header reads as
- * obsidian over the hero rather than as grey over the body's warm
- * white. Each section sets its own surface. */
+/* ═══════════════════════════════════════
+   THE PUBLIC SITE (site1, October 2026)
+   The app's night, the same as my.remvo.app
+   and the Instagram posts: deep, not black;
+   ivory text and actions; gold only on
+   money. Every page section reads these.
+   ═══════════════════════════════════════ */
+
 .shell {
+  --site-width: 1120px;
+  --site-gutter: clamp(16px, 4vw, 32px);
+  --site-bg: var(--night-0);
+  --site-raised: var(--night-1);
+  --site-raised-2: var(--night-2);
+  --site-line: var(--night-line);
+  --site-line-strong: var(--night-line-strong);
+  --site-text: var(--ivory);
+  --site-text-2: var(--ivory-2);
+  --site-text-3: var(--ivory-3);
+  --site-plum: #5B3A5E;
+  --site-plum-ink: #D7B3DA;
+
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   min-height: 100dvh;
-  background-color: var(--color-obsidian);
+  color: var(--site-text);
+  background-color: var(--site-bg);
+  color-scheme: dark;
+}
+
+/* Focus and the skip link are ivory on night, as in the app: gold is
+ * for money. */
+.shell :global(.skip-link) {
+  color: var(--night-0);
+  background: var(--ivory);
+}
+
+.shell :focus-visible {
+  outline: 2px solid var(--ivory);
+  outline-offset: 2px;
 }
 
 .main {

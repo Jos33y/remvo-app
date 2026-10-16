@@ -94,6 +94,7 @@ export function useSellerData() {
   const makeListing = useCallback((input, onUpdate) => jobStore.create(input, onUpdate), []);
   const watchJob = useCallback((jobId, onUpdate) => jobStore.watch(jobId, onUpdate), []);
   const deleteJob = useCallback((jobId) => jobStore.remove(jobId), []);
+  const deleteJobSoon = useCallback((jobId, ms, onFail) => jobStore.removeSoon(jobId, ms, onFail), []);
   const editJob = useCallback((jobId, field, value) => jobStore.edit(jobId, field, value), []);
   const loadMoreJobs = useCallback(() => jobStore.loadMore(), []);
 
@@ -128,7 +129,7 @@ export function useSellerData() {
     listingsEnabled: wallet?.listingsEnabled ?? false,
     listingCredits,
     summary, jobs, history, settings, job,
-    fetchJob, lookUp, makeListing, watchJob, deleteJob, editJob, loadMoreJobs,
+    fetchJob, lookUp, makeListing, watchJob, deleteJob, deleteJobSoon, editJob, loadMoreJobs,
     topUp, topUpStatus, updateSettings, refreshWallet,
     checkBatch, startBatch, fetchBatch, listBatches, batchFile, refreshAll,
   };

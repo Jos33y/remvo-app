@@ -27,7 +27,9 @@ const day = (iso) => {
 
 const coarse = () => typeof window !== 'undefined' && window.matchMedia?.('(pointer: coarse)').matches;
 
-export function ChatThread({ messages, onSend, intro = null, placeholder = 'Write a message', autoFocus = false, disabled = false, footnote = null }) {
+/* seed: { text, key } puts a start in the box (a topic the seller tapped)
+ * without sending it; a new key puts it there again. */
+export function ChatThread({ messages, onSend, intro = null, placeholder = 'Write a message', autoFocus = false, disabled = false, footnote = null, seed = null }) {
   const [draft, setDraft] = useState('');
   const [sending, setSending] = useState(false);
   const listRef = useRef(null);
@@ -42,6 +44,13 @@ export function ChatThread({ messages, onSend, intro = null, placeholder = 'Writ
   }, [messages.length]);
 
   useEffect(() => { if (autoFocus && !coarse()) boxRef.current?.focus(); }, [autoFocus]);
+
+  useEffect(() => {
+    if (!seed) return;
+    setDraft(seed.text);
+    const el = boxRef.current;
+    if (el) { el.focus(); requestAnimationFrame(() => el.setSelectionRange(seed.text.length, seed.text.length)); }
+  }, [seed?.key]);
 
   // The box grows with what is typed, up to six lines.
   useLayoutEffect(() => {

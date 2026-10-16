@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import { PageHeader } from '@components/ui/seller/PageHeader';
-import { Sheet } from '@components/ui/seller/Sheet';
+import { NotHere } from '@components/ui/seller/NotHere';
 import { useToast } from '@components/ui/seller/Toast';
 import { CopyField, EditableField, StatusPill } from '@components/ui/seller/parts';
 import { IconAlert, IconCheck, IconCopy, IconDownload, IconExternal, IconTrash } from '@components/ui/seller/icons';
@@ -16,6 +16,10 @@ import { Breakable } from '@components/ui/seller/Breakable';
 import s from '@styles/pages/seller/app.module.css';
 import L from '@styles/pages/seller/listing.module.css';
 
+// Undo is offered for as long as its toast shows (eight seconds, longer
+// while it is pointed at or focused); this is only the longest wait.
+const UNDO_SAFETY_MS = 60_000;
+
 /* ──────────────────────────────────────────────────────────────────
  * A listing, /listings/:id
  *
@@ -28,8 +32,8 @@ import L from '@styles/pages/seller/listing.module.css';
  * download is their version, and any field can be put back.
  *
  * Copy all and Download put everything in one go. Delete removes it
- * now rather than in 90 days; its credits stay spent, because the work
- * was done.
+ * now rather than in 90 days, with Undo for a few seconds instead of a
+ * question first; its credits stay spent, because the work was done.
  *
  * Anything Remvo could not find (a category, a parcel the page does
  * not give, a price with no live listings to go by, a required item
@@ -154,10 +158,8 @@ export function ListingPage() {
   const location = useLocation();
   const madeIn = location.state?.madeIn ?? null;
   const toast = useToast();
-  const { job: find, fetchJob, deleteJob, editJob, jobsStatus } = useSellerData();
+  const { job: find, fetchJob, deleteJobSoon, editJob, jobsStatus } = useSellerData();
   const { copy } = useClipboard({ resetMs: 1500 });
-  const [confirm, setConfirm] = useState(false);
-  const [busy, setBusy] = useState(false);
   const [missing, setMissing] = useState(false);
   // Set as a delete starts: the listing leaving the store is not a reason to ask the server for it.
   const deleting = useRef(false);
@@ -180,10 +182,7 @@ export function ListingPage() {
         <PageHeader title="Listing" back={SELLER_ROUTES.LISTINGS} backLabel="Listings" large={false} />
         <div className={s.content}>
           {missing ? (
-            <div className={s.empty}>
-              <p className={s.emptyTitle}>This listing is not here</p>
-              <p className={s.emptyText}>It may have been deleted, or passed its 90 days.</p>
-            </div>
+            <NotHere title="This listing is not here" text="It may have been deleted, or passed its 90 days." />
           ) : (
             <div className={s.empty} aria-busy="true">
               <p className={s.emptyText}>Opening the listing…</p>
@@ -204,20 +203,17 @@ export function ListingPage() {
   const save = (field) => (value) => editJob(job.id, field, value);
   const keptUntil = new Date(Date.parse(job.createdAt) + PRICING.RESULT_DAYS * DAY).toISOString();
 
-  async function remove() {
-    setBusy(true);
+  // Delete at once, with Undo: no question first. The listing goes back
+  // to Listings and is deleted for good when the Undo window closes.
+  function remove(e) {
     deleting.current = true;
-    try {
-      await deleteJob(job.id);
-    } catch (err) {
-      deleting.current = false;
-      setBusy(false);
-      setConfirm(false);
-      toast(err.message || 'That did not delete. Try again.');
-      return;
-    }
-    toast('Listing deleted');
+    const { undo, commit } = deleteJobSoon(job.id, UNDO_SAFETY_MS, (err) => toast(err.message || 'That listing did not delete. It is back in your list.'));
     navigate(SELLER_ROUTES.LISTINGS, { replace: true });
+    toast('Listing deleted', {
+      focus: e?.detail === 0, // pressed with a keyboard
+      onClose: commit,
+      action: { label: 'Undo', onClick: () => { if (undo()) toast('Listing back'); } },
+    });
   }
 
   return (
@@ -428,8 +424,11 @@ export function ListingPage() {
 
         <div className={s.section}>
           <div className={s.group}>
-            <button type="button" className={`${s.row} ${s.danger}`} onClick={() => setConfirm(true)}>
-              <span className={s.rowMain}><span className={s.rowTitle}>Delete listing</span></span>
+            <button type="button" className={`${s.row} ${s.danger}`} onClick={remove}>
+              <span className={s.rowMain}>
+                <span className={s.rowTitle}>Delete listing</span>
+                <span className={s.rowSub}>Now, not in 90 days. Its credits stay spent.</span>
+              </span>
               <IconTrash size={20} />
             </button>
           </div>
@@ -437,25 +436,6 @@ export function ListingPage() {
         </div>
       </div>
 
-      <Sheet
-        open={confirm}
-        onClose={() => !busy && setConfirm(false)}
-        title="Delete this listing?"
-        footer={
-          <div className={s.actions}>
-            <button type="button" className={`${s.button} ${s.destructive} ${s.block}`} onClick={remove} disabled={busy}>
-              {busy ? 'Deleting…' : 'Delete listing'}
-            </button>
-            <button type="button" className={`${s.button} ${s.secondary} ${s.block}`} onClick={() => setConfirm(false)} disabled={busy}>
-              Keep it
-            </button>
-          </div>
-        }
-      >
-        <p className={s.sheetText}>
-          It is removed now, not in 90 days, and cannot be brought back. The {job.credits || 'no'} credits it used stay spent.
-        </p>
-      </Sheet>
     </>
   );
 }

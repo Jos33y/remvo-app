@@ -195,6 +195,7 @@
   padding: 0 16px 12px;
   font-size: 0.75rem;
   line-height: 1.4;
+  overflow-wrap: anywhere;
   color: var(--app-text-3);
   background-color: var(--app-bar-solid);
 }

@@ -15,16 +15,16 @@
 import { LEGAL_UPDATED, ROUTES } from '@utils/constants';
 
 export const SITE_ORIGIN = 'https://remvo.app';
-export const OG_IMAGE = `${SITE_ORIGIN}/og-listing-1200x630.png`;
+export const OG_IMAGE = `${SITE_ORIGIN}/og-remvo-1200x630.png`;
 
 export const PAGES = Object.freeze({
   [ROUTES.HOME]: {
-    title: 'Remvo | Finished eBay listings from a barcode',
-    description: 'Give Remvo a barcode and get back a finished eBay listing: title, description, category, item specifics, parcel and a price. $0.30 a listing.',
+    title: 'Remvo | Finished eBay listings from a product',
+    description: 'Paste a barcode or a product link and get a finished eBay listing: title, description, category, item specifics, parcel and a price. $0.30 a listing.',
   },
   [ROUTES.HOW]: {
     title: 'How it works | Remvo',
-    description: 'A barcode in, every eBay field back: title, category, item specifics, parcel and a price from live listings. One at a time, or 500 in bulk.',
+    description: 'A barcode or a product link in, every eBay field back: title, category, item specifics, parcel and a price from live listings. One at a time, or 500 in bulk.',
   },
   [ROUTES.EXAMPLE]: {
     title: 'A real eBay listing made from one barcode | Remvo',

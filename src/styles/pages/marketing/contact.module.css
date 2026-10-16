@@ -9,19 +9,14 @@
 
 .contact {
   flex: 1;
-  background: radial-gradient(
-    ellipse 60% 50% at 50% 30%,
-    #1E1E1E 0%,
-    #1A1A1A 45%,
-    #151515 100%
-  );
+  background-color: var(--night-0);
   padding: var(--space-16) 0 var(--space-20);
 }
 
 .inner {
-  max-width: var(--max-width-narrow);
+  max-width: var(--site-width);
   margin: 0 auto;
-  padding: 0 var(--gutter);
+  padding: 0 var(--site-gutter);
 }
 
 /* ── Header ── */
@@ -32,24 +27,24 @@
   font-size: var(--text-xs);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--color-gold);
+  color: var(--ivory-2);
   margin-bottom: var(--space-4);
 }
 
 .heading {
-  font-family: var(--font-sans);
-  font-weight: var(--weight-semibold);
-  font-size: var(--text-2xl);
-  line-height: var(--leading-tight);
-  letter-spacing: var(--tracking-tight);
-  color: var(--color-white);
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(2.5rem, 5.6vw, 3.75rem);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--ivory);
   margin-bottom: var(--space-3);
 }
 
 .sub {
   font-size: var(--text-base);
   line-height: var(--leading-relaxed);
-  color: rgba(255, 255, 255, 0.62);
+  color: rgba(244, 239, 230, 0.62);
   max-width: 480px;
   margin-bottom: var(--space-10);
 }
@@ -66,8 +61,8 @@
 .card {
   display: block;
   padding: var(--space-6);
-  background-color: rgba(255, 255, 255, 0.03);
-  border: 0.5px solid rgba(255, 255, 255, 0.06);
+  background-color: rgba(244, 239, 230, 0.03);
+  border: 0.5px solid rgba(244, 239, 230, 0.06);
   border-radius: var(--radius-md);
   text-decoration: none;
   transition:
@@ -77,13 +72,13 @@
 
 @media (hover: hover) and (pointer: fine) {
   .card:hover {
-    border-color: rgba(201, 168, 76, 0.25);
-    background-color: rgba(255, 255, 255, 0.04);
+    border-color: var(--night-line-strong);
+    background-color: rgba(244, 239, 230, 0.05);
   }
 }
 
 .cardIcon {
-  color: var(--color-gold);
+  color: var(--ivory-2);
   margin-bottom: var(--space-4);
 }
 
@@ -91,29 +86,29 @@
   font-family: var(--font-sans);
   font-weight: var(--weight-semibold);
   font-size: var(--text-base);
-  color: var(--color-white);
+  color: var(--ivory);
   margin-bottom: var(--space-2);
 }
 
 .cardValue {
   font-family: var(--font-mono);
   font-size: var(--text-sm);
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(244, 239, 230, 0.6);
   margin-bottom: var(--space-3);
   word-break: break-all;
 }
 
 .cardMeta {
   font-size: 0.8125rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--ivory-3);
 }
 
 /* ── Inquiry guidance ── */
 
 .guidance {
   padding: var(--space-6);
-  background-color: rgba(255, 255, 255, 0.02);
-  border: 0.5px solid rgba(255, 255, 255, 0.06);
+  background-color: rgba(244, 239, 230, 0.02);
+  border: 0.5px solid rgba(244, 239, 230, 0.06);
   border-radius: var(--radius-md);
 }
 
@@ -121,14 +116,14 @@
   font-family: var(--font-sans);
   font-weight: var(--weight-semibold);
   font-size: var(--text-base);
-  color: var(--color-white);
+  color: var(--ivory);
   margin-bottom: var(--space-2);
 }
 
 .guidanceText {
   font-size: var(--text-sm);
   line-height: var(--leading-relaxed);
-  color: rgba(255, 255, 255, 0.62);
+  color: rgba(244, 239, 230, 0.62);
   margin-bottom: var(--space-5);
 }
 
@@ -143,7 +138,7 @@
   align-items: baseline;
   gap: var(--space-4);
   padding-bottom: var(--space-3);
-  border-bottom: 0.5px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 0.5px solid rgba(244, 239, 230, 0.04);
 }
 
 .guidanceItem:last-child {
@@ -154,14 +149,14 @@
 .guidanceLabel {
   font-family: var(--font-mono);
   font-size: 0.8125rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(244, 239, 230, 0.6);
   white-space: nowrap;
   min-width: 160px;
 }
 
 .guidanceDesc {
   font-size: var(--text-sm);
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--ivory-3);
 }
 
 /* ── Company line ── */
@@ -171,12 +166,12 @@
   font-family: var(--font-mono);
   font-size: 0.75rem;
   line-height: var(--leading-relaxed);
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--ivory-3);
 }
 
 @media (prefers-contrast: more) {
-  .sub, .cardMeta, .guidanceText, .guidanceDesc, .company { color: var(--color-white); }
-  .card, .guidance { border-color: rgba(255, 255, 255, 0.5); }
+  .sub, .cardMeta, .guidanceText, .guidanceDesc, .company { color: var(--ivory); }
+  .card, .guidance { border-color: var(--ivory-3); }
 }
 
 /* ═══════════════════════════════════════
@@ -203,9 +198,6 @@
 }
 
 @media (max-width: 480px) {
-  .heading {
-    font-size: var(--text-xl);
-  }
 
   .sub {
     font-size: var(--text-sm);

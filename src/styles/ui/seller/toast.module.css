@@ -31,3 +31,37 @@
 .toast svg {
   color: var(--app-success);
 }
+
+/* A toast with one action (Undo): it can be pointed at and tabbed to. */
+.withAction {
+  pointer-events: auto;
+  padding-right: 6px;
+}
+
+.action {
+  min-height: 32px;
+  margin-left: 6px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 600;
+  color: var(--app-on-action);
+  background-color: var(--app-action);
+  touch-action: manipulation;
+}
+
+/* 32 px drawn, 44 px to tap. */
+.action {
+  position: relative;
+}
+
+.action::before {
+  content: '';
+  position: absolute;
+  inset: -6px -4px;
+}
+
+.action:focus-visible {
+  outline: none;
+  box-shadow: var(--app-focus);
+}

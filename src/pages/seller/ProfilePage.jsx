@@ -13,12 +13,18 @@ import { sellerApi } from '@lib/sellerApi';
 import { addPasskey, passkeysSupported } from '@lib/sellerPasskeys';
 import { BRAND, SELLER_ROUTES, siteUrl } from '@utils/constants';
 import s from '@styles/pages/seller/app.module.css';
+import P from '@styles/pages/seller/profile.module.css';
 
 /* ──────────────────────────────────────────────────────────────────
  * Profile
  *
  * Who you are signed in as, where to get help, the policies, and the
  * two ways out: sign out, and delete the account.
+ *
+ * Who you are is a sender's label: ivory paper with a cut line, FROM,
+ * the seller's name in serif, the email and the date they joined, and
+ * a barcode drawn from the email (the same account always gets the
+ * same bars). The label is Profile's one picture; the rest is rows.
  *
  * Deleting is in the app because both app stores require it of any
  * app with sign-up. Until the API has the endpoint, the sheet says
@@ -27,6 +33,28 @@ import s from '@styles/pages/seller/app.module.css';
  * ────────────────────────────────────────────────────────────────── */
 
 const APP_VERSION = '0.1';
+
+/* Bars for the label, from the email: the same address, the same bars. */
+function barsFor(text = '') {
+  let h = 2166136261;
+  const out = [];
+  for (let i = 0; i < 38; i += 1) {
+    h ^= text.charCodeAt(i % Math.max(1, text.length)) + i;
+    h = Math.imul(h, 16777619) >>> 0;
+    out.push(1 + (h % 3));
+  }
+  return out;
+}
+
+function Bars({ seed }) {
+  let x = 0;
+  const rects = barsFor(seed).map((w, i) => {
+    const r = i % 2 === 0 ? <rect key={i} x={x} y="0" width={w} height="28" /> : null;
+    x += w + (i % 2 === 0 ? 0 : 0);
+    return r;
+  });
+  return <svg className={P.bars} viewBox={`0 0 ${x} 28`} preserveAspectRatio="none" aria-hidden="true" focusable="false">{rects}</svg>;
+}
 
 /* A long address wraps before the @ and at dots, never mid-word. */
 function breakable(email = '') {
@@ -52,6 +80,7 @@ export function ProfilePage() {
   const [choosing, setChoosing] = useState(null); // 'site' | 'currency' | 'password' | 'name' | null
   const [keys, setKeys] = useState(null);
   const [keyBusy, setKeyBusy] = useState(false);
+  const [removing, setRemoving] = useState(null); // the passkey being asked about
   const canPasskey = passkeysSupported();
 
   const loadKeys = useCallback(() => sellerApi.passkeys().then((r) => setKeys(r.items)).catch(() => setKeys([])), []);
@@ -71,13 +100,16 @@ export function ProfilePage() {
   }
 
   async function onRemovePasskey(k) {
-    if (!window.confirm(`Remove the passkey on ${k.label}? You can still sign in with your password.`)) return;
+    setKeyBusy(true);
     try {
       await sellerApi.passkeyRemove(k.id);
       await loadKeys();
+      setRemoving(null);
       toast('Passkey removed');
     } catch (err) {
       toast(err.message);
+    } finally {
+      setKeyBusy(false);
     }
   }
   const site = MARKETPLACE[settings?.marketplace ?? 'US'];
@@ -95,7 +127,6 @@ export function ProfilePage() {
 
   useEffect(() => { document.title = 'Remvo | Profile'; }, []);
 
-  const initial = (account?.email ?? '?').charAt(0).toUpperCase();
   const deleteMail = `mailto:${BRAND.EMAIL}?subject=${encodeURIComponent('Delete my Remvo account')}&body=${encodeURIComponent(`Please delete the Remvo account for ${account?.email}.`)}`;
 
   async function onSignOut() {
@@ -108,15 +139,21 @@ export function ProfilePage() {
     <>
       <PageHeader title="Profile" />
       <div className={s.content}>
-        <div className={s.section}>
-          <div className={s.profileHead}>
-            <span className={s.avatar} aria-hidden="true">{initial}</span>
-            <span className={s.rowMain}>
-              <span className={s.profileEmail}>{breakable(account?.email)}</span>
-              {account?.createdAt && <span className={s.rowSub}>Since {longDate(account.createdAt)}</span>}
-            </span>
+        <section className={`${s.section} ${P.label}`} aria-label="Signed in as">
+          <div className={P.cut}>
+            <p className={P.from}>From</p>
+            {account?.name ? (
+              <p className={P.name}>{account.name}</p>
+            ) : (
+              <button type="button" className={P.addName} onClick={() => setChoosing('name')}>Add your name</button>
+            )}
+            <p className={P.email}>{breakable(account?.email)}</p>
+            <div className={P.foot}>
+              {account?.createdAt && <p className={P.since}>Remvo seller since {longDate(account.createdAt)}</p>}
+              <Bars seed={account?.email ?? ''} />
+            </div>
           </div>
-        </div>
+        </section>
 
         <section className={s.section} aria-labelledby="selling-heading">
           <div className={s.groupHead}><h2 id="selling-heading" className={s.groupTitle}>Selling</h2></div>
@@ -171,7 +208,7 @@ export function ProfilePage() {
                   <span className={s.rowTitle}>{k.label}</span>
                   <span className={s.rowSub}>Added {longDate(k.createdAt)}{k.lastUsedAt ? `. Last used ${when(k.lastUsedAt).replace(/^(Today|Yesterday)/, (m) => m.toLowerCase())}` : ''}</span>
                 </span>
-                <button type="button" className={s.keyRemove} onClick={() => onRemovePasskey(k)}>Remove<span className="sr-only"> passkey on {k.label}</span></button>
+                <button type="button" className={s.keyRemove} onClick={() => setRemoving(k)}>Remove<span className="sr-only"> passkey on {k.label}</span></button>
               </div>
             ))}
             {canPasskey ? (
@@ -231,6 +268,24 @@ export function ProfilePage() {
 
         <p className={s.version}>Remvo {APP_VERSION}. {BRAND.LEGAL_NAME}</p>
       </div>
+
+      <Sheet
+        open={Boolean(removing)}
+        onClose={() => !keyBusy && setRemoving(null)}
+        title="Remove this passkey?"
+        footer={
+          <div className={s.actions}>
+            <button type="button" className={`${s.button} ${s.destructive} ${s.block}`} onClick={() => onRemovePasskey(removing)} disabled={keyBusy}>
+              {keyBusy ? 'Removing…' : 'Remove passkey'}
+            </button>
+            <button type="button" className={`${s.button} ${s.secondary} ${s.block}`} onClick={() => setRemoving(null)} disabled={keyBusy}>Keep it</button>
+          </div>
+        }
+      >
+        <p className={s.sheetText}>
+          {removing?.label} will no longer sign you in. {account?.hasPassword ? 'You can still sign in with your password.' : 'Set a password first if this is your only way in.'}
+        </p>
+      </Sheet>
 
       <PasswordSheet open={choosing === 'password'} onClose={() => setChoosing(null)} onSaved={toast} />
       <NameSheet open={choosing === 'name'} onClose={() => setChoosing(null)} onSaved={toast} />

@@ -11,20 +11,15 @@
    ═══════════════════════════════════════ */
 
 .footer {
-  background: radial-gradient(
-    ellipse 70% 60% at 50% 0%,
-    #1E1E1E 0%,
-    #1A1A1A 40%,
-    #151515 100%
-  );
+  background-color: var(--night-0);
   border-top: var(--border-subtle);
   margin-top: auto;
 }
 
 .inner {
-  max-width: var(--max-width-content);
+  max-width: var(--site-width);
   margin: 0 auto;
-  padding: var(--space-12) var(--gutter) var(--space-8);
+  padding: var(--space-12) var(--site-gutter) var(--space-8);
 }
 
 .grid {
@@ -32,7 +27,7 @@
   grid-template-columns: 1fr 1fr 1fr;
   gap: var(--space-10);
   padding-bottom: var(--space-8);
-  border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 0.5px solid rgba(244, 239, 230, 0.08);
 }
 
 .col {
@@ -41,19 +36,17 @@
 }
 
 .colTitle {
-  font-family: var(--font-mono);
-  font-weight: var(--weight-regular);
-  font-size: var(--text-xs);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  color: var(--ivory-3);
   margin-bottom: var(--space-4);
 }
 
 .colLink {
   display: block;
   font-size: var(--text-sm);
-  color: rgba(255, 255, 255, 0.62);
+  color: rgba(244, 239, 230, 0.62);
   text-decoration: none;
   padding: 6px 0;
   transition: color var(--transition-fast);
@@ -61,7 +54,7 @@
 
 @media (hover: hover) and (pointer: fine) {
   .colLink:hover {
-    color: var(--color-white);
+    color: var(--ivory);
   }
 }
 
@@ -72,14 +65,14 @@
 
 .companyName {
   font-size: var(--text-sm);
-  color: rgba(255, 255, 255, 0.62);
+  color: rgba(244, 239, 230, 0.62);
   padding: 6px 0;
 }
 
 .companyMeta {
   font-family: var(--font-mono);
   font-size: 0.8125rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--ivory-3);
   padding: 6px 0;
 }
 
@@ -90,14 +83,14 @@
   grid-template-columns: 1fr 1fr;
   gap: var(--space-10);
   padding: var(--space-6) 0;
-  border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 0.5px solid rgba(244, 239, 230, 0.08);
   margin-bottom: var(--space-6);
 }
 
 .note {
   font-size: 0.8125rem;
   line-height: var(--leading-relaxed);
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--ivory-3);
   max-width: 420px;
 }
 
@@ -113,12 +106,12 @@
 .copy {
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--ivory-3);
 }
 
 @media (prefers-contrast: more) {
-  .colLink, .companyName, .companyMeta, .note, .copy, .colTitle { color: var(--color-white); }
-  .grid, .notes { border-bottom-color: rgba(255, 255, 255, 0.4); }
+  .colLink, .companyName, .companyMeta, .note, .copy, .colTitle { color: var(--ivory); }
+  .grid, .notes { border-bottom-color: rgba(244, 239, 230, 0.4); }
 }
 
 /* ═══════════════════════════════════════
@@ -127,7 +120,7 @@
 
 @media (max-width: 640px) {
   .inner {
-    padding: var(--space-10) var(--gutter) var(--space-6);
+    padding: var(--space-10) var(--site-gutter) var(--space-6);
   }
 
   .grid {

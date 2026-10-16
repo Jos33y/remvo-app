@@ -20,8 +20,8 @@ const FIELDS = [
 function faq(currency) {
   return [
     {
-      q: 'What if my barcode is not on Amazon?',
-      a: 'The job stops, the credits go straight back to your balance, and you can try the product link instead. Nothing is charged for a product we cannot find.',
+      q: 'Which product links work?',
+      a: 'Amazon product pages, today. Paste the page\u2019s own link, not a search. If a barcode or a link finds nothing, the listing stops and its credits go straight back.',
     },
     {
       q: 'What about sizes and colours?',
@@ -29,7 +29,7 @@ function faq(currency) {
     },
     {
       q: 'Can I list used items?',
-      a: 'Yes, if they have a barcode. Choose the condition (New, New other or Used) before you start, and the listing is written for it. Vintage, handmade and one-off items without a barcode are not something Remvo does.',
+      a: 'Yes, if they have a barcode. Choose the condition (New, New other, Used or For parts) before you start, and the listing is written for it. Vintage, handmade and one-off items without a barcode are not something Remvo does.',
     },
     {
       q: 'Can I change the listing before I copy it?',
@@ -37,7 +37,7 @@ function faq(currency) {
     },
     {
       q: 'Can I list a whole spreadsheet?',
-      a: 'Yes, up to 500 lines at a time. Paste the barcode column or upload the file saved as a CSV. Remvo checks every line for free and tells you what will run and what it will cost before anything is spent. When the listings are made you get an email, an eBay drafts file to upload in Seller Hub, and a full file with every field.',
+      a: 'Yes, up to 500 at a time. Paste the column of barcodes or product links, or upload the file saved as a CSV. Remvo checks every line for free and tells you what will run and what it will cost before anything is spent. When the listings are made you get an email, an eBay drafts file to upload in Seller Hub, and a full file with every field.',
     },
     {
       q: 'Does it add photos?',
@@ -85,7 +85,6 @@ export function HowItWorksPage() {
       <section className={styles.intro} aria-labelledby="how-heading">
         <div className={styles.introInner}>
           <Reveal>
-            <span className={styles.label}>How it works</span>
             <h1 id="how-heading" className={styles.title}>
               One product in. One finished eBay listing out.
             </h1>
@@ -103,9 +102,9 @@ export function HowItWorksPage() {
         <div className={styles.bodyInner}>
           <Section heading="What you give it" id="give">
             <p>
-              The barcode from the box, the 8 to 14 digits under the stripes, or
-              the link to the product on Amazon. Then its condition: New, New
-              other (open box) or Used.
+              The barcode from the box (the 8 to 14 digits under the stripes) or
+              the product&apos;s link. Then its condition: New, New other (open
+              box), Used or For parts.
             </p>
             <p className={styles.muted}>
               If a barcode matches more than one product, you see them and pick
@@ -115,7 +114,7 @@ export function HowItWorksPage() {
 
           <Section heading="Who it is for" id="for">
             <ul className={styles.list}>
-              <li>Sellers of products with a barcode: wholesale, retail arbitrage, overstock, returns.</li>
+              <li>Resellers and dropshippers listing branded products: wholesale, returns, clearance, or a list of products to sell.</li>
               <li>Anyone listing the same kind of thing week after week, who would rather check a listing than type one.</li>
             </ul>
             <p className={`${styles.after}`}>
@@ -182,8 +181,8 @@ export function HowItWorksPage() {
 
           <Section heading="In bulk" id="bulk">
             <p>
-              Paste a column of barcodes or upload your spreadsheet, up to 500 lines. Remvo checks every
-              line for free and tells you what will run and what it will cost. Start, and get on with
+              Paste your products, one a line, or upload your spreadsheet, up to 500 at a time. Remvo checks
+              every line for free and tells you what will run and what it will cost. Start, and get on with
               something else: you get an email when they are done.
             </p>
             <ul className={`${styles.list} ${styles.after}`}>
@@ -202,7 +201,7 @@ export function HowItWorksPage() {
             </ul>
           </Section>
 
-          <Section heading="When a job fails" id="fails">
+          <Section heading="When a listing fails" id="fails">
             <p>
               If Remvo cannot produce the listing, the credits go straight back
               to your balance. Nothing to ask for.
@@ -229,9 +228,9 @@ export function HowItWorksPage() {
       <section className={styles.close} aria-label="Get started">
         <div className={styles.closeInner}>
           <p className={styles.closeHeading}>
-            {perListing} a listing, from a {from} top‑up.
+            <span className={styles.money}>{perListing}</span> a listing, from a {from} top&#8209;up.
           </p>
-          <Button href={APP_LINKS.SIGN_UP} variant="primary" size="large">
+          <Button href={APP_LINKS.SIGN_UP} variant="ivory" size="large">
             Make your first listing
           </Button>
         </div>

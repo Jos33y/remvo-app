@@ -65,11 +65,12 @@ export const sellerRouter = createBrowserRouter([
               { path: SELLER_ROUTES.PROFILE, element: <ProfilePage /> },
               { path: SELLER_ROUTES.SUPPORT, element: <SupportPage /> },
               { path: SELLER_ROUTES.BILLING, element: <Navigate to={`${SELLER_ROUTES.CREDITS}?topup=1`} replace /> },
+              // Not in Remvo: inside the app, so the tabs are still there.
+              { path: '*', element: <SellerNotFoundPage /> },
             ],
           },
         ],
       },
-      { path: '*', element: <SellerNotFoundPage /> },
     ],
   },
 ]);

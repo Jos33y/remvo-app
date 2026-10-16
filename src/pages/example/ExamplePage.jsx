@@ -1,5 +1,6 @@
 import { Link } from 'react-router';
 import { Reveal } from '@components/ui/marketing/Reveal';
+import jbl from '@/assets/products/jbl-flip-6-560.webp';
 import { Button } from '@components/ui/shared/Button';
 import { useMarket } from '@hooks/useMarket';
 import { money } from '@lib/market';
@@ -16,6 +17,31 @@ import s from '@styles/pages/marketing/example-page.module.css';
  * and post. The listing is stored in exampleListing.js, so the page
  * never calls the API and never changes on its own.
  * ────────────────────────────────────────────────────────────────── */
+
+/* The postmark on the listing's paper, in eBay.com's ink: the site
+ * round the top, READY round the bottom, the day in the middle. */
+function Postmark({ site, date }) {
+  const d = new Date(date.iso);
+  const day = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' }).toUpperCase();
+  return (
+    <svg className={s.postmark} viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+      <defs>
+        <path id="pm-top" d="M 18 60 A 42 42 0 0 1 102 60" />
+        <path id="pm-bottom" d="M 14 60 A 46 46 0 0 0 106 60" />
+      </defs>
+      <circle cx="60" cy="60" r="56" fill="none" stroke="currentColor" strokeWidth="2" />
+      <circle cx="60" cy="60" r="34" fill="none" stroke="currentColor" strokeWidth="1.2" />
+      <text fontFamily="var(--font-mono)" fontSize="11" fontWeight="600" letterSpacing="2" fill="currentColor">
+        <textPath href="#pm-top" startOffset="50%" textAnchor="middle">{site.toUpperCase()}</textPath>
+      </text>
+      <text fontFamily="var(--font-mono)" fontSize="11" fontWeight="600" letterSpacing="3" fill="currentColor">
+        <textPath href="#pm-bottom" startOffset="50%" textAnchor="middle">READY</textPath>
+      </text>
+      <text x="60" y="58" textAnchor="middle" fontFamily="var(--font-mono)" fontSize="12" fontWeight="600" fill="currentColor">{day}</text>
+      <text x="60" y="72" textAnchor="middle" fontFamily="var(--font-mono)" fontSize="10" fill="currentColor">{d.getUTCFullYear()}</text>
+    </svg>
+  );
+}
 
 const grouped = (v) => String(v).replace(/(\d{4})(?=\d)/g, '$1 ');
 
@@ -39,7 +65,6 @@ export function ExamplePage() {
       <section className={info.intro} aria-labelledby="example-heading">
         <div className={info.introInner}>
           <Reveal>
-            <span className={info.label}>Example</span>
             <h1 id="example-heading" className={info.title}>
               A real Remvo listing, made from one barcode
             </h1>
@@ -76,7 +101,14 @@ export function ExamplePage() {
 
           <section className={`${info.section} ${s.listingSection}`} aria-labelledby="listing">
             <h2 id="listing" className={info.sectionHeading}>What came back</h2>
+            <div className={s.paper}>
             <div className={s.sheet}>
+              <div className={s.top}>
+                <div className={s.photo}>
+                  <img src={jbl} width="207" height="560" alt="The JBL Flip 6 speaker, in black" loading="lazy" decoding="async" />
+                </div>
+                <Postmark site={e.site} date={e.madeOn} />
+              </div>
               <dl className={s.rows}>
                 <Row term="Title">
                   <span className={s.title}>{e.title}</span>
@@ -122,6 +154,7 @@ export function ExamplePage() {
                 </Row>
               </dl>
             </div>
+            </div>
           </section>
 
           <Reveal>
@@ -147,7 +180,7 @@ export function ExamplePage() {
           <p className={info.closeHeading}>
             Made for {PRICING.JOBS.LISTING.credits} credits ({listingCost}). Yours is next, and your first one is on us.
           </p>
-          <Button href={APP_LINKS.SIGN_UP} variant="primary" size="large">
+          <Button href={APP_LINKS.SIGN_UP} variant="ivory" size="large">
             Make your first listing
           </Button>
         </div>

@@ -2,60 +2,60 @@ import { Link } from 'react-router';
 import { Button } from '@components/ui/shared/Button';
 import { CurrencySwitch } from '@components/ui/marketing/CurrencySwitch';
 import { useMarket } from '@hooks/useMarket';
-import { CURRENCIES, money } from '@lib/market';
+import { money } from '@lib/market';
 import { PRICING, APP_LINKS, ROUTES, listingsFor } from '@utils/constants';
 import styles from '@styles/ui/marketing/pack-grid.module.css';
 
 /* PackGrid
  *
- * The three top-ups, read from PRICING, used on the home page and the
+ * The top-ups, read from PRICING, used on the home page and the
  * pricing page so the two can never disagree. Prices follow the
  * visitor's currency, with the switch above them.
  *
- * A credit costs the same in every pack; the two bigger packs add
- * bonus credits, said on the card as a plain number. The $20 pack
- * carries the accent because the payment fee on the smallest is
- * nearly double; the card says what it buys, not that it is popular.
+ * Each tile says it the way the app's Credits page does: the price,
+ * then what it makes (listings, in bold), the credits, and the price
+ * of a listing at the foot. The bonus sits in a row every tile keeps,
+ * so the lines line up. The $20 pack's button is the ivory one because
+ * the payment fee on the smallest is nearly double; the tile says what
+ * it buys, not that it is popular.
  */
 export function PackGrid({ headingLevel = 3 }) {
   const H = `h${headingLevel}`;
   const { currency } = useMarket();
   const listing = PRICING.JOBS.LISTING;
-  const symbol = CURRENCIES.find((c) => c.id === currency).symbol;
   const min = PRICING.CUSTOM.min[currency];
   const max = PRICING.CUSTOM.max[currency];
 
   return (
     <div className={styles.wrap}>
       <div className={styles.head}>
+        <p className={styles.welcome}>
+          <strong>Your first listing is on us.</strong> Every new account starts with {PRICING.WELCOME.credits} free credits.
+        </p>
         <CurrencySwitch />
       </div>
-
-      <p className={styles.welcome}>
-        <strong>Your first listing is on us.</strong> Every new account starts with {PRICING.WELCOME.credits} free credits.
-      </p>
 
       <ul className={styles.grid} role="list">
         {PRICING.PACKS.map((p) => {
           const price = p.price[currency];
+          const total = p.credits + p.bonus;
+          const each = money(Math.round(((price * listing.credits) / total) * 100) / 100, currency);
           return (
             // data-chat-clear: on a phone the chat button steps aside while any part of a pack is under it.
             <li key={p.credits} className={`${styles.pack} ${p.featured ? styles.featured : ''}`} data-chat-clear="">
               <H className={styles.price}>
-                <span className={styles.currency}>{symbol}</span>{price}
+                {money(price, currency)}
                 <span className="sr-only"> top-up</span>
               </H>
-              <p className={styles.credits}>
-                {(p.credits + p.bonus).toLocaleString('en-GB')} credits
-                {p.bonus > 0 && <span className={styles.bonus}>{p.credits.toLocaleString('en-GB')} + {p.bonus} bonus</span>}
+              <p className={styles.tag}>
+                {p.bonus > 0 ? <span className={styles.bonus}>+{p.bonus} bonus</span> : null}
               </p>
-              <p className={styles.covers}>
-                About {listingsFor(p.credits + p.bonus)} listings
-                <span className={styles.coversNote}> at {listing.credits} credits each</span>
-              </p>
+              <p className={styles.listings}>{listingsFor(total)} listings</p>
+              <p className={styles.credits}>{total.toLocaleString('en-GB')} credits</p>
+              <p className={styles.each}><span className={styles.eachNum}>{each}</span> a listing</p>
               <Button
                 href={APP_LINKS.TOP_UP}
-                variant={p.featured ? 'primary' : 'secondary'}
+                variant={p.featured ? 'ivory' : 'secondary'}
                 size="default"
                 className={styles.buy}
               >

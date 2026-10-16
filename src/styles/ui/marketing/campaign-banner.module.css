@@ -1,16 +1,17 @@
 /* ═══════════════════════════════════════
    CAMPAIGN BANNER
    One quiet line above the header: the
-   date in white, the reason in grey, the
-   action in gold. Obsidian, a shade lifted
-   from the page, so it reads as a notice
-   and not as part of the brand bar.
+   date in ivory, the reason in grey, the
+   action in plum (it leads to bulk, and
+   plum is bulk's colour; gold is kept for
+   money). Night, a step lifted from the
+   page, so it reads as a notice.
    ═══════════════════════════════════════ */
 
 .banner {
   position: relative;
   z-index: 101;
-  background-color: var(--color-obsidian-light);
+  background-color: var(--night-1);
   border-bottom: var(--border-subtle);
   font-family: var(--font-sans);
 }
@@ -19,9 +20,9 @@
   display: flex;
   align-items: center;
   gap: var(--space-4);
-  max-width: var(--max-width-content);
+  max-width: var(--site-width);
   margin: 0 auto;
-  padding: 0 var(--gutter);
+  padding: 0 var(--site-gutter);
   min-height: 44px;
 }
 
@@ -31,7 +32,7 @@
   margin: 0;
   font-size: 0.875rem;
   line-height: 1.4;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(244, 239, 230, 0.72);
 }
 
 .dot {
@@ -40,13 +41,13 @@
   height: 6px;
   margin-right: 10px;
   border-radius: 50%;
-  background-color: var(--color-gold);
+  background-color: var(--app-plum-ink, #D7B3DA);
   vertical-align: 2px;
 }
 
 .when {
   font-weight: 600;
-  color: var(--color-white, #FFFFFF);
+  color: var(--ivory);
 }
 
 .action {
@@ -57,7 +58,7 @@
   min-height: 44px;
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--color-gold);
+  color: #D7B3DA;
   text-decoration: none;
   white-space: nowrap;
 }
@@ -68,7 +69,7 @@
 
 .action:focus-visible,
 .close:focus-visible {
-  outline: 2px solid var(--color-gold);
+  outline: 2px solid var(--ivory);
   outline-offset: 2px;
   border-radius: 6px;
 }
@@ -80,7 +81,7 @@
   width: 44px;
   height: 44px;
   margin-right: -12px;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(244, 239, 230, 0.55);
   background: none;
   border: 0;
   cursor: pointer;

@@ -6,6 +6,7 @@ import { ScrollToTop } from '@components/layout/shared/ScrollToTop';
 import { SiteChat } from '@components/ui/support/SiteChat';
 import { CampaignBanner } from '@components/ui/marketing/CampaignBanner';
 import { canonical, pageMeta } from '@lib/seo';
+import '@styles/base/instrument-serif.css';
 import styles from '@styles/layout/marketing/page-shell.module.css';
 
 /* The page's title, description and canonical address, from lib/seo.js.
