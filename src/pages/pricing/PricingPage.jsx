@@ -143,7 +143,7 @@ export function PricingPage() {
           <p className={styles.closeHeading}>
             Your first listing is on us. After that, {money(first.price[currency], currency)} is {listingsFor(first.credits)} listings.
           </p>
-          <Button href={APP_LINKS.SIGN_IN} variant="primary" size="large">
+          <Button href={APP_LINKS.SIGN_UP} variant="primary" size="large">
             Make your first listing
           </Button>
         </div>

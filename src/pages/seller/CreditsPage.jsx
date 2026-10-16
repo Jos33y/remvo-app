@@ -102,14 +102,14 @@ export function CreditsPage() {
   const [params, setParams] = useSearchParams();
   const [topUp, setTopUp] = useState(params.get('topup') === '1');
   const checkoutId = params.get('checkout_id');
-  const clearReturn = () => { params.delete('checkout_id'); setParams(params, { replace: true }); };
+  const clearReturn = () => { params.delete('checkout_id'); setParams(params, { replace: true, preventScrollReset: true }); };
   const months = useMemo(() => groupByMonth(history), [history]);
 
   useEffect(() => { document.title = 'Remvo | Credits'; }, []);
 
   const closeTopUp = () => {
     setTopUp(false);
-    if (params.has('topup')) { params.delete('topup'); setParams(params, { replace: true }); }
+    if (params.has('topup')) { params.delete('topup'); setParams(params, { replace: true, preventScrollReset: true }); }
   };
 
   return (

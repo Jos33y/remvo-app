@@ -6,6 +6,7 @@ import { IconHome, IconListings, IconCredits, IconProfile, IconSupport } from '@
 import { useSupportUnread } from '@hooks/useSupportUnread';
 import { useThemeColor } from '@hooks/useThemeColor';
 import { count } from '@lib/plural';
+import { note } from '@lib/sellerTrail';
 import { useSellerSession } from '@context/SellerSession';
 import { SELLER_ROUTES } from '@utils/constants';
 import theme from '@styles/layout/seller/app-theme.module.css';
@@ -68,6 +69,9 @@ export function SellerShell() {
   const unread = useSupportUnread({ enabled: Boolean(account), onSupport: flush });
   // The bars' own colours (app-theme.module.css --app-bar-solid).
   useThemeColor('#F7F5F1', '#161618');
+
+  // Where each screen sits in history, for the back buttons (lib/sellerTrail.js).
+  useEffect(() => { note(location.pathname); }, [location.key, location.pathname]);
 
   // iOS Safari only shows :active on touch when a touch listener exists.
   useEffect(() => {

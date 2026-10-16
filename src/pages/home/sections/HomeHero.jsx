@@ -35,7 +35,7 @@ export function HomeHero() {
               items.</strong>
             </p>
             <div className={styles.heroCtas}>
-              <Button href={APP_LINKS.SIGN_IN} variant="primary" size="default">
+              <Button href={APP_LINKS.SIGN_UP} variant="primary" size="default">
                 Make your first listing
               </Button>
               <Button href={ROUTES.EXAMPLE} variant="secondary" size="default">

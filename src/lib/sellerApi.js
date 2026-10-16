@@ -78,11 +78,26 @@ async function call(method, path, body) {
 }
 
 export const sellerApi = Object.freeze({
-  start: (email) => call('POST', '/auth/start', { email }),
+  // Sign-up and sign-in (modules/accounts in remvo-api)
+  signUp: (email, password) => call('POST', '/auth/sign-up', { email, password }),
   verifyLink: (token) => call('POST', '/auth/verify-link', { token }),
   verifyCode: (email, code) => call('POST', '/auth/verify-code', { email, code }),
+  signIn: (email, password) => call('POST', '/auth/sign-in', { email, password }),
+  startReset: (email) => call('POST', '/auth/reset', { email }),
+  checkReset: (token) => call('POST', '/auth/reset/check', { token }),
+  /** { email, code, password } or { token, password } -> { account } */
+  finishReset: (body) => call('POST', '/auth/reset/finish', body),
+  passkeySignInStart: () => call('POST', '/auth/passkey/start'),
+  passkeySignInFinish: (challengeId, credential) => call('POST', '/auth/passkey/finish', { challengeId, credential }),
   signOut: () => call('POST', '/auth/sign-out'),
   me: () => call('GET', '/me'),
+  setName: (name) => call('PATCH', '/me', { name }),
+  /** { password } for a first one, { current, password } to change it */
+  setPassword: (body) => call('POST', '/me/password', body),
+  passkeys: () => call('GET', '/me/passkeys'),
+  passkeyAddStart: () => call('POST', '/me/passkeys/start'),
+  passkeyAddFinish: (challengeId, credential) => call('POST', '/me/passkeys/finish', { challengeId, credential }),
+  passkeyRemove: (id) => call('DELETE', `/me/passkeys/${encodeURIComponent(id)}`),
 
   // Wallet (modules/credits in remvo-api)
   wallet: () => call('GET', '/wallet'),

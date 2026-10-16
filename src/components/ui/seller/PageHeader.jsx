@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
+import { cameFrom } from '@lib/sellerTrail';
 import { IconChevronLeft } from '@components/ui/seller/icons';
 import styles from '@styles/ui/seller/page-header.module.css';
 
@@ -35,7 +36,9 @@ export function PageHeader({ title, back, backLabel = 'Back', action, large = tr
     return () => io.disconnect();
   }, [large]);
 
-  const goBack = () => (back === -1 ? navigate(-1) : navigate(back));
+  // Back to the screen just left goes back in history, so it opens where
+  // it was scrolled; otherwise the named screen opens fresh, at its top.
+  const goBack = () => (back === -1 || cameFrom(back) ? navigate(-1) : navigate(back));
 
   return (
     <>

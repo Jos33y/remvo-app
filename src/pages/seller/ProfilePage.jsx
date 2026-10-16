@@ -1,13 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { PageHeader } from '@components/ui/seller/PageHeader';
 import { Sheet } from '@components/ui/seller/Sheet';
+import { NameSheet, PasswordSheet } from '@components/ui/seller/AccountSheets';
 import { useToast } from '@components/ui/seller/Toast';
 import { IconChat, IconChevronRight, IconExternal, IconMail } from '@components/ui/seller/icons';
 import { CURRENCIES, MARKETPLACES, MARKETPLACE } from '@lib/market';
 import { useSellerSession } from '@context/SellerSession';
 import { useSellerData } from '@context/SellerData';
-import { longDate } from '@lib/sellerFormat';
+import { longDate, when } from '@lib/sellerFormat';
+import { sellerApi } from '@lib/sellerApi';
+import { addPasskey, passkeysSupported } from '@lib/sellerPasskeys';
 import { BRAND, SELLER_ROUTES, siteUrl } from '@utils/constants';
 import s from '@styles/pages/seller/app.module.css';
 
@@ -46,7 +49,37 @@ export function ProfilePage() {
   const { settings, updateSettings } = useSellerData();
   const [leaving, setLeaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const [choosing, setChoosing] = useState(null); // 'site' | 'currency' | null
+  const [choosing, setChoosing] = useState(null); // 'site' | 'currency' | 'password' | 'name' | null
+  const [keys, setKeys] = useState(null);
+  const [keyBusy, setKeyBusy] = useState(false);
+  const canPasskey = passkeysSupported();
+
+  const loadKeys = useCallback(() => sellerApi.passkeys().then((r) => setKeys(r.items)).catch(() => setKeys([])), []);
+  useEffect(() => { loadKeys(); }, [loadKeys]);
+
+  async function onAddPasskey() {
+    if (keyBusy) return;
+    setKeyBusy(true);
+    try {
+      const added = await addPasskey();
+      if (added) { await loadKeys(); toast(`Passkey added for this ${added.label === 'Passkey' ? 'device' : added.label}`); }
+    } catch (err) {
+      toast(err.message);
+    } finally {
+      setKeyBusy(false);
+    }
+  }
+
+  async function onRemovePasskey(k) {
+    if (!window.confirm(`Remove the passkey on ${k.label}? You can still sign in with your password.`)) return;
+    try {
+      await sellerApi.passkeyRemove(k.id);
+      await loadKeys();
+      toast('Passkey removed');
+    } catch (err) {
+      toast(err.message);
+    }
+  }
   const site = MARKETPLACE[settings?.marketplace ?? 'US'];
   const cur = CURRENCIES.find((c) => c.id === (settings?.currency ?? 'USD'));
 
@@ -112,12 +145,44 @@ export function ProfilePage() {
               <span className={s.rowMain}><span className={s.rowTitle}>Email</span></span>
               <span className={`${s.rowValue} ${s.rowValueTruncate}`}>{account?.email}</span>
             </div>
-            <div className={s.row}>
-              <span className={s.rowMain}><span className={s.rowTitle}>Signing in</span></span>
-              <span className={s.rowValue}>Email link or code</span>
-            </div>
+            <button type="button" className={s.row} onClick={() => setChoosing('name')}>
+              <span className={s.rowMain}><span className={s.rowTitle}>Name</span></span>
+              <span className={`${s.rowValue} ${s.rowValueTruncate}`}>{account?.name || 'Add'}</span>
+              <span className={s.chevron}><IconChevronRight /></span>
+            </button>
+            <button type="button" className={s.row} onClick={() => setChoosing('password')}>
+              <span className={s.rowMain}>
+                <span className={s.rowTitle}>Password</span>
+                {!account?.hasPassword && <span className={s.rowSub}>Not set yet. Set one so your browser can sign you in.</span>}
+              </span>
+              <span className={s.rowValue}>{account?.hasPassword ? 'Change' : 'Set'}</span>
+              <span className={s.chevron}><IconChevronRight /></span>
+            </button>
           </div>
           <p className={s.groupNote}>To change your email, write to us from the one you use now.</p>
+        </section>
+
+        <section className={s.section} aria-labelledby="passkeys-heading">
+          <div className={s.groupHead}><h2 id="passkeys-heading" className={s.groupTitle}>Passkeys</h2></div>
+          <div className={s.group}>
+            {(keys ?? []).map((k) => (
+              <div key={k.id} className={s.row}>
+                <span className={s.rowMain}>
+                  <span className={s.rowTitle}>{k.label}</span>
+                  <span className={s.rowSub}>Added {longDate(k.createdAt)}{k.lastUsedAt ? `. Last used ${when(k.lastUsedAt).replace(/^(Today|Yesterday)/, (m) => m.toLowerCase())}` : ''}</span>
+                </span>
+                <button type="button" className={s.keyRemove} onClick={() => onRemovePasskey(k)}>Remove<span className="sr-only"> passkey on {k.label}</span></button>
+              </div>
+            ))}
+            {canPasskey ? (
+              <button type="button" className={s.row} onClick={onAddPasskey} disabled={keyBusy}>
+                <span className={s.rowMain}><span className={`${s.rowTitle} ${s.accent}`}>{keyBusy ? 'Adding…' : 'Add a passkey on this device'}</span></span>
+              </button>
+            ) : (
+              <div className={s.row}><span className={s.rowMain}><span className={s.rowSub}>This browser cannot make passkeys.</span></span></div>
+            )}
+          </div>
+          <p className={s.groupNote}>Sign in with Face ID, a fingerprint or your screen lock instead of typing a password. Your phone or password manager keeps it and can share it with your other devices.</p>
         </section>
 
         <section className={s.section} aria-labelledby="help-heading">
@@ -166,6 +231,9 @@ export function ProfilePage() {
 
         <p className={s.version}>Remvo {APP_VERSION}. {BRAND.LEGAL_NAME}</p>
       </div>
+
+      <PasswordSheet open={choosing === 'password'} onClose={() => setChoosing(null)} onSaved={toast} />
+      <NameSheet open={choosing === 'name'} onClose={() => setChoosing(null)} onSaved={toast} />
 
       <Sheet open={choosing === 'site'} onClose={() => setChoosing(null)} title="eBay site">
         <div className={s.packs} role="radiogroup" aria-label="eBay site">

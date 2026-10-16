@@ -147,7 +147,7 @@ export function ExamplePage() {
           <p className={info.closeHeading}>
             Made for {PRICING.JOBS.LISTING.credits} credits ({listingCost}). Yours is next, and your first one is on us.
           </p>
-          <Button href={APP_LINKS.SIGN_IN} variant="primary" size="large">
+          <Button href={APP_LINKS.SIGN_UP} variant="primary" size="large">
             Make your first listing
           </Button>
         </div>

@@ -231,7 +231,7 @@ export function HowItWorksPage() {
           <p className={styles.closeHeading}>
             {perListing} a listing, from a {from} top‑up.
           </p>
-          <Button href={APP_LINKS.SIGN_IN} variant="primary" size="large">
+          <Button href={APP_LINKS.SIGN_UP} variant="primary" size="large">
             Make your first listing
           </Button>
         </div>

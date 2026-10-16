@@ -30,7 +30,7 @@ export function HomeCTA() {
             Sign in with your email and give it one barcode. Your first listing is on us. After that, top-ups start at {money(PRICING.PACKS[0].price[currency], currency)}.
           </p>
           <div className={styles.ctaActions}>
-            <Button href={APP_LINKS.SIGN_IN} variant="primary" size="large">
+            <Button href={APP_LINKS.SIGN_UP} variant="primary" size="large">
               Make your first listing
             </Button>
           </div>

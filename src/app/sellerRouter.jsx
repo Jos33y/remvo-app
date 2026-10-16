@@ -1,9 +1,10 @@
-import { createBrowserRouter, Navigate, Outlet } from 'react-router';
+import { createBrowserRouter, Navigate, Outlet, ScrollRestoration } from 'react-router';
 import { SellerSessionProvider } from '@context/SellerSession';
 import { RequireSeller } from '@components/layout/seller/RequireSeller';
 import { SellerShell } from '@components/layout/seller/SellerShell';
 import { SignInPage } from '@pages/seller/SignInPage';
 import { VerifyLinkPage } from '@pages/seller/VerifyLinkPage';
+import { SetPasswordPage } from '@pages/seller/SetPasswordPage';
 import { SellerHomePage } from '@pages/seller/SellerHomePage';
 import { ListingsPage } from '@pages/seller/ListingsPage';
 import { NewListingPage } from '@pages/seller/NewListingPage';
@@ -18,7 +19,9 @@ import { SELLER_ROUTES } from '@utils/constants';
 
 /* Seller router for my.remvo.app.
  *
- *   /sign-in, /sign-in/verify    signed out
+ *   /sign-in, /sign-up           signed out: password, passkey, or open an account
+ *   /sign-in/verify              the confirm-your-email link
+ *   /sign-in/password            the set-or-reset-password link
  *   /                            Home: balance, make a listing, recent
  *   /listings                    every listing, filter and search
  *   /listings/new                making one (covers the tabs)
@@ -28,17 +31,24 @@ import { SELLER_ROUTES } from '@utils/constants';
  *   /credits                     balance, top-up, history
  *   /profile                     account, help, legal, sign out, delete
  *   /billing                     the marketing site's Top up: credits with the sheet open
+ *
+ * Scroll: a new screen opens at its top; going back (the browser's,
+ * the phone's, or a back button to the screen just left) returns to
+ * where that screen was scrolled. ScrollRestoration does both.
  */
 export const sellerRouter = createBrowserRouter([
   {
     element: (
       <SellerSessionProvider>
+        <ScrollRestoration />
         <Outlet />
       </SellerSessionProvider>
     ),
     children: [
       { path: SELLER_ROUTES.SIGN_IN, element: <SignInPage /> },
+      { path: SELLER_ROUTES.SIGN_UP, element: <SignInPage /> },
       { path: SELLER_ROUTES.VERIFY, element: <VerifyLinkPage /> },
+      { path: SELLER_ROUTES.SET_PASSWORD, element: <SetPasswordPage /> },
       {
         element: <RequireSeller />,
         children: [

@@ -39,7 +39,7 @@ export function PrivacyPage() {
 
       <Clause id="collect" heading="2. What we collect">
         <DefList>
-          <DefItem term="Your account">Your email address, and the date you joined.</DefItem>
+          <DefItem term="Your account">Your email address, the date you joined, and a name if you give us one. Your password, only as a one-way hash (argon2id): we cannot read it, and nobody who saw our database could either. If you add a passkey, its public key and the kind of device it is on; the private part never leaves your device.</DefItem>
           <DefItem term="Your jobs">The barcodes and links you give us, and the listings we prepare from them.</DefItem>
           <DefItem term="Your purchases">From Polar: your name, email address, country, what you bought, the amount, any tax, and the order reference. We never see or store your card details.</DefItem>
           <DefItem term="Your credits">Every top-up, every job that used credits, every refund and every expiry.</DefItem>
@@ -64,7 +64,7 @@ export function PrivacyPage() {
           <DefItem term="Anthropic">Writes the listing text from the product details. Receives the product details, not your account.</DefItem>
           <DefItem term="Apify">Reads the product page for the barcode or link you give. Receives the barcode or link only.</DefItem>
           <DefItem term="eBay">Its public category and listing information, looked up by product. Receives no information about you.</DefItem>
-          <DefItem term="Resend">Sends your sign-in links, receipts and reminders. Receives your email address.</DefItem>
+          <DefItem term="Resend">Sends the codes that confirm your email and reset your password, receipts and reminders. Receives your email address.</DefItem>
           <DefItem term="Hostinger and Cloudflare">Host and protect our servers. Your data passes through them.</DefItem>
         </DefList>
         <p>4.2. We also disclose data where the law requires us to.</p>
@@ -100,7 +100,8 @@ export function PrivacyPage() {
 
       <Clause id="security" heading="9. Security">
         <p>9.1. Data travels encrypted between your browser and our servers. Access to it is limited to the people who run {BRAND.NAME}. If a breach puts your data at risk, we tell you and the authorities the law requires us to.</p>
-        <p>9.2. {BRAND.NAME} is not for anyone under 18, and we do not knowingly hold their data.</p>
+        <p>9.2. After ten wrong passwords in a row, your account waits 15 minutes before it takes another; a reset code still works. Setting or resetting your password signs you out everywhere else.</p>
+        <p>9.3. {BRAND.NAME} is not for anyone under 18, and we do not knowingly hold their data.</p>
       </Clause>
 
       <Clause id="changes" heading="10. Changes">

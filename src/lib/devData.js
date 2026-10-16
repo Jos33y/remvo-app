@@ -12,6 +12,8 @@
  *   ?data=real    back to the real API
  *   ?balance=N    any balance, with any of the above (0, 1, 2, 100350)
  *
+ * "One" is also a seller from before passwords, so Home asks for one.
+ *
  * The choice is kept for the tab (sessionStorage), so it survives
  * moving between screens. The data changes, never the component.
  * Every value is something a real product, seller or eBay produces.
@@ -230,7 +232,7 @@ function build(mode, balanceOverride) {
   }
   const bought = balance - (welcome?.credits ?? 0);
   return {
-    me: { account: { id: 'acc_dev0000000000000000', email: mode === 'worst' ? LONG_EMAIL : 'seller@example.com', createdAt: ago(60 * 24 * 75) } },
+    me: { account: { id: 'acc_dev0000000000000000', email: mode === 'worst' ? LONG_EMAIL : 'seller@example.com', name: mode === 'worst' ? 'Bartholomew-Alexander' : null, hasPassword: mode !== 'one', createdAt: ago(60 * 24 * 75) } },
     wallet: {
       balance, expiresAt: bought > 0 ? expiresAt : null, welcome,
       worth: { cents: Math.max(0, bought) * 10, currency: 'USD' },
@@ -269,6 +271,7 @@ export async function devAnswer(method, path, body, ApiError) {
 
   if (method === 'GET') {
     if (route === '/me') return d.me;
+    if (route === '/me/passkeys') return { items: [] };
     if (route === '/wallet') return d.wallet;
     if (route === '/wallet/history') return page(d.history);
     if (route === '/jobs') return page(d.jobs);

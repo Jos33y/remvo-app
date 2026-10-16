@@ -10,7 +10,7 @@ import styles from '@styles/layout/seller/seller-shell.module.css';
  * A dropped connection is not a sign-out: it says so and offers a retry
  * instead of throwing the seller onto the sign-in page. */
 export function RequireSeller() {
-  const { status, retry } = useSellerSession();
+  const { status, retry, left } = useSellerSession();
   const location = useLocation();
 
   if (status === 'loading') {
@@ -29,7 +29,7 @@ export function RequireSeller() {
 
   if (status === 'signedOut') {
     const here = `${location.pathname}${location.search}`;
-    const next = here && here !== SELLER_ROUTES.HOME ? `?next=${encodeURIComponent(here)}` : '';
+    const next = !left && here && here !== SELLER_ROUTES.HOME ? `?next=${encodeURIComponent(here)}` : '';
     return <Navigate to={`${SELLER_ROUTES.SIGN_IN}${next}`} replace />;
   }
 

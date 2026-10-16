@@ -25,6 +25,8 @@ export const APP_URL = import.meta.env.DEV ? 'http://localhost:5173' : 'https://
 const DEV_FLAG = import.meta.env.DEV ? '?my' : '';
 export const APP_LINKS = {
   SIGN_IN: `${APP_URL}/sign-in${DEV_FLAG}`,
+  /* "Make your first listing" buttons: straight to opening an account. */
+  SIGN_UP: `${APP_URL}/sign-up${DEV_FLAG}`,
   TOP_UP: `${APP_URL}/billing${DEV_FLAG}`,
   BULK: `${APP_URL}/listings/bulk${DEV_FLAG}`,
 };
@@ -39,7 +41,10 @@ export const siteUrl = (path = '/') => `${SITE_URL}${path}${import.meta.env.DEV 
 export const SELLER_ROUTES = {
   HOME: '/',
   SIGN_IN: '/sign-in',
+  SIGN_UP: '/sign-up',
   VERIFY: '/sign-in/verify',
+  /* From the set-or-reset password email: #t= in the fragment. */
+  SET_PASSWORD: '/sign-in/password',
   LISTINGS: '/listings',
   NEW_LISTING: '/listings/new',
   BULK: '/listings/bulk',
@@ -122,7 +127,7 @@ export function creditsFor(amount, currency) {
 }
 
 /* The date shown on every legal page, and its machine form. */
-export const LEGAL_UPDATED = { label: '14 October 2026', iso: '2026-10-14', version: 'v2.2' };
+export const LEGAL_UPDATED = { label: '16 October 2026', iso: '2026-10-16', version: 'v2.3' };
 
 /* ── Paused corridor: checkout and admin trees only ── */
 

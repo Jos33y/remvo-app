@@ -39,7 +39,8 @@ export function SellerSessionProvider({ children }) {
 
   const signOut = useCallback(async () => {
     try { await sellerApi.signOut(); } finally {
-      setState({ status: 'signedOut', account: null });
+      // left: they chose to go, so sign-in starts fresh, not back where they were.
+      setState({ status: 'signedOut', account: null, left: true });
     }
   }, []);
 

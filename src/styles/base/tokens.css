@@ -40,6 +40,8 @@
 
   --font-sans: 'Geist Variable', 'Geist', system-ui, -apple-system, sans-serif;
   --font-mono: 'IBM Plex Mono', 'SFMono-Regular', 'Consolas', monospace;
+  /* Rare moments only (brand direction 5); load styles/base/instrument-serif.css where used. */
+  --font-serif: 'Instrument Serif', 'Iowan Old Style', Georgia, serif;
   --weight-regular: 400;
   --weight-semibold: 600;
 
@@ -90,6 +92,25 @@
   --dur-small: 180ms;  /* popovers, toasts, the chat panel */
   --dur-sheet: 280ms;  /* sheets and drawers opening */
   --dur-exit: 200ms;   /* sheets and drawers closing */
+
+  /* The seller app's night (16 October 2026: dark only until 100 sellers).
+   * Deep, not black: three lifted steps, warm ivory text, colour as
+   * tinted surfaces. Contrast, WCAG 2.2 AA (4.5:1), worst case is on
+   * --night-2: ivory 13.3, ivory-2 7.6, ivory-3 5.7, oxide-ink 6.3,
+   * verdigris-ink 7.4, lapis-ink 7.4, gold 6.7. On --night-0: ivory 16.0. */
+  --night-0: #141418;   /* the page */
+  --night-1: #1C1C21;   /* cards, fields */
+  --night-2: #25252B;   /* raised: sheets, the active segment */
+  --night-line: rgba(244, 239, 230, 0.12);
+  --night-line-strong: rgba(244, 239, 230, 0.22);
+  --ivory: #F4EFE6;
+  --ivory-2: rgba(244, 239, 230, 0.72);
+  --ivory-3: rgba(244, 239, 230, 0.6);
+  --gold: #C9A84C;
+  --gold-hair: rgba(201, 168, 76, 0.42);
+  --oxide-ink: #EB8F6A;
+  --verdigris-ink: #6FC4AE;
+  --lapis-ink: #9BB4EC;
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
 
