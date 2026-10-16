@@ -91,6 +91,8 @@ export const sellerApi = Object.freeze({
   passkeySignInFinish: (challengeId, credential) => call('POST', '/auth/passkey/finish', { challengeId, credential }),
   signOut: () => call('POST', '/auth/sign-out'),
   me: () => call('GET', '/me'),
+  /** The last 7 days: listings made and stock value, in the seller's time zone. */
+  summary: (tz) => call('GET', `/summary${tz ? `?tz=${encodeURIComponent(tz)}` : ''}`),
   setName: (name) => call('PATCH', '/me', { name }),
   /** { password } for a first one, { current, password } to change it */
   setPassword: (body) => call('POST', '/me/password', body),

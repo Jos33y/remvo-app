@@ -290,7 +290,7 @@ export function TopUpSheet({ open, onClose }) {
 //  Make a listing: the one input, and the product's condition
 // ══════════════════════════════════════════════════════════════════
 
-export function MakeListingForm({ autoFocus = false }) {
+export function MakeListingForm({ autoFocus = false, hero = false }) {
   const navigate = useNavigate();
   const { summary, settings } = useSellerData();
   const [value, setValue] = useState('');
@@ -312,13 +312,13 @@ export function MakeListingForm({ autoFocus = false }) {
   const short = summary && summary.balance < LISTING;
 
   return (
-    <form className={s.card} onSubmit={submit} noValidate>
-      <label htmlFor={id} className={s.label}>Make a listing</label>
+    <form className={`${s.card} ${hero ? s.cardHero : ''}`} onSubmit={submit} noValidate>
+      <label htmlFor={id} className={`${s.label} ${hero ? s.labelHero : ''}`}>Make a listing</label>
       <div className={s.inputWrap}>
         <span className={s.inputIcon}>{looksLikeLink ? <IconLink size={20} /> : <IconBarcode size={20} />}</span>
         <input
           id={id}
-          className={s.input}
+          className={`${s.input} ${hero ? s.inputHero : ''}`}
           type="text"
           inputMode={looksLikeLink ? 'url' : 'text'}
           autoComplete="off"
@@ -354,7 +354,7 @@ export function MakeListingForm({ autoFocus = false }) {
           Make listing, {LISTING} credits
         </button>
       </div>
-      {short && <p className={s.hint}>Your balance is under {LISTING} credits. You can still check the product first; top up before it runs.</p>}
+      {short && !hero && <p className={s.hint}>Your balance is under {LISTING} credits. You can still check the product first; top up before it runs.</p>}
     </form>
   );
 }

@@ -57,6 +57,12 @@ const ago = (mins) => new Date(NOW - mins * 60_000).toISOString();
 const ahead = (days) => new Date(NOW + days * 86_400_000).toISOString();
 const STEPS = ['Reading the product page', 'Finding the eBay category', 'Filling the item specifics', 'Measuring the parcel', 'Checking prices', 'Writing the title and description'];
 
+// Product photos without the network: a drawn product on white, as Amazon shoots them.
+const PHOTO = (fill, shape) => `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#fff"/>${shape.replace(/F/g, fill)}</svg>`)}`;
+const SPEAKER = PHOTO('#d8c9a8', '<rect x="22" y="30" width="56" height="44" rx="14" fill="F"/><circle cx="50" cy="52" r="12" fill="#00000022"/>');
+const CHARGER = PHOTO('#222', '<rect x="34" y="14" width="32" height="72" rx="6" fill="F"/><rect x="44" y="20" width="12" height="3" rx="1.5" fill="#4af"/>');
+const DRILL = PHOTO('#1b6f8a', '<path d="M20 30h46v18H44v30H30V48H20z" fill="F"/><rect x="66" y="35" width="18" height="6" fill="#999"/>');
+
 const LONG_EMAIL = 'bartholomew.fitzgerald+ebay-wholesale@northwind-liquidation-holdings.example.com';
 const LONG_LINK = 'https://www.amazon.co.uk/Philips-Shaver-Series-Electric-Precision/dp/B0CB5MZXW8/ref=sr_1_3?crid=2QK7ZJ0X8W1&keywords=philips+shaver&qid=1728912345&sprefix=philips%2Caps%2C89&sr=8-3&th=1';
 const LONG_CATEGORY = 'Home & Garden > Kitchen, Dining & Bar > Small Kitchen Appliances > Coffee Makers, Espresso Machines & Accessories > Espresso Machines';
@@ -95,7 +101,7 @@ function job({ status = 'ready', input = { kind: 'barcode', value: '842982108097
     id: jobId(), ref: r, batchId, status, createdAt: ago(mins), finishedAt: status === 'ready' || status === 'failed' ? ago(mins - 1) : null,
     input, marketplace, condition: 'new', credits: status === 'failed' ? 0 : 3,
     step: step ?? (status === 'ready' ? 6 : status === 'running' ? 2 : 0), steps: STEPS,
-    source: source ?? { title: 'Energizer BTS356 Bluetooth Speaker', url: 'https://www.amazon.com/dp/B0EXAMPLE', image: null, amazon: 'amazon.com' },
+    source: source ?? { title: 'Energizer BTS356 Bluetooth Speaker', url: 'https://www.amazon.com/dp/B0EXAMPLE', image: SPEAKER, amazon: 'amazon.com' },
     listing: status === 'ready' ? listing(l) : null, edits: {}, failure: status === 'failed' ? failure : null,
   };
 }
@@ -107,15 +113,15 @@ function worstJobs() {
   return [
     job({ status: 'running', input: { kind: 'link', value: LONG_LINK }, source: { title: null, url: LONG_LINK, image: null, amazon: 'amazon.co.uk' }, marketplace: 'UK', mins: 1 }),
     job({ status: 'queued', input: { kind: 'barcode', value: '5000394203693' }, source: null, mins: 1 }),
-    job({ status: 'running', source: { title: 'Anker Portable Charger, Power Bank, 10,000mAh Battery Pack with PowerIQ Charging Technology and USB-C (Input Only) for iPhone 15/15 Pro/15 Pro Max, Samsung Galaxy S23, Pixel and More', url: 'https://www.amazon.com/dp/B0194WDVHI', image: null, amazon: 'amazon.com' }, mins: 2 }),
-    job({ mins: 8, input: { kind: 'barcode', value: '848061039423' },
+    job({ status: 'running', source: { title: 'Anker Portable Charger, Power Bank, 10,000mAh Battery Pack with PowerIQ Charging Technology and USB-C (Input Only) for iPhone 15/15 Pro/15 Pro Max, Samsung Galaxy S23, Pixel and More', url: 'https://www.amazon.com/dp/B0194WDVHI', image: CHARGER, amazon: 'amazon.com' }, mins: 2 }),
+    job({ mins: 8, input: { kind: 'barcode', value: '848061039423' }, source: { title: 'Anker PowerCore 10000', url: 'https://www.amazon.com/dp/B0194WDVHI', image: 'https://example.invalid/broken.jpg', amazon: 'amazon.com' },
       l: { title: 'Anker PowerCore 10000 Portable Charger 10000mAh Power Bank USB-C Black A1263 New', specifics: THIRTY_SPECIFICS,
         category: { id: '20612', path: LONG_CATEGORY }, parcel: { l: 24, w: 18, h: 14, weight: 46, oz: 0, units: 'imperial', band: 'USPS Ground Advantage' },
         price: { value: 12499, median: 12500, low: 11999, high: 12999, listings: 1, by: 'median', currency: 'USD' },
         alternative: 'Anker A1263 PowerCore 10000 mAh Power Bank, USB-C Input, Black, Boxed, Brand New',
         missing: ['Compatible Model', 'Features'] } }),
     job({ mins: 30, marketplace: 'DE', input: { kind: 'barcode', value: '4059952513839' },
-      source: { title: 'Bosch Professional 18V System Akku-Bohrschrauber GSR 18V-55 (inkl. 2x 2,0 Ah Akku, Ladegerät GAL 18V-20, Zusatzhandgriff, L-BOXX)', url: 'https://www.amazon.de/dp/B07XYZ1234', image: null, amazon: 'amazon.de' },
+      source: { title: 'Bosch Professional 18V System Akku-Bohrschrauber GSR 18V-55 (inkl. 2x 2,0 Ah Akku, Ladegerät GAL 18V-20, Zusatzhandgriff, L-BOXX)', url: 'https://www.amazon.de/dp/B07XYZ1234', image: DRILL, amazon: 'amazon.de' },
       l: { site: 'eBay.de', language: 'German', title: 'Bosch Professional GSR 18V-55 Akku-Bohrschrauber 2x 2,0 Ah Akku Ladegerät L-BOXX',
         category: { id: '122838', path: 'Heimwerker > Elektrowerkzeuge > Bohrmaschinen & Akkuschrauber' },
         parcel: { l: 40, w: 32, h: 12, weight: 3.4, units: 'metric', band: 'DHL Paket' },
@@ -246,6 +252,29 @@ function build(mode, balanceOverride) {
   };
 }
 
+// GET /summary, worked out from the fixture's own listings, in local days.
+function weekOf(jobs) {
+  const key = (t) => { const x = new Date(t); return `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, '0')}-${String(x.getDate()).padStart(2, '0')}`; };
+  const days = Array.from({ length: 7 }, (_, i) => ({ date: key(NOW - (6 - i) * 86_400_000), ready: 0, failed: 0 }));
+  const byDate = new Map(days.map((x) => [x.date, x]));
+  const value = new Map();
+  for (const j of jobs) {
+    const day = byDate.get(key(j.createdAt));
+    if (!day || (j.status !== 'ready' && j.status !== 'failed')) continue;
+    day[j.status] += 1;
+    const p = j.status === 'ready' ? j.listing?.price : null;
+    if (p?.value != null) {
+      const v = value.get(p.currency) ?? { currency: p.currency, total: 0, priced: 0 };
+      v.total += p.value; v.priced += 1; value.set(p.currency, v);
+    }
+  }
+  return {
+    tz: 'UTC', days,
+    week: { ready: days.reduce((n, x) => n + x.ready, 0), failed: days.reduce((n, x) => n + x.failed, 0), value: [...value.values()].sort((a, b) => b.total - a.total) },
+    allTime: { ready: jobs.filter((j) => j.status === 'ready').length },
+  };
+}
+
 const PAGE = 50;
 let cache = null;
 
@@ -287,6 +316,7 @@ export async function devAnswer(method, path, body, ApiError) {
       return { batch: b };
     }
     if (route === '/support') return { chat: d.support };
+    if (route === '/summary') return weekOf(d.jobs);
   }
 
   if (method === 'POST' && route === '/batches/check') {

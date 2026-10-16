@@ -5,48 +5,56 @@
    app root and to the sheet layer (which
    renders outside it), so both match.
 
-   Light by default, dark when the phone is
-   set to dark, as a native app would. The
-   balance card stays obsidian and gold in
-   both: it is the one object that carries
-   the brand.
+   The night (16 October 2026): dark only
+   until 100 paying sellers, whatever the
+   phone is set to. Deep, not black: three
+   lifted steps, warm ivory text. Ivory is
+   the action colour; gold is kept for
+   money (a balance, a price, stock value);
+   colour family inks say what state a
+   thing is in. Values from tokens.css.
 
-   Contrast, every text pair at or over
-   WCAG AA 4.5:1:
-     light  text-2 #565656 on #F4F1EC  6.6
-            text-3 #6B6B6B on #FFFFFF  5.3
-            accent #7A6220 on #FFFFFF  6.1
-     dark   text-2 0.66 white on #1C1C1E  7.4
-            text-3 0.52 white on #1C1C1E  5.1
-            accent #C9A84C on #1C1C1E  7.1
+   Contrast, WCAG 2.2 AA (4.5:1), worst
+   case on --app-card-pressed (#25252B):
+     text 13.3, text-2 7.6, text-3 5.7,
+     success 7.4, warn 6.3, info 7.4,
+     gold 6.7. Ivory button text 16.0.
    ═══════════════════════════════════════ */
 
 .theme {
-  --app-bg: #F4F1EC;
-  --app-card: #FFFFFF;
-  --app-card-pressed: #ECE8E1;
-  --app-fill: rgba(0, 0, 0, 0.05);
-  --app-text: #1A1A1A;
-  --app-text-2: #565656;
-  --app-text-3: #6B6B6B;
-  --app-sep: rgba(0, 0, 0, 0.1);
-  --app-accent: #7A6220;
-  --app-gold: #C9A84C;
-  --app-on-gold: #1A1A1A;
-  --app-success: #1F6B40;
-  --app-success-fill: rgba(31, 107, 64, 0.1);
-  --app-danger: #B82A2A;
-  --app-danger-fill: rgba(184, 42, 42, 0.08);
-  --app-bar: rgba(247, 245, 241, 0.92);
-  --app-bar-solid: #F7F5F1;
-  --app-scrim: rgba(0, 0, 0, 0.32);
-  --app-focus: 0 0 0 2px var(--app-bg), 0 0 0 4px #7A6220;
+  --app-bg: var(--night-0);
+  --app-card: var(--night-1);
+  --app-card-pressed: var(--night-2);
+  --app-fill: rgba(244, 239, 230, 0.07);
+  --app-text: var(--ivory);
+  --app-text-2: var(--ivory-2);
+  --app-text-3: var(--ivory-3);
+  --app-sep: var(--night-line);
+  --app-accent: var(--ivory);
+  --app-action: var(--ivory);
+  --app-on-action: var(--night-0);
+  --app-gold: var(--gold);
+  --app-on-gold: var(--night-0);
+  --app-success: var(--verdigris-ink);
+  --app-success-fill: rgba(47, 125, 109, 0.22);
+  --app-warn: var(--oxide-ink);
+  --app-warn-fill: rgba(181, 85, 47, 0.18);
+  --app-info: var(--lapis-ink);
+  --app-info-fill: rgba(44, 74, 138, 0.26);
+  --app-plum: #5B3A5E;
+  --app-plum-ink: #D7B3DA;
+  --app-danger: var(--oxide-ink);
+  --app-danger-fill: rgba(181, 85, 47, 0.18);
+  --app-bar: rgba(20, 20, 24, 0.86);
+  --app-bar-solid: #18181C;
+  --app-scrim: rgba(0, 0, 0, 0.6);
+  --app-focus: 0 0 0 2px var(--app-bg), 0 0 0 4px var(--ivory);
 
-  /* The balance card, the same in both appearances. */
-  --card-obsidian: #161618;
-  --card-text: #FFFFFF;
-  --card-text-2: rgba(255, 255, 255, 0.66);
-  --card-gold: #C9A84C;
+  /* The balance card (Credits until credits1). */
+  --card-obsidian: var(--night-1);
+  --card-text: var(--ivory);
+  --card-text-2: var(--ivory-2);
+  --card-gold: var(--gold);
 
   --tabbar-h: 50px;
   --navbar-h: 44px;
@@ -58,31 +66,7 @@
 
   color: var(--app-text);
   -webkit-tap-highlight-color: transparent;
-  color-scheme: light;
-}
-
-@media (prefers-color-scheme: dark) {
-  .theme {
-    --app-bg: #0E0E10;
-    --app-card: #1C1C1E;
-    --app-card-pressed: #2A2A2D;
-    --app-fill: rgba(255, 255, 255, 0.08);
-    --app-text: #FFFFFF;
-    --app-text-2: rgba(255, 255, 255, 0.66);
-    --app-text-3: rgba(255, 255, 255, 0.52);
-    --app-sep: rgba(255, 255, 255, 0.1);
-    --app-accent: #C9A84C;
-    --app-success: #5CC48C;
-    --app-success-fill: rgba(92, 196, 140, 0.14);
-    --app-danger: #F08A8A;
-    --app-danger-fill: rgba(240, 138, 138, 0.12);
-    --app-bar: rgba(22, 22, 24, 0.9);
-    --app-bar-solid: #161618;
-    --app-scrim: rgba(0, 0, 0, 0.55);
-    --app-focus: 0 0 0 2px var(--app-bg), 0 0 0 4px #C9A84C;
-    --card-obsidian: #1C1C1E;
-    color-scheme: dark;
-  }
+  color-scheme: dark;
 }
 
 @media (prefers-contrast: more) {

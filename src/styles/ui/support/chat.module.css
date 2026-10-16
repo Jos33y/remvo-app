@@ -176,8 +176,8 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  color: var(--app-on-gold);
-  background-color: var(--app-gold);
+  color: var(--app-on-action);
+  background-color: var(--app-action);
   touch-action: manipulation;
   transition: transform 100ms var(--ease-out), opacity 150ms ease;
 }

@@ -67,8 +67,19 @@ export function SellerShell() {
   // Support is a chat: the box to write in sits just above the tabs, with no padding under it.
   const flush = location.pathname === SELLER_ROUTES.SUPPORT;
   const unread = useSupportUnread({ enabled: Boolean(account), onSupport: flush });
-  // The bars' own colours (app-theme.module.css --app-bar-solid).
-  useThemeColor('#F7F5F1', '#161618');
+  // The bars' own colour (app-theme.module.css --app-bar-solid). Dark only.
+  useThemeColor('#18181C', '#18181C');
+
+  // The night under the app too: iOS overscroll and short screens show
+  // the page behind, which is the marketing site's warm white otherwise.
+  useEffect(() => {
+    const { documentElement: root, body } = document;
+    const was = [root.style.backgroundColor, root.style.colorScheme, body.style.backgroundColor];
+    root.style.backgroundColor = '#141418';
+    root.style.colorScheme = 'dark';
+    body.style.backgroundColor = '#141418';
+    return () => { [root.style.backgroundColor, root.style.colorScheme, body.style.backgroundColor] = was; };
+  }, []);
 
   // Where each screen sits in history, for the back buttons (lib/sellerTrail.js).
   useEffect(() => { note(location.pathname); }, [location.key, location.pathname]);
@@ -99,7 +110,7 @@ export function SellerShell() {
           {/* Tabs change at once (motion spec 8): no fade, no wait for the
             * old page to leave. A pushed screen (a listing, a batch) rises
             * in briefly so the eye follows where it came from. */}
-          <div key={location.pathname} className={`${styles.page} ${covered ? styles.pushIn : ''}`}>
+          <div key={location.pathname} className={`${styles.page} ${covered ? styles.pushIn : ''} ${location.pathname === SELLER_ROUTES.HOME ? styles.pageWide : ''}`}>
             {outlet}
           </div>
         </main>

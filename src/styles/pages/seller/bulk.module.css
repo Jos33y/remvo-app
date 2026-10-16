@@ -217,7 +217,7 @@
 }
 
 .barReady {
-  background-color: var(--app-gold);
+  background-color: var(--app-success);
   transform: scaleX(var(--part, 0));
 }
 
@@ -250,7 +250,7 @@
   vertical-align: 1px;
 }
 
-.dotReady { background-color: var(--app-gold); }
+.dotReady { background-color: var(--app-success); }
 .dotFailed { background-color: var(--app-danger); }
 .dotWaiting { background-color: var(--app-text-3); }
 
@@ -273,7 +273,7 @@
 }
 
 .check {
-  color: var(--app-accent);
+  color: var(--app-warn);
   font-size: 0.8125rem;
   font-weight: 600;
 }

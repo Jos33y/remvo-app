@@ -18,23 +18,25 @@ import styles from '@styles/ui/seller/page-header.module.css';
  *   backLabel  the back button's text, the screen it returns to
  *   action   a node for the right side of the bar
  *   large    false for detail pages, which use only the small bar
+ *   quiet    no large title, but the bar stays clear until content
+ *            scrolls under it (Home, whose first figure is its title)
  * ────────────────────────────────────────────────────────────────── */
 
-export function PageHeader({ title, back, backLabel = 'Back', action, large = true, children }) {
+export function PageHeader({ title, back, backLabel = 'Back', action, large = true, quiet = false, children }) {
   const navigate = useNavigate();
   const sentinel = useRef(null);
-  const [scrolled, setScrolled] = useState(!large);
+  const [scrolled, setScrolled] = useState(!large && !quiet);
 
   useEffect(() => {
     const el = sentinel.current;
     if (!el) return undefined;
     // Without a large title the small one is the page's name: always shown.
-    const io = new IntersectionObserver(([e]) => setScrolled(!large || !e.isIntersecting), {
+    const io = new IntersectionObserver(([e]) => setScrolled((!large && !quiet) || !e.isIntersecting), {
       rootMargin: `-${44 + 1}px 0px 0px 0px`,
     });
     io.observe(el);
     return () => io.disconnect();
-  }, [large]);
+  }, [large, quiet]);
 
   // Back to the screen just left goes back in history, so it opens where
   // it was scrolled; otherwise the named screen opens fresh, at its top.
@@ -52,14 +54,14 @@ export function PageHeader({ title, back, backLabel = 'Back', action, large = tr
               </button>
             )}
           </div>
-          <p className={`${styles.smallTitle} ${scrolled ? styles.smallTitleOn : ''}`} aria-hidden={large ? !scrolled : undefined}>
+          <p className={`${styles.smallTitle} ${scrolled ? styles.smallTitleOn : ''}`} aria-hidden={large || quiet ? !scrolled : undefined}>
             {title}
           </p>
           <div className={`${styles.side} ${styles.sideRight}`}>{action}</div>
         </div>
       </div>
       <div ref={sentinel} className={styles.sentinel} aria-hidden="true" />
-      {large ? (
+      {large && !quiet ? (
         <header className={styles.large}>
           <h1 className={styles.largeTitle}>{title}</h1>
           {children}

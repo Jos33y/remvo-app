@@ -222,7 +222,7 @@ button.row:focus-visible {
 
 .pillReady { color: var(--app-success); background-color: var(--app-success-fill); }
 .pillFailed { color: var(--app-danger); background-color: var(--app-danger-fill); }
-.pillRunning { color: var(--app-accent); background-color: var(--app-fill); }
+.pillRunning { color: var(--app-info); background-color: var(--app-info-fill); }
 
 /* ── Balance card (obsidian in both appearances) ── */
 
@@ -346,13 +346,13 @@ button.row:focus-visible {
 }
 
 .primary {
-  color: var(--app-on-gold);
-  background-color: var(--app-gold);
+  color: var(--app-on-action);
+  background-color: var(--app-action);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .primary:hover:not(:disabled) {
-    background-color: #BE9E44;
+    background-color: #FFFFFF;
   }
 }
 
@@ -474,7 +474,7 @@ a.textButton:focus-visible {
   outline: none;
   background-color: var(--app-card);
   border-color: var(--app-accent);
-  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.22);
+  box-shadow: 0 0 0 3px rgba(244, 239, 230, 0.16);
 }
 
 .input[aria-invalid='true'] {
@@ -625,14 +625,14 @@ a.textButton:focus-visible {
 }
 
 .stepDone .stepMark {
-  color: var(--app-on-gold);
-  background-color: var(--app-gold);
-  border-color: var(--app-gold);
+  color: var(--app-on-action);
+  background-color: var(--app-action);
+  border-color: var(--app-action);
 }
 
 .stepNow .stepMark {
   position: relative;
-  border-color: var(--app-gold);
+  border-color: var(--app-action);
 }
 
 /* The "now" ring: a halo that widens and fades while the step runs.
@@ -643,7 +643,7 @@ a.textButton:focus-visible {
   position: absolute;
   inset: -1.5px;
   border-radius: 50%;
-  border: 3px solid rgba(201, 168, 76, 0.35);
+  border: 3px solid rgba(155, 180, 236, 0.4);
   pointer-events: none;
   animation: breathe 1.4s var(--ease-out) infinite;
 }
@@ -866,7 +866,7 @@ a.textButton:focus-visible {
   height: 10px;
   margin: 6px 5px 0;
   border-radius: 50%;
-  background-color: var(--app-gold);
+  background-color: var(--app-info);
   animation: pulse 1.6s ease-in-out infinite;
 }
 
@@ -1045,7 +1045,7 @@ a.textButton:focus-visible {
 }
 
 .pack[aria-checked='true'] {
-  border-color: var(--app-gold);
+  border-color: var(--app-action);
   background-color: var(--app-card);
 }
 
@@ -1153,8 +1153,8 @@ a.textButton:focus-visible {
 }
 
 .pack[aria-checked='true'] .radio {
-  border-color: var(--app-gold);
-  background-color: var(--app-gold);
+  border-color: var(--app-action);
+  background-color: var(--app-action);
   box-shadow: inset 0 0 0 4px var(--app-card);
 }
 
@@ -1296,4 +1296,32 @@ a.textButton:focus-visible {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+}
+
+/* ── Make a listing, as Home's main action ── */
+
+.cardHero {
+  padding: 20px;
+  border-radius: 18px;
+  box-shadow: inset 0 0 0 1px var(--night-line), 0 24px 48px -32px rgba(0, 0, 0, 0.7);
+}
+
+.labelHero {
+  margin-bottom: 12px;
+  font-size: 1.0625rem;
+  letter-spacing: -0.01em;
+}
+
+.inputHero {
+  height: 58px;
+  padding-left: 46px;
+  /* 16px at least, so iOS never zooms; the full placeholder fits at 320. */
+  font-size: clamp(1rem, 4.6vw, 1.125rem);
+  border-radius: 14px;
+  background-color: var(--night-0);
+  border-color: var(--night-line-strong);
+}
+
+.cardHero .inputIcon {
+  left: 14px;
 }

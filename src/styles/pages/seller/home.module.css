@@ -1,0 +1,346 @@
+/* ═══════════════════════════════════════
+   HOME
+   The week as the headline, set in
+   Instrument Serif straight on the night,
+   no card around it. Gold on the money
+   figure only. Then the barcode, the
+   balance line, the bulk door, recent.
+   Phone: one column. From 900px: two.
+   ═══════════════════════════════════════ */
+
+.home {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: 'week' 'act' 'recent';
+  row-gap: 28px;
+  padding-top: 4px;
+}
+
+.weekArea { grid-area: week; }
+.recentArea { grid-area: recent; }
+
+.actArea {
+  grid-area: act;
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+@media (min-width: 900px) {
+  .home {
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+    grid-template-areas: 'week act' 'recent act';
+    grid-template-rows: auto 1fr;
+    column-gap: 56px;
+    row-gap: 40px;
+    padding-top: 40px;
+  }
+
+  .actArea {
+    position: sticky;
+    top: 24px;
+  }
+}
+
+/* ── The week ── */
+
+.week {
+  padding: 0 4px;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ivory-3);
+}
+
+.headline {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(2.25rem, 9vw, 3.25rem);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  color: var(--ivory);
+  text-wrap: balance;
+}
+
+.figure {
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.headlinePending {
+  font-size: clamp(1.75rem, 7vw, 2.25rem);
+  color: var(--ivory-3);
+}
+
+.sub {
+  margin: 10px 0 0;
+  font-size: 1.0625rem;
+  line-height: 1.45;
+  color: var(--ivory-2);
+  text-wrap: pretty;
+}
+
+.money {
+  font-size: 1.1875rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+}
+
+.moneyMore {
+  color: var(--ivory-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.failedNote {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 8px 0 0;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--ivory-2);
+}
+
+/* The same dashed oxide edge as a failed parcel in the stacks. */
+.failedNote::before {
+  content: '';
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border: 1px dashed var(--oxide-ink);
+  border-radius: 2px;
+  transform: translateY(1px);
+}
+
+.stacks {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--night-line);
+}
+
+.stacksPending {
+  margin-top: 22px;
+  height: 92px;
+  border-top: 1px solid var(--night-line);
+}
+
+/* ── Balance, on one line ── */
+
+.balance {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 6px 6px 6px 16px;
+  border-radius: 14px;
+  background-color: var(--app-card);
+}
+
+.balanceText {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 0;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  color: var(--ivory-2);
+  text-decoration: none;
+}
+
+a.balanceText:focus-visible {
+  outline: 2px solid var(--ivory);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a.balanceText:hover { color: var(--ivory); }
+}
+
+.balanceFigure {
+  font-weight: 600;
+  color: var(--ivory);
+  font-variant-numeric: tabular-nums;
+}
+
+.balanceEmpty .balanceText {
+  color: var(--ivory);
+}
+
+.balanceButton {
+  flex: none;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--ivory);
+  background-color: var(--night-2);
+  box-shadow: inset 0 0 0 1px var(--night-line);
+  touch-action: manipulation;
+  transition: transform var(--dur-press) var(--ease-out), background-color 150ms ease;
+}
+
+.balanceButtonMain {
+  color: var(--night-0);
+  background-color: var(--ivory);
+  box-shadow: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .balanceButton:hover { background-color: #303037; }
+  .balanceButtonMain:hover { background-color: #FFFFFF; }
+}
+
+.balanceButton:active {
+  transform: scale(0.96);
+}
+
+.balanceButton:focus-visible {
+  outline: 2px solid var(--ivory);
+  outline-offset: 2px;
+}
+
+/* ── Got a stack? The door to Bulk, in Bulk's plum ── */
+
+.stack {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 72px;
+  padding: 12px 10px 12px 14px;
+  border-radius: 14px;
+  color: var(--ivory);
+  text-decoration: none;
+  background:
+    linear-gradient(100deg, rgba(91, 58, 94, 0.42), rgba(91, 58, 94, 0.14) 70%),
+    var(--app-card);
+  box-shadow: inset 0 0 0 1px rgba(215, 179, 218, 0.16);
+  touch-action: manipulation;
+  transition: transform var(--dur-press) var(--ease-out), box-shadow 150ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .stack:hover { box-shadow: inset 0 0 0 1px rgba(215, 179, 218, 0.34); }
+}
+
+.stack:active {
+  transform: scale(0.985);
+}
+
+.stack:focus-visible {
+  outline: 2px solid var(--ivory);
+  outline-offset: 2px;
+}
+
+.stackArt {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: var(--app-plum-ink);
+}
+
+.stackArt rect {
+  fill: #2A1F2C;
+  stroke: currentColor;
+  stroke-width: 1.2;
+}
+
+.stackArt path {
+  stroke: currentColor;
+  stroke-width: 1;
+  opacity: 0.7;
+}
+
+.stackMain {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.stackTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--app-plum-ink);
+}
+
+.stackText {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--ivory-2);
+}
+
+.stackChevron {
+  flex: none;
+  color: var(--app-plum-ink);
+  opacity: 0.8;
+}
+
+/* ── Recent, with the product's photo ── */
+
+.jobRow {
+  min-height: 72px;
+  padding-left: 12px;
+}
+
+/* The hairline starts at the text, not under the photo. */
+.jobRow + .jobRow::before {
+  left: 72px;
+}
+
+.thumb {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  overflow: hidden;
+  border-radius: 10px;
+  /* Product shots are on white: a white tile keeps them whole. */
+  background-color: #FFFFFF;
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 3px;
+}
+
+.thumbEmpty {
+  color: var(--ivory-3);
+  background-color: var(--night-2);
+  box-shadow: inset 0 0 0 1px var(--night-line);
+}
+
+.recentEmpty {
+  margin: 0;
+  padding: 20px 16px;
+  border-radius: 14px;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--ivory-3);
+  border: 1px dashed var(--night-line-strong);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .balanceButton,
+  .stack { transition: none; }
+  .balanceButton:active,
+  .stack:active { transform: none; }
+}
+
+@media (prefers-contrast: more) {
+  .eyebrow,
+  .recentEmpty { color: var(--ivory-2); }
+}

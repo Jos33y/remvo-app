@@ -132,8 +132,8 @@
   font-weight: 700;
   line-height: 1;
   font-variant-numeric: tabular-nums;
-  color: var(--app-on-gold);
-  background-color: var(--app-gold);
+  color: var(--app-on-action);
+  background-color: var(--app-action);
   border: 2px solid var(--app-bar-solid);
   border-radius: 9px;
 }
@@ -245,6 +245,11 @@
     max-width: 680px;
     margin: 0 auto;
     padding: 0 32px;
+  }
+
+  /* Home uses the room a laptop has: two columns. */
+  .pageWide {
+    max-width: 1120px;
   }
 }
 

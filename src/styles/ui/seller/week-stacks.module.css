@@ -1,0 +1,112 @@
+/* ═══════════════════════════════════════
+   WEEK STACKS
+   Seven days, seven stacks of isometric
+   parcels. Ivory faces lit from the top
+   left; failed ones as oxide outlines.
+   ═══════════════════════════════════════ */
+
+.week {
+  margin: 0;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+  align-items: end;
+}
+
+.column {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.stack {
+  width: 100%;
+  max-width: 46px;
+  height: auto;
+  overflow: visible;
+}
+
+.floor {
+  fill: rgba(244, 239, 230, 0.05);
+  stroke: rgba(244, 239, 230, 0.14);
+  stroke-width: 0.6;
+}
+
+.today .floor {
+  stroke: rgba(244, 239, 230, 0.4);
+}
+
+.top { fill: #F4EFE6; }
+.left { fill: #A9A49B; }
+.right { fill: #CFC9BE; }
+
+.tape {
+  stroke: #A08742;
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+
+.parcel path {
+  stroke: #141418;
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.failed .top,
+.failed .left,
+.failed .right {
+  fill: rgba(181, 85, 47, 0.12);
+  stroke: #EB8F6A;
+  stroke-width: 0.8;
+  stroke-dasharray: 2 2;
+}
+
+/* Built once, oldest day first: each parcel drops into place. */
+.parcel {
+  animation: land 420ms var(--ease-out) both;
+  animation-delay: calc(var(--i) * 38ms + 150ms);
+}
+
+@keyframes land {
+  from { opacity: 0; transform: translateY(-14px); }
+  to { opacity: 1; transform: none; }
+}
+
+.more {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  fill: var(--ivory-2);
+}
+
+.count {
+  min-height: 1.2em;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.2;
+  color: var(--ivory);
+  font-variant-numeric: tabular-nums;
+}
+
+.label {
+  font-size: 0.75rem;
+  line-height: 1.2;
+  color: var(--ivory-3);
+}
+
+.today .label {
+  color: var(--ivory);
+  font-weight: 600;
+}
+
+@media (min-width: 900px) {
+  .stack { max-width: 60px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .parcel { animation: none; }
+}
