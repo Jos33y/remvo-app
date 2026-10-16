@@ -239,24 +239,27 @@
   opacity: 0.6;
 }
 
-/* Room on the right for the show/hide button. */
+/* Room on the right for the eye. */
 .withReveal {
-  padding-right: 76px;
+  padding-right: 56px;
 }
 
 .reveal {
   position: absolute;
   top: 4px;
   right: 4px;
+  display: grid;
+  place-items: center;
+  width: 44px;
   height: 44px;
-  min-width: 64px;
-  padding: 0 12px;
   border-radius: 9px;
-  font-size: 0.875rem;
-  font-weight: 500;
   color: var(--ivory-2);
   background: transparent;
   touch-action: manipulation;
+}
+
+.reveal[aria-pressed='true'] {
+  color: var(--ivory);
 }
 
 @media (hover: hover) and (pointer: fine) {

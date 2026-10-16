@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { Link, Navigate, useLocation, useNavigate, useSearchParams } from 'react-router';
 import { AuthLayout } from '@components/layout/seller/AuthLayout';
-import { IconAlert } from '@components/ui/seller/icons';
+import { IconAlert, IconEye, IconEyeOff } from '@components/ui/seller/icons';
 import { useSellerSession } from '@context/SellerSession';
 import { sellerApi } from '@lib/sellerApi';
 import { autofillSupported, passkeysSupported, signInWithPasskey, stopPasskeyPrompt } from '@lib/sellerPasskeys';
@@ -92,9 +92,8 @@ function PasswordField({ id, label, value, onChange, autoComplete, invalid, desc
           aria-describedby={describedBy}
           disabled={disabled}
         />
-        <button type="button" className={styles.reveal} onClick={() => setShown((v) => !v)} aria-pressed={shown} aria-controls={id} disabled={disabled}>
-          {shown ? 'Hide' : 'Show'}
-          <span className="sr-only"> password</span>
+        <button type="button" className={styles.reveal} onClick={() => setShown((v) => !v)} aria-label="Show password" aria-pressed={shown} aria-controls={id} disabled={disabled}>
+          {shown ? <IconEyeOff /> : <IconEye />}
         </button>
       </div>
     </div>

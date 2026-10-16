@@ -1218,21 +1218,28 @@ a.textButton:focus-visible {
 }
 
 .inputReveal {
-  padding-right: 76px;
+  padding-right: 54px;
 }
 
 .revealButton {
   position: absolute;
-  right: 4px;
-  height: 42px;
-  min-width: 64px;
-  padding: 0 12px;
+  right: 3px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
   border-radius: 9px;
-  font-size: 0.875rem;
-  font-weight: 500;
   color: var(--app-text-2);
   background: transparent;
   touch-action: manipulation;
+}
+
+.revealButton[aria-pressed='true'] {
+  color: var(--app-text);
+}
+
+.sheetLead {
+  margin: 0 0 16px;
 }
 
 @media (hover: hover) and (pointer: fine) {

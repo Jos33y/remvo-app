@@ -1,6 +1,6 @@
 import { useEffect, useId, useState } from 'react';
 import { Sheet } from '@components/ui/seller/Sheet';
-import { IconAlert } from '@components/ui/seller/icons';
+import { IconAlert, IconEye, IconEyeOff } from '@components/ui/seller/icons';
 import { useSellerSession } from '@context/SellerSession';
 import { sellerApi } from '@lib/sellerApi';
 import s from '@styles/pages/seller/app.module.css';
@@ -37,8 +37,8 @@ function Reveal({ id, value, onChange, autoComplete, label, describedBy, invalid
           aria-invalid={invalid ? 'true' : undefined}
           data-autofocus={autoFocus ? '' : undefined}
         />
-        <button type="button" className={s.revealButton} onClick={() => setShown((v) => !v)} aria-pressed={shown} aria-controls={id}>
-          {shown ? 'Hide' : 'Show'}<span className="sr-only"> password</span>
+        <button type="button" className={s.revealButton} onClick={() => setShown((v) => !v)} aria-label="Show password" aria-pressed={shown} aria-controls={id}>
+          {shown ? <IconEyeOff /> : <IconEye />}
         </button>
       </div>
     </div>
@@ -80,7 +80,7 @@ export function PasswordSheet({ open, onClose, onSaved }) {
   return (
     <Sheet open={open} onClose={onClose} title={has ? 'Change password' : 'Set a password'}>
       <form onSubmit={save} noValidate>
-        {!has && <p className={s.small}>Your browser can save it and sign you in next time, on any device.</p>}
+        {!has && <p className={`${s.small} ${s.sheetLead}`}>Your browser can save it and sign you in next time, on any device.</p>}
         <input type="email" name="email" autoComplete="username" value={account?.email ?? ''} readOnly hidden />
         {has && (
           <Reveal id={ids.current} label="Current password" value={current} autoComplete="current-password" autoFocus

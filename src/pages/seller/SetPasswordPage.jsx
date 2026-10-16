@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { AuthLayout } from '@components/layout/seller/AuthLayout';
-import { IconAlert } from '@components/ui/seller/icons';
+import { IconAlert, IconEye, IconEyeOff } from '@components/ui/seller/icons';
 import { useSellerSession } from '@context/SellerSession';
 import { sellerApi } from '@lib/sellerApi';
 import { SELLER_ROUTES } from '@utils/constants';
@@ -96,8 +96,8 @@ export function SetPasswordPage() {
                   disabled={busy || state !== 'ready'}
                   autoFocus
                 />
-                <button type="button" className={styles.reveal} onClick={() => setShown((v) => !v)} aria-pressed={shown} aria-controls={ids.pw}>
-                  {shown ? 'Hide' : 'Show'}<span className="sr-only"> password</span>
+                <button type="button" className={styles.reveal} onClick={() => setShown((v) => !v)} aria-label="Show password" aria-pressed={shown} aria-controls={ids.pw}>
+                  {shown ? <IconEyeOff /> : <IconEye />}
                 </button>
               </div>
             </div>
