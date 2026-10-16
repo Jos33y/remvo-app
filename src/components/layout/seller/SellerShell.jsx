@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
-import { NavLink, useLocation, useOutlet } from 'react-router';
+import { useEffect, useState } from 'react';
+import { Link, NavLink, useLocation, useNavigate, useOutlet } from 'react-router';
 import { Logo } from '@components/ui/shared/Logo';
 import { ToastProvider } from '@components/ui/seller/Toast';
-import { IconHome, IconListings, IconCredits, IconProfile, IconSupport } from '@components/ui/seller/icons';
+import { IconHome, IconListings, IconCredits, IconProfile, IconSignOut, IconSupport } from '@components/ui/seller/icons';
 import { useSupportUnread } from '@hooks/useSupportUnread';
 import { useThemeColor } from '@hooks/useThemeColor';
 import { count } from '@lib/plural';
@@ -29,6 +29,40 @@ import styles from '@styles/layout/seller/seller-shell.module.css';
  * set hideTabs via the route handle, as an iOS pushed or modal screen
  * does, so a phone screen is never short of room for the work.
  * ────────────────────────────────────────────────────────────────── */
+
+/* The account at the foot of the rail: who is signed in, a way to their
+ * profile, and signing out one click away rather than at the bottom of
+ * Profile. Phones keep it in Profile, where the tab bar leads. */
+function RailAccount() {
+  const { account, signOut } = useSellerSession();
+  const navigate = useNavigate();
+  const [leaving, setLeaving] = useState(false);
+  if (!account) return null;
+  const name = account.name || 'Your account';
+  async function leave() {
+    setLeaving(true);
+    await signOut();
+    navigate(SELLER_ROUTES.SIGN_IN, { replace: true });
+  }
+  return (
+    <div className={styles.railFoot}>
+      <Link to={SELLER_ROUTES.PROFILE} className={styles.account} title={account.email}>
+        <span className={styles.accountInitial} aria-hidden="true">{(account.name || account.email).charAt(0).toUpperCase()}</span>
+        <span className={styles.accountText}>
+          <span className={styles.accountName}>{name}</span>
+          <span className={styles.accountEmail}>{account.email}</span>
+        </span>
+      </Link>
+      <button type="button" className={styles.signOut} onClick={leave} disabled={leaving}>
+        <IconSignOut size={18} />
+        {leaving ? 'Signing out…' : 'Sign out'}
+      </button>
+    </div>
+  );
+}
+
+// Screens that use a laptop's width: Home, and a listing (two panes).
+const WIDE = /^\/(?:$|listings\/(?!new$|bulk$)[^/]+$)/;
 
 export const TABS = [
   { to: SELLER_ROUTES.HOME, label: 'Home', Icon: IconHome, end: true },
@@ -101,16 +135,14 @@ export function SellerShell() {
           <nav className={styles.railNav} aria-label="Main">
             {TABS.map((t) => <TabLink key={t.to} {...t} variant="railItem" badge={t.to === SELLER_ROUTES.SUPPORT ? unread : 0} />)}
           </nav>
-          <div className={styles.railFoot}>
-            <span className={styles.railEmail} title={account?.email}>{account?.email}</span>
-          </div>
+          <RailAccount />
         </aside>
 
         <main id="seller-main" className={styles.main}>
           {/* Tabs change at once (motion spec 8): no fade, no wait for the
             * old page to leave. A pushed screen (a listing, a batch) rises
             * in briefly so the eye follows where it came from. */}
-          <div key={location.pathname} className={`${styles.page} ${covered ? styles.pushIn : ''} ${location.pathname === SELLER_ROUTES.HOME ? styles.pageWide : ''}`}>
+          <div key={location.pathname} className={`${styles.page} ${covered ? styles.pushIn : ''} ${WIDE.test(location.pathname) ? styles.pageWide : ''}`}>
             {outlet}
           </div>
         </main>

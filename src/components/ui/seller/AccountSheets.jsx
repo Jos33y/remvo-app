@@ -8,8 +8,8 @@ import s from '@styles/pages/seller/app.module.css';
 /* ──────────────────────────────────────────────────────────────────
  * Account sheets: a password, a name.
  *
- *   PasswordSheet  set a first password (sellers from before 16
- *                  October), or change it (needs the current one).
+ *   PasswordSheet  set a first password (an account without one),
+ *                  or change it (needs the current one).
  *                  Every other device is signed out.
  *   NameSheet      what Remvo calls the seller. Optional; blank clears.
  *

@@ -61,6 +61,8 @@ export const IconExternal = ({ size = 16 }) => (<svg {...base(size)}><path d="M1
 export const IconEdit = ({ size = 20 }) => (<svg {...base(size)}><path d="M14.5 5.5 18.5 9.5M4.5 19.5l1-4.2L15.8 5a1.4 1.4 0 0 1 2 0l1.2 1.2a1.4 1.4 0 0 1 0 2L8.7 18.5z" /></svg>);
 export const IconChat = ({ size = 24 }) => (<svg {...base(size)}><path d="M5 18.5V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2H8.2z" /><path d="M9 10h6M9 13h3.5" /></svg>);
 export const IconSend = ({ size = 20 }) => (<svg {...base(size)}><path d="M12 19V5.5M6.5 11 12 5.5l5.5 5.5" /></svg>);
+export const IconSignOut = ({ size = 20 }) => (<svg {...base(size)}><path d="M10 5H6.5a1.5 1.5 0 0 0-1.5 1.5v11A1.5 1.5 0 0 0 6.5 19H10M14.5 8l4 4-4 4M18.5 12H9.5" /></svg>);
+export const IconStack = ({ size = 20 }) => (<svg {...base(size)}><path d="M12 4 20 8l-8 4-8-4z" /><path d="M4 12l8 4 8-4M4 16l8 4 8-4" /></svg>);
 export const IconGlobe = ({ size = 20 }) => (<svg {...base(size)}><circle cx="12" cy="12" r="8.5" /><path d="M3.5 12h17M12 3.5c2.3 2.4 3.4 5.2 3.4 8.5s-1.1 6.1-3.4 8.5c-2.3-2.4-3.4-5.2-3.4-8.5s1.1-6.1 3.4-8.5z" /></svg>);
 
 /* Show and hide a password: an open eye, and the same eye struck through. */

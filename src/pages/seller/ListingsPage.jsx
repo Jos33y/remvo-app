@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router';
 import { PageHeader } from '@components/ui/seller/PageHeader';
-import { IconChevronRight, IconListings, IconPlus } from '@components/ui/seller/icons';
+import { IconChevronRight, IconListings, IconPlus, IconStack } from '@components/ui/seller/icons';
 import { useSellerData } from '@context/SellerData';
 import { MARKETPLACE } from '@lib/market';
 import { JobRow } from '@pages/seller/SellerHomePage';
@@ -66,12 +66,14 @@ export function ListingsPage() {
       <PageHeader
         title="Listings"
         action={
-          <>
-            <Link to={SELLER_ROUTES.BULK} className={s.textButton}>Bulk</Link>
-            <Link to={SELLER_ROUTES.NEW_LISTING} className={s.iconButton} aria-label="New listing">
-              <IconPlus size={26} />
+          <span className={s.barActions}>
+            <Link to={SELLER_ROUTES.BULK} className={`${s.barPill} ${s.barPillPlum}`}>
+              <IconStack size={18} /><span>Bulk<span className={s.wideOnly}> listing</span></span>
             </Link>
-          </>
+            <Link to={SELLER_ROUTES.NEW_LISTING} className={`${s.barPill} ${s.barPillMain}`} aria-label="New listing">
+              <IconPlus size={20} /><span className={s.wideOnly}>New listing</span>
+            </Link>
+          </span>
         }
       >
         <div className={s.segmented} role="group" aria-label="Show">
@@ -85,8 +87,8 @@ export function ListingsPage() {
           <input
             className={`${s.input} ${s.inputPlain}`}
             type="search"
-            placeholder="Search titles, barcodes and references"
-            aria-label="Search listings"
+            placeholder="Search listings"
+            aria-label="Search listings by title, barcode or reference"
             value={q}
             onChange={(e) => setQ(e.target.value)}
             enterKeyHint="search"
@@ -98,8 +100,8 @@ export function ListingsPage() {
         {batches.length > 0 && (
           <section className={s.section} aria-labelledby="batches-heading">
             <div className={s.groupHead}><h2 id="batches-heading" className={s.groupTitle}>Bulk</h2></div>
-            <div className={s.group}>
-              {batches.map((x) => <BatchRow key={x.id} batch={x} />)}
+            <div className={s.batchCards}>
+              {batches.map((x) => <BatchCard key={x.id} batch={x} />)}
             </div>
           </section>
         )}
@@ -139,22 +141,31 @@ export function ListingsPage() {
   );
 }
 
-function BatchRow({ batch }) {
+/* A bulk run as a card in Bulk's plum: how many, when, and a bar of
+ * what came back (ready, did not work, still to make). */
+function BatchCard({ batch }) {
   const c = batch.counts;
   const done = c.ready + c.failed;
-  const sub = batch.status === 'running'
+  const running = batch.status === 'running';
+  const pct = (n) => `${(n / Math.max(1, batch.total)) * 100}%`;
+  const sub = running
     ? `${done} of ${batch.total} made`
     : `${c.ready} ready${c.failed ? `, ${c.failed} did not work` : ''}`;
   return (
-    <Link to={batchPath(batch.id)} className={s.row}>
-      <span className={s.rowMain}>
-        <span className={s.rowTitle}>{count(batch.total, 'listing')}</span>
-        <span className={s.rowSub}>
-          <span>{when(batch.createdAt)}</span>
-          <span>{sub}</span>
+    <Link to={batchPath(batch.id)} className={s.batchCard}>
+      <span className={s.batchTop}>
+        <span className={s.batchIcon} aria-hidden="true"><IconStack size={20} /></span>
+        <span className={s.rowMain}>
+          <span className={s.batchTitle}>{count(batch.total, 'listing')}</span>
+          <span className={s.batchSub}>{when(batch.createdAt)} <span className={s.mono}>{batch.ref}</span></span>
         </span>
+        <span className={s.chevron}><IconChevronRight /></span>
       </span>
-      <span className={s.chevron}><IconChevronRight /></span>
+      <span className={s.batchBar} aria-hidden="true">
+        <span className={s.batchReady} style={{ width: pct(c.ready) }} />
+        <span className={s.batchFailed} style={{ width: pct(c.failed) }} />
+      </span>
+      <span className={s.batchStatus}>{running && <span className={s.pulse} aria-hidden="true" />}{sub}</span>
     </Link>
   );
 }

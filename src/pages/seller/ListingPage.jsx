@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import { PageHeader } from '@components/ui/seller/PageHeader';
 import { Sheet } from '@components/ui/seller/Sheet';
 import { useToast } from '@components/ui/seller/Toast';
 import { CopyField, EditableField, StatusPill } from '@components/ui/seller/parts';
-import { IconAlert, IconCheck, IconCopy, IconDownload, IconTrash } from '@components/ui/seller/icons';
+import { IconAlert, IconCheck, IconCopy, IconDownload, IconExternal, IconTrash } from '@components/ui/seller/icons';
 import { useSellerData } from '@context/SellerData';
 import { useClipboard } from '@hooks/useClipboard';
 import { barcodeLabel, listingCsv, productName, stepsFor, withEdits } from '@lib/sellerData';
@@ -14,6 +14,7 @@ import { count, plural } from '@lib/plural';
 import { PRICING, SELLER_ROUTES } from '@utils/constants';
 import { Breakable } from '@components/ui/seller/Breakable';
 import s from '@styles/pages/seller/app.module.css';
+import L from '@styles/pages/seller/listing.module.css';
 
 /* ──────────────────────────────────────────────────────────────────
  * A listing, /listings/:id
@@ -68,9 +69,90 @@ function download(job) {
 
 const BRAND = /^(brand|marke|marque|marca)$/i;
 
+/* The product photo's own colour, softly behind it: a tint, never a
+ * theme. Read from a copy of the image; when the image host does not
+ * allow that (no CORS), the tint stays the default lapis. */
+function useTint(src) {
+  const [tint, setTint] = useState(null);
+  useEffect(() => {
+    if (!src) return undefined;
+    let live = true;
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.referrerPolicy = 'no-referrer';
+    img.onload = () => {
+      try {
+        const c = document.createElement('canvas');
+        c.width = 24; c.height = 24;
+        const ctx = c.getContext('2d', { willReadFrequently: true });
+        ctx.drawImage(img, 0, 0, 24, 24);
+        const d = ctx.getImageData(0, 0, 24, 24).data;
+        let r = 0; let g = 0; let b = 0; let n = 0;
+        for (let i = 0; i < d.length; i += 4) {
+          const max = Math.max(d[i], d[i + 1], d[i + 2]);
+          const min = Math.min(d[i], d[i + 1], d[i + 2]);
+          // Skip the white studio background and near-greys: the product's colour is what is left.
+          if (d[i + 3] < 200 || min > 225 || max - min < 18) continue;
+          r += d[i]; g += d[i + 1]; b += d[i + 2]; n += 1;
+        }
+        if (live && n > 12) setTint(`${Math.round(r / n)}, ${Math.round(g / n)}, ${Math.round(b / n)}`);
+      } catch { /* the host does not allow reading it: keep the default */ }
+    };
+    img.src = src;
+    return () => { live = false; };
+  }, [src]);
+  return tint;
+}
+
+/* Where the price sits among live listings on the site: the spread
+ * from lowest to highest, the middle marked, the seller's price as a
+ * gold dot. Said in words too, for screen readers. */
+function PriceRange({ price, value, site }) {
+  const { low, high, median, listings, currency } = price;
+  if (!listings || low == null || high == null) return null;
+  const span = high - low;
+  const at = (x) => (span > 0 ? Math.min(100, Math.max(0, ((x - low) / span) * 100)) : 50);
+  return (
+    <div className={L.range}>
+      <div className={L.rangeTrack} aria-hidden="true">
+        {median != null && <span className={L.rangeMid} style={{ left: `${at(median)}%` }} />}
+        {value != null && <span className={L.rangeYou} style={{ left: `${at(value)}%` }} />}
+      </div>
+      <div className={L.rangeEnds} aria-hidden="true">
+        <span>{listingPrice(low, currency)}</span>
+        <span>{listingPrice(high, currency)}</span>
+      </div>
+      <p className="sr-only">
+        {count(listings, `live ${site} listing`)} range from {listingPrice(low, currency)} to {listingPrice(high, currency)}
+        {median != null ? `, middle ${listingPrice(median, currency)}` : ''}.
+      </p>
+    </div>
+  );
+}
+
+function BigPhoto({ src }) {
+  const [broken, setBroken] = useState(false);
+  if (!src || broken) {
+    return (
+      <span className={`${L.photo} ${L.photoEmpty}`} aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="56" height="56" focusable="false">
+          <path d="M12 3.5l8 4v9l-8 4-8-4v-9z M4 7.5l8 4 8-4M12 11.5v9" fill="none" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round" />
+        </svg>
+      </span>
+    );
+  }
+  return (
+    <span className={L.photo}>
+      <img src={src} alt="" width="200" height="200" decoding="async" referrerPolicy="no-referrer" onError={() => setBroken(true)} />
+    </span>
+  );
+}
+
 export function ListingPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const madeIn = location.state?.madeIn ?? null;
   const toast = useToast();
   const { job: find, fetchJob, deleteJob, editJob, jobsStatus } = useSellerData();
   const { copy } = useClipboard({ resetMs: 1500 });
@@ -80,6 +162,7 @@ export function ListingPage() {
   // Set as a delete starts: the listing leaving the store is not a reason to ask the server for it.
   const deleting = useRef(false);
   const job = find(id);
+  const tint = useTint(job?.source?.image ?? null);
 
   useEffect(() => { document.title = 'Remvo | Listing'; }, []);
 
@@ -140,20 +223,68 @@ export function ListingPage() {
   return (
     <>
       <PageHeader title={job.status === 'failed' ? 'Failed listing' : 'Listing'} back={SELLER_ROUTES.LISTINGS} backLabel="Listings" large={false} />
-      <div className={s.content}>
-        <header className={s.jobHead}>
-          <h2 className={`${s.jobTitle} ${productName(job) ? s.jobTitleClamp : ''}`} title={productName(job) ?? undefined}>
-            {productName(job) ?? <Breakable text={inputLabel(job.input)} />}
+      <div className={`${s.content} ${L.page} ${madeIn != null ? L.fresh : ''}`}>
+        <aside className={L.summary} style={tint ? { '--tint': tint } : undefined} aria-labelledby="listing-heading">
+          <div className={L.stage}>
+            <BigPhoto src={job.source?.image} />
+          </div>
+          <h2 id="listing-heading" className={L.title} title={productName(job) ?? undefined}>
+            {l?.title ?? productName(job) ?? <Breakable text={inputLabel(job.input)} />}
           </h2>
-          <p className={s.jobMeta}>
+          <p className={L.meta}>
             <StatusPill status={job.status} />
-            <span>{when(job.createdAt)}</span>
             <span>{site.site}</span>
-            <span className={s.mono}>{job.ref}</span>
-            <span>{job.credits ? count(job.credits, 'credit') : 'No credits used'}</span>
+            {l && <span>{l.condition}</span>}
+            <span>{when(job.createdAt)}</span>
           </p>
-        </header>
+          {madeIn != null && job.status === 'ready' && <p className={L.madeIn}>Ready in {count(madeIn, 'second')}.</p>}
 
+          {l && (
+            <>
+              <div className={L.priceBlock}>
+                <p className={L.priceLabel}>Price</p>
+                {l.price.value != null
+                  ? <p className={L.priceFigure}>{listingPrice(l.price.value, l.price.currency)}</p>
+                  : <p className={L.priceNone}>Not set</p>}
+                <PriceRange price={o.price} value={l.price.value} site={site.site} />
+                <p className={L.priceNote}>
+                  {o.price.listings
+                    ? `Middle of ${count(o.price.listings, `live ${site.site} listing`)} is ${listingPrice(o.price.median, o.price.currency)}.`
+                    : `No live ${site.site} listings of this product to price from. Set your own below.`}
+                </p>
+              </div>
+
+              <dl className={L.facts}>
+                <div><dt>Category</dt><dd lang={lang}>{l.category ? l.category.path.split(' > ').at(-1) : 'Pick on eBay'}</dd></div>
+                <div><dt>Item specifics</dt><dd>{l.specifics.length ? `${l.specifics.length} filled` : 'None needed'}{needs.length ? `, ${needs.length} to add` : ''}</dd></div>
+                <div><dt>Parcel</dt><dd className={hasParcel(l.parcel) ? s.mono : undefined}>{hasParcel(l.parcel) ? parcel(l.parcel) : 'Measure it'}</dd></div>
+              </dl>
+
+              <div className={L.actions}>
+                <button type="button" className={`${s.button} ${s.primary} ${s.block}`} onClick={async () => { if (await copy(allText(job))) toast('Everything copied'); }}>
+                  <IconCopy size={20} /> Copy everything
+                </button>
+                <button type="button" className={`${s.button} ${s.secondary} ${s.block}`} onClick={() => download(job)}>
+                  <IconDownload size={20} /> Download CSV
+                </button>
+              </div>
+            </>
+          )}
+
+          {job.source?.url && (
+            <p className={L.madeFrom}>
+              <span className={L.madeFromLabel}>Made from</span>
+              <a href={job.source.url} target="_blank" rel="noopener noreferrer" className={L.madeFromLink}>
+                {job.source.title && <span className={L.madeFromTitle}>{job.source.title}</span>}
+                <span className={L.madeFromHost}>View on {job.source.amazon ?? 'the product page'} <IconExternal size={13} /></span>
+                <span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            </p>
+          )}
+          <p className={L.ref}><span className={s.mono}>{job.ref}</span> <span>{job.credits ? count(job.credits, 'credit') : 'No credits used'}</span></p>
+        </aside>
+
+        <div className={L.work}>
         {making && (
           <div className={s.section}>
             <div className={s.card} aria-live="polite">
@@ -185,7 +316,11 @@ export function ListingPage() {
 
         {l && (
           <>
-            <section className={s.section} aria-label="The listing">
+            <section className={L.fieldsSection} aria-labelledby="copy-heading">
+              <div className={s.groupHead}>
+                <h2 id="copy-heading" className={s.groupTitle}>Copy into eBay</h2>
+                <span className={L.headNote}>In the order eBay asks</span>
+              </div>
               <div className={s.group}>
                 <EditableField
                   label="Title"
@@ -288,14 +423,6 @@ export function ListingPage() {
               <p className={s.groupNote}>Check it against your stock before you publish. Kept until {longDate(keptUntil)}.</p>
             </section>
 
-            <div className={`${s.section} ${s.actions} ${s.actionsRow}`}>
-              <button type="button" className={`${s.button} ${s.primary}`} onClick={async () => { if (await copy(allText(job))) toast('Everything copied'); }}>
-                <IconCopy size={20} /> Copy everything
-              </button>
-              <button type="button" className={`${s.button} ${s.secondary}`} onClick={() => download(job)}>
-                <IconDownload size={20} /> Download CSV
-              </button>
-            </div>
           </>
         )}
 
@@ -306,6 +433,7 @@ export function ListingPage() {
               <IconTrash size={20} />
             </button>
           </div>
+        </div>
         </div>
       </div>
 

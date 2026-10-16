@@ -108,9 +108,9 @@ export function SegmentedChoice({ label, options, value, onChange, labelHidden =
   }
 
   return (
-    <div>
+    <div className={s.segmentedWrap}>
       <p id={labelId} className={labelHidden ? 'sr-only' : s.choiceLabel}>{label}</p>
-      <div className={s.segmented} role="radiogroup" aria-labelledby={labelId}>
+      <div className={`${s.segmented} ${options.length > 3 ? s.segmentedMany : ''}`} role="radiogroup" aria-labelledby={labelId}>
         {options.map((o, i) => (
           <button
             key={o.id}
@@ -326,7 +326,7 @@ export function MakeListingForm({ autoFocus = false, hero = false }) {
           autoCorrect="off"
           spellCheck={false}
           enterKeyHint="go"
-          placeholder="Barcode or Amazon link"
+          placeholder="Barcode or product link"
           value={value}
           onChange={(e) => { setValue(e.target.value); if (error) setError(''); }}
           aria-invalid={error ? 'true' : undefined}

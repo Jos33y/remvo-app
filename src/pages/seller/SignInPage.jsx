@@ -45,7 +45,7 @@ const HEAD = {
   'sign-in': ['Welcome back.', 'Sign in to make your listings.'],
   'sign-up': ['Open your seller account.', 'An email and a password. Your first listing is on us.'],
   confirm: ['Check your email.', null],
-  forgot: ['Forgot your password?', 'We will email you a code to choose a new one. Made your account before 16 October? This is how you set your first password.'],
+  forgot: ['Forgot your password?', 'We will email you a code to choose a new one.'],
   reset: ['Choose a new password.', null],
 };
 
@@ -337,10 +337,6 @@ export function SignInPage() {
           {canPasskey && (
             <button type="button" className={styles.secondary} onClick={onPasskey} disabled={busy}>Sign in with a passkey</button>
           )}
-          <p className={styles.small}>
-            Made your account before 16 October? It has no password yet.{' '}
-            <button type="button" onClick={() => go('forgot')}>Set one now</button>.
-          </p>
         </form>
       )}
 

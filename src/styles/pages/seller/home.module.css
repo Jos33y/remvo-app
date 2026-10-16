@@ -323,6 +323,47 @@ a.balanceText:focus-visible {
   box-shadow: inset 0 0 0 1px var(--night-line);
 }
 
+/* Three rows in the shape of real ones: what is coming, not a blank. */
+.ghost {
+  position: relative;
+}
+
+.ghostRow {
+  pointer-events: none;
+}
+
+.ghostRow + .ghostRow::before {
+  left: 72px;
+}
+
+.ghostLine {
+  display: block;
+  width: calc(var(--w) * 100%);
+  height: 10px;
+  border-radius: 5px;
+  background-color: rgba(244, 239, 230, 0.1);
+}
+
+.ghostShort {
+  width: calc(var(--w) * 45%);
+  margin-top: 8px;
+  background-color: rgba(244, 239, 230, 0.06);
+}
+
+.ghost > div:first-child {
+  -webkit-mask-image: linear-gradient(to bottom, #000 40%, transparent);
+  mask-image: linear-gradient(to bottom, #000 40%, transparent);
+}
+
+.ghostNote {
+  margin: -28px 0 0;
+  padding: 0 16px;
+  position: relative;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--ivory-2);
+}
+
 .recentEmpty {
   margin: 0;
   padding: 20px 16px;
@@ -342,5 +383,46 @@ a.balanceText:focus-visible {
 
 @media (prefers-contrast: more) {
   .eyebrow,
-  .recentEmpty { color: var(--ivory-2); }
+  /* Three rows in the shape of real ones: what is coming, not a blank. */
+.ghost {
+  position: relative;
+}
+
+.ghostRow {
+  pointer-events: none;
+}
+
+.ghostRow + .ghostRow::before {
+  left: 72px;
+}
+
+.ghostLine {
+  display: block;
+  width: calc(var(--w) * 100%);
+  height: 10px;
+  border-radius: 5px;
+  background-color: rgba(244, 239, 230, 0.1);
+}
+
+.ghostShort {
+  width: calc(var(--w) * 45%);
+  margin-top: 8px;
+  background-color: rgba(244, 239, 230, 0.06);
+}
+
+.ghost > div:first-child {
+  -webkit-mask-image: linear-gradient(to bottom, #000 40%, transparent);
+  mask-image: linear-gradient(to bottom, #000 40%, transparent);
+}
+
+.ghostNote {
+  margin: -28px 0 0;
+  padding: 0 16px;
+  position: relative;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--ivory-2);
+}
+
+.recentEmpty { color: var(--ivory-2); }
 }

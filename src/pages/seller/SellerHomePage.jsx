@@ -5,9 +5,6 @@ import { MakeListingForm, StatusPill, TopUpSheet } from '@components/ui/seller/p
 import { IconChevronRight } from '@components/ui/seller/icons';
 import { WeekStacks } from '@components/ui/seller/WeekStacks';
 import { useSellerData } from '@context/SellerData';
-import { useSellerSession } from '@context/SellerSession';
-import { PasswordSheet } from '@components/ui/seller/AccountSheets';
-import { useToast } from '@components/ui/seller/Toast';
 import { inputLabel, when } from '@lib/sellerFormat';
 import { withEdits } from '@lib/sellerData';
 import { sellerApi } from '@lib/sellerApi';
@@ -130,8 +127,8 @@ function Week({ finished }) {
     headline = 'A fresh week.';
     sub = <>{count(allTime.ready, 'listing')} made so far. The next one starts with a barcode.</>;
   } else {
-    headline = 'Your first listing is one barcode away.';
-    sub = <>Type or scan it into Make a listing. It is usually back in under 30 seconds.</>;
+    headline = 'Your first listing is 20 seconds away.';
+    sub = <>Paste a barcode or a product link into Make a listing. Title, specifics, parcel and price come back together.</>;
   }
 
   return (
@@ -186,30 +183,29 @@ function BalanceLine({ onTopUp }) {
   );
 }
 
-// ── Sellers from before passwords: asked once a visit ──
+// ── Nothing made yet: the shape of what is coming ──
 
-const LATER_KEY = 'remvo.passwordLater';
-const saidLater = () => { try { return sessionStorage.getItem(LATER_KEY) === '1'; } catch { return false; } };
-
-function PasswordPrompt() {
-  const { account } = useSellerSession();
-  const toast = useToast();
-  const [open, setOpen] = useState(false);
-  const [later, setLater] = useState(saidLater);
-  if (!account || account.hasPassword || later) return null;
-  const notNow = () => { try { sessionStorage.setItem(LATER_KEY, '1'); } catch { /* private mode */ } setLater(true); };
+function GhostRows() {
   return (
-    <>
-      <section className={s.promptCard} aria-labelledby="password-prompt">
-        <h2 id="password-prompt" className={s.promptTitle}>Set a password</h2>
-        <p className={s.promptText}>Remvo now signs you in with a password your browser can save and fill in, on any device. It takes a moment.</p>
-        <div className={s.promptActions}>
-          <button type="button" className={`${s.button} ${s.primary}`} onClick={() => setOpen(true)}>Set a password</button>
-          <button type="button" className={`${s.button} ${s.secondary}`} onClick={notNow}>Not now</button>
-        </div>
-      </section>
-      <PasswordSheet open={open} onClose={() => setOpen(false)} onSaved={toast} />
-    </>
+    <div className={h.ghost}>
+      <div className={s.group} aria-hidden="true">
+        {[0.62, 0.48, 0.55].map((w, i) => (
+          <div key={w} className={`${s.row} ${h.jobRow} ${h.ghostRow}`} style={{ '--w': w, '--i': i }}>
+            <span className={`${h.thumb} ${h.thumbEmpty}`}>
+              <svg viewBox="0 0 24 24" width="22" height="22" focusable="false">
+                <path d="M12 3.5l8 4v9l-8 4-8-4v-9z" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
+                <path d="M4 7.5l8 4 8-4M12 11.5v9" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
+              </svg>
+            </span>
+            <span className={s.rowMain}>
+              <span className={h.ghostLine} />
+              <span className={`${h.ghostLine} ${h.ghostShort}`} />
+            </span>
+          </div>
+        ))}
+      </div>
+      <p className={h.ghostNote}>Each listing lands here with its product photo, newest first.</p>
+    </div>
   );
 }
 
@@ -234,7 +230,6 @@ export function SellerHomePage() {
         <div className={h.actArea}>
           <MakeListingForm hero />
           <BalanceLine onTopUp={() => setTopUp(true)} />
-          <PasswordPrompt />
           <Link to={SELLER_ROUTES.BULK} className={h.stack}>
             <span className={h.stackArt} aria-hidden="true">
               <svg viewBox="0 0 40 40" width="40" height="40" focusable="false">
@@ -262,7 +257,7 @@ export function SellerHomePage() {
               {recent.map((j) => <JobRow key={j.id} job={j} />)}
             </div>
           ) : (
-            <p className={h.recentEmpty}>Your listings will line up here, newest first, each with its product photo.</p>
+            <GhostRows />
           )}
         </section>
       </div>

@@ -1,0 +1,143 @@
+/* ═══════════════════════════════════════
+   MAKING A LISTING
+   The product the seller chose, on white,
+   with the steps under it and a clock.
+   A lapis line across the top fills as
+   the steps finish (scaleX, compositor).
+   ═══════════════════════════════════════ */
+
+.making {
+  position: relative;
+  overflow: hidden;
+  padding: 20px;
+  border-radius: 18px;
+  background:
+    radial-gradient(80% 60% at 0% 0%, rgba(44, 74, 138, 0.18), transparent 70%),
+    var(--app-card);
+  box-shadow: inset 0 0 0 1px var(--night-line);
+}
+
+.bar {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background-color: var(--lapis-ink);
+  transform-origin: left center;
+  transform: scaleX(var(--p, 0));
+  transition: transform 600ms var(--ease-out);
+}
+
+.product {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 18px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--night-line);
+}
+
+.productText {
+  flex: 1;
+  min-width: 0;
+}
+
+.productTitle {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.productMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin: 4px 0 0;
+  font-size: 0.8125rem;
+  color: var(--ivory-3);
+}
+
+.elapsed {
+  flex: none;
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+  color: var(--ivory-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.steps {
+  margin-top: 4px;
+}
+
+/* ── A product photo: white tile, or a parcel ── */
+
+.photo {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: var(--size);
+  height: var(--size);
+  overflow: hidden;
+  border-radius: 12px;
+  background-color: #FFFFFF;
+}
+
+.photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 4px;
+}
+
+.photoEmpty {
+  color: var(--ivory-3);
+  background-color: var(--night-2);
+  box-shadow: inset 0 0 0 1px var(--night-line);
+}
+
+/* ── Which product? Each choice, and a way to check it on Amazon ── */
+
+.matchWrap {
+  position: relative;
+}
+
+.match {
+  width: 100%;
+  padding-bottom: 40px;
+}
+
+.view {
+  position: absolute;
+  left: 96px;
+  bottom: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 4px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--ivory-2);
+  text-decoration: underline;
+  text-decoration-color: var(--night-line-strong);
+  text-underline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .view:hover { color: var(--ivory); text-decoration-color: currentColor; }
+}
+
+.view:focus-visible {
+  outline: none;
+  box-shadow: var(--app-focus);
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar { transition: none; }
+}

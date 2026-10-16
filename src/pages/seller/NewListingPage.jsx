@@ -2,13 +2,15 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { PageHeader } from '@components/ui/seller/PageHeader';
 import { MakeListingForm, TopUpSheet } from '@components/ui/seller/parts';
-import { IconAlert, IconCheck } from '@components/ui/seller/icons';
+import { IconAlert, IconCheck, IconExternal } from '@components/ui/seller/icons';
 import { useSellerData } from '@context/SellerData';
 import { CONDITION, readInput, stepsFor } from '@lib/sellerData';
 import { NotEnoughCredits, PickNeeded } from '@lib/sellerJobs';
 import { inputLabel } from '@lib/sellerFormat';
+import { MARKETPLACE } from '@lib/market';
 import { SELLER_ROUTES, listingPath } from '@utils/constants';
 import s from '@styles/pages/seller/app.module.css';
+import m from '@styles/pages/seller/making.module.css';
 
 /* ──────────────────────────────────────────────────────────────────
  * New listing, /listings/new
@@ -40,6 +42,34 @@ const HEADINGS = {
   short: 'Not enough credits',
 };
 
+/* A product's photo on white, as Amazon shoots them; a parcel when
+ * there is none or it does not load. */
+function ProductPhoto({ src, size }) {
+  const [broken, setBroken] = useState(false);
+  return (
+    <span className={`${m.photo} ${!src || broken ? m.photoEmpty : ''}`} style={{ '--size': `${size}px` }} aria-hidden="true">
+      {src && !broken ? (
+        <img src={src} alt="" width={size} height={size} decoding="async" referrerPolicy="no-referrer" onError={() => setBroken(true)} />
+      ) : (
+        <svg viewBox="0 0 24 24" width={size * 0.4} height={size * 0.4} focusable="false">
+          <path d="M12 3.5l8 4v9l-8 4-8-4v-9z M4 7.5l8 4 8-4M12 11.5v9" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
+        </svg>
+      )}
+    </span>
+  );
+}
+
+/* Seconds since the credits were taken, so the wait is a number, not a guess. */
+function Elapsed({ since }) {
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  const sec = since ? Math.max(0, Math.floor((now - since) / 1000)) : 0;
+  return <span className={m.elapsed} aria-hidden="true">{Math.floor(sec / 60)}:{String(sec % 60).padStart(2, '0')}</span>;
+}
+
 export function NewListingPage() {
   const location = useLocation();
   return <NewListing key={location.key} />;
@@ -62,6 +92,10 @@ function NewListing() {
   // Whether credits were taken and given back, or never taken: the failure screen says which.
   const [returned, setReturned] = useState(false);
   const [topUp, setTopUp] = useState(false);
+  // The product, as soon as it is known: shown while the listing is made.
+  const [product, setProduct] = useState(null);
+  const [amazon, setAmazon] = useState(MARKETPLACE[settings?.marketplace ?? 'US']?.amazon ?? 'amazon.com');
+  const [startedAt, setStartedAt] = useState(0);
   const started = useRef(false);
 
   useEffect(() => { document.title = 'Remvo | New listing'; }, []);
@@ -75,11 +109,16 @@ function NewListing() {
   async function run(read, asin = null) {
     setStage('running');
     setDone(-1);
+    const t0 = Date.now();
+    setStartedAt(t0);
     try {
-      const job = await makeListing({ input: read.value, asin, condition }, (j) => setDone(j.step - 1));
+      const job = await makeListing({ input: read.value, asin, condition }, (j) => {
+        setDone(j.step - 1);
+        if (j.source?.title) setProduct((p) => ({ title: j.source.title, image: j.source.image ?? p?.image ?? null, asin: p?.asin ?? asin }));
+      });
       if (!job) { navigate(SELLER_ROUTES.LISTINGS, { replace: true }); return; }
       if (job.status === 'failed') { fail(job.failure, true); return; }
-      navigate(listingPath(job.id), { replace: true });
+      navigate(listingPath(job.id), { replace: true, state: { madeIn: Math.round((Date.now() - t0) / 1000) } });
     } catch (err) {
       if (err instanceof NotEnoughCredits) { setStage('short'); return; }
       if (err instanceof PickNeeded) { setMatches(err.matches); setPick(err.matches[0]?.asin ?? null); setStage('pick'); return; }
@@ -96,8 +135,10 @@ function NewListing() {
       setInput(read);
       try {
         const found = await lookUp(read.value);
+        if (MARKETPLACE[found.amazon]) setAmazon(MARKETPLACE[found.amazon].amazon);
         if (found.matches) { setMatches(found.matches); setPick(found.matches[0].asin); setStage('pick'); return; }
         setPick(found.product?.asin ?? null);
+        if (found.product) setProduct({ title: found.product.title, image: found.product.image ?? null, asin: found.product.asin });
         run(read, read.kind === 'barcode' ? found.product?.asin : null);
       } catch (err) {
         fail(err.message);
@@ -138,21 +179,24 @@ function NewListing() {
               Amazon lists more than one product for this barcode. Choose the one you sell. Nothing is spent yet.
             </p>
             <div className={s.packs} role="radiogroup" aria-label="Products for this barcode">
-              {matches.map((m) => (
-                <button key={m.asin} type="button" role="radio" aria-checked={pick === m.asin} className={`${s.pack} ${s.match}`} onClick={() => setPick(m.asin)}>
-                  <span className={s.matchImage} aria-hidden="true">
-                    {m.image && <img src={m.image} alt="" width={56} height={56} loading="lazy" decoding="async" referrerPolicy="no-referrer" onError={(e) => { e.currentTarget.hidden = true; }} />}
-                  </span>
-                  <span className={s.packMain}>
-                    <span className={s.matchTitle}>{m.title}</span>
-                    <span className={`${s.small} ${s.mono}`}>{m.asin}</span>
-                  </span>
-                  <span className={s.radio} aria-hidden="true" />
-                </button>
+              {matches.map((x) => (
+                <div key={x.asin} className={m.matchWrap}>
+                  <button type="button" role="radio" aria-checked={pick === x.asin} className={`${s.pack} ${s.match} ${m.match}`} onClick={() => setPick(x.asin)}>
+                    <ProductPhoto src={x.image} size={64} />
+                    <span className={s.packMain}>
+                      <span className={s.matchTitle}>{x.title}</span>
+                      <span className={`${s.small} ${s.mono}`}>{x.asin}</span>
+                    </span>
+                    <span className={s.radio} aria-hidden="true" />
+                  </button>
+                  <a className={m.view} href={`https://www.${amazon}/dp/${x.asin}`} target="_blank" rel="noopener noreferrer">
+                    View on {amazon}<IconExternal size={14} /><span className="sr-only"> (opens in a new tab)</span>
+                  </a>
+                </div>
               ))}
             </div>
             <div className={s.section}>
-              <button type="button" className={`${s.button} ${s.primary} ${s.block}`} onClick={() => run(input, pick)}>
+              <button type="button" className={`${s.button} ${s.primary} ${s.block}`} onClick={() => { const x = matches.find((y) => y.asin === pick); if (x) setProduct({ title: x.title, image: x.image ?? null, asin: x.asin }); run(input, pick); }}>
                 Make listing, {LISTING} credits
               </button>
             </div>
@@ -161,8 +205,20 @@ function NewListing() {
 
         {stage === 'running' && (
           <div className={s.section}>
-            <div className={s.card} aria-live="polite">
-              <ol className={s.steps}>
+            <div className={m.making} aria-live="polite">
+              <span className={m.bar} style={{ '--p': (done + 1) / steps.length }} aria-hidden="true" />
+              <div className={m.product}>
+                <ProductPhoto src={product?.image} size={72} />
+                <div className={m.productText}>
+                  <p className={m.productTitle}>{product?.title ?? 'Finding the product'}</p>
+                  <p className={m.productMeta}>
+                    {product?.asin && <span className={s.mono}>{product.asin}</span>}
+                    <span>{CONDITION[condition].label}</span>
+                  </p>
+                </div>
+                <Elapsed since={startedAt} />
+              </div>
+              <ol className={`${s.steps} ${m.steps}`}>
                 {steps.map((label, i) => {
                   const state = i <= done ? s.stepDone : i === done + 1 ? s.stepNow : '';
                   return (

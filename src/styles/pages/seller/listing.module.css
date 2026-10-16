@@ -1,0 +1,318 @@
+/* ═══════════════════════════════════════
+   A FINISHED LISTING
+   Left: the product on a stage lit in its
+   own colour, the title, the price among
+   live listings, the facts, and the two
+   things a seller does next. Right: every
+   field, in the order eBay asks, ready to
+   copy. Phone: one column, same order.
+   ═══════════════════════════════════════ */
+
+.page {
+  --tint: 44, 74, 138;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 28px;
+  padding-top: 4px;
+}
+
+@media (min-width: 900px) {
+  .page {
+    grid-template-columns: minmax(300px, 380px) minmax(0, 1fr);
+    gap: 48px;
+    align-items: start;
+    padding-top: 24px;
+  }
+
+  .summary {
+    position: sticky;
+    top: 24px;
+  }
+}
+
+/* ── The product, on a stage ── */
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.stage {
+  display: grid;
+  place-items: center;
+  padding: 28px 0 30px;
+  border-radius: 20px;
+  background:
+    radial-gradient(60% 70% at 50% 45%, rgba(var(--tint), 0.42), transparent 72%),
+    linear-gradient(180deg, rgba(var(--tint), 0.12), rgba(var(--tint), 0.02)),
+    var(--night-1);
+  box-shadow: inset 0 0 0 1px var(--night-line);
+  transition: background 600ms ease;
+}
+
+.photo {
+  display: grid;
+  place-items: center;
+  width: 168px;
+  height: 168px;
+  overflow: hidden;
+  border-radius: 18px;
+  background-color: #FFFFFF;
+  box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 10px;
+}
+
+.photoEmpty {
+  color: var(--ivory-3);
+  background-color: var(--night-2);
+  box-shadow: inset 0 0 0 1px var(--night-line);
+}
+
+.title {
+  margin: 20px 0 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--ivory);
+  overflow-wrap: anywhere;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  margin: 10px 0 0;
+  font-size: 0.875rem;
+  color: var(--ivory-2);
+}
+
+.madeIn {
+  margin: 10px 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--verdigris-ink);
+}
+
+/* ── The price: gold, the one place money shows ── */
+
+.priceBlock {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--night-line);
+}
+
+.priceLabel {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--ivory-3);
+}
+
+.priceFigure {
+  margin: 2px 0 0;
+  font-family: var(--font-serif);
+  font-size: 3rem;
+  line-height: 1.05;
+  color: var(--gold);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.priceNone {
+  margin: 4px 0 0;
+  font-size: 1.25rem;
+  color: var(--ivory-2);
+}
+
+.range {
+  margin-top: 14px;
+}
+
+.rangeTrack {
+  position: relative;
+  height: 6px;
+  margin: 0 6px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, rgba(244, 239, 230, 0.12), rgba(244, 239, 230, 0.26), rgba(244, 239, 230, 0.12));
+}
+
+.rangeMid {
+  position: absolute;
+  top: -5px;
+  width: 2px;
+  height: 16px;
+  margin-left: -1px;
+  border-radius: 1px;
+  background-color: var(--ivory-2);
+}
+
+.rangeYou {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  background-color: var(--gold);
+  box-shadow: 0 0 0 3px var(--night-0);
+}
+
+.rangeEnds {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ivory-3);
+}
+
+.priceNote {
+  margin: 8px 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--ivory-2);
+}
+
+/* ── The facts ── */
+
+.facts {
+  display: grid;
+  gap: 0;
+  margin: 18px 0 0;
+  border-top: 1px solid var(--night-line);
+}
+
+.facts > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--night-line);
+  font-size: 0.875rem;
+}
+
+.facts dt {
+  flex: none;
+  color: var(--ivory-3);
+}
+
+.facts dd {
+  margin: 0;
+  min-width: 0;
+  text-align: right;
+  color: var(--ivory);
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* ── Made from: the product page, for the seller's eyes only ── */
+
+.madeFrom {
+  margin: 20px 0 0;
+}
+
+.madeFromLabel {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.8125rem;
+  color: var(--ivory-3);
+}
+
+.madeFromLink {
+  display: grid;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  color: inherit;
+  text-decoration: none;
+  background-color: var(--night-1);
+  box-shadow: inset 0 0 0 1px var(--night-line);
+  transition: box-shadow 150ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .madeFromLink:hover { box-shadow: inset 0 0 0 1px var(--night-line-strong); }
+}
+
+.madeFromLink:focus-visible {
+  outline: 2px solid var(--ivory);
+  outline-offset: 2px;
+}
+
+.madeFromTitle {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--ivory-2);
+}
+
+.madeFromHost {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--ivory);
+}
+
+.ref {
+  display: flex;
+  gap: 12px;
+  margin: 14px 0 0;
+  font-size: 0.75rem;
+  color: var(--ivory-3);
+}
+
+/* ── The fields ── */
+
+.work {
+  min-width: 0;
+}
+
+.fieldsSection {
+  margin-top: 0;
+}
+
+.headNote {
+  font-size: 0.8125rem;
+  color: var(--ivory-3);
+}
+
+/* ── Just made: the summary arrives in three beats ── */
+
+.fresh .stage,
+.fresh .title,
+.fresh .priceBlock {
+  animation: arrive 520ms var(--ease-out) both;
+}
+
+.fresh .title { animation-delay: 90ms; }
+.fresh .priceBlock { animation-delay: 180ms; }
+
+@keyframes arrive {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fresh .stage,
+  .fresh .title,
+  .fresh .priceBlock { animation: none; }
+  .stage { transition: none; }
+}

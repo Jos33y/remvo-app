@@ -211,22 +211,93 @@
     box-shadow: var(--app-focus);
   }
 
+  /* The account, at the foot: a card with who is signed in, then
+   * Sign out, quiet until it is wanted. */
   .railFoot {
     margin-top: auto;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    padding: 0 12px;
+    gap: 4px;
+    padding-top: 16px;
+    border-top: 1px solid var(--app-sep);
   }
 
-  .railEmail {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--app-text-3);
+  .account {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 56px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    color: inherit;
+    text-decoration: none;
+    transition: background-color 150ms ease;
+  }
+
+  .accountInitial {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--app-text);
+    background-color: var(--night-2);
+    box-shadow: inset 0 0 0 1px var(--night-line-strong);
+  }
+
+  .accountText {
+    min-width: 0;
+    display: grid;
+    gap: 1px;
+  }
+
+  .accountName,
+  .accountEmail {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
+  .accountName {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--app-text);
+  }
+
+  .accountEmail {
+    font-size: 0.8125rem;
+    color: var(--app-text-3);
+  }
+
+  .signOut {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    padding: 0 18px;
+    border-radius: 10px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--app-text-2);
+    background: none;
+    transition: background-color 150ms ease, color 150ms ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .account:hover { background-color: var(--app-fill); }
+    .signOut:hover:not(:disabled) { color: var(--app-text); background-color: var(--app-fill); }
+  }
+
+  .account:focus-visible,
+  .signOut:focus-visible {
+    outline: none;
+    box-shadow: var(--app-focus);
+  }
+
+  .signOut:disabled { opacity: 0.6; }
 
   .main {
     margin-left: var(--rail-w);

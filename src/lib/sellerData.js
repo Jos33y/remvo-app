@@ -19,6 +19,7 @@ export const CONDITIONS = Object.freeze([
   { id: 'new', label: 'New', hint: 'Sealed, never used' },
   { id: 'new_other', label: 'New other', hint: 'Open box, unused' },
   { id: 'used', label: 'Used', hint: 'Has been used' },
+  { id: 'for_parts', label: 'For parts', hint: 'Not working, or sold for spares. Listed as "For parts or not working"' },
 ]);
 export const CONDITION = Object.freeze(Object.fromEntries(CONDITIONS.map((c) => [c.id, c])));
 
