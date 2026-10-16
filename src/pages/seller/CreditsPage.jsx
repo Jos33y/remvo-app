@@ -1,15 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { PageHeader } from '@components/ui/seller/PageHeader';
-import { BalanceCard, TopUpSheet } from '@components/ui/seller/parts';
+import { BonusTag, SegmentedChoice, TopUpSheet, perListing, useOffers } from '@components/ui/seller/parts';
 import { IconAlert, IconCheck, IconChevronRight } from '@components/ui/seller/icons';
 import { useToast } from '@components/ui/seller/Toast';
 import { useSellerData } from '@context/SellerData';
-import { signed, when } from '@lib/sellerFormat';
-import { count } from '@lib/plural';
-import { money } from '@lib/market';
-import { PRICING, listingPath, siteUrl } from '@utils/constants';
+import { longDate, signed, when } from '@lib/sellerFormat';
+import { count, num, plural } from '@lib/plural';
+import { CURRENCIES, money } from '@lib/market';
+import { PRICING, listingPath, listingsFor, siteUrl } from '@utils/constants';
 import s from '@styles/pages/seller/app.module.css';
+import c from '@styles/pages/seller/credits.module.css';
 
 /* ──────────────────────────────────────────────────────────────────
  * Credits
@@ -84,6 +85,137 @@ function TopUpReturn({ checkoutId, onDone }) {
   );
 }
 
+/* What the balance can do, said first in listings: the unit a seller
+ * thinks in. Credits, their worth (gold: money) and their date follow. */
+function Balance() {
+  const { summary, walletStatus, refreshWallet, listingCredits } = useSellerData();
+  if (!summary) {
+    const failed = walletStatus === 'error';
+    return (
+      <section className={c.balance} aria-label="Balance" aria-busy={!failed}>
+        <p className={c.eyebrow}>Balance</p>
+        <p className={c.pending} role={failed ? 'alert' : 'status'}>{failed ? 'Your balance did not load.' : 'Getting your balance.'}</p>
+        {failed && <button type="button" className={`${s.button} ${s.secondary}`} onClick={refreshWallet}>Try again</button>}
+      </section>
+    );
+  }
+  const { balance, worth, currency, listingsLeft, expiresAt, welcome } = summary;
+  const onlyWelcome = welcome && welcome.credits === balance;
+  const pct = Math.min(1, listingsLeft / 100);
+  return (
+    <section className={c.balance} aria-labelledby="balance-heading">
+      <p className={c.eyebrow}>Balance</p>
+      <h2 id="balance-heading" className={c.figure}>
+        <span className={c.figureNum}>{num(listingsLeft)}</span> {plural(listingsLeft, 'listing')} left
+      </h2>
+      <div className={c.gauge} aria-hidden="true"><span style={{ '--p': pct }} /></div>
+      <dl className={c.facts}>
+        <div><dt>Credits</dt><dd className={s.mono}>{num(balance)}</dd></div>
+        <div><dt>Worth</dt><dd className={c.money}>{onlyWelcome ? 'Free' : money(worth, currency)}</dd></div>
+        <div><dt>{onlyWelcome ? 'Welcome credits last until' : 'Last until'}</dt><dd>{onlyWelcome ? longDate(welcome.expiresAt) : expiresAt ? longDate(expiresAt) : 'No date yet'}</dd></div>
+      </dl>
+      <p className={c.note}>
+        {onlyWelcome
+          ? 'Your first listing is on us. The packs below are for the rest.'
+          : `${listingCredits} credits make a listing.${welcome ? ` Includes ${count(welcome.credits, 'welcome credit')}, until ${longDate(welcome.expiresAt)}.` : ''}`}
+      </p>
+    </section>
+  );
+}
+
+/* The seller's own pace, from the last 7 days: which pack lasts them a
+ * month or more, said in weeks. Honest, theirs, and only when there is
+ * a pace to go by. */
+function usePace(offers) {
+  const { jobs, listingCredits } = useSellerData();
+  return useMemo(() => {
+    const week = Date.now() - 7 * 86_400_000;
+    const made = jobs.filter((j) => j.status === 'ready' && Date.parse(j.createdAt) >= week).length;
+    if (made < 2 || !offers.length) return null;
+    const perWeek = made * listingCredits;
+    const fit = offers.find((o) => o.total / perWeek >= 4) ?? offers.at(-1);
+    return { made, fit, weeks: Math.floor(fit.total / perWeek) };
+  }, [jobs, listingCredits, offers]);
+}
+
+/* The packs, on the page itself: a tap opens Polar's checkout. */
+function Packs({ onOther }) {
+  const { topUp, settings, updateSettings, topUpsEnabled, summary, listingCredits } = useSellerData();
+  const { offers, peak } = useOffers();
+  const pace = usePace(offers);
+  const currency = settings?.currency ?? 'USD';
+  const [busy, setBusy] = useState(null);
+  const [failure, setFailure] = useState('');
+  const ready = Boolean(summary) && topUpsEnabled;
+
+  async function buy(credits) {
+    setBusy(credits); setFailure('');
+    try { await topUp({ credits }); } catch (err) { setFailure(err.message); setBusy(null); }
+  }
+
+  return (
+    <section className={s.section} aria-labelledby="packs-heading">
+      <div className={c.packsHead}>
+        <h2 id="packs-heading" className={s.groupTitle}>Top up</h2>
+        <div className={c.currency}>
+          <SegmentedChoice
+            label="Pay in"
+            labelHidden
+            options={CURRENCIES.map((x) => ({ id: x.id, label: `${x.symbol} ${x.id}` }))}
+            value={currency}
+            onChange={(id) => { setFailure(''); updateSettings({ currency: id }).catch((err) => setFailure(err.message)); }}
+          />
+        </div>
+      </div>
+      {peak && (
+        <p className={s.peakNote}>
+          <strong>Peak bonus:</strong> {peak.percent}% extra credits on top-ups of {money(PRICING.PACKS.find((p) => p.credits === peak.minCredits)?.price[currency] ?? 20, currency)} or more, until {PRICING.PEAK.lastDay}.
+        </p>
+      )}
+      {pace && (
+        <p className={c.pace}>
+          You made {count(pace.made, 'listing')} in the last 7 days. The {money(pace.fit.pack.price[currency], currency)} pack lasts about {count(pace.weeks, 'week')} at that pace.
+        </p>
+      )}
+      {summary && !topUpsEnabled && <p className={s.notice} role="status">Top-ups open soon. Nothing can be bought just yet.</p>}
+      {failure && <p className={`${s.notice} ${s.noticeDanger}`} role="alert"><IconAlert size={20} /><span>{failure}</span></p>}
+      <ul className={c.packs} role="list">
+        {offers.map((o) => {
+          const price = o.pack.price[currency];
+          const fits = pace?.fit.credits === o.credits;
+          return (
+            <li key={o.credits}>
+              <button type="button" className={`${c.pack} ${o.volumeBonus || o.peakBonus ? c.packBonus : ''} ${fits ? c.packFits : ''}`} onClick={() => buy(o.credits)} disabled={!ready || busy !== null}
+                aria-label={`Top up ${money(price, currency)}: ${count(o.total, 'credit')}, about ${count(listingsFor(o.total), 'listing')}, ${perListing(price, o.total, listingCredits, currency)} a listing. Opens Polar's secure checkout.`}>
+                <span className={c.packTop}>
+                  <span className={c.packPrice}>{money(price, currency)}</span>
+                  {fits && <span className={c.fitsTag}>Fits your pace</span>}
+                </span>
+                <span className={c.packCredits}>{count(o.total, 'credit')}</span>
+                <BonusTag offer={o} />
+                <span className={c.packEach}>{perListing(price, o.total, listingCredits, currency)} each</span>
+                <span className={c.packListings}>
+                  {busy === o.credits ? 'Opening checkout…' : `About ${count(listingsFor(o.total), 'listing')}`}
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+      <ul className={c.assure} role="list">
+        <li><IconCheck size={16} /> No subscription. You pay only when you top up.</li>
+        <li><IconCheck size={16} /> Unused credits refunded in full within {PRICING.REFUND_DAYS} days.</li>
+        <li><IconCheck size={16} /> Credits last {PRICING.EXPIRY_MONTHS} months, and every top-up extends them.</li>
+        <li><IconCheck size={16} /> A tile opens Polar&apos;s secure checkout. You see the total, with any tax, before you pay.</li>
+      </ul>
+      <p className={s.groupNote}>
+        <button type="button" className={c.other} onClick={onOther}>Another amount</button>{' '}
+        from {money(PRICING.CUSTOM.min[currency], currency)}, at the same price per credit.
+      </p>
+    </section>
+  );
+}
+
 function groupByMonth(rows) {
   const out = [];
   for (const r of rows) {
@@ -101,6 +233,7 @@ export function CreditsPage() {
   const currency = settings?.currency ?? 'USD';
   const [params, setParams] = useSearchParams();
   const [topUp, setTopUp] = useState(params.get('topup') === '1');
+  const [start, setStart] = useState(null);
   const checkoutId = params.get('checkout_id');
   const clearReturn = () => { params.delete('checkout_id'); setParams(params, { replace: true, preventScrollReset: true }); };
   const months = useMemo(() => groupByMonth(history), [history]);
@@ -119,8 +252,10 @@ export function CreditsPage() {
         {checkoutId && <TopUpReturn key={checkoutId} checkoutId={checkoutId} onDone={clearReturn} />}
 
         <div className={s.section}>
-          <BalanceCard onTopUp={() => setTopUp(true)} />
+          <Balance />
         </div>
+
+        <Packs onOther={() => { setStart('other'); setTopUp(true); }} />
 
         <section className={s.section} aria-labelledby="how-heading">
           <div className={s.groupHead}><h2 id="how-heading" className={s.groupTitle}>How credits work</h2></div>
@@ -142,7 +277,7 @@ export function CreditsPage() {
               <span className={s.chevron}><IconChevronRight /></span>
             </a>
           </div>
-          <p className={s.groupNote}>Every top-up extends all the credits you have bought. Welcome credits last {PRICING.WELCOME.days} days. A listing that fails gives its credits back on its own.</p>
+          <p className={s.groupNote}>Every top-up extends all the credits you have bought, bonus credits included. Welcome credits last {PRICING.WELCOME.days} days. A listing that fails gives its credits back on its own.</p>
         </section>
 
         <section className={s.section} aria-labelledby="history-heading">
@@ -158,7 +293,7 @@ export function CreditsPage() {
                         <span className={s.rowTitle}>{r.label}</span>
                         <span className={s.rowSub}>{when(r.at)}</span>
                       </span>
-                      <span className={`${s.rowValue} ${s.rowValueMono} ${r.credits > 0 ? s.plus : ''}`}>
+                      <span className={`${s.rowValue} ${s.rowValueMono} ${r.credits > 0 ? s.plus : ''} ${r.kind === 'bonus' ? c.bonusValue : ''}`}>
                         {signed(r.credits)}
                       </span>
                     </>
@@ -172,7 +307,7 @@ export function CreditsPage() {
           ))}
         </section>
       </div>
-      <TopUpSheet open={topUp} onClose={closeTopUp} />
+      <TopUpSheet open={topUp} onClose={closeTopUp} start={start} />
     </>
   );
 }

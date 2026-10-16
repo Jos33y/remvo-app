@@ -30,6 +30,8 @@ export function CreditsPage() {
         <p>1.4. Credits have no cash value. They cannot be withdrawn, exchanged for money, or moved to another account.</p>
         <p>1.5. Every new account starts with {PRICING.WELCOME.credits} welcome credits, enough for one listing. They are free.</p>
         <p>1.6. Welcome credits are given once per account, and once a day per internet connection. An account made from a connection that has already had them that day starts without them.</p>
+        <p>1.7. Some top-ups add bonus credits: {PRICING.PACKS.filter((p) => p.bonus).map((p) => `${p.bonus} with the ${p.credits.toLocaleString('en-GB')}-credit top-up`).join(' and ')}. From 20 November to {PRICING.PEAK.lastDay} 2026, top-ups of {PRICING.PEAK.minCredits} credits or more also add {PRICING.PEAK.percent}% of the credits bought. Bonus credits are added with the top-up, last as long as it does, and have no cash value.</p>
+        <p>1.8. If a top-up is refunded, its bonus credits are taken back in the same proportion as the money returned.</p>
       </Clause>
 
       <Clause id="use" heading="2. What a job uses">

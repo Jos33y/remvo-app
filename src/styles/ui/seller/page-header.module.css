@@ -91,8 +91,18 @@
 }
 
 /* What sits under a large title (filters, a search, a line of facts) keeps clear of it. */
-.large > .largeTitle + * {
+.large > .largeTitle + *,
+.large > .titleRow + * {
   margin-top: 14px;
+}
+
+/* The title with the page's main actions beside it (wide screens). */
+.titleRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 16px;
 }
 
 .largeTitle {

@@ -12,10 +12,10 @@ import styles from '@styles/ui/marketing/pack-grid.module.css';
  * pricing page so the two can never disagree. Prices follow the
  * visitor's currency, with the switch above them.
  *
- * A credit costs the same in every pack, so no pack is called better
- * value. The middle pack carries the accent because the payment fee
- * on the smallest is nearly double; the card says what it buys, not
- * that it is popular.
+ * A credit costs the same in every pack; the two bigger packs add
+ * bonus credits, said on the card as a plain number. The $20 pack
+ * carries the accent because the payment fee on the smallest is
+ * nearly double; the card says what it buys, not that it is popular.
  */
 export function PackGrid({ headingLevel = 3 }) {
   const H = `h${headingLevel}`;
@@ -45,9 +45,12 @@ export function PackGrid({ headingLevel = 3 }) {
                 <span className={styles.currency}>{symbol}</span>{price}
                 <span className="sr-only"> top-up</span>
               </H>
-              <p className={styles.credits}>{p.credits} credits</p>
+              <p className={styles.credits}>
+                {(p.credits + p.bonus).toLocaleString('en-GB')} credits
+                {p.bonus > 0 && <span className={styles.bonus}>{p.credits.toLocaleString('en-GB')} + {p.bonus} bonus</span>}
+              </p>
               <p className={styles.covers}>
-                About {listingsFor(p.credits)} listings
+                About {listingsFor(p.credits + p.bonus)} listings
                 <span className={styles.coversNote}> at {listing.credits} credits each</span>
               </p>
               <Button

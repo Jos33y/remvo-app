@@ -1,13 +1,12 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { Sheet } from '@components/ui/seller/Sheet';
 import { useToast } from '@components/ui/seller/Toast';
-import { IconAlert, IconBarcode, IconCheck, IconCopy, IconEdit, IconLink, IconPlus } from '@components/ui/seller/icons';
+import { IconAlert, IconBarcode, IconCheck, IconCopy, IconEdit, IconLink } from '@components/ui/seller/icons';
 import { useSellerData } from '@context/SellerData';
 import { useClipboard } from '@hooks/useClipboard';
 import { CONDITION, CONDITIONS, readInput } from '@lib/sellerData';
-import { longDate } from '@lib/sellerFormat';
-import { count, num, plural } from '@lib/plural';
+import { count, num } from '@lib/plural';
 import { CURRENCIES, MARKETPLACE, money } from '@lib/market';
 import { PRICING, SELLER_ROUTES, creditsFor, listingsFor } from '@utils/constants';
 import s from '@styles/pages/seller/app.module.css';
@@ -26,67 +25,6 @@ export function StatusPill({ status }) {
   if (status === 'failed') return <span className={`${s.pill} ${s.pillFailed}`}>Failed, credits back</span>;
   if (status === 'queued') return <span className={`${s.pill} ${s.pillRunning}`}>Waiting</span>;
   return <span className={`${s.pill} ${s.pillRunning}`}>Working</span>;
-}
-
-// ══════════════════════════════════════════════════════════════════
-//  Balance card
-// ══════════════════════════════════════════════════════════════════
-
-export function BalanceCard({ onTopUp, compact = false }) {
-  const { summary, walletStatus, refreshWallet } = useSellerData();
-
-  // Loading says so in words, in the card's own shape, so nothing jumps
-  // when the figure arrives. A failure says what to do.
-  if (!summary) {
-    const failed = walletStatus === 'error';
-    return (
-      <section className={s.balance} aria-label="Balance" aria-busy={!failed}>
-        <p className={s.balanceLabel}>Balance</p>
-        <p className={s.balanceFigure}>
-          <span className={`${s.balanceNumber} ${s.balancePending}`} aria-hidden="true">{failed ? '–' : '···'}</span>
-        </p>
-        <p className={s.balanceMeta} role={failed ? 'alert' : 'status'}>
-          {failed ? 'Your balance did not load.' : 'Getting your balance.'}
-        </p>
-        {failed && (
-          <div className={s.balanceActions}>
-            <button type="button" className={`${s.button} ${s.onCard} ${s.onCardGhost}`} onClick={refreshWallet}>Try again</button>
-          </div>
-        )}
-      </section>
-    );
-  }
-  const { balance, worth, currency, listingsLeft, expiresAt, welcome } = summary;
-  const onlyWelcome = welcome && welcome.credits === balance;
-
-  return (
-    <section className={s.balance} aria-label="Balance">
-      <p className={s.balanceLabel}>Balance</p>
-      <p className={s.balanceFigure}>
-        <span className={s.balanceNumber}>{num(balance)}</span>
-        <span className={s.balanceUnit}>{plural(balance, 'credit')}</span>
-      </p>
-      {onlyWelcome ? (
-        <p className={s.balanceMeta}>
-          <strong>Your first listing is on us.</strong>
-          {!compact && <><br />{plural(welcome.credits, 'This', 'These')} {count(welcome.credits, 'credit')} {plural(welcome.credits, 'lasts', 'last')} until {longDate(welcome.expiresAt)}.</>}
-        </p>
-      ) : (
-        <p className={s.balanceMeta}>
-          Worth {money(worth, currency)}. Enough for <strong>{count(listingsLeft, 'listing')}</strong>.
-          {expiresAt && !compact && <><br />Lasts until {longDate(expiresAt)}.</>}
-          {welcome && !compact && <><br />Includes {count(welcome.credits, 'welcome credit')}, until {longDate(welcome.expiresAt)}.</>}
-        </p>
-      )}
-      {onTopUp && (
-        <div className={s.balanceActions}>
-          <button type="button" className={`${s.button} ${s.primary} ${s.onCard}`} onClick={onTopUp}>
-            <IconPlus size={18} /> Top up
-          </button>
-        </div>
-      )}
-    </section>
-  );
 }
 
 // ══════════════════════════════════════════════════════════════════
@@ -141,10 +79,50 @@ export function SegmentedChoice({ label, options, value, onChange, labelHidden =
 
 const OTHER = 'other';
 
-export function TopUpSheet({ open, onClose }) {
+/**
+ * The packs on sale, with what each adds. From the API when it has read
+ * Polar (so a pack not set up there is never shown), otherwise from
+ * PRICING. Prices always from PRICING: the API sells by pack, Polar
+ * charges the pack's price.
+ */
+export function useOffers() {
+  const { packs, peak } = useSellerData();
+  return useMemo(() => {
+    const list = packs ?? PRICING.PACKS.map((p) => ({ credits: p.credits, volumeBonus: p.bonus, peakBonus: 0, total: p.credits + p.bonus }));
+    return {
+      peak,
+      offers: list
+        .map((o) => ({ ...o, pack: PRICING.PACKS.find((p) => p.credits === o.credits) }))
+        .filter((o) => o.pack),
+    };
+  }, [packs, peak]);
+}
+
+/** What a pack adds on top, as one tag: "+50 bonus" (green), or in the
+ * peak "+350 extra" (plum; the peak note says why). One tag, so the
+ * tiles never read like a sale rack. */
+export function BonusTag({ offer }) {
+  const extra = (offer.volumeBonus ?? 0) + (offer.peakBonus ?? 0);
+  if (!extra) return null;
+  const peak = offer.peakBonus > 0;
+  return (
+    <span className={s.bonusTag}>
+      <span className={peak ? s.bonusPeak : undefined}>+{num(extra)} {peak ? 'extra' : 'bonus'}</span>
+    </span>
+  );
+}
+
+/** What one listing costs in a pack, bonus included: "$0.27". */
+export function perListing(price, total, listingCredits, currency) {
+  return money(Math.round(((price * listingCredits) / total) * 100) / 100, currency);
+}
+
+export function TopUpSheet({ open, onClose, start = null }) {
   const { topUp, settings, updateSettings, topUpsEnabled, summary } = useSellerData();
+  const { offers, peak } = useOffers();
   const currency = settings?.currency ?? 'USD';
-  const [chosen, setChosen] = useState(PRICING.PACKS.find((p) => p.featured)?.credits ?? PRICING.PACKS[0].credits);
+  const [chosen, setChosen] = useState(start ?? PRICING.PACKS.find((p) => p.featured)?.credits ?? PRICING.PACKS[0].credits);
+  useEffect(() => { if (open && start) setChosen(start); }, [open, start]);
   const [amount, setAmount] = useState('');
   const [error, setError] = useState('');
   const [failure, setFailure] = useState('');
@@ -154,7 +132,7 @@ export function TopUpSheet({ open, onClose }) {
 
   const min = PRICING.CUSTOM.min[currency];
   const max = PRICING.CUSTOM.max[currency];
-  const pack = PRICING.PACKS.find((p) => p.credits === chosen);
+  const pack = PRICING.PACKS.find((p) => p.credits === chosen) ?? PRICING.PACKS[0];
   const whole = /^\d+$/.test(amount.trim()) ? Number(amount.trim()) : null;
   const otherCredits = whole ? creditsFor(whole, currency) : 0;
   const ready = Boolean(summary) && topUpsEnabled;
@@ -195,9 +173,7 @@ export function TopUpSheet({ open, onClose }) {
           <button type="button" className={`${s.button} ${s.primary} ${s.block}`} onClick={pay} disabled={busy || !ready}>
             {busy ? 'Opening checkout…' : payLabel}
           </button>
-          <p className={`${s.small} ${s.centred}`}>
-            Payment by Polar, our merchant of record. Any tax is shown before you pay.
-          </p>
+          <p className={`${s.small} ${s.centred}`}>Checkout by Polar. Any tax is added before you pay.</p>
         </>
       }
     >
@@ -215,22 +191,27 @@ export function TopUpSheet({ open, onClose }) {
         onChange={(id) => { setError(''); setFailure(''); updateSettings({ currency: id }).catch((err) => setFailure(err.message)); }}
       />
 
+      {peak && (
+        <p className={`${s.peakNote} ${s.after}`}>
+          <strong>Peak bonus:</strong> {peak.percent}% extra credits on top-ups of {money(PRICING.PACKS.find((p) => p.credits === peak.minCredits)?.price[currency] ?? 20, currency)} or more, until {PRICING.PEAK.lastDay}.
+        </p>
+      )}
       <div className={`${s.packs} ${s.after}`} role="radiogroup" aria-label="Choose a top-up">
-        {PRICING.PACKS.map((p) => (
+        {offers.map((o) => (
           <button
-            key={p.credits}
+            key={o.credits}
             type="button"
             role="radio"
-            aria-checked={chosen === p.credits}
+            aria-checked={chosen === o.credits}
             className={s.pack}
-            onClick={() => { setChosen(p.credits); setError(''); }}
-            data-autofocus={chosen === p.credits ? '' : undefined}
+            onClick={() => { setChosen(o.credits); setError(''); }}
+            data-autofocus={chosen === o.credits ? '' : undefined}
           >
-            <span className={s.packPrice}>{money(p.price[currency], currency)}</span>
+            <span className={s.packPrice}>{money(o.pack.price[currency], currency)}</span>
             <span className={s.packMain}>
-              <span className={s.packCredits}>{count(p.credits, 'credit')}</span>
-              <br />
-              <span className={s.packSub}>About {count(listingsFor(p.credits), 'listing')}</span>
+              <span className={s.packCredits}>{count(o.total, 'credit')}</span>
+              <BonusTag offer={o} />
+              <span className={s.packSub}>About {count(listingsFor(o.total), 'listing')}</span>
             </span>
             <span className={s.radio} aria-hidden="true" />
           </button>
@@ -275,7 +256,7 @@ export function TopUpSheet({ open, onClose }) {
           </div>
           {error
             ? <p id={amountErr} className={s.fieldError} role="alert"><IconAlert size={16} />{error}</p>
-            : <p className={s.hint} aria-live="polite">{whole ? `${count(otherCredits, 'credit')}, about ${count(listingsFor(otherCredits), 'listing')}` : `${money(PRICING.CREDIT[currency], currency)} a credit`}</p>}
+            : <p className={s.hint} aria-live="polite">{whole ? `${count(otherCredits, 'credit')}${peak && otherCredits >= peak.minCredits ? `, plus ${num(Math.floor((otherCredits * peak.percent) / 100))} peak bonus` : ''}, about ${count(listingsFor(otherCredits + (peak && otherCredits >= peak.minCredits ? Math.floor((otherCredits * peak.percent) / 100) : 0)), 'listing')}` : `${money(PRICING.CREDIT[currency], currency)} a credit`}</p>}
         </div>
       )}
 

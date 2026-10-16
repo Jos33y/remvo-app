@@ -1,0 +1,287 @@
+/* ═══════════════════════════════════════
+   CREDITS
+   The balance said in listings, in serif;
+   a gauge of how far it goes (a hundred
+   listings fills it); credits, their worth
+   in gold, their date. Then the packs as
+   four tiles that go straight to checkout,
+   then the history.
+   ═══════════════════════════════════════ */
+
+.balance {
+  display: grid;
+  gap: 0;
+  padding: 22px 20px 20px;
+  border-radius: 18px;
+  background:
+    radial-gradient(70% 90% at 100% 0%, rgba(201, 168, 76, 0.08), transparent 70%),
+    var(--app-card);
+  box-shadow: inset 0 0 0 1px var(--night-line);
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ivory-3);
+}
+
+.pending {
+  margin: 12px 0 14px;
+  font-size: 1.125rem;
+  color: var(--ivory-2);
+}
+
+.figure {
+  margin: 10px 0 0;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(2rem, 7vw, 2.75rem);
+  line-height: 1.05;
+  color: var(--ivory);
+}
+
+.figureNum {
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.gauge {
+  height: 6px;
+  margin: 16px 0 4px;
+  overflow: hidden;
+  border-radius: 3px;
+  background-color: rgba(244, 239, 230, 0.1);
+}
+
+.gauge span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--lapis-ink), var(--ivory));
+  transform-origin: left center;
+  transform: scaleX(var(--p));
+  transition: transform 700ms var(--ease-out);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, auto));
+  justify-content: start;
+  gap: 8px 28px;
+  margin: 16px 0 0;
+}
+
+.facts dt {
+  font-size: 0.75rem;
+  color: var(--ivory-3);
+}
+
+.facts dd {
+  margin: 2px 0 0;
+  font-size: 0.9375rem;
+  color: var(--ivory);
+}
+
+.money {
+  font-weight: 600;
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+}
+
+.note {
+  margin: 14px 0 0;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--ivory-2);
+}
+
+@media (max-width: 420px) {
+  .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .facts > div:last-child { grid-column: 1 / -1; }
+}
+
+/* ── The packs ── */
+
+.packsHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding: 0 4px 12px;
+}
+
+.currency {
+  min-width: 220px;
+}
+
+.packs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 900px) {
+  .packs { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.pack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  height: 100%;
+  min-height: 132px;
+  padding: 16px;
+  text-align: left;
+  border-radius: 14px;
+  color: var(--ivory);
+  background-color: var(--app-card);
+  box-shadow: inset 0 0 0 1px var(--night-line);
+  touch-action: manipulation;
+  transition: transform var(--dur-press) var(--ease-out), box-shadow 150ms ease;
+}
+
+.packBonus {
+  box-shadow: inset 0 0 0 1px rgba(111, 196, 174, 0.3);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .pack:hover:not(:disabled) { box-shadow: inset 0 0 0 1px var(--night-line-strong); }
+  .packBonus:hover:not(:disabled) { box-shadow: inset 0 0 0 1px rgba(111, 196, 174, 0.55); }
+  .packFits:hover:not(:disabled) { box-shadow: inset 0 0 0 1.5px #FFFFFF; }
+}
+
+.pack:active:not(:disabled) { transform: scale(0.98); }
+.pack:disabled { opacity: 0.6; }
+
+.pack:focus-visible {
+  outline: none;
+  box-shadow: var(--app-focus);
+}
+
+.packTop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 8px;
+  width: 100%;
+}
+
+.fitsTag {
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--night-0);
+  background-color: var(--ivory);
+}
+
+.packFits {
+  box-shadow: inset 0 0 0 1.5px var(--ivory);
+}
+
+.packEach {
+  margin-top: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--ivory-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.pace {
+  margin: 0 0 4px;
+  padding: 0 4px;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--ivory);
+}
+
+.assure {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0 0;
+  padding: 14px 16px;
+  list-style: none;
+  border-radius: 14px;
+  background-color: var(--night-1);
+  box-shadow: inset 0 0 0 1px var(--night-line);
+}
+
+.assure li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--ivory-2);
+}
+
+.assure svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--verdigris-ink);
+}
+
+@media (min-width: 900px) {
+  .assure { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; }
+}
+
+.packPrice {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.packCredits {
+  margin-top: 6px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.packListings {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 6px;
+  font-size: 0.8125rem;
+  color: var(--ivory-2);
+}
+
+.other {
+  padding: 10px 2px;
+  margin: -10px -2px;
+  font: inherit;
+  font-weight: 600;
+  color: var(--ivory);
+  background: none;
+  text-decoration: underline;
+  text-decoration-color: var(--night-line-strong);
+  text-underline-offset: 3px;
+}
+
+.other:focus-visible {
+  outline: none;
+  box-shadow: var(--app-focus);
+  border-radius: 4px;
+}
+
+.bonusValue {
+  color: var(--verdigris-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gauge span,
+  .pack { transition: none; }
+  .pack:active:not(:disabled) { transform: none; }
+}

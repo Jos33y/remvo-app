@@ -17,12 +17,13 @@ import styles from '@styles/ui/seller/page-header.module.css';
  *   back     a path (or -1) for a back button; omit on tab roots
  *   backLabel  the back button's text, the screen it returns to
  *   action   a node for the right side of the bar
+ *   titleAction  a node beside the large title (wide screens' main actions)
  *   large    false for detail pages, which use only the small bar
  *   quiet    no large title, but the bar stays clear until content
  *            scrolls under it (Home, whose first figure is its title)
  * ────────────────────────────────────────────────────────────────── */
 
-export function PageHeader({ title, back, backLabel = 'Back', action, large = true, quiet = false, children }) {
+export function PageHeader({ title, back, backLabel = 'Back', action, titleAction = null, large = true, quiet = false, children }) {
   const navigate = useNavigate();
   const sentinel = useRef(null);
   const [scrolled, setScrolled] = useState(!large && !quiet);
@@ -63,7 +64,14 @@ export function PageHeader({ title, back, backLabel = 'Back', action, large = tr
       <div ref={sentinel} className={styles.sentinel} aria-hidden="true" />
       {large && !quiet ? (
         <header className={styles.large}>
-          <h1 className={styles.largeTitle}>{title}</h1>
+          {titleAction ? (
+            <div className={styles.titleRow}>
+              <h1 className={styles.largeTitle}>{title}</h1>
+              {titleAction}
+            </div>
+          ) : (
+            <h1 className={styles.largeTitle}>{title}</h1>
+          )}
           {children}
         </header>
       ) : (

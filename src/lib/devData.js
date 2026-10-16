@@ -188,6 +188,7 @@ function history(mode) {
   const rows = [
     { id: '9', at: ago(10), kind: 'job', credits: -1500, jobId: null, amountCents: null, currency: null, note: 'B-GC6SNQ' },
     { id: '8', at: ago(12), kind: 'job_return', credits: 3, jobId: 'job_x', amountCents: null, currency: null, note: 'L-9GSHF4' },
+    { id: '7b', at: ago(60 * 24 * 3), kind: 'bonus', credits: 150, jobId: null, amountCents: null, currency: null, note: 'Volume bonus' },
     { id: '7', at: ago(60 * 24 * 3), kind: 'topup', credits: 100000, jobId: null, amountCents: 1000000, currency: 'USD', note: null },
     { id: '6', at: ago(60 * 24 * 40), kind: 'topup', credits: 50, jobId: null, amountCents: 0, currency: 'USD', note: null },
     { id: '5', at: ago(60 * 24 * 41), kind: 'refund', credits: -50, jobId: null, amountCents: 500, currency: 'GBP', note: null },
@@ -243,6 +244,13 @@ function build(mode, balanceOverride) {
       worth: { cents: Math.max(0, bought) * 10, currency: 'USD' },
       settings: { marketplace: 'US', currency: 'USD', settingsSetAt: ago(60 * 24 * 75) },
       topUpsEnabled: true, listingsEnabled: true, listingCredits: 3,
+      // worst: the peak is on (every bonus showing); one: Polar has only the first three packs set up.
+      packs: mode === 'one'
+        ? [{ credits: 50, volumeBonus: 0, peakBonus: 0, total: 50 }, { credits: 200, volumeBonus: 0, peakBonus: 0, total: 200 }, { credits: 500, volumeBonus: 50, peakBonus: 0, total: 550 }]
+        : mode === 'worst'
+          ? [{ credits: 50, volumeBonus: 0, peakBonus: 0, total: 50 }, { credits: 200, volumeBonus: 0, peakBonus: 40, total: 240 }, { credits: 500, volumeBonus: 50, peakBonus: 100, total: 650 }, { credits: 1000, volumeBonus: 150, peakBonus: 200, total: 1350 }]
+          : null,
+      peak: mode === 'worst' ? { percent: 20, minCredits: 200, endsAt: '2026-12-02T00:00:00Z' } : null,
     },
     history: history(mode),
     jobs,

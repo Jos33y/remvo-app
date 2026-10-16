@@ -90,11 +90,17 @@ export const BRAND = {
 export const PRICING = Object.freeze({
   /* What one credit costs in each currency. */
   CREDIT: Object.freeze({ USD: 0.1, EUR: 0.1, GBP: 0.08 }),
+  /* bonus: extra credits on the bigger packs (volume bonus). The API
+   * decides what is credited; this mirrors modules/credits/pricing.js. */
   PACKS: Object.freeze([
-    { credits: 50, price: { USD: 5, EUR: 5, GBP: 4 }, featured: false },
-    { credits: 200, price: { USD: 20, EUR: 20, GBP: 16 }, featured: true },
-    { credits: 500, price: { USD: 50, EUR: 50, GBP: 40 }, featured: false },
+    { credits: 50, bonus: 0, price: { USD: 5, EUR: 5, GBP: 4 }, featured: false },
+    { credits: 200, bonus: 0, price: { USD: 20, EUR: 20, GBP: 16 }, featured: true },
+    { credits: 500, bonus: 50, price: { USD: 50, EUR: 50, GBP: 40 }, featured: false },
+    { credits: 1000, bonus: 150, price: { USD: 100, EUR: 100, GBP: 80 }, featured: false },
   ]),
+  /* Peak season: 20% extra on top-ups of 200 credits or more, 20
+   * November to 1 December 2026 (UK time). The API decides. */
+  PEAK: Object.freeze({ percent: 20, minCredits: 200, startsAt: '2026-11-20T00:00:00Z', endsAt: '2026-12-02T00:00:00Z', lastDay: '1 December' }),
   /* Any whole amount between these, in the app. */
   CUSTOM: Object.freeze({ min: { USD: 5, EUR: 5, GBP: 4 }, max: { USD: 1000, EUR: 1000, GBP: 800 } }),
   JOBS: Object.freeze({
@@ -127,7 +133,7 @@ export function creditsFor(amount, currency) {
 }
 
 /* The date shown on every legal page, and its machine form. */
-export const LEGAL_UPDATED = { label: '16 October 2026', iso: '2026-10-16', version: 'v2.3' };
+export const LEGAL_UPDATED = { label: '16 October 2026', iso: '2026-10-16', version: 'v2.4' };
 
 /* ── Paused corridor: checkout and admin trees only ── */
 

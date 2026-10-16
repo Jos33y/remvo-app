@@ -36,6 +36,7 @@ function labelFor(row) {
     // A bulk run takes its credits in one line, under the batch's reference.
     case 'job': return row.note?.startsWith('B-') ? `Bulk listing ${row.note}` : row.note ? `Listing ${row.note}` : 'Listing';
     case 'job_return': return row.note ? `Returned: listing ${row.note} failed` : 'Returned: listing failed';
+    case 'bonus': return row.note ?? 'Bonus credits';
     case 'grant': return 'Added by Remvo';
     default: return 'Correction';
   }
@@ -121,6 +122,9 @@ export function useSellerData() {
     jobsError: js.accountId === id ? js.error : null,
     moreJobs: js.accountId === id && Boolean(js.next),
     topUpsEnabled: wallet?.topUpsEnabled ?? false,
+    // What is on sale now (from Polar, via the API), and the peak bonus while it runs.
+    packs: wallet?.packs ?? null,
+    peak: wallet?.peak ?? null,
     listingsEnabled: wallet?.listingsEnabled ?? false,
     listingCredits,
     summary, jobs, history, settings, job,

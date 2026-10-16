@@ -66,12 +66,22 @@ export function ListingsPage() {
       <PageHeader
         title="Listings"
         action={
-          <span className={s.barActions}>
+          <span className={`${s.barActions} ${s.phoneOnly}`}>
             <Link to={SELLER_ROUTES.BULK} className={`${s.barPill} ${s.barPillPlum}`}>
-              <IconStack size={18} /><span>Bulk<span className={s.wideOnly}> listing</span></span>
+              <IconStack size={18} /><span>Bulk</span>
             </Link>
-            <Link to={SELLER_ROUTES.NEW_LISTING} className={`${s.barPill} ${s.barPillMain}`} aria-label="New listing">
-              <IconPlus size={20} /><span className={s.wideOnly}>New listing</span>
+            <Link to={SELLER_ROUTES.NEW_LISTING} className={`${s.barPill} ${s.barPillMain} ${s.barPillRound}`} aria-label="New listing">
+              <IconPlus size={20} />
+            </Link>
+          </span>
+        }
+        titleAction={
+          <span className={`${s.barActions} ${s.wideOnlyFlex}`}>
+            <Link to={SELLER_ROUTES.BULK} className={`${s.barPill} ${s.barPillPlum}`}>
+              <IconStack size={18} /><span>Bulk listing</span>
+            </Link>
+            <Link to={SELLER_ROUTES.NEW_LISTING} className={`${s.barPill} ${s.barPillMain}`}>
+              <IconPlus size={20} /><span>New listing</span>
             </Link>
           </span>
         }
