@@ -1,4 +1,5 @@
 import { Button } from '@components/ui/shared/Button';
+import { ChatLine } from '@components/ui/marketing/ChatInvite';
 import { APP_LINKS, PRICING } from '@utils/constants';
 import styles from '@styles/pages/marketing/homepage.module.css';
 
@@ -42,6 +43,9 @@ export function HomeBulk() {
               upload in Seller Hub.
             </p>
             <Button href={APP_LINKS.BULK} variant="secondary" size="default">List in bulk</Button>
+            <ChatLine className={styles.bulkTalk} path="bulk" action="Send us one spreadsheet and we'll show you the time it saves.">
+              Listing pallets or wholesale?
+            </ChatLine>
           </div>
           <div className={styles.bulkSide}>
             <StampSheet />

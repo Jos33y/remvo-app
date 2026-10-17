@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { Link } from 'react-router';
+import { ChatLine } from '@components/ui/marketing/ChatInvite';
 import { Button } from '@components/ui/shared/Button';
 import { ProfitSlip } from '@components/ui/profit/ProfitSlip';
 import { workOut } from '@lib/profitApi';
@@ -289,6 +290,11 @@ export function FeeCalculatorPage({ site }) {
             </p>
           </div>
           <Button href={APP_LINKS.SIGN_UP} variant="ivory" size="large">Make your first listing</Button>
+        </div>
+        <div className={info.closeInner}>
+          <ChatLine className={T.closeTalk} hint="What do you sell, and on which eBay site?" action="Tell us how you sell.">
+            Want the profit worked out on everything you list?
+          </ChatLine>
         </div>
       </section>
     </>

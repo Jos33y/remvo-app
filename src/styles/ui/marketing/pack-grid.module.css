@@ -131,6 +131,10 @@
   color: var(--site-text);
 }
 
+.talk.talk {
+  margin: 4px 0 0;
+}
+
 .terms {
   max-width: 64ch;
   margin: 8px 0 0;

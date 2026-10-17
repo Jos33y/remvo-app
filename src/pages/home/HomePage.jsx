@@ -3,9 +3,10 @@ import { HomeFeatures } from './sections/HomeFeatures';
 import { HomeBulk } from './sections/HomeBulk';
 import { HomePricing } from './sections/HomePricing';
 import { HomeCTA } from './sections/HomeCTA';
+import { ChatInvite } from '@components/ui/marketing/ChatInvite';
 
-/* Five sections on one night, told apart by space and hairlines:
- * what you get, how, many at once, what it costs, start. The hero
+/* Six sections on one night, told apart by space and hairlines:
+ * what you get, how, many at once, what it costs, talk to us, start. The hero
  * leads with a real finished listing because that is what a seller
  * came for. */
 export function HomePage() {
@@ -16,6 +17,7 @@ export function HomePage() {
       <HomeFeatures />
       <HomeBulk />
       <HomePricing />
+      <ChatInvite />
       <HomeCTA />
     </>
   );

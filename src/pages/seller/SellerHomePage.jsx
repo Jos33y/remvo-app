@@ -9,7 +9,7 @@ import { inputLabel, when } from '@lib/sellerFormat';
 import { withEdits } from '@lib/sellerData';
 import { sellerApi } from '@lib/sellerApi';
 import { count, num, plural } from '@lib/plural';
-import { SELLER_ROUTES, listingPath } from '@utils/constants';
+import { ROUTES, SELLER_ROUTES, listingPath, siteUrl, supportPath } from '@utils/constants';
 import { Breakable } from '@components/ui/seller/Breakable';
 import '@styles/base/instrument-serif.css';
 import s from '@styles/pages/seller/app.module.css';
@@ -136,6 +136,13 @@ function Week({ finished }) {
       <p className={h.eyebrow}>{fresh ? 'Start here' : 'This week'}</p>
       <h2 id="week-heading" className={h.headline}>{headline}</h2>
       {sub && <p className={h.sub}>{sub}</p>}
+      {/* Nothing made yet: see one first, or have a person walk them through it (chat3). */}
+      {fresh && (
+        <p className={h.help}>
+          <a href={siteUrl(ROUTES.EXAMPLE)} target="_blank" rel="noopener noreferrer">See a real listing</a> first, or{' '}
+          <Link to={supportPath('first')}>ask a person to walk you through it</Link>.
+        </p>
+      )}
       {week.failed > 0 && (
         <p className={h.failedNote}>{count(week.failed, 'listing')} did not work. Those credits went back.</p>
       )}

@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router';
 import { PageHeader } from '@components/ui/seller/PageHeader';
 import { ChatThread } from '@components/ui/support/ChatThread';
 import { useSellerSession } from '@context/SellerSession';
@@ -28,6 +29,16 @@ const TOPICS = [
   { label: 'Something to build', start: 'I would like Remvo to ' },
 ];
 
+/* chat3: asked from somewhere in the app (/support?about=failed&ref=L-...).
+ * The message starts itself, and the reason is filed with it so the
+ * person answering knows where they came from. */
+const REF = /^[LB]-[A-Z0-9]{4,10}$/;
+const ABOUT = {
+  first: () => "I'd like a hand with my first listing. I sell ",
+  failed: (ref) => (ref ? `Listing ${ref} did not work. Can you look at it? ` : 'A listing did not work. Can you look at it? '),
+  batch: (ref) => (ref ? `About batch ${ref}: ` : 'About my last batch: '),
+};
+
 function Postbox() {
   return (
     <svg className={s.postbox} viewBox="0 0 160 150" aria-hidden="true" focusable="false">
@@ -45,10 +56,19 @@ function Postbox() {
 
 export function SupportPage() {
   const { account } = useSellerSession();
+  const [params] = useSearchParams();
+  const about = ABOUT[params.get('about')] ? params.get('about') : null;
+  const ref = REF.test(params.get('ref') ?? '') ? params.get('ref') : null;
+  // The reason goes with the next message sent, once.
+  const reason = useRef(about);
   const load = useCallback(({ after, open }) => appChat.read({ after, open }).then((r) => r.chat), []);
-  const send = useCallback((text) => appChat.write(text, SELLER_ROUTES.SUPPORT).then((r) => r.chat), []);
+  const send = useCallback((text) => {
+    const path = reason.current;
+    const page = path === 'failed' || path === 'batch' ? `${SELLER_ROUTES.SUPPORT}?about=${path}${ref ? `&ref=${ref}` : ''}` : SELLER_ROUTES.SUPPORT;
+    return appChat.write(text, page, path).then((r) => { reason.current = null; return r.chat; });
+  }, [ref]);
   const chat = useChat({ load, send, open: true });
-  const [seed, setSeed] = useState(null);
+  const [seed, setSeed] = useState(() => (about ? { text: ABOUT[about](ref), key: 1 } : null));
 
   useEffect(() => { document.title = 'Remvo | Support'; }, []);
 

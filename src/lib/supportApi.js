@@ -53,10 +53,12 @@ export const siteChat = Object.freeze({
   /** { email, name?, message, page?, website } -> { chat, key } */
   start: (body) => call('POST', '/support/chats', { body }),
   read: (id, key, { after, open } = {}) => call('GET', `/support/chats/${encodeURIComponent(id)}${q(after, open)}`, { key }),
-  write: (id, key, message) => call('POST', `/support/chats/${encodeURIComponent(id)}/messages`, { key, body: { message } }),
+  /** path, page (chat3): how they sell, chosen after the chat began; filed with the message. */
+  write: (id, key, message, { path = null, page = null } = {}) => call('POST', `/support/chats/${encodeURIComponent(id)}/messages`, { key, body: { message, ...(path ? { path, ...(page ? { page } : {}) } : {}) } }),
 });
 
 export const appChat = Object.freeze({
   read: ({ after, open } = {}) => call('GET', `/my/support${q(after, open)}`, { cookie: true }),
-  write: (message, page) => call('POST', '/my/support/messages', { cookie: true, body: { message, ...(page ? { page } : {}) } }),
+  /** path (chat3): where in the app they asked from, or how they sell; filed with the message. */
+  write: (message, page, path = null) => call('POST', '/my/support/messages', { cookie: true, body: { message, ...(page ? { page } : {}), ...(path ? { path } : {}) } }),
 });

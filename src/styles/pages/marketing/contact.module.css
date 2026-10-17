@@ -70,6 +70,24 @@
     background-color var(--transition-fast);
 }
 
+/* The chat, first and across the row (chat3). A button, so it reads
+   as a card like the others, not as a form control. */
+.chatSlot { grid-column: 1 / -1; }
+
+.cardChat {
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.cardChat:focus-visible,
+.card:focus-visible {
+  outline: 2px solid var(--ivory);
+  outline-offset: 2px;
+}
+
 @media (hover: hover) and (pointer: fine) {
   .card:hover {
     border-color: var(--night-line-strong);

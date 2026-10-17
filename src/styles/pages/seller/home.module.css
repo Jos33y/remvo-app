@@ -86,6 +86,31 @@
   text-wrap: pretty;
 }
 
+.help {
+  margin: 14px 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--ivory-3);
+}
+
+.help a {
+  color: var(--ivory);
+  text-decoration: underline;
+  text-decoration-color: var(--night-line-strong);
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+}
+
+.help a:focus-visible {
+  outline: none;
+  border-radius: 2px;
+  box-shadow: var(--app-focus);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .help a:hover { text-decoration-color: var(--ivory); }
+}
+
 .money {
   font-size: 1.1875rem;
   font-weight: 600;

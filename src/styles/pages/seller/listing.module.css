@@ -338,3 +338,23 @@
   border-radius: 4px;
   box-shadow: var(--app-focus);
 }
+
+/* chat3: under a failed listing, a person a tap away. */
+.talk {
+  margin: 12px 0 0;
+  font-size: 0.9375rem;
+}
+
+.talk a {
+  color: var(--app-text);
+  text-decoration: underline;
+  text-decoration-color: var(--app-sep);
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+}
+
+.talk a:focus-visible {
+  outline: none;
+  border-radius: 2px;
+  box-shadow: var(--app-focus);
+}

@@ -587,6 +587,19 @@
   color: var(--ivory-3);
 }
 
+.sheetLink {
+  color: var(--ivory);
+  text-decoration: underline;
+  text-decoration-color: var(--night-line-strong);
+  text-underline-offset: 3px;
+}
+
+.sheetLink:focus-visible {
+  outline: none;
+  border-radius: 2px;
+  box-shadow: var(--app-focus);
+}
+
 /* ── A batch: the files and the lines ── */
 
 /* Both columns start level, whatever app.module.css does to a section. */

@@ -10,7 +10,7 @@ import { MARKETPLACE } from '@lib/market';
 import { CONDITION } from '@lib/sellerData';
 import { inputLabel, listingPrice, when } from '@lib/sellerFormat';
 import { count, num } from '@lib/plural';
-import { SELLER_ROUTES, listingPath } from '@utils/constants';
+import { SELLER_ROUTES, listingPath, supportPath } from '@utils/constants';
 import { Breakable } from '@components/ui/seller/Breakable';
 import s from '@styles/pages/seller/app.module.css';
 import b from '@styles/pages/seller/bulk.module.css';
@@ -212,9 +212,14 @@ export function BatchPage() {
             {c.failed > 0 && <span><span className={`${b.key} ${b.key_failed}`} />{num(c.failed)} did not work, credits back</span>}
             {waiting > 0 && <span><span className={`${b.key} ${b.key_queued}`} />{num(waiting)} waiting</span>}
           </p>
-          {running && (
+          {running ? (
             <p className={b.sheetNote}>
               You can leave this screen; we will email you when it is done. A listing you make on its own goes ahead of the batch.
+            </p>
+          ) : (
+            // chat3: once it is done, ask how it went; a person reads it.
+            <p className={b.sheetNote}>
+              How did that batch go? <Link className={b.sheetLink} to={supportPath('batch', batch.ref)}>Tell us what would make the next one faster.</Link>
             </p>
           )}
         </section>

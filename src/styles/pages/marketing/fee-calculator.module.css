@@ -116,6 +116,10 @@
   color: var(--site-text-2);
 }
 
+.closeTalk.closeTalk {
+  margin-top: 24px;
+}
+
 @media (prefers-contrast: more) {
   .kicker, .closeText { color: var(--ivory); }
 }

@@ -11,7 +11,7 @@ import { barcodeLabel, listingCsv, productName, stepsFor, withEdits } from '@lib
 import { MARKETPLACE } from '@lib/market';
 import { hasParcel, inputLabel, listingPrice, longDate, parcel, when } from '@lib/sellerFormat';
 import { count, plural } from '@lib/plural';
-import { PRICING, SELLER_ROUTES, worldPath } from '@utils/constants';
+import { PRICING, SELLER_ROUTES, supportPath, worldPath } from '@utils/constants';
 import { Breakable } from '@components/ui/seller/Breakable';
 import { ProfitCard } from '@components/ui/seller/ProfitCard';
 import { SellerTypeSheet } from '@components/ui/seller/SellerTypeSheet';
@@ -79,6 +79,7 @@ function download(job) {
 }
 
 const BRAND = /^(brand|marke|marque|marca)$/i;
+const MPN = /^(mpn|herstellernummer|numéro de pièce fabricant|codice produttore|número de pieza del fabricante)$/i;
 
 /* The product photo's own colour, softly behind it: a tint, never a
  * theme. Read from a copy of the image; when the image host does not
@@ -332,6 +333,10 @@ export function ListingPage() {
               <IconAlert size={20} />
               <span>{job.failure} The credits went back to your balance.</span>
             </div>
+            {/* chat3: a person, a tap away, at the moment it went wrong. */}
+            <p className={L.talk}>
+              <Link to={supportPath('failed', job.ref)}>Want a person to look at it?</Link>
+            </p>
           </div>
         )}
 
@@ -387,9 +392,9 @@ export function ListingPage() {
                     </div>
                   </div>
                 )}
-                {/* Brand shows once: in the specifics when it is there, otherwise here. */}
+                {/* Brand and MPN show once: in the specifics when they are there, otherwise here. */}
                 {ids.brand && !l.specifics.some(([k, v]) => BRAND.test(k) && v === ids.brand) && <CopyField label="Brand" value={ids.brand} />}
-                {ids.mpn && <CopyField label="MPN" mono value={ids.mpn} />}
+                {ids.mpn && !l.specifics.some(([k, v]) => MPN.test(k) && v === ids.mpn) && <CopyField label="MPN" mono value={ids.mpn} />}
                 {ids.gtin && <CopyField label={barcodeLabel(job.marketplace)} mono value={ids.gtin} />}
                 {l.specifics.length > 0 && (
                   <CopyField label="Item specifics" copyText={l.specifics.map(([k, v]) => `${k}: ${v}`).join('\n')}>

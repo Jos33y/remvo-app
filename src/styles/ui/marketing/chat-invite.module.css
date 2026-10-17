@@ -1,0 +1,155 @@
+/* ═══════════════════════════════════════
+   CHAT INVITE (chat3)
+   The invitation, then eight ways a
+   seller can say who they are, each a
+   row like a line in a ledger: the
+   seller's own words, an arrow that says
+   it opens something. No cards, no
+   colour: the words do the work, and the
+   site's night stays quiet before the
+   close. Two columns from 900px.
+   ═══════════════════════════════════════ */
+
+.invite {
+  padding: clamp(64px, 9vw, 120px) 0;
+  border-top: 1px solid var(--site-line);
+}
+
+.inner {
+  display: grid;
+  gap: 32px clamp(40px, 6vw, 96px);
+  max-width: var(--site-width);
+  margin: 0 auto;
+  padding: 0 var(--site-gutter);
+}
+
+@media (min-width: 900px) {
+  .inner {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    align-items: start;
+  }
+
+  .text {
+    position: sticky;
+    top: 120px;
+  }
+}
+
+.heading {
+  max-width: 14ch;
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(2.25rem, 4.6vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  color: var(--site-text);
+  text-wrap: balance;
+}
+
+.desc {
+  max-width: 40ch;
+  margin: 20px 0 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--site-text-2);
+}
+
+.ask {
+  margin: 0 0 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--site-text-2);
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--site-line);
+}
+
+.list > li {
+  border-bottom: 1px solid var(--site-line);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  min-height: 56px;
+  padding: 14px 4px;
+  font: inherit;
+  font-size: 1.0625rem;
+  line-height: 1.35;
+  text-align: left;
+  color: var(--site-text);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.arrow {
+  flex: none;
+  color: var(--site-text-3);
+  transition: transform var(--transition-fast), color var(--transition-fast);
+}
+
+.row:focus-visible {
+  outline: 2px solid var(--site-text);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .row:hover .arrow {
+    color: var(--site-text);
+    transform: translateX(3px);
+  }
+}
+
+/* ── One line in place ── */
+
+.line {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--site-text-2);
+}
+
+.lineButton {
+  display: inline;
+  padding: 0;
+  font: inherit;
+  color: var(--site-text);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: var(--site-line-strong);
+  text-underline-offset: 5px;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color var(--transition-fast);
+}
+
+.lineButton:focus-visible {
+  outline: 2px solid var(--site-text);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .lineButton:hover { text-decoration-color: var(--site-text); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow { transition: none; }
+  .row:hover .arrow { transform: none; }
+}
+
+@media (prefers-contrast: more) {
+  .desc, .ask, .line, .arrow { color: var(--site-text); }
+}

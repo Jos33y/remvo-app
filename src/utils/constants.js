@@ -40,6 +40,10 @@ export const APP_LINKS = {
 export const SITE_URL = import.meta.env.DEV ? 'http://localhost:5173' : 'https://remvo.app';
 export const siteUrl = (path = '/') => `${SITE_URL}${path}${import.meta.env.DEV ? '?site' : ''}`;
 
+/* Support with a reason (chat3): where in the app they asked from, and
+ * the listing or batch it is about, so the message starts itself. */
+export const supportPath = (about, ref = null) => `/support?about=${encodeURIComponent(about)}${ref ? `&ref=${encodeURIComponent(ref)}` : ''}`;
+
 /* Routes inside the seller app (my.remvo.app). */
 export const SELLER_ROUTES = {
   HOME: '/',
@@ -149,7 +153,7 @@ export function creditsFor(amount, currency) {
 }
 
 /* The date shown on every legal page, and its machine form. */
-export const LEGAL_UPDATED = { label: '17 October 2026', iso: '2026-10-17', version: 'v2.5' };
+export const LEGAL_UPDATED = { label: '17 October 2026', iso: '2026-10-17', version: 'v2.6' };
 
 /* ── Paused corridor: checkout and admin trees only ── */
 

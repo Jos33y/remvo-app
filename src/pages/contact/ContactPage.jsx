@@ -1,24 +1,40 @@
 import { Reveal } from '@components/ui/marketing/Reveal';
 import { BRAND } from '@utils/constants';
+import { openChat } from '@lib/chatBus';
 import styles from '@styles/pages/marketing/contact.module.css';
 
-/* Two addresses: one for anything about your account, a job, credits
- * or a refund; one for company, legal and data protection. Answered
- * within 48 hours, the time Polar holds merchants to. */
+/* The chat first (chat3): a person answers, usually within a few
+ * hours. Then two addresses: one for anything about your account, a
+ * job, credits or a refund; one for company, legal and data
+ * protection, answered within 48 hours, the time Polar holds
+ * merchants to. */
 export function ContactPage() {
 
   return (
     <section className={styles.contact}>
       <div className={styles.inner}>
         <Reveal>
-          <h1 className={styles.heading}>Write to the people who build it.</h1>
+          <h1 className={styles.heading}>Talk to the people who build it.</h1>
           <p className={styles.sub}>
-            No contact form and no ticket queue. Every message is read and
-            answered within 48 hours.
+            No ticket queue. A person answers the chat, usually within a few
+            hours, and every email within 48.
           </p>
         </Reveal>
 
         <div className={styles.channels}>
+          <Reveal className={styles.chatSlot}>
+            <button type="button" className={`${styles.card} ${styles.cardChat}`} onClick={() => openChat()}>
+              <div className={styles.cardIcon}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M4 5h16v11H9l-5 4z" />
+                </svg>
+              </div>
+              <h2 className={styles.cardTitle}>Anything at all</h2>
+              <p className={styles.cardValue}>Chat with us</p>
+              <p className={styles.cardMeta}>A person answers, usually within a few hours</p>
+            </button>
+          </Reveal>
+
           <Reveal delay={80}>
             <a href={`mailto:${BRAND.EMAIL}`} className={styles.card}>
               <div className={styles.cardIcon}>

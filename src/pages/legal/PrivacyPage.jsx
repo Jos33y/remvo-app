@@ -45,7 +45,7 @@ export function PrivacyPage() {
           <DefItem term="Your credits">Every top-up, every job that used credits, every refund and every expiry.</DefItem>
           <DefItem term="Technical records">Your IP address, browser type, and the time of each request, kept in our server logs.</DefItem>
           <DefItem term="Welcome credits">When your account is made, a keyed hash of your IP address: a scrambled form that cannot be turned back into the address. It lets us give welcome credits once a day per connection.</DefItem>
-          <DefItem term="Messages">What you send us when you write to support.</DefItem>
+          <DefItem term="Messages">What you send us in the chat or by email, the page you wrote from, and how you sell if you chose to tell us.</DefItem>
         </DefList>
       </Clause>
 
@@ -65,6 +65,7 @@ export function PrivacyPage() {
           <DefItem term="Apify">Reads the product page for the barcode or link you give. Receives the barcode or link only.</DefItem>
           <DefItem term="eBay">Its public category and listing information, looked up by product. Receives no information about you.</DefItem>
           <DefItem term="Resend">Sends the codes that confirm your email and reset your password, receipts and reminders. Receives your email address.</DefItem>
+          <DefItem term="Telegram">Brings chat messages to the person at Remvo who answers them. Receives your message, your email address and the page you wrote from.</DefItem>
           <DefItem term="Hostinger and Cloudflare">Host and protect our servers. Your data passes through them.</DefItem>
         </DefList>
         <p>4.2. We also disclose data where the law requires us to.</p>

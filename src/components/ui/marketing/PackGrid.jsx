@@ -1,4 +1,5 @@
 import { Link } from 'react-router';
+import { ChatLine } from '@components/ui/marketing/ChatInvite';
 import { Button } from '@components/ui/shared/Button';
 import { CurrencySwitch } from '@components/ui/marketing/CurrencySwitch';
 import { useMarket } from '@hooks/useMarket';
@@ -70,6 +71,10 @@ export function PackGrid({ headingLevel = 3 }) {
         Need a different amount? Top up anything from {money(min, currency)} to {money(max, currency, { whole: true })} in the app,
         at the same {money(PRICING.CREDIT[currency], currency)} a credit.
       </p>
+
+      <ChatLine className={styles.talk} hint="Roughly how many do you list a month?" action="Tell us roughly how many you list a month.">
+        Not sure which pack fits?
+      </ChatLine>
 
       <p className={styles.terms}>
         Any VAT or sales tax is worked out at checkout for where you are, and shown before you pay.

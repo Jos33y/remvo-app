@@ -4,6 +4,8 @@ import { ChatThread } from '@components/ui/support/ChatThread';
 import { IconChat, IconClose } from '@components/ui/seller/icons';
 import { useChat } from '@hooks/useChat';
 import { siteChat } from '@lib/supportApi';
+import { CHAT_EVENT } from '@lib/chatBus';
+import { SELL_PATHS, pathById } from '@lib/sellPaths';
 import { ROUTES } from '@utils/constants';
 import theme from '@styles/layout/seller/app-theme.module.css';
 import s from '@styles/ui/support/site-chat.module.css';
@@ -69,6 +71,8 @@ export function SiteChat() {
   const panel = useRef(null);
   const titleId = useId();
   const aside = useStepAside(location.pathname);
+  // What a button on the page opened the chat with: how they sell, or a hint.
+  const [asked, setAsked] = useState({ path: null, hint: null, key: 0 });
 
   // A reply email's link: take the chat, open it, tidy the address.
   useEffect(() => {
@@ -87,8 +91,24 @@ export function SiteChat() {
     window.history.replaceState(null, '', `${window.location.pathname}${q ? `?${q}` : ''}${window.location.hash}`);
   }, []);
 
+  // A button on the page: open the chat, with how they sell already chosen.
+  useEffect(() => {
+    const onAsk = (e) => {
+      const d = e.detail ?? {};
+      const path = pathById(d.path) ? d.path : null;
+      reason.current = path;
+      setAsked({ path, hint: d.hint ?? null, key: Date.now() });
+      setOpen(true);
+    };
+    window.addEventListener(CHAT_EVENT, onAsk);
+    return () => window.removeEventListener(CHAT_EVENT, onAsk);
+  }, []);
+
   const load = useCallback(({ after, open: isOpen }) => siteChat.read(saved.id, saved.key, { after, open: isOpen }).then((r) => r.chat), [saved]);
-  const send = useCallback((text) => siteChat.write(saved.id, saved.key, text).then((r) => r.chat), [saved]);
+  // A way of selling chosen on the page after the chat began goes with the next message, once.
+  const reason = useRef(null);
+  const send = useCallback((text) => siteChat.write(saved.id, saved.key, text, { path: reason.current, page: window.location.pathname })
+    .then((r) => { reason.current = null; return r.chat; }), [saved]);
   const chat = useChat({ load, send, open, enabled: Boolean(saved?.id) });
 
   // A key that no longer opens anything (an old browser copy): start again.
@@ -130,11 +150,17 @@ export function SiteChat() {
               messages={chat.messages}
               onSend={chat.post}
               autoFocus
+              // Chosen on the page: the message starts with what they said, theirs to change.
+              seed={asked.path ? { text: `${pathById(asked.path).label}. `, key: asked.key } : null}
+              placeholder={asked.path ? pathById(asked.path).hint : asked.hint ?? undefined}
               footnote={saved.email ? `If you leave, the reply goes to ${saved.email}.` : 'If you leave, the reply comes by email.'}
             />
           ) : (
             <StartForm
+              key={asked.key}
               page={location.pathname}
+              path={asked.path}
+              hint={asked.hint}
               onStarted={(out, email) => {
                 const next = { id: out.chat.id, key: out.key, email };
                 keep(next);
@@ -151,24 +177,27 @@ export function SiteChat() {
         className={`${s.launcher} ${open ? s.launcherOpen : ''} ${aside && !open ? s.launcherAside : ''}`}
         onClick={() => (open ? close() : setOpen(true))}
         aria-expanded={open}
-        aria-label={open ? 'Close chat' : chat.unread ? `Chat with Remvo, ${chat.unread} new` : 'Chat with Remvo'}
+        aria-label={open ? 'Close chat' : chat.unread ? `Chat with us, ${chat.unread} new` : 'Chat with us'}
       >
         {open ? <IconClose size={22} /> : <IconChat size={24} />}
-        <span className={s.launcherText} aria-hidden="true">{open ? 'Close' : 'Chat'}</span>
+        <span className={s.launcherText} aria-hidden="true">{open ? 'Close' : 'Chat with us'}</span>
         {!open && chat.unread > 0 && <span className={s.badge} aria-hidden="true">{chat.unread}</span>}
       </button>
     </div>
   );
 }
 
-function StartForm({ page, onStarted }) {
+function StartForm({ page, onStarted, path: chosen = null, hint = null }) {
+  const [path, setPath] = useState(chosen);
+  // Chosen on the page already: one line, not the eight again, so the email and message come straight up.
+  const [picking, setPicking] = useState(!chosen);
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
   const [trap, setTrap] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
-  const ids = { email: useId(), name: useId(), message: useId(), error: useId() };
+  const ids = { email: useId(), name: useId(), message: useId(), error: useId(), paths: useId() };
 
   async function submit(e) {
     e.preventDefault();
@@ -179,7 +208,7 @@ function StartForm({ page, onStarted }) {
     setBusy(true);
     setError('');
     try {
-      const out = await siteChat.start({ email: em, ...(name.trim() ? { name: name.trim() } : {}), message: message.trim(), page, website: trap });
+      const out = await siteChat.start({ email: em, ...(name.trim() ? { name: name.trim() } : {}), message: message.trim(), page, ...(path ? { path } : {}), website: trap });
       onStarted(out, em.toLowerCase());
     } catch (err) {
       setError(err.message);
@@ -189,18 +218,40 @@ function StartForm({ page, onStarted }) {
 
   return (
     <form className={s.form} onSubmit={submit} noValidate>
-      <p className={s.lead}>Questions about Remvo, a listing that went wrong, or something you would like built. Leave your email so we can answer even if you close this page.</p>
+      {!picking && path ? (
+        <div className={s.pathChosen}>
+          <p className={s.pathSaid}><span className={s.label}>How you sell</span> {pathById(path).label}</p>
+          <button type="button" className={s.change} onClick={() => setPicking(true)}>Change</button>
+        </div>
+      ) : (
+      <fieldset className={s.paths}>
+        <legend id={ids.paths} className={s.label}>How do you sell? <span className={s.optional}>optional</span></legend>
+        <div className={s.pathList}>
+          {SELL_PATHS.map((p) => (
+            <button
+              key={p.id}
+              type="button"
+              className={s.path}
+              aria-pressed={path === p.id}
+              onClick={() => setPath(path === p.id ? null : p.id)}
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
+      </fieldset>
+      )}
       <label className={s.label} htmlFor={ids.email}>Email</label>
       <input id={ids.email} className={s.input} type="email" autoComplete="email" inputMode="email" value={email} onChange={(e) => setEmail(e.target.value)} required aria-describedby={error ? ids.error : undefined} />
       <label className={s.label} htmlFor={ids.name}>Name <span className={s.optional}>optional</span></label>
       <input id={ids.name} className={s.input} type="text" autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} maxLength={80} />
       <label className={s.label} htmlFor={ids.message}>Message</label>
-      <textarea id={ids.message} className={`${s.input} ${s.area}`} rows={4} value={message} onChange={(e) => setMessage(e.target.value)} maxLength={4000} required />
+      <textarea id={ids.message} className={`${s.input} ${s.area}`} rows={4} placeholder={pathById(path)?.hint ?? hint ?? 'Your question, or what you sell.'} value={message} onChange={(e) => setMessage(e.target.value)} maxLength={4000} required />
       {/* Hidden from people; a bot that fills it is turned away. */}
       <input className={s.trap} type="text" name="website" tabIndex={-1} autoComplete="off" value={trap} onChange={(e) => setTrap(e.target.value)} aria-hidden="true" />
       {error && <p id={ids.error} className={s.error} role="alert">{error}</p>}
       <button type="submit" className={s.start} disabled={busy}>{busy ? 'Sending…' : 'Start chat'}</button>
-      <p className={s.small}>We use your email only to answer you. <Link to={ROUTES.PRIVACY}>Privacy policy</Link></p>
+      <p className={s.small}>Leave your email so the reply reaches you even if you close this page. We use it only to answer you. <Link to={ROUTES.PRIVACY}>Privacy policy</Link></p>
     </form>
   );
 }

@@ -323,6 +323,10 @@
   color: var(--site-text-2);
 }
 
+.bulkTalk.bulkTalk {
+  margin-top: 20px;
+}
+
 .sheet {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
