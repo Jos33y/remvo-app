@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router';
+import { Link, useLocation, useNavigate, useParams } from 'react-router';
 import { PageHeader } from '@components/ui/seller/PageHeader';
 import { NotHere } from '@components/ui/seller/NotHere';
 import { useToast } from '@components/ui/seller/Toast';
@@ -11,7 +11,7 @@ import { barcodeLabel, listingCsv, productName, stepsFor, withEdits } from '@lib
 import { MARKETPLACE } from '@lib/market';
 import { hasParcel, inputLabel, listingPrice, longDate, parcel, when } from '@lib/sellerFormat';
 import { count, plural } from '@lib/plural';
-import { PRICING, SELLER_ROUTES } from '@utils/constants';
+import { PRICING, SELLER_ROUTES, worldPath } from '@utils/constants';
 import { Breakable } from '@components/ui/seller/Breakable';
 import { ProfitCard } from '@components/ui/seller/ProfitCard';
 import { SellerTypeSheet } from '@components/ui/seller/SellerTypeSheet';
@@ -254,6 +254,11 @@ export function ListingPage() {
             <span>{when(job.createdAt)}</span>
           </p>
           {madeIn != null && job.status === 'ready' && <p className={L.madeIn}>Ready in {count(madeIn, 'second')}.</p>}
+          {job.worldId && (
+            <p className={L.world}>
+              One of several eBay sites for this product. <Link to={worldPath(job.worldId)} className={L.worldLink}>See where it brings in most</Link>
+            </p>
+          )}
 
           {l && (
             <>

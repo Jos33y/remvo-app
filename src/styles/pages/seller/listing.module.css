@@ -317,3 +317,24 @@
   .fresh .priceBlock { animation: none; }
   .stage { transition: none; }
 }
+
+/* world1: this listing is one of several sites for the product. */
+.world {
+  margin: 10px 0 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--app-text-2);
+}
+
+.worldLink {
+  color: var(--app-text);
+  text-decoration: underline;
+  text-decoration-color: var(--app-text-3);
+  text-underline-offset: 3px;
+}
+
+.worldLink:focus-visible {
+  outline: none;
+  border-radius: 4px;
+  box-shadow: var(--app-focus);
+}

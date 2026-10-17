@@ -130,6 +130,12 @@ export const sellerApi = Object.freeze({
   batch: (id) => call('GET', `/batches/${encodeURIComponent(id)}`),
   /** The eBay drafts file ('ebay') or the full CSV ('csv'), as a Blob. */
   batchFile: (id, format) => download(`/batches/${encodeURIComponent(id)}/export?format=${format}`),
+
+  // One product on several eBay sites (modules/worlds in remvo-api)
+  /** { input, asin?, condition, sites } -> { world }; credits taken */
+  createWorld: (body) => call('POST', '/worlds', body),
+  world: (id) => call('GET', `/worlds/${encodeURIComponent(id)}`),
+  worldFile: (id) => download(`/worlds/${encodeURIComponent(id)}/export`),
 });
 
 /** A file from the API, as a Blob, with the same errors as call(). */

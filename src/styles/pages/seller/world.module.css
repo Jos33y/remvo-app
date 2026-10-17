@@ -1,0 +1,194 @@
+/* ═══════════════════════════════════════
+   ONE PRODUCT, SEVERAL EBAY SITES (world1)
+   Each site is named by its code in a
+   postmark ring, the same mark as when
+   the sites were picked. Where it brings
+   in most is a ranked list of bars, each
+   against the best, so the answer reads
+   at a glance; the best bar and figure
+   are gold, the money that matters, the
+   rest ivory. Desktop: the comparison and
+   the sites side by side.
+   ═══════════════════════════════════════ */
+
+.product {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 4px;
+}
+
+.productTitle {
+  margin: 0;
+  min-width: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.cols {
+  display: grid;
+  margin-top: 28px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0 32px;
+}
+
+/* Both columns start level: neither section takes the first-child margin. */
+.cols > section,
+.cols > section:first-child {
+  margin-top: 0;
+}
+
+.cols > section + section {
+  margin-top: 28px;
+}
+
+@media (min-width: 1100px) {
+  .cols > section + section { margin-top: 0; }
+
+  .cols {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.headNote {
+  font-size: 0.8125rem;
+  color: var(--app-text-3);
+}
+
+/* The postmark: a site's code in a double ring. */
+.code {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--app-text);
+  box-shadow: inset 0 0 0 1.25px var(--app-text-2), inset 0 0 0 4px var(--app-card), inset 0 0 0 5px var(--app-text-3);
+}
+
+.codeOff {
+  color: var(--app-text-3);
+  box-shadow: inset 0 0 0 1px var(--app-sep), inset 0 0 0 4px var(--app-card), inset 0 0 0 5px var(--app-sep);
+}
+
+.bestTag {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+/* ── Where it brings in most ── */
+
+.wait {
+  padding: 18px 16px;
+}
+
+.waitText {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--app-text-2);
+}
+
+.bars {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 8px 16px;
+  list-style: none;
+}
+
+.bar {
+  padding: 12px 0;
+  border-top: 1px solid var(--app-sep);
+}
+
+.bar:first-child {
+  border-top: none;
+}
+
+.barHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rank {
+  width: 1ch;
+  font-family: var(--font-serif);
+  font-size: 1.375rem;
+  line-height: 1;
+  color: var(--app-text-3);
+  font-variant-numeric: lining-nums;
+}
+
+.barSite {
+  flex: 1;
+  min-width: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.barValue {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--app-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.barBest .barValue {
+  font-family: var(--font-serif);
+  font-size: 1.625rem;
+  line-height: 1;
+  color: var(--gold);
+}
+
+.track {
+  display: block;
+  height: 6px;
+  margin: 10px 0 0 calc(1ch + 50px + 12px);
+  border-radius: 3px;
+  background-color: var(--app-fill);
+  overflow: hidden;
+}
+
+.fill {
+  display: block;
+  width: var(--w);
+  height: 100%;
+  border-radius: 3px;
+  background-color: var(--app-text-3);
+  transition: width 400ms var(--ease-out, ease);
+}
+
+.barBest .fill {
+  background-color: var(--gold);
+}
+
+.barSub {
+  margin: 6px 0 0 calc(1ch + 50px + 12px);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--app-text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 359px) {
+  .track, .barSub { margin-left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fill { transition: none; }
+}
+
+@media (prefers-contrast: more) {
+  .headNote, .barSub, .rank, .waitText { color: var(--app-text); }
+  .fill { background-color: var(--app-text); }
+}

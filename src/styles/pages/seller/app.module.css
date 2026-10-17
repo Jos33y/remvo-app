@@ -1546,3 +1546,30 @@ a.textButton:focus-visible {
 }
 
 .peakNote strong { color: var(--app-plum-ink); }
+
+/* A second, quieter action under a form's main button (world1: "Or list
+ * it on more eBay sites"). Full width so it is an easy target. */
+.textAction {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  margin-top: 6px;
+  font-size: 0.9375rem;
+  color: var(--app-text);
+  text-decoration: underline;
+  text-decoration-color: var(--app-text-3);
+  text-underline-offset: 3px;
+  background: none;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.textAction:focus-visible {
+  outline: none;
+  box-shadow: var(--app-focus);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .textAction:hover { text-decoration-color: var(--app-text); }
+}

@@ -52,6 +52,8 @@ export const SELLER_ROUTES = {
   NEW_LISTING: '/listings/new',
   BULK: '/listings/bulk',
   BATCH: '/batches/:id',
+  /* world1: one product on several eBay sites. */
+  WORLD: '/sites/:id',
   LISTING: '/listings/:id',
   CREDITS: '/credits',
   PROFILE: '/profile',
@@ -62,6 +64,16 @@ export const SELLER_ROUTES = {
 
 export const listingPath = (id) => `/listings/${id}`;
 export const batchPath = (id) => `/batches/${id}`;
+export const worldPath = (id) => `/sites/${id}`;
+
+/* What listing one product on several eBay sites costs (world1): one
+ * site 3 credits, three 8, all seven 15; each further site 3 more,
+ * never past 15. remvo-api's modules/worlds/pricing.js charges it. */
+export function worldCredits(n) {
+  if (n <= 0) return 0;
+  if (n <= 2) return n * 3;
+  return Math.min(15, 8 + (n - 3) * 3);
+}
 
 export const BRAND = {
   NAME: 'Remvo',

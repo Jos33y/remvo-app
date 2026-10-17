@@ -283,11 +283,12 @@ export function MakeListingForm({ autoFocus = false, hero = false }) {
   const looksLikeLink = /^(https?:|www\.|amazon\.)/i.test(value.trim());
   const site = MARKETPLACE[settings?.marketplace ?? 'US'];
 
-  function submit(e) {
+  // multi (world1): the same product on several eBay sites; the sites are picked once it is found.
+  function submit(e, multi = false) {
     e.preventDefault();
     const read = readInput(value);
     if (read.error) { setError(read.error); return; }
-    navigate(SELLER_ROUTES.NEW_LISTING, { state: { raw: value, condition } });
+    navigate(SELLER_ROUTES.NEW_LISTING, { state: { raw: value, condition, ...(multi ? { multi: true } : {}) } });
   }
 
   const short = summary && summary.balance < LISTING;
@@ -333,6 +334,9 @@ export function MakeListingForm({ autoFocus = false, hero = false }) {
       <div className={s.cardActions}>
         <button type="submit" className={`${s.button} ${s.primary} ${s.block}`}>
           Make listing, {LISTING} credits
+        </button>
+        <button type="button" className={s.textAction} onClick={(e) => submit(e, true)}>
+          Or list it on more eBay sites
         </button>
       </div>
       {short && !hero && <p className={s.hint}>Your balance is under {LISTING} credits. You can still check the product first; top up before it runs.</p>}

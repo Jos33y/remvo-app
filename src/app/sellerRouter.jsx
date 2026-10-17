@@ -10,6 +10,7 @@ import { ListingsPage } from '@pages/seller/ListingsPage';
 import { NewListingPage } from '@pages/seller/NewListingPage';
 import { ListingPage } from '@pages/seller/ListingPage';
 import { BulkPage } from '@pages/seller/BulkPage';
+import { WorldPage } from '@pages/seller/WorldPage';
 import { BatchPage } from '@pages/seller/BatchPage';
 import { CreditsPage } from '@pages/seller/CreditsPage';
 import { ProfilePage } from '@pages/seller/ProfilePage';
@@ -61,6 +62,7 @@ export const sellerRouter = createBrowserRouter([
               { path: SELLER_ROUTES.BULK, element: <BulkPage /> },
               { path: SELLER_ROUTES.LISTING, element: <ListingPage /> },
               { path: SELLER_ROUTES.BATCH, element: <BatchPage /> },
+              { path: SELLER_ROUTES.WORLD, element: <WorldPage /> },
               { path: SELLER_ROUTES.CREDITS, element: <CreditsPage /> },
               { path: SELLER_ROUTES.PROFILE, element: <ProfilePage /> },
               { path: SELLER_ROUTES.SUPPORT, element: <SupportPage /> },

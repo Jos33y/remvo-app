@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { listingPrice } from '@lib/sellerFormat';
+import { MARKETPLACE } from '@lib/market';
 import { IconAlert } from '@components/ui/seller/icons';
 import s from '@styles/pages/seller/app.module.css';
 import P from '@styles/ui/profit/profit-slip.module.css';
@@ -250,7 +251,7 @@ export function ProfitSlip({ profit: p, values = {}, onSave, siteName, marketpla
         {/* Money in */}
         <Row
           label="Sold for"
-          sub={p.vatRegistered && !noPrice ? `${money(p.income, cur)} without VAT${p.postCharged ? `, ${post.toLowerCase()} included` : ''}` : null}
+          sub={p.saleVat && !noPrice ? `${money(p.income, cur)} without ${Math.round(p.saleVat * 100)}% VAT${p.postCharged ? `, ${post.toLowerCase()} included` : ''}` : null}
         >
           <Figure label="Sold for" value={values.price ?? p.price ?? null} currency={cur} placeholder="Price" big wanted={noPrice} onSave={(v) => onSave('price', v)} min={0.01} />
         </Row>
@@ -342,7 +343,9 @@ export function ProfitSlip({ profit: p, values = {}, onSave, siteName, marketpla
       )}
 
       <p className={P.foot}>
-        {split ? `${siteName} fees for a ${who}` : `${siteName} fees, no eBay shop`}, checked {longDay(p.checked)}.
+        {p.abroad
+          ? `Selling on ${siteName} from ${MARKETPLACE[p.abroad.from]?.site ?? 'abroad'}: ${siteName}'s business rates${p.saleVat ? ", and the buyer's VAT, which eBay collects or you owe, taken out of the price" : ''}`
+          : split ? `${siteName} fees for a ${who}` : `${siteName} fees, no eBay shop`}, checked {longDay(p.checked)}.
         {split && onOpenSettings && <> <button type="button" className={P.link} onClick={onOpenSettings}>Change</button></>}
         {' '}Not counted: {marketplace === 'US' || marketplace === 'CA' ? 'the fee on sales tax, shop and Top Rated rates.' : 'shop, Top Rated and international rates.'}
       </p>

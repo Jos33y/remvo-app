@@ -7,8 +7,9 @@ import { useSellerData } from '@context/SellerData';
 import { CONDITION, readInput, stepsFor } from '@lib/sellerData';
 import { NotEnoughCredits, PickNeeded } from '@lib/sellerJobs';
 import { inputLabel } from '@lib/sellerFormat';
-import { MARKETPLACE } from '@lib/market';
-import { SELLER_ROUTES, listingPath } from '@utils/constants';
+import { MARKETPLACE, MARKETPLACES } from '@lib/market';
+import { sellerApi } from '@lib/sellerApi';
+import { SELLER_ROUTES, listingPath, worldCredits, worldPath } from '@utils/constants';
 import s from '@styles/pages/seller/app.module.css';
 import m from '@styles/pages/seller/making.module.css';
 
@@ -21,6 +22,9 @@ import m from '@styles/pages/seller/making.module.css';
  *   enter    no input yet (opened from the + in Listings)
  *   looking  the input is being checked on Amazon; nothing is spent
  *   pick     a barcode matched more than one product: choose, free
+ *   sites    (world1, from "On more eBay sites") which eBay sites to
+ *            list it on, with what that costs: one site 3 credits,
+ *            three 8, all seven 15. Free until Make.
  *   running  credits taken; each step ticks as the API reports it.
  *            Never a spinner: the seller sees what is happening, in
  *            words. Leaving is fine: the listing carries on and turns
@@ -38,6 +42,8 @@ import m from '@styles/pages/seller/making.module.css';
 const HEADINGS = {
   running: 'Making your listing',
   pick: 'Which product?',
+  sites: 'Which eBay sites?',
+  starting: 'Which eBay sites?',
   failed: 'This one did not work',
   short: 'Not enough credits',
 };
@@ -80,7 +86,11 @@ function NewListing() {
   const location = useLocation();
   const raw = location.state?.raw ?? null;
   const condition = location.state?.condition ?? 'new';
-  const { lookUp, makeListing, settings, listingCredits: LISTING } = useSellerData();
+  // world1: chosen in the form ("On more eBay sites"): the sites are picked once the product is known.
+  const multi = Boolean(location.state?.multi);
+  const { lookUp, makeListing, settings, listingCredits: LISTING, refreshAll } = useSellerData();
+  const home = settings?.marketplace ?? 'US';
+  const [sites, setSites] = useState(() => [home]);
   const steps = stepsFor(settings?.marketplace);
 
   const [stage, setStage] = useState(raw ? 'looking' : 'enter');
@@ -104,6 +114,19 @@ function NewListing() {
     setFailure(message);
     setReturned(creditsBack);
     setStage('failed');
+  }
+
+  // Several sites: one bundle, then the page that follows them all.
+  async function runWorld() {
+    setStage('starting');
+    try {
+      const { world } = await sellerApi.createWorld({ input: input.value, ...(pick && input.kind === 'barcode' ? { asin: pick } : {}), condition, sites });
+      refreshAll?.();
+      navigate(worldPath(world.id), { replace: true });
+    } catch (err) {
+      if (err.status === 402) { setStage('short'); return; }
+      fail(err.message || 'Something went wrong on our side. Try again in a minute.');
+    }
   }
 
   async function run(read, asin = null) {
@@ -139,6 +162,7 @@ function NewListing() {
         if (found.matches) { setMatches(found.matches); setPick(found.matches[0].asin); setStage('pick'); return; }
         setPick(found.product?.asin ?? null);
         if (found.product) setProduct({ title: found.product.title, image: found.product.image ?? null, asin: found.product.asin });
+        if (multi) { setStage('sites'); return; }
         run(read, read.kind === 'barcode' ? found.product?.asin : null);
       } catch (err) {
         fail(err.message);
@@ -196,11 +220,23 @@ function NewListing() {
               ))}
             </div>
             <div className={s.section}>
-              <button type="button" className={`${s.button} ${s.primary} ${s.block}`} onClick={() => { const x = matches.find((y) => y.asin === pick); if (x) setProduct({ title: x.title, image: x.image ?? null, asin: x.asin }); run(input, pick); }}>
-                Make listing, {LISTING} credits
+              <button type="button" className={`${s.button} ${s.primary} ${s.block}`} onClick={() => { const x = matches.find((y) => y.asin === pick); if (x) setProduct({ title: x.title, image: x.image ?? null, asin: x.asin }); if (multi) setStage('sites'); else run(input, pick); }}>
+                {multi ? 'Choose the eBay sites' : `Make listing, ${LISTING} credits`}
               </button>
             </div>
           </div>
+        )}
+
+        {(stage === 'sites' || stage === 'starting') && (
+          <SitesStage
+            product={product}
+            condition={condition}
+            home={home}
+            sites={sites}
+            setSites={setSites}
+            busy={stage === 'starting'}
+            onMake={runWorld}
+          />
         )}
 
         {stage === 'running' && (
@@ -252,7 +288,9 @@ function NewListing() {
         {stage === 'short' && (
           <div className={s.section}>
             <div className={s.notice}>
-              A listing uses {LISTING} credits and your balance is lower. Top up, then make it again from Home.
+              {multi
+                ? `${sites.length} eBay sites use ${worldCredits(sites.length)} credits and your balance is lower. Top up, then make them again from Home.`
+                : `A listing uses ${LISTING} credits and your balance is lower. Top up, then make it again from Home.`}
             </div>
             <div className={s.section}>
               <button type="button" className={`${s.button} ${s.primary} ${s.block}`} onClick={() => setTopUp(true)}>Top up</button>
@@ -262,5 +300,65 @@ function NewListing() {
       </div>
       <TopUpSheet open={topUp} onClose={() => setTopUp(false)} />
     </>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────────────
+ * Which eBay sites (world1)
+ *
+ * The product, then the seven sites as a list to tick, the seller's
+ * own site ticked first. What it costs is said beside the button and
+ * changes as sites are ticked; the three bundles are named under it.
+ * ────────────────────────────────────────────────────────────────── */
+function SitesStage({ product, condition, home, sites, setSites, busy, onMake }) {
+  const n = sites.length;
+  const toggle = (id) => setSites((x) => (x.includes(id) ? x.filter((y) => y !== id) : [...x, id]));
+  const all = n === MARKETPLACES.length;
+  return (
+    <div className={s.section}>
+      {product && (
+        <div className={`${s.card} ${m.chosen}`}>
+          <ProductPhoto src={product.image} size={56} />
+          <div className={m.productText}>
+            <p className={m.productTitle}>{product.title}</p>
+            <p className={m.productMeta}>
+              {product.asin && <span className={s.mono}>{product.asin}</span>}
+              <span>{CONDITION[condition].label}</span>
+            </p>
+          </div>
+        </div>
+      )}
+
+      <div className={s.section}>
+        <div className={s.groupHead}>
+          <h2 className={s.groupTitle} id="sites-heading">List it on</h2>
+          <button type="button" className={s.groupLink} onClick={() => setSites(all ? [home] : MARKETPLACES.map((x) => x.id))}>
+            {all ? 'Just mine' : 'All seven'}
+          </button>
+        </div>
+        <div className={s.packs} role="group" aria-labelledby="sites-heading">
+          {MARKETPLACES.map((x) => (
+            <button key={x.id} type="button" role="checkbox" aria-checked={sites.includes(x.id)} className={`${s.pack} ${m.site}`} onClick={() => toggle(x.id)}>
+              <span className={m.siteCode} aria-hidden="true">{x.id}</span>
+              <span className={s.packMain}>
+                <span className={s.packCredits}>{x.site}</span>
+                <span className={s.packSub}>{x.id === home ? 'Your site' : `${x.name}`}, in {x.lang}</span>
+              </span>
+              <span className={m.tick} aria-hidden="true" />
+            </button>
+          ))}
+        </div>
+        <p className={s.groupNote}>
+          Each site gets its own listing: written in its language, in its categories, with its parcel service and a price from its own live listings.
+        </p>
+      </div>
+
+      <div className={s.section}>
+        <button type="button" className={`${s.button} ${s.primary} ${s.block}`} disabled={!n || busy} onClick={onMake}>
+          {busy ? 'Starting…' : n ? `Make ${n === 1 ? 'the listing' : `${n} listings`}, ${worldCredits(n)} credits` : 'Pick at least one site'}
+        </button>
+        <p className={s.groupNote}>One site 3 credits, three sites 8, all seven 15. A site that does not work gives its credits back.</p>
+      </div>
+    </div>
   );
 }
