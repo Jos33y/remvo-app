@@ -638,6 +638,17 @@
   font-weight: 600;
 }
 
+/* What a line keeps, from the paste's Cost column (profit1). */
+.keep,
+.loss {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.keep { color: var(--gold); }
+.loss { color: var(--oxide-ink); }
+
 .lineRef {
   font-family: var(--font-mono);
   font-size: 0.8125rem;

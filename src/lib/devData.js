@@ -90,18 +90,22 @@ const listing = (over = {}) => ({
   ...over,
 });
 
+// What you keep, as remvo-api works it out (modules/profit/calc.js, 17 October 2026).
+const PROFIT = Object.freeze({"energizer": {"currency": "USD", "checked": "2026-10-17", "sellerType": null, "asks": false, "vatRegistered": false, "vatRate": null, "ready": true, "price": 137.99, "postCharged": 0, "rate": {"label": "Most categories", "text": "13.6% up to $7,500, then 2.35%", "own": false, "matched": false}, "fees": [{"key": "final", "label": "Final value fee", "amount": 18.77}, {"key": "order", "label": "Per-order fee", "amount": 0.4}], "feesTotal": 19.17, "income": 137.99, "buyer": null, "needs": [], "cost": 60, "postCost": 9, "profit": 49.82, "margin": 36.1, "breakEven": 80.32}, "energizerNoCost": {"currency": "USD", "checked": "2026-10-17", "sellerType": null, "asks": false, "vatRegistered": false, "vatRate": null, "ready": false, "price": 137.99, "postCharged": 0, "rate": {"label": "Most categories", "text": "13.6% up to $7,500, then 2.35%", "own": false, "matched": false}, "fees": [{"key": "final", "label": "Final value fee", "amount": 18.77}, {"key": "order", "label": "Per-order fee", "amount": 0.4}], "feesTotal": 19.17, "income": 137.99, "buyer": null, "needs": ["cost"]}, "anker": {"currency": "USD", "checked": "2026-10-17", "sellerType": null, "asks": false, "vatRegistered": false, "vatRate": null, "ready": false, "price": 12499, "postCharged": 0, "rate": {"label": "Most categories", "text": "13.6% up to $7,500, then 2.35%", "own": false, "matched": false}, "fees": [{"key": "final", "label": "Final value fee", "amount": 1137.48}, {"key": "order", "label": "Per-order fee", "amount": 0.4}], "feesTotal": 1137.88, "income": 12499, "buyer": null, "needs": ["cost"]}, "drill": {"currency": "EUR", "checked": "2026-10-17", "sellerType": "business", "asks": false, "vatRegistered": true, "vatRate": 0.19, "ready": true, "price": 12499, "postCharged": 6.99, "rate": {"label": "Garden and DIY", "text": "13%", "own": false, "matched": true}, "fees": [{"key": "final", "label": "Final value fee", "amount": 1625.78}, {"key": "order", "label": "Per-order fee", "amount": 0.45}, {"key": "vat", "label": "VAT on fees, 19%", "reclaimed": true, "amount": 308.98}], "feesTotal": 1626.23, "income": 10509.24, "buyer": null, "needs": [], "cost": 9000, "postCost": 5.49, "profit": -122.48, "margin": -1.2, "breakEven": 12671.42}, "dyson": {"currency": "EUR", "checked": "2026-10-17", "sellerType": "business", "asks": false, "vatRegistered": false, "vatRate": 0.2, "ready": false, "needs": ["price"]}, "tommee": {"currency": "USD", "checked": "2026-10-17", "sellerType": null, "asks": false, "vatRegistered": false, "vatRate": null, "ready": true, "price": 137.99, "postCharged": 0, "rate": {"label": "Most categories", "text": "13.6% up to $7,500, then 2.35%", "own": false, "matched": false}, "fees": [{"key": "final", "label": "Final value fee", "amount": 18.77}, {"key": "order", "label": "Per-order fee", "amount": 0.4}], "feesTotal": 19.17, "income": 137.99, "buyer": null, "needs": [], "cost": 160, "postCost": 12.5, "profit": -53.68, "margin": -38.9, "breakEven": 200.11}, "ukAsk": {"currency": "GBP", "checked": "2026-10-17", "sellerType": null, "asks": true, "vatRegistered": false, "vatRate": null, "ready": true, "price": 24.99, "postCharged": 3.49, "rate": null, "fees": [], "feesTotal": 0, "income": 28.48, "buyer": {"fee": 1.7, "pays": 30.18}, "needs": [], "cost": 9.5, "postCost": 3.1, "profit": 15.88, "margin": 55.8, "breakEven": 9.11}});
+
 let seq = 0;
 const ref = () => `L-${(++seq).toString(36).toUpperCase().padStart(6, 'X')}`;
 const jobId = () => `job_dev${String(seq).padStart(17, '0')}`;
 
-function job({ status = 'ready', input = { kind: 'barcode', value: '842982108097' }, marketplace = 'US', source = null, l = {}, mins = 5, batchId = null, failure = null, step } = {}) {
+function job({ status = 'ready', input = { kind: 'barcode', value: '842982108097' }, marketplace = 'US', source = null, l = {}, mins = 5, batchId = null, failure = null, step, profit = PROFIT.energizerNoCost, edits = {} } = {}) {
   const r = ref();
   return {
     id: jobId(), ref: r, batchId, status, createdAt: ago(mins), finishedAt: status === 'ready' || status === 'failed' ? ago(mins - 1) : null,
     input, marketplace, condition: 'new', credits: status === 'failed' ? 0 : 3,
     step: step ?? (status === 'ready' ? 6 : status === 'running' ? 2 : 0), steps: STEPS,
     source: source ?? { title: 'Energizer BTS356 Bluetooth Speaker', url: 'https://www.amazon.com/dp/B0EXAMPLE', image: SPEAKER, amazon: 'amazon.com' },
-    listing: status === 'ready' ? listing(l) : null, edits: {}, failure: status === 'failed' ? failure : null,
+    listing: status === 'ready' ? listing(l) : null, edits, failure: status === 'failed' ? failure : null,
+    profit: status === 'ready' ? profit : null,
   };
 }
 
@@ -118,21 +122,30 @@ function worstJobs() {
         category: { id: '20612', path: LONG_CATEGORY }, parcel: { l: 24, w: 18, h: 14, weight: 46, oz: 0, units: 'imperial', band: 'USPS Ground Advantage' },
         price: { value: 12499, median: 12500, low: 11999, high: 12999, listings: 1, by: 'median', currency: 'USD' },
         alternative: 'Anker A1263 PowerCore 10000 mAh Power Bank, USB-C Input, Black, Boxed, Brand New',
-        missing: ['Compatible Model', 'Features'] } }),
+        missing: ['Compatible Model', 'Features'] }, profit: PROFIT.anker }),
     job({ mins: 30, marketplace: 'DE', input: { kind: 'barcode', value: '4059952513839' },
       source: { title: 'Bosch Professional 18V System Akku-Bohrschrauber GSR 18V-55 (inkl. 2x 2,0 Ah Akku, Ladegerät GAL 18V-20, Zusatzhandgriff, L-BOXX)', url: 'https://www.amazon.de/dp/B07XYZ1234', image: DRILL, amazon: 'amazon.de' },
       l: { site: 'eBay.de', language: 'German', title: 'Bosch Professional GSR 18V-55 Akku-Bohrschrauber 2x 2,0 Ah Akku Ladegerät L-BOXX',
         category: { id: '122838', path: 'Heimwerker > Elektrowerkzeuge > Bohrmaschinen & Akkuschrauber' },
         parcel: { l: 40, w: 32, h: 12, weight: 3.4, units: 'metric', band: 'DHL Paket' },
-        price: { value: 12499, median: 12499, low: 11000, high: 13999, listings: 3, by: 'median', currency: 'EUR' } } }),
+        price: { value: 12499, median: 12499, low: 11000, high: 13999, listings: 3, by: 'median', currency: 'EUR' } },
+      profit: PROFIT.drill, edits: { cost: 9000, postCost: 5.49, postCharged: 6.99 } }),
     job({ mins: 90, marketplace: 'FR', input: { kind: 'barcode', value: '5025155028681' },
       l: { site: 'eBay.fr', language: 'French', title: "Aspirateur balai sans fil Dyson V8 Absolute, autonomie jusqu'à 40 min, gris",
         parcel: { l: 26, w: 22, h: 72, weight: null, units: 'metric', band: 'Colissimo' },
-        price: { value: null, median: null, low: null, high: null, listings: 0, by: null, currency: 'EUR' } } }),
+        price: { value: null, median: null, low: null, high: null, listings: 0, by: null, currency: 'EUR' } }, profit: PROFIT.dyson }),
+    job({ mins: 120, marketplace: 'UK', input: { kind: 'barcode', value: '6925281995682' },
+      source: { title: 'JBL Tune 510BT Wireless On-Ear Headphones, Black', url: 'https://www.amazon.co.uk/dp/B08WM3LMJF', image: null, amazon: 'amazon.co.uk' },
+      l: { site: 'eBay.co.uk', title: 'JBL Tune 510BT Wireless On-Ear Bluetooth Headphones Black Pure Bass Foldable New',
+        category: { id: '112529', path: 'Sound & Vision > Headphones', ids: ['293', '112529'] },
+        parcel: { l: 20, w: 17, h: 6, weight: 0.4, units: 'metric', band: 'Royal Mail small parcel' },
+        price: { value: 24.99, median: 24.99, low: 21.5, high: 29.99, listings: 14, by: 'median', currency: 'GBP' } },
+      profit: PROFIT.ukAsk, edits: { cost: 9.5, postCost: 3.1, postCharged: 3.49 } }),
     job({ mins: 200, input: { kind: 'barcode', value: '5010415241062' },
       source: { title: 'TOMMEE TIPPEE CLOSER TO NATURE BABY BOTTLES 260ML X3 ANTI-COLIC VALVE', url: 'https://www.amazon.com/dp/B00XYZ', image: null, amazon: 'amazon.com' },
       l: { title: 'TOMMEE TIPPEE CLOSER TO NATURE BABY BOTTLES 260ML X3 ANTI-COLIC VALVE BPA FREE', parcel: null,
-        category: null, missing: ['category'], identifiers: { brand: 'Tommee Tippee', mpn: null, gtin: null } } }),
+        category: null, missing: ['category'], identifiers: { brand: 'Tommee Tippee', mpn: null, gtin: null } },
+      profit: PROFIT.tommee, edits: { cost: 160, postCost: 12.5 } }),
     job({ mins: 600, input: { kind: 'barcode', value: '841667174051' }, source: { title: 'Echo Dot', url: 'https://www.amazon.com/dp/B09B8V1LZ3', image: null, amazon: 'amazon.com' },
       l: { title: 'Echo Dot', parcel: { l: 4, w: 4, h: 4, weight: 0, oz: 9, units: 'imperial', band: 'USPS Ground Advantage' } } }),
     job({ status: 'failed', mins: 1400, input: { kind: 'barcode', value: '012345678905' }, failure: 'Amazon has no product for this barcode on amazon.com. Check the number, or paste the product page link instead.' }),
@@ -152,6 +165,8 @@ function batchLines(total, batchId, mix) {
       image: k === 'queued' ? null : [SPEAKER, CHARGER, DRILL, null, 'https://example.invalid/broken.jpg'][i % 5],
       product: k === 'queued' ? null : 'Anker Portable Charger, Power Bank, 10,000mAh Battery Pack with PowerIQ Charging Technology and USB-C (Input Only) for iPhone 15/15 Pro/15 Pro Max, Samsung Galaxy S23, Pixel and More',
       price: k === 'ready' ? { value: i % 11 === 0 ? 12499 : 37.99, currency: 'USD' } : null,
+      // Every third ready line came with a cost; the 12,499 ones at a loss.
+      profit: k === 'ready' && i % 3 === 0 ? (i % 11 === 0 ? { value: -1137.88, margin: -9.1, currency: 'USD' } : { value: 14.47, margin: 38.1, currency: 'USD' }) : null,
       picked: k === 'ready' && i % 9 === 0 ? { of: 5 } : null,
       missing: k === 'ready' && i % 13 === 0 ? ['Compatible Model', 'Features'] : [],
       failure: k === 'failed' ? (i % 2 ? 'Amazon has no product for this barcode on amazon.com. Check the number, or paste the product page link instead.' : 'Not a barcode.') : null,
@@ -222,7 +237,7 @@ function build(mode, balanceOverride) {
     welcome = { credits: 3, expiresAt: ahead(30) };
   } else if (mode === 'one') {
     seq = 0;
-    jobs = [job({ mins: 3 })];
+    jobs = [job({ mins: 3, profit: PROFIT.energizer, edits: { cost: 60, postCost: 9 } })];
     batches = [batch('bat_dev000000000000000001', 'B-ONE001', 1, () => 'ready', 30)];
     balance = 1;
   } else if (mode === 'huge') {
@@ -243,7 +258,7 @@ function build(mode, balanceOverride) {
     wallet: {
       balance, expiresAt: bought > 0 ? expiresAt : null, welcome,
       worth: { cents: Math.max(0, bought) * 10, currency: 'USD' },
-      settings: { marketplace: 'US', currency: 'USD', settingsSetAt: ago(60 * 24 * 75) },
+      settings: { marketplace: 'US', currency: 'USD', settingsSetAt: ago(60 * 24 * 75), sellerType: null, vatRegistered: false },
       topUpsEnabled: true, listingsEnabled: true, listingCredits: 3,
       // worst: the peak is on (every bonus showing); one: Polar has only the first three packs set up.
       packs: mode === 'one'

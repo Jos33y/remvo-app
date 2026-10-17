@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router';
 import { PageHeader } from '@components/ui/seller/PageHeader';
 import { Sheet } from '@components/ui/seller/Sheet';
 import { NameSheet, PasswordSheet } from '@components/ui/seller/AccountSheets';
+import { SellerTypeSheet, sellerTypeName } from '@components/ui/seller/SellerTypeSheet';
 import { useToast } from '@components/ui/seller/Toast';
 import { IconChat, IconChevronRight, IconExternal, IconMail } from '@components/ui/seller/icons';
 import { CURRENCIES, MARKETPLACES, MARKETPLACE } from '@lib/market';
@@ -77,7 +78,7 @@ export function ProfilePage() {
   const { settings, updateSettings } = useSellerData();
   const [leaving, setLeaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const [choosing, setChoosing] = useState(null); // 'site' | 'currency' | 'password' | 'name' | null
+  const [choosing, setChoosing] = useState(null); // 'site' | 'currency' | 'account' | 'password' | 'name' | null
   const [keys, setKeys] = useState(null);
   const [keyBusy, setKeyBusy] = useState(false);
   const [removing, setRemoving] = useState(null); // the passkey being asked about
@@ -115,10 +116,10 @@ export function ProfilePage() {
   const site = MARKETPLACE[settings?.marketplace ?? 'US'];
   const cur = CURRENCIES.find((c) => c.id === (settings?.currency ?? 'USD'));
 
-  async function choose(patch, said) {
+  async function choose(patch, said, keepOpen = false) {
     try {
       await updateSettings(patch);
-      setChoosing(null);
+      if (!keepOpen) setChoosing(null);
       toast(said);
     } catch (err) {
       toast(err.message);
@@ -171,8 +172,16 @@ export function ProfilePage() {
               <span className={s.rowValue}>{cur.symbol} {cur.id}</span>
               <span className={s.chevron}><IconChevronRight /></span>
             </button>
+            <button type="button" className={s.row} onClick={() => setChoosing('account')}>
+              <span className={s.rowMain}>
+                <span className={s.rowTitle}>eBay account</span>
+                <span className={s.rowSub}>For the fees in What you keep</span>
+              </span>
+              <span className={s.rowValue}>{sellerTypeName(settings)}</span>
+              <span className={s.chevron}><IconChevronRight /></span>
+            </button>
           </div>
-          <p className={s.groupNote}>The eBay site sets the language, categories, parcel services and prices of new listings. The currency is what you pay in.</p>
+          <p className={s.groupNote}>The eBay site sets the language, categories, parcel services and prices of new listings. The currency is what you pay in. Your eBay account, private or business, sets the fees profit is worked out on.</p>
         </section>
 
         <section className={s.section} aria-labelledby="account-heading">
@@ -313,6 +322,8 @@ export function ProfilePage() {
         </div>
         <p className={`${s.small} ${s.after}`}>Listings you have already made stay as they are.</p>
       </Sheet>
+
+      <SellerTypeSheet open={choosing === 'account'} onClose={() => setChoosing(null)} settings={settings} onChoose={choose} />
 
       <Sheet open={choosing === 'currency'} onClose={() => setChoosing(null)} title="Currency">
         <div className={s.packs} role="radiogroup" aria-label="Currency">

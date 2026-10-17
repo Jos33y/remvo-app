@@ -41,10 +41,19 @@ export function onCreditsMoved(fn) { onMoney = fn; }
 
 const finished = (j) => j.status === 'ready' || j.status === 'failed';
 
-function put(job) {
+function put(incoming) {
   if (state.accountId == null) return;
-  const i = state.jobs.findIndex((j) => j.id === job.id);
-  const jobs = i < 0 ? [job, ...state.jobs] : state.jobs.map((j) => (j.id === job.id ? job : j));
+  const i = state.jobs.findIndex((j) => j.id === incoming.id);
+  // A listing from a list has no profit (only one asked for by id
+  // does): keep the one already here while the seller's figures stand.
+  const had = i >= 0 ? state.jobs[i] : null;
+  const job = !('profit' in incoming) && had && 'profit' in had && JSON.stringify(had.edits) === JSON.stringify(incoming.edits)
+    ? { ...incoming, profit: had.profit }
+    : incoming;
+  // A listing already in the list keeps its place: asking for it again
+  // (its profit, a poll) must not reorder the list under the seller.
+  if (i >= 0) { set({ jobs: state.jobs.map((j, k) => (k === i ? job : j)) }); return; }
+  const jobs = [job, ...state.jobs];
   jobs.sort((a, b) => b.createdAt.localeCompare(a.createdAt) || b.id.localeCompare(a.id));
   set({ jobs });
 }

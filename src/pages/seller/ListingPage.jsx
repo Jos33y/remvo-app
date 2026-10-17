@@ -13,6 +13,8 @@ import { hasParcel, inputLabel, listingPrice, longDate, parcel, when } from '@li
 import { count, plural } from '@lib/plural';
 import { PRICING, SELLER_ROUTES } from '@utils/constants';
 import { Breakable } from '@components/ui/seller/Breakable';
+import { ProfitCard } from '@components/ui/seller/ProfitCard';
+import { SellerTypeSheet } from '@components/ui/seller/SellerTypeSheet';
 import s from '@styles/pages/seller/app.module.css';
 import L from '@styles/pages/seller/listing.module.css';
 
@@ -38,6 +40,11 @@ const UNDO_SAFETY_MS = 60_000;
  * Anything Remvo could not find (a category, a parcel the page does
  * not give, a price with no live listings to go by, a required item
  * specific) is said plainly where it would be, never left blank.
+ *
+ * Above the fields, what the seller keeps if it sells (ProfitCard),
+ * on their own eBay fees: worked out by the API, which is why the
+ * listing is asked for again when it came from a list without it, and
+ * when the seller changes how their eBay account is set up.
  * ────────────────────────────────────────────────────────────────── */
 
 const DAY = 86_400_000;
@@ -158,7 +165,8 @@ export function ListingPage() {
   const location = useLocation();
   const madeIn = location.state?.madeIn ?? null;
   const toast = useToast();
-  const { job: find, fetchJob, deleteJobSoon, editJob, jobsStatus } = useSellerData();
+  const { job: find, fetchJob, deleteJobSoon, editJob, jobsStatus, settings, updateSettings } = useSellerData();
+  const [account, setAccount] = useState(false); // the eBay account sheet
   const { copy } = useClipboard({ resetMs: 1500 });
   const [missing, setMissing] = useState(false);
   // Set as a delete starts: the listing leaving the store is not a reason to ask the server for it.
@@ -175,6 +183,18 @@ export function ListingPage() {
     fetchJob(id).catch(() => { if (live) setMissing(true); });
     return () => { live = false; };
   }, [id, Boolean(job), jobsStatus]);
+
+  // The profit comes with a listing asked for by id, not with the list,
+  // and follows the seller's eBay account settings.
+  const profitKey = `${settings?.sellerType ?? ''}|${settings?.vatRegistered ? 1 : 0}`;
+  const askedFor = useRef(null);
+  useEffect(() => {
+    if (!job || job.status !== 'ready' || deleting.current) return;
+    const key = `${job.id}|${profitKey}`;
+    if (askedFor.current === key && job.profit !== undefined) return;
+    askedFor.current = key;
+    fetchJob(job.id).catch(() => {});
+  }, [job?.id, job?.status, job?.profit === undefined, profitKey]);
 
   if (!job) {
     return (
@@ -312,6 +332,18 @@ export function ListingPage() {
 
         {l && (
           <>
+            {job.profit !== undefined && (
+              <ProfitCard
+                key={job.id}
+                job={job}
+                profit={job.profit}
+                site={site}
+                onSave={(field, value) => editJob(job.id, field, value)}
+                onSellerType={(patch) => updateSettings(patch).then(() => toast(patch.sellerType === 'business' ? 'Business seller fees' : 'Private seller fees')).catch((err) => toast(err.message))}
+                onOpenSettings={() => setAccount(true)}
+              />
+            )}
+
             <section className={L.fieldsSection} aria-labelledby="copy-heading">
               <div className={s.groupHead}>
                 <h2 id="copy-heading" className={s.groupTitle}>Copy into eBay</h2>
@@ -436,6 +468,12 @@ export function ListingPage() {
         </div>
       </div>
 
+      <SellerTypeSheet
+        open={account}
+        onClose={() => setAccount(false)}
+        settings={settings}
+        onChoose={(patch, said, keepOpen) => updateSettings(patch).then(() => { if (!keepOpen) setAccount(false); toast(said); }).catch((err) => toast(err.message))}
+      />
     </>
   );
 }

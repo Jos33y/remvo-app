@@ -190,7 +190,7 @@ export function BulkPage() {
               </div>
             </div>
             <p className={b.spreadsheet}>
-              From a spreadsheet: copy the column and paste it, or save the sheet as a CSV and upload it. A column named Condition is used when there is one.
+              From a spreadsheet: copy the column and paste it, or save the sheet as a CSV and upload it. A column named Condition is used when there is one, and a column named Cost gives each listing what you keep after eBay's fees.
             </p>
 
             <div className={b.condition}>
@@ -264,6 +264,13 @@ function Verdict({ checked, each, balance, short, canStart, busy, onStart, onTop
         <p className={b.note}>
           {checked.duplicates > 0 && `${checked.duplicates === 1 ? 'One line repeats' : `${num(checked.duplicates)} lines repeat`} an earlier line, so nothing is listed twice. `}
           {checked.fixed?.length > 0 && `${checked.fixed.length === 1 ? 'One barcode had' : `${num(checked.fixed.length)} barcodes had`} lost the 0 a spreadsheet drops from the front; it is put back.`}
+        </p>
+      )}
+      {checked.costColumn && (
+        <p className={b.note}>
+          {checked.costs > 0
+            ? `${checked.costs === n ? 'Every line has' : `${num(checked.costs)} of ${num(n)} lines have`} a cost from the ${checked.costColumn} column, so ${checked.costs === 1 ? 'its listing shows' : 'their listings show'} what you keep after eBay's fees.`
+            : `The ${checked.costColumn} column has no amounts Remvo can read, such as 12.50.`}
         </p>
       )}
 

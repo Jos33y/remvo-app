@@ -283,6 +283,12 @@ const Line = memo(function Line({ line }) {
           <StatusPill status={line.status} />
           <span className={b.lineRef}>{line.ref}</span>
           {line.price?.value != null && <span>{listingPrice(line.price.value, line.price.currency)}</span>}
+          {/* From a Cost column: what the seller keeps, gold as money is; a loss in oxide. */}
+          {line.profit && (
+            <span className={line.profit.value < 0 ? b.loss : b.keep}>
+              {line.profit.value < 0 ? `Loses ${listingPrice(-line.profit.value, line.profit.currency)}` : `Keeps ${listingPrice(line.profit.value, line.profit.currency)}`}
+            </span>
+          )}
           {line.picked && <span className={b.check}>Check: 1 of {line.picked.of} products</span>}
           {!line.picked && line.missing?.length > 0 && <span className={b.check}>Check: {line.missing.length} to fill in</span>}
         </span>
@@ -297,5 +303,5 @@ const Line = memo(function Line({ line }) {
 }, (a, z) => {
   const x = a.line; const y = z.line;
   return x.id === y.id && x.status === y.status && x.title === y.title && x.product === y.product && x.image === y.image
-    && x.price?.value === y.price?.value && x.failure === y.failure && Boolean(x.picked) === Boolean(y.picked) && (x.missing?.length ?? 0) === (y.missing?.length ?? 0);
+    && x.price?.value === y.price?.value && x.profit?.value === y.profit?.value && x.failure === y.failure && Boolean(x.picked) === Boolean(y.picked) && (x.missing?.length ?? 0) === (y.missing?.length ?? 0);
 });
