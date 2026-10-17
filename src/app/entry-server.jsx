@@ -5,6 +5,7 @@ import { marketingRoutes } from './marketingRoutes';
 import { LoaderDismisser } from './LoaderDismisser';
 import { BRAND, PRICING, ROUTES } from '@utils/constants';
 import { OG_IMAGE, SITE_ORIGIN } from '@lib/seo';
+import { FAQ } from '@pages/tools/FeeCalculatorPage';
 
 export { PAGES, NOT_FOUND, SITE_ORIGIN, OG_IMAGE, canonical } from '@lib/seo';
 
@@ -77,6 +78,28 @@ export function structuredData(path) {
         url: `${SITE_ORIGIN}${ROUTES.PRICING}`,
       })),
     };
+  }
+  // tools1: a free web tool, and its questions, as the page shows them.
+  if (path === ROUTES.FEES_US || path === ROUTES.FEES_UK) {
+    const uk = path === ROUTES.FEES_UK;
+    return [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'WebApplication',
+        name: uk ? 'eBay UK fee calculator' : 'eBay fee calculator',
+        url: `${SITE_ORIGIN}${path}`,
+        applicationCategory: 'BusinessApplication',
+        operatingSystem: 'Any',
+        isAccessibleForFree: true,
+        offers: { '@type': 'Offer', price: '0', priceCurrency: uk ? 'GBP' : 'USD' },
+        publisher: { '@type': 'Organization', name: BRAND.NAME, url: `${SITE_ORIGIN}/` },
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: FAQ[uk ? 'UK' : 'US'].map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+      },
+    ];
   }
   return null;
 }

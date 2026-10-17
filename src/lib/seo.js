@@ -30,6 +30,16 @@ export const PAGES = Object.freeze({
     title: 'A real eBay listing made from one barcode | Remvo',
     description: 'Every field Remvo wrote for a JBL Flip 6 from its barcode: title, category, 9 item specifics, parcel, a price from live eBay.com listings.',
   },
+  [ROUTES.FEES_US]: {
+    title: 'eBay fee calculator: what eBay.com takes, what you keep | Remvo',
+    description: 'Free eBay.com fee calculator. Type the sale price and your costs to see the final value fee, the per-order fee, your profit, margin and break-even price. No account.',
+    updated: '2026-10-17',
+  },
+  [ROUTES.FEES_UK]: {
+    title: 'eBay UK fee calculator for private and business sellers | Remvo',
+    description: 'Free eBay.co.uk fee calculator. Private or business, with or without VAT, by category: see what eBay takes and what you keep after your costs. No account.',
+    updated: '2026-10-17',
+  },
   [ROUTES.PRICING]: {
     title: 'Pricing | Remvo',
     description: '$0.30 a listing with prepaid credits. No subscription. Your first listing is on us, and a listing that fails gives its credits back.',

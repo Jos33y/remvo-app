@@ -253,7 +253,8 @@
   padding-top: 0;
   font-size: 0.8125rem;
   font-weight: 400;
-  color: var(--site-text-3);
+  /* text-2, not text-3: small text needs the stronger contrast (tools1, axe). */
+  color: var(--site-text-2);
 }
 
 .table tbody th {

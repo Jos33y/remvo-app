@@ -1,0 +1,183 @@
+/* ═══════════════════════════════════════
+   EBAY FEE CALCULATOR (tools1)
+   The info page's intro, then the tool:
+   what sold (price, account, category)
+   on the left, the profit slip on the
+   right, the same slip as on a listing in
+   the app. Phone: one column, the slip
+   under the price. The tool sits inside
+   the app theme, so its inputs and the
+   slip are the app's, on the site's
+   night.
+   ═══════════════════════════════════════ */
+
+.kicker {
+  margin: 0 0 14px;
+  font-size: 0.9375rem;
+  color: var(--site-text-2);
+}
+
+.band {
+  padding: 0 0 clamp(48px, 7vw, 88px);
+}
+
+.tool {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+@media (min-width: 960px) {
+  .tool {
+    grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+    gap: 24px;
+  }
+}
+
+.panel {
+  display: grid;
+  gap: 22px;
+  padding: 20px;
+  border-radius: 14px;
+  background-color: var(--app-card);
+}
+
+.result {
+  min-width: 0;
+}
+
+.field {
+  min-width: 0;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.hint {
+  margin: 8px 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--app-text-3);
+}
+
+.priceBox {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.priceSym {
+  position: absolute;
+  left: 16px;
+  font-family: var(--font-mono);
+  font-size: 1.375rem;
+  color: var(--app-text-3);
+  pointer-events: none;
+}
+
+.priceInput.priceInput {
+  height: 60px;
+  padding-left: 40px;
+  font-size: 1.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.segmented {
+  width: 100%;
+}
+
+.segmented > button {
+  min-height: 40px;
+}
+
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  margin-top: 6px;
+  font-size: 0.9375rem;
+  color: var(--app-text);
+  cursor: pointer;
+}
+
+.check input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--ivory);
+}
+
+.select.select {
+  height: auto;
+  min-height: 50px;
+  padding: 12px 40px 12px 14px;
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  white-space: normal;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--app-text-3) 50%),
+    linear-gradient(135deg, var(--app-text-3) 50%, transparent 50%);
+  background-position: calc(100% - 20px) 50%, calc(100% - 15px) 50%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+
+.select option {
+  color: var(--ivory);
+  background-color: var(--night-1);
+}
+
+.other {
+  margin: 0;
+  padding-top: 16px;
+  font-size: 0.875rem;
+  color: var(--app-text-3);
+  border-top: 1px solid var(--app-sep);
+}
+
+.otherLink {
+  color: var(--app-text);
+  text-decoration: underline;
+  text-decoration-color: var(--app-text-3);
+  text-underline-offset: 3px;
+}
+
+.otherLink:focus-visible {
+  outline: 2px solid var(--ivory);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.error {
+  margin-top: 10px;
+}
+
+.closeText {
+  max-width: 46ch;
+  margin: 14px 0 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--site-text-2);
+}
+
+@media (prefers-contrast: more) {
+  .kicker, .hint, .other, .closeText { color: var(--ivory); }
+}
+
+/* The rates by category: on a phone a tiered rate wraps under itself
+ * rather than run past the edge of the page. */
+.rates td {
+  width: 42%;
+  white-space: normal;
+}
+
+@media (min-width: 761px) {
+  .rates td { width: 34%; }
+}

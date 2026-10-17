@@ -8,6 +8,7 @@ import { RefundsPage } from '@pages/legal/RefundsPage';
 import { CreditsPage } from '@pages/legal/CreditsPage';
 import { ContactPage } from '@pages/contact/ContactPage';
 import { ExamplePage } from '@pages/example/ExamplePage';
+import { FeeCalculatorUsPage, FeeCalculatorUkPage } from '@pages/tools/FeeCalculatorPage';
 import { NotFoundPage } from '@pages/not-found/NotFoundPage';
 import { ROUTES } from '@utils/constants';
 
@@ -32,6 +33,8 @@ export const marketingRoutes = [
       { path: ROUTES.CREDITS, element: <CreditsPage /> },
       { path: ROUTES.CONTACT, element: <ContactPage /> },
       { path: ROUTES.EXAMPLE, element: <ExamplePage /> },
+      { path: ROUTES.FEES_US, element: <FeeCalculatorUsPage /> },
+      { path: ROUTES.FEES_UK, element: <FeeCalculatorUkPage /> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },
