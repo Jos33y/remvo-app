@@ -451,3 +451,11 @@ a.balanceText:focus-visible {
 
 .recentEmpty { color: var(--ivory-2); }
 }
+
+/* world2: a product's sites, as their codes, on its one row. */
+.siteCodes {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--ivory-3);
+}

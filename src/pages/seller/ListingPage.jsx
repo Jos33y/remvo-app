@@ -123,7 +123,9 @@ function PriceRange({ price, value, site }) {
   const { low, high, median, listings, currency } = price;
   if (!listings || low == null || high == null) return null;
   const span = high - low;
-  const at = (x) => (span > 0 ? Math.min(100, Math.max(0, ((x - low) / span) * 100)) : 50);
+  // Every live listing at one price: there is no spread to place anything on (world2). The note says it in words.
+  if (!(span > 0)) return null;
+  const at = (x) => Math.min(100, Math.max(0, ((x - low) / span) * 100));
   return (
     <div className={L.range}>
       <div className={L.rangeTrack} aria-hidden="true">
@@ -140,6 +142,15 @@ function PriceRange({ price, value, site }) {
       </p>
     </div>
   );
+}
+
+/* What the live listings say, in one line. One price for all of them is said as that (world2). */
+function priceNote(price, site, none = 'Set your own below.') {
+  const { listings, low, high, median, currency } = price;
+  if (!listings) return `No live ${site} listings of this product to price from. ${none}`;
+  if (listings === 1) return `One live ${site} listing, at ${listingPrice(median ?? low, currency)}.`;
+  if (low != null && low === high) return `All ${listings} live ${site} listings are ${listingPrice(low, currency)}.`;
+  return `Middle of ${count(listings, `live ${site} listing`)} is ${listingPrice(median, currency)}.`;
 }
 
 function BigPhoto({ src }) {
@@ -270,9 +281,7 @@ export function ListingPage() {
                   : <p className={L.priceNone}>Not set</p>}
                 <PriceRange price={o.price} value={l.price.value} site={site.site} />
                 <p className={L.priceNote}>
-                  {o.price.listings
-                    ? `Middle of ${count(o.price.listings, `live ${site.site} listing`)} is ${listingPrice(o.price.median, o.price.currency)}.`
-                    : `No live ${site.site} listings of this product to price from. Set your own below.`}
+                  {priceNote(o.price, site.site)}
                 </p>
               </div>
 
@@ -452,9 +461,7 @@ export function ListingPage() {
                     ? <p className={s.price}>{listingPrice(l.price.value, l.price.currency)}</p>
                     : <p className={s.fieldValue}>Not set</p>}
                   <p className={s.small}>
-                    {o.price.listings
-                      ? `Middle of ${count(o.price.listings, `live ${site.site} listing`)} is ${listingPrice(o.price.median, o.price.currency)}`
-                      : `No live ${site.site} listings of this product to price from. Set your own.`}
+                    {priceNote(o.price, site.site, 'Set your own.')}
                   </p>
                 </EditableField>
               </div>

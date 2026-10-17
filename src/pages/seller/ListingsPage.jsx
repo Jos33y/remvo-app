@@ -4,7 +4,8 @@ import { PageHeader } from '@components/ui/seller/PageHeader';
 import { IconChevronRight, IconListings, IconPlus, IconStack } from '@components/ui/seller/icons';
 import { useSellerData } from '@context/SellerData';
 import { MARKETPLACE } from '@lib/market';
-import { JobRow } from '@pages/seller/SellerHomePage';
+import { JobRow, ListRow } from '@pages/seller/SellerHomePage';
+import { withWorlds } from '@lib/worldRows';
 import { SELLER_ROUTES, batchPath } from '@utils/constants';
 import { when } from '@lib/sellerFormat';
 import { count } from '@lib/plural';
@@ -118,7 +119,10 @@ export function ListingsPage() {
         <div className={s.section}>
           {shown.length ? (
             <div className={s.group}>
-              {shown.map((j) => <JobRow key={j.id} job={j} />)}
+              {/* All, unsearched: a product on several sites is one row. Filtered or searched: each site's own (world2). */}
+              {filter === 'all' && !q.trim()
+                ? withWorlds(shown).map((x) => <ListRow key={x.kind === 'world' ? x.id : x.job.id} item={x} />)
+                : shown.map((j) => <JobRow key={j.id} job={j} />)}
             </div>
           ) : (
             <div className={s.empty}>

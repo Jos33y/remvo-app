@@ -144,6 +144,13 @@
 
 /* ── Which eBay sites (world1) ── */
 
+/* world2: the link to check the product sits in its line, not over the picker's rows. */
+.chosen .view {
+  position: static;
+  min-height: 44px;
+  margin-left: -4px;
+}
+
 /* The product, chosen, above the sites. */
 .chosen {
   display: flex;

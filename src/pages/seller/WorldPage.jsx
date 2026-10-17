@@ -24,10 +24,10 @@ import W from '@styles/pages/seller/world.module.css';
  * sites have a price, where it brings in most: each site's price less
  * that site's eBay fees, on the seller's own account settings, put into
  * the seller's currency at the European Central Bank's rate, best
- * first, as bars a seller reads at a glance. The item costs the same
- * wherever it sells, so the order is also the order of profit; postage
- * and international fees depend on where they post from, and the page
- * says so rather than guess.
+ * first, as bars a seller reads at a glance. What the item costs the
+ * seller for each site, and postage from where they post, are not
+ * known here, and the page says so rather than guess (world2: the
+ * order is of what each site brings in, not yet of profit).
  *
  * Each site's listing is an ordinary listing, a tap away, and all of
  * them come down as one CSV with a row a site.
@@ -176,7 +176,8 @@ function SiteRow({ job, best }) {
         </span>
         <span className={s.rowSub}>
           <StatusPill status={job.status} />
-          <span>{site.site}</span>
+          {/* The site's name is the title until there is one: said once (world2). */}
+          {job.title && <span>{site.site}</span>}
           {job.price?.value != null && <span className={s.mono}>{listingPrice(job.price.value, job.price.currency)}</span>}
           {job.status === 'ready' && job.price?.value == null && <span>No price to go by</span>}
           {job.status === 'running' && <span>{stepsFor(job.marketplace)[Math.max(0, job.step - 1)] ?? 'Starting'}</span>}
@@ -242,7 +243,8 @@ function Compare({ world, busy }) {
       <p className={s.groupNote}>
         What each site&apos;s price leaves after that site&apos;s eBay fees, on your account settings
         {c.comparable && c.rates ? `, in ${c.currency} at the European Central Bank's rate of ${longDay(c.rates.date)}` : ', each in its own currency (no exchange rate to compare them just now)'}.
-        {' '}On another country&apos;s site that is business rates, and on a UK or EU site the buyer&apos;s VAT comes out of the price. Your item costs the same wherever it sells, so this is also the order of profit. Not counted: postage and international fees, which depend on where you post from.
+        {' '}On another country&apos;s site that is business rates, and on a UK or EU site the buyer&apos;s VAT comes out of the price.
+        {' '}Not counted: what the item costs you for each site, and postage and international fees, which depend on where you post from. Add your costs on each listing to see the profit there.
       </p>
     </>
   );

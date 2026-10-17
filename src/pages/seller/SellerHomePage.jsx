@@ -9,7 +9,8 @@ import { inputLabel, when } from '@lib/sellerFormat';
 import { withEdits } from '@lib/sellerData';
 import { sellerApi } from '@lib/sellerApi';
 import { count, num, plural } from '@lib/plural';
-import { ROUTES, SELLER_ROUTES, listingPath, siteUrl, supportPath } from '@utils/constants';
+import { ROUTES, SELLER_ROUTES, listingPath, siteUrl, supportPath, worldPath } from '@utils/constants';
+import { withWorlds, worldStatus } from '@lib/worldRows';
 import { Breakable } from '@components/ui/seller/Breakable';
 import '@styles/base/instrument-serif.css';
 import s from '@styles/pages/seller/app.module.css';
@@ -32,6 +33,8 @@ import h from '@styles/pages/seller/home.module.css';
 
 export function Thumb({ src }) {
   const [broken, setBroken] = useState(false);
+  // A new picture gets a fresh try: one that failed before must not hide the next (world2).
+  useEffect(() => { setBroken(false); }, [src]);
   if (!src || broken) {
     return (
       <span className={`${h.thumb} ${h.thumbEmpty}`} aria-hidden="true">
@@ -64,6 +67,36 @@ export function JobRow({ job }) {
       <span className={s.chevron}><IconChevronRight /></span>
     </Link>
   );
+}
+
+/* One product on several eBay sites: one row, its sites in postmark
+ * codes, opening where it brings in most (world2). */
+export function WorldRow({ jobs }) {
+  const lead = jobs.find((j) => j.source?.image) ?? jobs.find((j) => j.source?.title) ?? jobs[0];
+  const title = lead.source?.title ?? withEdits(lead)?.title ?? inputLabel(lead.input);
+  const ready = jobs.filter((j) => j.status === 'ready').length;
+  const status = worldStatus(jobs);
+  const busy = status === 'running' || status === 'queued';
+  return (
+    <Link to={worldPath(jobs[0].worldId)} className={`${s.row} ${h.jobRow}`}>
+      <Thumb src={lead.source?.image} />
+      <span className={s.rowMain}>
+        <span className={`${s.rowTitle} ${s.rowTitleClamp}`}><Breakable text={title} /></span>
+        <span className={s.rowSub}>
+          <span>{when(lead.createdAt)}</span>
+          <StatusPill status={status} />
+          <span>{busy ? `${ready} of ${jobs.length} eBay sites ready` : `${jobs.length} eBay sites`}</span>
+          <span className={h.siteCodes} aria-hidden="true">{jobs.map((j) => j.marketplace).join(' ')}</span>
+        </span>
+      </span>
+      <span className={s.chevron}><IconChevronRight /></span>
+    </Link>
+  );
+}
+
+/** A job, or one product on several sites, as its row. */
+export function ListRow({ item }) {
+  return item.kind === 'world' ? <WorldRow jobs={item.jobs} /> : <JobRow job={item.job} />;
 }
 
 // ── The week ──
@@ -221,7 +254,8 @@ function GhostRows() {
 export function SellerHomePage() {
   const { jobs } = useSellerData();
   const [topUp, setTopUp] = useState(false);
-  const recent = jobs.slice(0, 5);
+  const rows = withWorlds(jobs);
+  const recent = rows.slice(0, 5);
   const finished = jobs.filter((j) => j.status === 'ready' || j.status === 'failed').length;
 
   useEffect(() => { document.title = 'Remvo'; }, []);
@@ -257,11 +291,11 @@ export function SellerHomePage() {
         <section className={h.recentArea} aria-labelledby="recent-heading">
           <div className={s.groupHead}>
             <h2 id="recent-heading" className={s.groupTitle}>Recent</h2>
-            {jobs.length > recent.length && <Link to={SELLER_ROUTES.LISTINGS} className={s.groupLink}>See all</Link>}
+            {rows.length > recent.length && <Link to={SELLER_ROUTES.LISTINGS} className={s.groupLink}>See all</Link>}
           </div>
           {recent.length ? (
             <div className={s.group}>
-              {recent.map((j) => <JobRow key={j.id} job={j} />)}
+              {recent.map((x) => <ListRow key={x.kind === 'world' ? x.id : x.job.id} item={x} />)}
             </div>
           ) : (
             <GhostRows />

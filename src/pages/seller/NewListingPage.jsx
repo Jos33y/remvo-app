@@ -230,7 +230,7 @@ function NewListing() {
         {(stage === 'sites' || stage === 'starting') && (
           <SitesStage
             product={product}
-            condition={condition}
+            amazon={amazon}
             home={home}
             sites={sites}
             setSites={setSites}
@@ -310,21 +310,26 @@ function NewListing() {
  * own site ticked first. What it costs is said beside the button and
  * changes as sites are ticked; the three bundles are named under it.
  * ────────────────────────────────────────────────────────────────── */
-function SitesStage({ product, condition, home, sites, setSites, busy, onMake }) {
+function SitesStage({ product, amazon, home, sites, setSites, busy, onMake }) {
   const n = sites.length;
   const toggle = (id) => setSites((x) => (x.includes(id) ? x.filter((y) => y !== id) : [...x, id]));
   const all = n === MARKETPLACES.length;
   return (
     <div className={s.section}>
+      {/* What is about to be listed, and a way to check it before any credits go (world2).
+          A link is not read until the listings are made, so it has no title yet: say so. */}
       {product && (
         <div className={`${s.card} ${m.chosen}`}>
           <ProductPhoto src={product.image} size={56} />
           <div className={m.productText}>
-            <p className={m.productTitle}>{product.title}</p>
-            <p className={m.productMeta}>
-              {product.asin && <span className={s.mono}>{product.asin}</span>}
-              <span>{CONDITION[condition].label}</span>
-            </p>
+            <p className={m.productTitle}>{product.title ?? 'The product at this link'}</p>
+            {product.asin && (
+              <p className={m.productMeta}>
+                <a className={m.view} href={`https://www.${amazon}/dp/${product.asin}`} target="_blank" rel="noopener noreferrer">
+                  View on {amazon}<IconExternal size={14} /><span className="sr-only"> (opens in a new tab)</span>
+                </a>
+              </p>
+            )}
           </div>
         </div>
       )}
