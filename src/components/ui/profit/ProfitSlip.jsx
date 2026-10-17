@@ -9,12 +9,20 @@ import P from '@styles/ui/profit/profit-slip.module.css';
  *
  * A sum read from the top down, the answer first:
  *
- *   You keep          $49.82      36.1% margin, even at $80.32
- *   Sale                                              $108.99
- *   Postage you charge                               [ Free ]
+ *   You keep          $49.82      36.1% margin, 70.6% return...
+ *   Sold for                                         [ 108.99 ]
+ *   Shipping you charge                              [ Free ]
  *   eBay fees  13.6% of $108.99, plus $0.40         −$15.22  ▸
+ *   Promoted Listings                                [ None ] %
  *   Item cost                                        [ 60.00 ]
- *   Postage you pay                                  [ None ]
+ *   Shipping you pay                                 [ None ]
+ *   Other costs                                      [ None ]
+ *   Profit you want   [ Add ]   Sell it for $123.96 to keep $30.00
+ *
+ * Until there is a cost, the answer at the top is what eBay takes
+ * (and its share of the sale), so the card always answers something.
+ * tools2: one card on the public page too, the price typed in the sum
+ * itself, Promoted Listings, other costs and "find my price".
  *
  * Money in, then money out. The figures a seller types are lines in
  * the sum, not a form above it, and an empty one says what it wants
@@ -67,7 +75,7 @@ export function appliedRate(rate, currency) {
 }
 
 /* A figure typed into the sum. Saves after a pause, on Enter, or on leaving the box. */
-function Figure({ label, value, currency, placeholder, onSave, max = 99_999, percent = false, wanted = false, describedBy }) {
+function Figure({ label, value, currency, placeholder, onSave, max = 99_999, min = 0, percent = false, wanted = false, big = false, describedBy }) {
   const id = useId();
   const errId = useId();
   const [text, setText] = useState(() => shown(value, currency, percent));
@@ -85,6 +93,7 @@ function Figure({ label, value, currency, placeholder, onSave, max = 99_999, per
     clearTimeout(timer.current);
     const r = readAmount(raw);
     if (r.error || (r.value != null && r.value > max)) { setError(r.error ?? `Up to ${max}.`); return; }
+    if (r.value != null && r.value < min) { setError('Enter more than 0.'); return; }
     setError('');
     if (leaving) setText(shown(r.value, currency, percent));
     if (r.value === last.current) return;
@@ -102,7 +111,7 @@ function Figure({ label, value, currency, placeholder, onSave, max = 99_999, per
   return (
     <span className={P.figure}>
       <label htmlFor={id} className="sr-only">{label}</label>
-      <span className={`${P.box} ${wanted && !text ? P.boxWanted : ''}`}>
+      <span className={`${P.box} ${big ? P.boxBig : ''} ${wanted && !text ? P.boxWanted : ''}`}>
         {sym && <span className={P.sym} aria-hidden="true">{sym}</span>}
         <input
           id={id}
@@ -146,15 +155,16 @@ function Row({ label, sub = null, children, className = '' }) {
 /**
  * @param {object} props
  * @param {object} props.profit            remvo-api's answer (modules/profit/calc.js)
- * @param {{ cost?, postCost?, postCharged?, feeRate? }} props.values   the seller's own figures
+ * @param {{ price?, cost?, postCost?, postCharged?, otherCost?, adRate?, target?, feeRate? }} props.values   the seller's own figures
  * @param {(field: string, value: number|null) => Promise} props.onSave
  * @param {string} props.siteName          eBay.com, eBay.co.uk...
  * @param {string} props.marketplace       US, UK...
+ * @param {React.ReactNode} [props.controls]   the site, account and category, at the top of the card (public page)
  * @param {(patch: object) => void} [props.onSellerType]   answers "private or business?"
  * @param {() => void} [props.onOpenSettings]               "Change" beside the seller type
  * @param {boolean} [props.busy]           a sum is on its way
  */
-export function ProfitSlip({ profit: p, values = {}, onSave, siteName, marketplace, onSellerType, onOpenSettings, busy = false }) {
+export function ProfitSlip({ profit: p, values = {}, onSave, siteName, marketplace, controls = null, onSellerType, onOpenSettings, busy = false }) {
   const [open, setOpen] = useState(false);
   const [ownRate, setOwnRate] = useState(values.feeRate != null);
   const feesId = useId();
@@ -164,33 +174,35 @@ export function ProfitSlip({ profit: p, values = {}, onSave, siteName, marketpla
   // eBay.com and eBay.ca sellers say shipping; the rest say postage.
   const post = marketplace === 'US' || marketplace === 'CA' ? 'Shipping' : 'Postage';
 
-  if (p.needs?.includes('price')) {
-    return (
-      <div className={`${s.card} ${P.slip}`}>
-        <p className={P.empty}>Set a price first. The fees and what you keep are worked out from it.</p>
-      </div>
-    );
-  }
-
   const fees = p.fees ?? [];
   const paid = fees.filter((f) => !f.reclaimed);
   const reclaimed = fees.find((f) => f.reclaimed);
   const loss = p.ready && p.profit < 0;
   const order = fees.find((f) => f.key === 'order');
   const reg = fees.find((f) => f.key === 'regulatory');
+  const ad = fees.find((f) => f.key === 'ad');
   const vat = fees.find((f) => f.key === 'vat' && !f.reclaimed);
   const split = p.asks || p.sellerType != null;
   const who = p.sellerType === 'business' ? `business seller${p.vatRegistered ? ', VAT registered' : ''}` : 'private seller';
+  const noPrice = p.needs?.includes('price');
 
   // "13.6% of $108.99, plus $0.40 an order": joined by hand, because a
   // euro amount has its own comma (0,45 €).
-  const parts = [appliedRate(p.rate, cur), order && `${money(order.amount, cur)} an order`, reg && `${money(reg.amount, cur)} regulatory`, vat && 'VAT'].filter(Boolean);
+  const parts = [
+    p.rate && appliedRate(p.rate, cur),
+    order && `${money(order.amount, cur)} an order`,
+    reg && `${money(reg.amount, cur)} regulatory`,
+    ad && `${pct(p.adRate / 100)} ad`,
+    vat && 'VAT',
+  ].filter(Boolean);
   const feeSub = !fees.length
     ? `None for a ${who} on ${siteName}`
     : parts.length > 1 ? `${parts.slice(0, -1).join(', ')}, plus ${parts.at(-1)}` : parts[0];
 
   return (
     <div className={`${s.card} ${P.slip}`} aria-busy={busy || undefined}>
+      {controls && <div className={P.controls}>{controls}</div>}
+
       {p.asks && onSellerType && (
         <div className={P.ask} role="group" aria-labelledby="profit-ask">
           <p id="profit-ask" className={P.askText}>
@@ -204,90 +216,124 @@ export function ProfitSlip({ profit: p, values = {}, onSave, siteName, marketpla
         </div>
       )}
 
-      {/* The answer, first. */}
+      {/* The answer, first, always: what eBay takes until there is a cost, then what you keep. */}
       <div className={`${P.hero} ${loss ? P.heroLoss : ''}`} aria-live="polite" aria-atomic="true">
-        {p.ready ? (
+        {noPrice ? (
+          <>
+            <p className={P.heroLabel}>eBay takes</p>
+            <p className={P.heroWaiting}>Type what it sold for.</p>
+          </>
+        ) : p.ready ? (
           <>
             <p className={P.heroLabel}>{loss ? 'You lose' : 'You keep'}</p>
             <p className={P.heroFigure}>{money(Math.abs(p.profit), cur)}</p>
             <p className={P.heroFacts}>
               {p.margin != null && <span><span className={P.factNum}>{pctOf(p.margin)}</span> margin</span>}
+              {p.roi != null && <span><span className={P.factNum}>{pctOf(p.roi)}</span> return</span>}
+              <span>eBay takes <span className={P.factNum}>{money(p.feesTotal, cur)}</span></span>
               <span>Breaks even at <span className={P.factNum}>{money(p.breakEven, cur)}</span></span>
             </p>
           </>
         ) : (
           <>
-            <p className={P.heroLabel}>You keep</p>
-            <p className={P.heroWaiting} id={costHint}>Add your item cost to see what you keep.</p>
-            <p className={P.heroFacts}><span>eBay takes <span className={P.factNum}>{money(p.feesTotal, cur)}</span></span></p>
+            <p className={P.heroLabel}>eBay takes</p>
+            <p className={`${P.heroFigure} ${P.heroFees}`}>{money(p.feesTotal, cur)}</p>
+            <p className={P.heroFacts}>
+              {p.takes != null && <span><span className={P.factNum}>{pctOf(p.takes)}</span> of the sale</span>}
+              <span id={costHint}>Add your item cost to see your profit.</span>
+            </p>
           </>
         )}
       </div>
 
       <div className={P.sum}>
         {/* Money in */}
-        {/* VAT registered: the sale as kept, postage in it, VAT out of it. */}
         <Row
-          label={p.vatRegistered ? 'Sale, without VAT' : 'Sale'}
-          sub={p.vatRegistered ? `${money(p.price, cur)}${p.postCharged ? ` and ${money(p.postCharged, cur)} ${post.toLowerCase()}` : ''}, less ${Math.round(p.vatRate * 100)}% VAT` : null}
+          label="Sold for"
+          sub={p.vatRegistered && !noPrice ? `${money(p.income, cur)} without VAT${p.postCharged ? `, ${post.toLowerCase()} included` : ''}` : null}
         >
-          <span className={P.amount}>{money(p.vatRegistered ? p.income : p.price, cur)}</span>
+          <Figure label="Sold for" value={values.price ?? p.price ?? null} currency={cur} placeholder="Price" big wanted={noPrice} onSave={(v) => onSave('price', v)} min={0.01} />
         </Row>
-        <Row label={`${post} you charge`} sub={p.vatRegistered && p.postCharged ? 'In the sale above' : null}>
+        <Row label={`${post} you charge`}>
           <Figure label={`${post} you charge`} value={values.postCharged ?? null} currency={cur} placeholder="Free" onSave={(v) => onSave('postCharged', v)} />
         </Row>
 
         {/* Money out */}
-        <div className={P.out}>
-          {fees.length > 0 ? (
-            <button type="button" className={`${P.row} ${P.feesRow}`} aria-expanded={open} aria-controls={feesId} onClick={() => setOpen((o) => !o)}>
-              <span className={P.rowLabel}>
-                eBay fees
-                <span className={P.rowSub}>{feeSub}</span>
-              </span>
-              <span className={P.rowValue}>
-                <span className={P.amount}>{out(p.feesTotal, cur)}</span>
-                <span className={`${P.chev} ${open ? P.chevOpen : ''}`} aria-hidden="true" />
-              </span>
-            </button>
-          ) : (
-            <Row label="eBay fees" sub={feeSub}><span className={P.amount}>{money(0, cur)}</span></Row>
-          )}
+        {!noPrice && (
+          <div className={P.out}>
+            {fees.length > 0 ? (
+              <button type="button" className={`${P.row} ${P.feesRow}`} aria-expanded={open} aria-controls={feesId} onClick={() => setOpen((o) => !o)}>
+                <span className={P.rowLabel}>
+                  eBay fees
+                  <span className={P.rowSub}>{feeSub}</span>
+                </span>
+                <span className={P.rowValue}>
+                  <span className={P.amount}>{out(p.feesTotal, cur)}</span>
+                  <span className={`${P.chev} ${open ? P.chevOpen : ''}`} aria-hidden="true" />
+                </span>
+              </button>
+            ) : (
+              <Row label="eBay fees" sub={feeSub}><span className={P.amount}>{money(0, cur)}</span></Row>
+            )}
 
-          {fees.length > 0 && (
-            <div id={feesId} className={P.breakdown} hidden={!open}>
-              {paid.map((f) => (
-                <div key={f.key} className={P.subRow}>
-                  <span>{f.key === 'final' ? `${f.label}, ${appliedRate(p.rate, cur)}` : f.label}</span>
-                  <span className={P.amount}>{out(f.amount, cur)}</span>
-                </div>
-              ))}
-              {reclaimed && <p className={P.note}>The {money(reclaimed.amount, cur)} VAT on these fees is yours to reclaim, so it is not counted.</p>}
-              {p.rate && (ownRate ? (
-                <div className={P.ownRate}>
-                  <span className={P.ownLabel}>Your final value fee rate</span>
-                  <Figure label="Your final value fee rate" value={values.feeRate ?? null} currency={cur} placeholder={String(Number((p.rate.bands?.[0]?.[1] ?? 0) * 100).toFixed(1)).replace(/\.0$/, '')} percent max={30} onSave={(v) => onSave('feeRate', v)} />
-                  <button type="button" className={P.link} onClick={async () => { await onSave('feeRate', null); setOwnRate(false); }}>Use eBay&apos;s rate</button>
-                </div>
-              ) : (
-                <p className={P.note}>
-                  {p.rate.matched ? `eBay's rate for ${lower(p.rate.label)}: ${p.rate.text}.` : `eBay's rate for most categories, ${p.rate.text}. Yours may differ.`}
-                  {' '}<button type="button" className={P.link} onClick={() => setOwnRate(true)}>Use your own rate</button>
-                </p>
-              ))}
-            </div>
-          )}
+            {fees.length > 0 && (
+              <div id={feesId} className={P.breakdown} hidden={!open}>
+                {paid.map((f) => (
+                  <div key={f.key} className={P.subRow}>
+                    <span>{f.key === 'final' && p.rate ? `${f.label}, ${appliedRate(p.rate, cur)}` : f.key === 'ad' ? `${f.label}, ${pct(p.adRate / 100)}` : f.label}</span>
+                    <span className={P.amount}>{out(f.amount, cur)}</span>
+                  </div>
+                ))}
+                {reclaimed && <p className={P.note}>The {money(reclaimed.amount, cur)} VAT on these fees is yours to reclaim, so it is not counted.</p>}
+                {p.rate && (ownRate ? (
+                  <div className={P.ownRate}>
+                    <span className={P.ownLabel}>Your final value fee rate</span>
+                    <Figure label="Your final value fee rate" value={values.feeRate ?? null} currency={cur} placeholder={String(Number((p.rate.bands?.[0]?.[1] ?? 0) * 100).toFixed(1)).replace(/\.0$/, '')} percent max={30} onSave={(v) => onSave('feeRate', v)} />
+                    <button type="button" className={P.link} onClick={async () => { await onSave('feeRate', null); setOwnRate(false); }}>Use eBay&apos;s rate</button>
+                  </div>
+                ) : (
+                  <p className={P.note}>
+                    {p.rate.matched ? `eBay's rate for ${lower(p.rate.label)}: ${p.rate.text}.` : `eBay's rate for most categories, ${p.rate.text}. Yours may differ.`}
+                    {' '}<button type="button" className={P.link} onClick={() => setOwnRate(true)}>Use your own rate</button>
+                  </p>
+                ))}
+              </div>
+            )}
 
-          <Row label="Item cost" sub={p.vatRegistered ? 'Without VAT' : null} className={!p.ready ? P.rowWanted : ''}>
-            <span className={P.sign} aria-hidden="true">{MINUS}</span>
-            <Figure label={p.vatRegistered ? 'Item cost, without VAT' : 'Item cost'} value={values.cost ?? null} currency={cur} placeholder="Add" wanted onSave={(v) => onSave('cost', v)} describedBy={!p.ready ? costHint : undefined} />
-          </Row>
-          <Row label={`${post} you pay`}>
-            <span className={P.sign} aria-hidden="true">{MINUS}</span>
-            <Figure label={`${post} you pay`} value={values.postCost ?? null} currency={cur} placeholder="None" onSave={(v) => onSave('postCost', v)} />
-          </Row>
-        </div>
+            <Row label="Promoted Listings" sub="Your ad rate, on the whole sale">
+              <Figure label="Promoted Listings ad rate" value={values.adRate ?? null} currency={cur} placeholder="None" percent max={100} onSave={(v) => onSave('adRate', v)} />
+            </Row>
+            <Row label="Item cost" sub={p.vatRegistered ? 'Without VAT' : null}>
+              <span className={P.sign} aria-hidden="true">{MINUS}</span>
+              <Figure label={p.vatRegistered ? 'Item cost, without VAT' : 'Item cost'} value={values.cost ?? null} currency={cur} placeholder="Add" wanted onSave={(v) => onSave('cost', v)} describedBy={!p.ready ? costHint : undefined} />
+            </Row>
+            <Row label={`${post} you pay`}>
+              <span className={P.sign} aria-hidden="true">{MINUS}</span>
+              <Figure label={`${post} you pay`} value={values.postCost ?? null} currency={cur} placeholder="None" onSave={(v) => onSave('postCost', v)} />
+            </Row>
+            <Row label="Other costs" sub="Packaging and the like">
+              <span className={P.sign} aria-hidden="true">{MINUS}</span>
+              <Figure label="Other costs" value={values.otherCost ?? null} currency={cur} placeholder="None" onSave={(v) => onSave('otherCost', v)} />
+            </Row>
+          </div>
+        )}
       </div>
+
+      {/* Find my price: the profit they want, and the price that makes it. */}
+      {!noPrice && (
+        <div className={P.find}>
+          <Row label="Profit you want" sub={p.ready ? null : 'Add your item cost first'}>
+            <Figure label="Profit you want" value={values.target ?? null} currency={cur} placeholder="Add" onSave={(v) => onSave('target', v)} />
+          </Row>
+          {p.ready && p.target && (
+            <p className={P.findAnswer} aria-live="polite">
+              {p.target.price != null
+                ? <>Sell it for <span className={P.findPrice}>{money(p.target.price, cur)}</span> to keep {money(p.target.profit, cur)}.</>
+                : <>No price keeps {money(p.target.profit, cur)} with these costs.</>}
+            </p>
+          )}
+        </div>
+      )}
 
       {p.buyer && (
         <p className={P.buyer}>

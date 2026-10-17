@@ -39,7 +39,7 @@ export function TermsPage() {
       }
     >
       <Clause id="who" heading="1. Who we are">
-        <p>1.1. {BRAND.NAME} is operated by {BRAND.LEGAL_NAME}, a company registered in Nigeria under RC {BRAND.RC_NUMBER}, at {BRAND.ADDRESS} (&quot;we&quot;, &quot;us&quot;).</p>
+        <p>1.1. {BRAND.NAME} is operated by {BRAND.LEGAL_NAME}, a company registered in Nigeria under RC {BRAND.RC_NUMBER}, based in {BRAND.ADDRESS} (&quot;we&quot;, &quot;us&quot;).</p>
         <p>1.2. &quot;You&quot; means the person or business that holds a {BRAND.NAME} account.</p>
       </Clause>
 

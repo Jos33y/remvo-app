@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import { Button } from '@components/ui/shared/Button';
-import { ProfitSlip, readAmount } from '@components/ui/profit/ProfitSlip';
+import { ProfitSlip } from '@components/ui/profit/ProfitSlip';
 import { workOut } from '@lib/profitApi';
 import { FEE_TABLES, START, START_PROFIT, UK_BUYER_PROTECTION } from '@lib/feeTables';
 import { APP_LINKS, ROUTES } from '@utils/constants';
@@ -15,6 +15,10 @@ import T from '@styles/pages/marketing/fee-calculator.module.css';
  *
  * /ebay-fee-calculator      eBay.com
  * /ebay-fee-calculator-uk   eBay.co.uk, private and business
+ *
+ * tools2: one card, answer first. The site, account and category sit
+ * at the top of the card, the price is typed in the sum itself, and
+ * the top line always answers: what eBay takes, then what you keep.
  *
  * A seller who searches "what will eBay take?" gets the answer, and
  * what they keep, from the same slip and the same fee table as every
@@ -34,8 +38,8 @@ const UK_PRIVATE = 'https://www.ebay.co.uk/help/selling/fees-credits-invoices/se
 const UK_BP = 'https://www.ebay.co.uk/help/buying/paying-items/buyer-protection?id=5594';
 
 const SITE = {
-  US: { name: 'eBay.com', currency: 'USD', sym: '$', other: { to: ROUTES.FEES_UK, label: 'eBay.co.uk' } },
-  UK: { name: 'eBay.co.uk', currency: 'GBP', sym: '£', other: { to: ROUTES.FEES_US, label: 'eBay.com' } },
+  US: { name: 'eBay.com', currency: 'USD' },
+  UK: { name: 'eBay.co.uk', currency: 'GBP' },
 };
 
 function longDay(iso) {
@@ -70,6 +74,9 @@ function useSum(site) {
       postCharged: values.postCharged ?? null,
       cost: values.cost ?? null,
       postCost: values.postCost ?? null,
+      otherCost: values.otherCost ?? null,
+      adRate: values.adRate ?? null,
+      target: values.target ?? null,
     }, c.signal)
       .then((p) => { setProfit(p); setError(''); })
       .catch((err) => { if (err?.name !== 'AbortError') setError(err.message); })
@@ -80,120 +87,76 @@ function useSum(site) {
   return { inputs, setInputs, values, setValues, profit, busy, error };
 }
 
-function PriceInput({ value, currency, sym, onChange }) {
-  const id = useId();
-  const errId = useId();
-  const [text, setText] = useState(value == null ? '' : Number(value).toFixed(2));
-  const [error, setError] = useState('');
-  const timer = useRef(null);
-  useEffect(() => () => clearTimeout(timer.current), []);
-  const commit = (raw) => {
-    clearTimeout(timer.current);
-    const r = readAmount(raw);
-    if (r.error || r.value == null || r.value <= 0) { setError(r.value === null ? 'Enter what it sold for.' : 'Enter a price such as 24.99.'); return false; }
-    setError('');
-    onChange(r.value);
-    return true;
-  };
+/* The site, the account and the category, at the top of the one card. */
+function Controls({ site, inputs, set }) {
+  const table = FEE_TABLES[site];
+  const catId = useId();
+  const business = inputs.sellerType === 'business';
   return (
-    <div className={T.field}>
-      <label htmlFor={id} className={T.label}>Sold for</label>
-      <div className={T.priceBox}>
-        <span className={T.priceSym} aria-hidden="true">{sym}</span>
-        <input
-          id={id}
-          className={`${s.input} ${s.inputMono} ${T.priceInput}`}
-          inputMode="decimal"
-          autoComplete="off"
-          enterKeyHint="done"
-          value={text}
-          aria-invalid={error ? 'true' : undefined}
-          aria-describedby={error ? errId : `${id}-hint`}
-          onChange={(e) => {
-            const v = e.target.value;
-            setText(v);
-            if (error) setError('');
-            clearTimeout(timer.current);
-            timer.current = setTimeout(() => { if (!readAmount(v).error && readAmount(v).value > 0) commit(v); }, 500);
-          }}
-          onBlur={(e) => { if (commit(e.target.value)) setText(Number(readAmount(e.target.value).value).toFixed(2)); }}
-          onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); commit(e.currentTarget.value); } }}
-        />
-      </div>
-      {error
-        ? <p id={errId} className={s.fieldError} role="alert">{error}</p>
-        : <p id={`${id}-hint`} className={T.hint}>The item price your buyer sees{currency === 'GBP' ? ', VAT included' : ', before sales tax'}.</p>}
-    </div>
+    <>
+      <nav className={`${s.segmented} ${T.segmented}`} aria-label="eBay site">
+        {['US', 'UK'].map((id) => (
+          <Link key={id} to={id === 'US' ? ROUTES.FEES_US : ROUTES.FEES_UK} className={`${s.segment} ${T.tab}`} aria-current={id === site ? 'page' : undefined}>
+            {SITE[id].name}
+          </Link>
+        ))}
+      </nav>
+
+      {table.split && (
+        <div className={T.row}>
+          <div className={`${s.segmented} ${T.segmented}`} role="radiogroup" aria-label="Your eBay account">
+            {[['private', 'Private seller'], ['business', 'Business seller']].map(([id, name]) => (
+              <button key={id} type="button" role="radio" aria-checked={inputs.sellerType === id} className={s.segment} onClick={() => set({ sellerType: id })}>{name}</button>
+            ))}
+          </div>
+          {business && (
+            <label className={T.check}>
+              <input type="checkbox" checked={inputs.vatRegistered} onChange={(e) => set({ vatRegistered: e.target.checked })} />
+              <span>Registered for VAT</span>
+            </label>
+          )}
+        </div>
+      )}
+
+      {table.groups.length > 0 && business && (
+        <div>
+          <label htmlFor={catId} className="sr-only">Category</label>
+          <select id={catId} className={`${s.input} ${T.select}`} value={inputs.groupKey} onChange={(e) => set({ groupKey: e.target.value })}>
+            <option value="standard">{table.standard.label}, {table.standard.text}</option>
+            {table.groups.map((g) => <option key={g.key} value={g.key}>{g.label}, {g.text}</option>)}
+          </select>
+        </div>
+      )}
+    </>
   );
 }
 
 function Calculator({ site }) {
   const meta = SITE[site];
-  const table = FEE_TABLES[site];
   const { inputs, setInputs, values, setValues, profit, busy, error } = useSum(site);
-  const catId = useId();
   const set = (patch) => setInputs((x) => ({ ...x, ...patch }));
-  const business = inputs.sellerType === 'business';
+
+  async function save(field, value) {
+    if (field === 'price') {
+      // A price is the one figure the sum cannot do without: an empty box keeps the last one.
+      if (value != null && value > 0) set({ price: value });
+      return;
+    }
+    setValues((v) => ({ ...v, [field]: value }));
+  }
 
   return (
     <div className={`${theme.theme} ${T.tool}`}>
-      <div className={T.panel}>
-        <PriceInput value={inputs.price} currency={meta.currency} sym={meta.sym} onChange={(price) => set({ price })} />
-
-        {table.split && (
-          <div className={T.field}>
-            <span className={T.label} id="acct-label">Your eBay account</span>
-            <div className={`${s.segmented} ${T.segmented}`} role="radiogroup" aria-labelledby="acct-label">
-              {[['private', 'Private'], ['business', 'Business']].map(([id, name]) => (
-                <button key={id} type="button" role="radio" aria-checked={inputs.sellerType === id} className={s.segment} onClick={() => set({ sellerType: id })}>{name}</button>
-              ))}
-            </div>
-            <p className={T.hint}>
-              {business ? 'You buy to resell, or sell as a company.' : 'Selling your own things. New eBay accounts start as private.'}
-            </p>
-            {business && (
-              <label className={T.check}>
-                <input type="checkbox" checked={inputs.vatRegistered} onChange={(e) => set({ vatRegistered: e.target.checked })} />
-                <span>Registered for VAT</span>
-              </label>
-            )}
-          </div>
-        )}
-
-        {table.groups.length > 0 && business && (
-          <div className={T.field}>
-            <label htmlFor={catId} className={T.label}>Category</label>
-            <select id={catId} className={`${s.input} ${T.select}`} value={inputs.groupKey} onChange={(e) => set({ groupKey: e.target.value })}>
-              <option value="standard">{table.standard.label}, {table.standard.text}</option>
-              {table.groups.map((g) => <option key={g.key} value={g.key}>{g.label}, {g.text}</option>)}
-            </select>
-            <p className={T.hint}>eBay.co.uk charges business sellers by category.</p>
-          </div>
-        )}
-
-        {!table.split && (
-          <p className={T.hint}>
-            eBay.com charges 13.6% of the sale in most categories. Some categories differ: open eBay fees in the result to use your own rate.
-          </p>
-        )}
-
-        <p className={T.other}>
-          Selling on {meta.other.label}? <Link to={meta.other.to} className={T.otherLink}>{meta.other.label} fees</Link>
-        </p>
-      </div>
-
-      <div className={T.result}>
-        <h2 className="sr-only">The result</h2>
-        <ProfitSlip
-          profit={profit}
-          values={values}
-          onSave={async (field, value) => setValues((v) => ({ ...v, [field]: value }))}
-          siteName={meta.name}
-          marketplace={site}
-          busy={busy}
-        />
-        {error && <p className={`${s.fieldError} ${T.error}`} role="alert">{error}</p>}
-      </div>
+      <ProfitSlip
+        profit={profit}
+        values={{ ...values, price: inputs.price }}
+        onSave={save}
+        siteName={meta.name}
+        marketplace={site}
+        busy={busy}
+        controls={<Controls site={site} inputs={inputs} set={set} />}
+      />
+      {error && <p className={`${s.fieldError} ${T.error}`} role="alert">{error}</p>}
     </div>
   );
 }

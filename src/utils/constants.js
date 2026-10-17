@@ -68,9 +68,10 @@ export const BRAND = {
   LEGAL_NAME: 'Remvo Labs Limited',
   RC_NUMBER: '9550568',
   DOMAIN: 'remvo.app',
-  /* Registered office, as on the CAC register. The Privacy Policy
-   * names it because a data controller has to give an address. */
-  ADDRESS: '5 Funmilayo Awodiya Close, Ige Estate, Lagos, Nigeria',
+  /* Where the company is, as the site shows it: the city only (Joseph,
+   * 17 October 2026). Remvo has no shop to visit; the RC number on the
+   * CAC register identifies the company, and email reaches it. */
+  ADDRESS: 'Lagos, Nigeria',
 
   /* One address for sellers, legal and data protection requests. On
    * the same domain as the site, as Polar requires; Cloudflare routes
@@ -136,7 +137,7 @@ export function creditsFor(amount, currency) {
 }
 
 /* The date shown on every legal page, and its machine form. */
-export const LEGAL_UPDATED = { label: '16 October 2026', iso: '2026-10-16', version: 'v2.4' };
+export const LEGAL_UPDATED = { label: '17 October 2026', iso: '2026-10-17', version: 'v2.5' };
 
 /* ── Paused corridor: checkout and admin trees only ── */
 

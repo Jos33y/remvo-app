@@ -87,6 +87,16 @@
   .wideOnly { display: none; }
 }
 
+/* The smallest phones: Pricing gives its place to the calculator. */
+@media (max-width: 379px) {
+  .roomyOnly { display: none; }
+}
+
+/* A shorter name, only where the bar is narrow (tools2). */
+@media (min-width: 641px) {
+  .narrowOnly { display: none; }
+}
+
 @media (max-width: 360px) {
   .right { gap: var(--space-4); }
   .navLink { font-size: 0.8125rem; }

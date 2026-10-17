@@ -89,6 +89,12 @@
   color: var(--oxide-ink);
 }
 
+/* Before a cost the answer is eBay's share: ivory, not gold, because
+ * gold is what the seller keeps. */
+.heroFees {
+  color: var(--app-text);
+}
+
 .heroWaiting {
   margin: 6px 0 0;
   font-size: 1.125rem;
@@ -101,7 +107,7 @@
   flex-wrap: wrap;
   gap: 4px 18px;
   margin: 10px 0 0;
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   color: var(--app-text-3);
 }
 
@@ -136,7 +142,7 @@
 
 .rowLabel {
   min-width: 0;
-  font-size: 0.9375rem;
+  font-size: 1rem;
   line-height: 1.35;
   color: var(--app-text);
 }
@@ -144,7 +150,7 @@
 .rowSub {
   display: block;
   margin-top: 2px;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   color: var(--app-text-3);
 }
 
@@ -157,7 +163,7 @@
 
 .amount {
   font-family: var(--font-mono);
-  font-size: 0.9375rem;
+  font-size: 1rem;
   color: var(--app-text);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -286,7 +292,7 @@
   min-width: 0;
   padding: 0 12px;
   font-family: var(--font-mono);
-  font-size: 0.9375rem;
+  font-size: 1rem;
   color: var(--app-text);
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -397,4 +403,56 @@
   font-family: var(--font-mono);
   font-size: 0.9375rem;
   color: var(--app-text-3);
+}
+
+/* ── tools2 ── */
+
+/* The public page's site, account and category, at the top of the card. */
+.controls {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid var(--app-sep);
+}
+
+/* The price: the one big box, where a sale starts. */
+.boxBig {
+  width: 160px;
+  height: 48px;
+}
+
+.boxBig .input,
+.boxBig .sym {
+  font-size: 1.25rem;
+}
+
+/* Find my price, under the sum. */
+.find {
+  padding: 0 16px 10px;
+  border-top: 1px solid var(--app-text-3);
+}
+
+.find > .row {
+  border-top: none;
+}
+
+.findAnswer {
+  margin: 0 0 6px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 1rem;
+  line-height: 1.45;
+  color: var(--app-text);
+  background-color: var(--app-fill);
+}
+
+.findPrice {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+@media (max-width: 359px) {
+  .boxBig { width: 128px; }
 }

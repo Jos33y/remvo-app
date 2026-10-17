@@ -1,14 +1,13 @@
 /* ═══════════════════════════════════════
-   EBAY FEE CALCULATOR (tools1)
-   The info page's intro, then the tool:
-   what sold (price, account, category)
-   on the left, the profit slip on the
-   right, the same slip as on a listing in
-   the app. Phone: one column, the slip
-   under the price. The tool sits inside
-   the app theme, so its inputs and the
-   slip are the app's, on the site's
-   night.
+   EBAY FEE CALCULATOR (tools1, tools2)
+   The info page's intro, then one card:
+   the site, account and category at its
+   top, then the same slip as on a
+   listing in the app, answer first. One
+   column at every width. The card sits
+   inside the app theme, so its inputs
+   and the slip are the app's, on the
+   site's night.
    ═══════════════════════════════════════ */
 
 .kicker {
@@ -22,78 +21,47 @@
 }
 
 .tool {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 16px;
-  align-items: start;
+  max-width: 720px;
 }
 
-@media (min-width: 960px) {
-  .tool {
-    grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
-    gap: 24px;
-  }
-}
-
-.panel {
-  display: grid;
-  gap: 22px;
-  padding: 20px;
-  border-radius: 14px;
-  background-color: var(--app-card);
-}
-
-.result {
-  min-width: 0;
-}
-
-.field {
-  min-width: 0;
-}
-
-.label {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  color: var(--app-text);
-}
-
-.hint {
-  margin: 8px 0 0;
-  font-size: 0.8125rem;
-  line-height: 1.5;
-  color: var(--app-text-3);
-}
-
-.priceBox {
-  position: relative;
+/* Account and VAT on one line where they fit. */
+.row {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  gap: 8px 16px;
 }
 
-.priceSym {
-  position: absolute;
-  left: 16px;
-  font-family: var(--font-mono);
-  font-size: 1.375rem;
-  color: var(--app-text-3);
-  pointer-events: none;
-}
-
-.priceInput.priceInput {
-  height: 60px;
-  padding-left: 40px;
-  font-size: 1.5rem;
-  font-variant-numeric: tabular-nums;
+.row > .segmented {
+  flex: 1 1 260px;
 }
 
 .segmented {
   width: 100%;
 }
 
-.segmented > button {
+.segmented > button,
+.segmented > a {
   min-height: 40px;
+}
+
+/* The two sites as tabs: links, so each page keeps its own address. */
+.tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.tab[aria-current='page'] {
+  color: var(--app-text);
+  background-color: var(--app-card);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 0 0 0.5px var(--app-sep);
+}
+
+.tab:focus-visible {
+  outline: none;
+  box-shadow: var(--app-focus);
 }
 
 .check {
@@ -101,7 +69,6 @@
   align-items: center;
   gap: 10px;
   min-height: 44px;
-  margin-top: 6px;
   font-size: 0.9375rem;
   color: var(--app-text);
   cursor: pointer;
@@ -134,26 +101,8 @@
   background-color: var(--night-1);
 }
 
-.other {
-  margin: 0;
-  padding-top: 16px;
-  font-size: 0.875rem;
-  color: var(--app-text-3);
-  border-top: 1px solid var(--app-sep);
-}
 
-.otherLink {
-  color: var(--app-text);
-  text-decoration: underline;
-  text-decoration-color: var(--app-text-3);
-  text-underline-offset: 3px;
-}
 
-.otherLink:focus-visible {
-  outline: 2px solid var(--ivory);
-  outline-offset: 2px;
-  border-radius: 2px;
-}
 
 .error {
   margin-top: 10px;
@@ -168,7 +117,7 @@
 }
 
 @media (prefers-contrast: more) {
-  .kicker, .hint, .other, .closeText { color: var(--ivory); }
+  .kicker, .closeText { color: var(--ivory); }
 }
 
 /* The rates by category: on a phone a tiered rate wraps under itself

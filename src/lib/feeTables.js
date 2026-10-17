@@ -200,6 +200,7 @@ export const START_PROFIT = Object.freeze({
     "ready": false,
     "price": 25,
     "postCharged": 0,
+    "adRate": null,
     "rate": {
       "label": "Most categories",
       "text": "13.6% up to $7,500, then 2.35%",
@@ -227,6 +228,7 @@ export const START_PROFIT = Object.freeze({
       }
     ],
     "feesTotal": 3.8,
+    "takes": 15.2,
     "income": 25,
     "buyer": null,
     "needs": [
@@ -243,6 +245,7 @@ export const START_PROFIT = Object.freeze({
     "ready": false,
     "price": 20,
     "postCharged": 0,
+    "adRate": null,
     "rate": {
       "label": "Everything else",
       "text": "12.9%",
@@ -281,6 +284,7 @@ export const START_PROFIT = Object.freeze({
       }
     ],
     "feesTotal": 3.66,
+    "takes": 18.3,
     "income": 20,
     "buyer": null,
     "needs": [
