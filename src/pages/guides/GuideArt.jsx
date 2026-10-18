@@ -12,6 +12,8 @@ import A from '@styles/pages/marketing/guide-art.module.css';
  *         listing, the made ones perforated ivory, the rest waiting.
  * drafts  a fanned stack of drafts, one field still missing, and a
  *         postmark landing on the top one: LISTED.
+ * pallet  a returns pallet in isometric, boxes coming off it into three
+ *         graded stacks (NEW, OPEN BOX, PARTS), a route from the barcode.
  *
  * Motion: once, on arrival (the rows light, the stamps land in order);
  * none under reduced motion, where the finished picture is shown.
@@ -137,6 +139,78 @@ function Drafts() {
   );
 }
 
+/* pallet: a returns pallet in isometric, the vault mark's style, with
+ * boxes coming off it into three graded stacks: NEW, OPEN BOX, PARTS.
+ * A dotted route runs from the box with the barcode to the stacks. */
+const ISO = { x: 0.866, y: 0.5 };
+const pt = (ox, oy, x, y, z) => [ox + (x - y) * ISO.x, oy + (x + y) * ISO.y - z];
+const pts = (list) => list.map((p) => p.join(',')).join(' ');
+
+function IsoBox({ ox, oy, x, y, z = 0, w, d, h, tone = 'box', i = 0, label }) {
+  const P = (a, b, c) => pt(ox, oy, a, b, c);
+  const top = [P(x, y, z + h), P(x + w, y, z + h), P(x + w, y + d, z + h), P(x, y + d, z + h)];
+  const left = [P(x, y + d, z), P(x + w, y + d, z), P(x + w, y + d, z + h), P(x, y + d, z + h)];
+  const right = [P(x + w, y, z), P(x + w, y + d, z), P(x + w, y + d, z + h), P(x + w, y, z + h)];
+  return (
+    <g className={tone === 'slat' ? undefined : A.boxDrop} style={{ '--i': i }}>
+      <polygon points={pts(left)} className={A[`${tone}L`]} />
+      <polygon points={pts(right)} className={A[`${tone}R`]} />
+      <polygon points={pts(top)} className={A[`${tone}T`]} />
+      {tone === 'box' && <polyline points={pts([P(x + w / 2, y, z + h), P(x + w / 2, y + d, z + h)])} className={A.tape} />}
+      {label && (() => {
+        // A barcode label on the right face.
+        const [lx, ly] = P(x + w, y + d * 0.3, z + h * 0.3);
+        return (
+          <g transform={`translate(${lx} ${ly}) skewY(-30)`}>
+            <rect x="0" y={-h * 0.45} width={d * 0.45} height={h * 0.32} className={A.label} />
+            {[0.06, 0.12, 0.16, 0.23, 0.27, 0.33, 0.38].map((f) => (
+              <rect key={f} x={d * f} y={-h * 0.42} width="1.6" height={h * 0.22} className={A.bars} />
+            ))}
+          </g>
+        );
+      })()}
+    </g>
+  );
+}
+
+function Pallet() {
+  const ox = 170;
+  const oy = 150;
+  return (
+    <svg className={A.art} viewBox="0 0 520 340" aria-hidden="true" focusable="false">
+      {/* The pallet: deck slats on three runners */}
+      {[0, 46, 92].map((y) => <IsoBox key={`r${y}`} ox={ox} oy={oy} x={0} y={y} w={140} d={14} h={10} tone="slat" />)}
+      {[0, 22, 44, 66, 88, 110].map((y) => <IsoBox key={`s${y}`} ox={ox} oy={oy} x={-4} y={y - 2} z={10} w={148} d={16} h={5} tone="slat" />)}
+      {/* What is still on it */}
+      <IsoBox ox={ox} oy={oy} x={6} y={6} z={15} w={58} d={48} h={44} i={0} />
+      <IsoBox ox={ox} oy={oy} x={70} y={4} z={15} w={64} d={52} h={34} i={1} />
+      <IsoBox ox={ox} oy={oy} x={8} y={62} z={15} w={56} d={44} h={30} i={2} />
+      <IsoBox ox={ox} oy={oy} x={12} y={14} z={59} w={44} d={34} h={28} i={3} />
+      <IsoBox ox={ox} oy={oy} x={72} y={62} z={15} w={58} d={46} h={46} i={4} label />
+
+      {/* From the scanned box to the stacks it is graded into */}
+      <g className={A.scan}>
+        <path d="M 240 196 C 268 172, 300 176, 318 206" className={A.route} />
+        <path d="M 310 202 L 318 208 L 321 198" className={A.arrow} />
+      </g>
+
+      {/* Three graded stacks */}
+      {[
+        { x: 300, word: 'NEW', boxes: [[0, 0, 0], [0, 0, 26]] },
+        { x: 372, word: 'OPEN BOX', boxes: [[0, 0, 0]] },
+        { x: 444, word: 'PARTS', boxes: [[0, 0, 0]], parts: true },
+      ].map((s, k) => (
+        <g key={s.word}>
+          {s.boxes.map(([bx, by, bz], j) => (
+            <IsoBox key={j} ox={s.x} oy={272} x={bx} y={by} z={bz} w={30} d={30} h={24} tone={s.parts ? 'part' : 'box'} i={5 + k * 2 + j} />
+          ))}
+          <text x={s.x} y={318} textAnchor="middle" className={A.tag}>{s.word}</text>
+        </g>
+      ))}
+    </svg>
+  );
+}
+
 function Signature() {
   // A barcode whose stripes become the lines of a listing.
   const stripes = [0, 6, 10, 18, 22, 30, 34, 38, 46, 52, 56, 64, 70, 74, 82, 88];
@@ -157,9 +231,9 @@ function Signature() {
   );
 }
 
-const ART = { bulk: Bulk, drafts: Drafts };
+const ART = { bulk: Bulk, drafts: Drafts, pallet: Pallet };
 
-export function GuideArt({ topic }) {
-  const Art = ART[topic] ?? Signature;
+export function GuideArt({ art }) {
+  const Art = ART[art] ?? Signature;
   return <Art />;
 }

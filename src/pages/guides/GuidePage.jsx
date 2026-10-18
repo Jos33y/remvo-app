@@ -167,7 +167,7 @@ export function GuidePage() {
             </p>
           </div>
           <div className={G.coverArt}>
-            <GuideArt topic={guide.topic} />
+            <GuideArt art={guide.art} />
           </div>
         </div>
       </header>

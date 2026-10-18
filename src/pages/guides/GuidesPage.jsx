@@ -31,7 +31,7 @@ export function GuidesPage() {
           {GUIDES.map((g) => (
             <li key={g.slug} className={`${G.stamp} ${G.perforated}`} data-topic={g.topic}>
               <div className={G.stampFace}>
-                <div className={G.stampArt}><GuideArt topic={g.topic} /></div>
+                <div className={G.stampArt}><GuideArt art={g.art} /></div>
                 <h2 className={G.stampTitle}><a href={guidePath(g.slug)}>{g.title}</a></h2>
                 <p className={G.stampShort}>{g.short}</p>
                 <p className={G.stampMeta}>

@@ -35,6 +35,9 @@ const DATE = /^\d{4}-\d{2}-\d{2}$/;
 
 export const slugOf = (file) => basename(file, '.md');
 
+// Headings' text for the contents list, as plain text: no tags, entities decoded.
+const plain = (html) => html.replace(/<[^>]+>/g, '').replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+
 const headingId = (text) => text.toLowerCase().replace(/<[^>]+>/g, '').replace(/&[a-z#0-9]+;/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 export function parseFrontMatter(source, file) {
@@ -59,6 +62,9 @@ export function parseFrontMatter(source, file) {
   for (const key of ['published', 'checked']) if (!DATE.test(meta[key])) throw new Error(`${file}: ${key} must be YYYY-MM-DD`);
   if (!ACTIONS.includes(meta.action)) throw new Error(`${file}: action must be one of ${ACTIONS.join(', ')}`);
   if (!TOPICS.includes(meta.topic)) throw new Error(`${file}: topic must be one of ${TOPICS.join(', ')}`);
+  // The cover picture: its own (art:) or the topic's.
+  if (meta.art && !/^[a-z]+$/.test(meta.art)) throw new Error(`${file}: art must be one word, such as pallet`);
+  meta.art = meta.art ?? meta.topic;
   if (meta.description.length > 160) throw new Error(`${file}: description is ${meta.description.length} characters; keep it to 160`);
   if (/—/.test(source)) throw new Error(`${file}: has an em dash`);
   meta.sources = (meta.sources ?? []).map((s) => {
@@ -83,7 +89,7 @@ export function renderBody(body) {
         const text = this.parser.parseInline(tokens);
         const id = headingId(text);
         const step = depth === 2 ? /^(\d+)\.\s+(.*)$/.exec(text) : null;
-        if (depth === 2) headings.push({ id, n: step ? Number(step[1]) : null, text: (step ? step[2] : text).replace(/<[^>]+>/g, '') });
+        if (depth === 2) headings.push({ id, n: step ? Number(step[1]) : null, text: plain(step ? step[2] : text) });
         if (step) return `<h2 id="${id}" class="step"><span class="step-n">${step[1]}<span class="sr-only">.</span></span> <span class="step-t">${step[2]}</span></h2>\n`;
         return `<h${depth} id="${id}">${text}</h${depth}>\n`;
       },
