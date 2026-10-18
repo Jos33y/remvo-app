@@ -1,23 +1,41 @@
 import { createBrowserRouter, Navigate, Outlet, ScrollRestoration } from 'react-router';
 import { SellerSessionProvider } from '@context/SellerSession';
-import { RequireSeller } from '@components/layout/seller/RequireSeller';
-import { SellerShell } from '@components/layout/seller/SellerShell';
 import { SignInPage } from '@pages/seller/SignInPage';
 import { VerifyLinkPage } from '@pages/seller/VerifyLinkPage';
 import { SetPasswordPage } from '@pages/seller/SetPasswordPage';
 import { EmailsOffPage } from '@pages/seller/EmailsOffPage';
-import { SellerHomePage } from '@pages/seller/SellerHomePage';
-import { ListingsPage } from '@pages/seller/ListingsPage';
-import { NewListingPage } from '@pages/seller/NewListingPage';
-import { ListingPage } from '@pages/seller/ListingPage';
-import { BulkPage } from '@pages/seller/BulkPage';
-import { WorldPage } from '@pages/seller/WorldPage';
-import { BatchPage } from '@pages/seller/BatchPage';
-import { CreditsPage } from '@pages/seller/CreditsPage';
-import { ProfilePage } from '@pages/seller/ProfilePage';
-import { SupportPage } from '@pages/seller/SupportPage';
-import { SellerNotFoundPage } from '@pages/seller/SellerNotFoundPage';
 import { SELLER_ROUTES } from '@utils/constants';
+import { loadSellerPages, sellerPages } from './loadSellerPages';
+
+/* tidy1: every screen behind sign-in comes from one chunk, fetched the
+ * first time one is shown (or in the background from the sign-in page).
+ * Until it is in, a screen suspends once; after, every screen renders
+ * straight from it, with no waiting between them. SellerApp waits for
+ * it before the first render on a signed-in address, so a deep link
+ * shows its screen in one go. */
+const screen = (name) => {
+  function Screen(props) {
+    const pages = sellerPages();
+    if (!pages) throw loadSellerPages();
+    const C = pages[name];
+    return <C {...props} />;
+  }
+  Screen.displayName = name;
+  return Screen;
+};
+const RequireSeller = screen('RequireSeller');
+const SellerShell = screen('SellerShell');
+const SellerHomePage = screen('SellerHomePage');
+const ListingsPage = screen('ListingsPage');
+const NewListingPage = screen('NewListingPage');
+const ListingPage = screen('ListingPage');
+const BulkPage = screen('BulkPage');
+const WorldPage = screen('WorldPage');
+const BatchPage = screen('BatchPage');
+const CreditsPage = screen('CreditsPage');
+const ProfilePage = screen('ProfilePage');
+const SupportPage = screen('SupportPage');
+const SellerNotFoundPage = screen('SellerNotFoundPage');
 
 /* Seller router for my.remvo.app.
  *
@@ -39,7 +57,8 @@ import { SELLER_ROUTES } from '@utils/constants';
  * the phone's, or a back button to the screen just left) returns to
  * where that screen was scrolled. ScrollRestoration does both.
  */
-export const sellerRouter = createBrowserRouter([
+/* Made when the seller app first renders (tidy1). */
+export const makeSellerRouter = () => createBrowserRouter([
   {
     element: (
       <SellerSessionProvider>

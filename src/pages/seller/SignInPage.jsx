@@ -7,6 +7,7 @@ import { sellerApi } from '@lib/sellerApi';
 import { autofillSupported, passkeysSupported, signInWithPasskey, stopPasskeyPrompt } from '@lib/sellerPasskeys';
 import { SELLER_ROUTES, siteUrl as site } from '@utils/constants';
 import styles from '@styles/pages/seller/sign-in.module.css';
+import { loadSellerPages } from '../../app/loadSellerPages';
 
 /* ──────────────────────────────────────────────────────────────────
  * SignInPage: /sign-in and /sign-up (16 October 2026: passwords)
@@ -107,6 +108,14 @@ export function SignInPage() {
   const [params] = useSearchParams();
   const next = safeNext(params.get('next'));
   const routeMode = location.pathname === SELLER_ROUTES.SIGN_UP ? 'sign-up' : 'sign-in';
+
+  // tidy1: once this page is up, fetch the signed-in screens quietly, so Home opens at once after.
+  useEffect(() => {
+    const go = () => { loadSellerPages().catch(() => {}); };
+    const idle = window.requestIdleCallback ?? ((f) => setTimeout(f, 1200));
+    const t = idle(go, { timeout: 3000 });
+    return () => (window.cancelIdleCallback ?? clearTimeout)(t);
+  }, []);
 
   const pending = readPending();
   const [mode, setMode] = useState(pending?.mode ?? routeMode);

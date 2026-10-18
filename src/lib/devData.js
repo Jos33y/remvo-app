@@ -171,6 +171,7 @@ function batchLines(total, batchId, mix) {
       // Every third ready line came with a cost; the 12,499 ones at a loss.
       profit: k === 'ready' && i % 3 === 0 ? (i % 11 === 0 ? { value: -1137.88, margin: -9.1, currency: 'USD' } : { value: 14.47, margin: 38.1, currency: 'USD' }) : null,
       picked: k === 'ready' && i % 9 === 0 ? { of: 5 } : null,
+      amazonUrl: k === 'ready' && i % 9 === 0 ? 'https://www.amazon.co.uk/dp/B0CB5MZXW8' : null,
       missing: k === 'ready' && i % 13 === 0 ? ['Compatible Model', 'Features'] : [],
       failure: k === 'failed' ? (i % 2 ? 'Amazon has no product for this barcode on amazon.com. Check the number, or paste the product page link instead.' : 'Not a barcode.') : null,
     });

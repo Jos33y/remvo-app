@@ -2,7 +2,7 @@ import { memo, useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { PageHeader } from '@components/ui/seller/PageHeader';
 import { StatusPill } from '@components/ui/seller/parts';
-import { IconChevronRight, IconDownload } from '@components/ui/seller/icons';
+import { IconChevronRight, IconDownload, IconExternal } from '@components/ui/seller/icons';
 import { useToast } from '@components/ui/seller/Toast';
 import { useSellerData } from '@context/SellerData';
 import { Thumb } from '@pages/seller/SellerHomePage';
@@ -13,7 +13,7 @@ import { count, num } from '@lib/plural';
 import { SELLER_ROUTES, listingPath, supportPath } from '@utils/constants';
 import { Breakable } from '@components/ui/seller/Breakable';
 import s from '@styles/pages/seller/app.module.css';
-import { AskNext } from '@components/ui/seller/AskNext';
+import { NextQuestion } from '@components/ui/seller/AskNext';
 import b from '@styles/pages/seller/bulk.module.css';
 
 /* ──────────────────────────────────────────────────────────────────
@@ -271,8 +271,8 @@ export function BatchPage() {
             </div>
           </section>
         </div>
-        {/* ask1: once per seller, under a finished batch. */}
-        {!running && <AskNext />}
+        {/* ask1 and tidy1: the name if we have none, then what next; once each. */}
+        {!running && <NextQuestion />}
       </div>
     </>
   );
@@ -282,11 +282,19 @@ export function BatchPage() {
 const Line = memo(function Line({ line }) {
   const title = line.title ?? line.product ?? inputLabel(line.input);
   const finished = line.status === 'ready' || line.status === 'failed';
+  // tidy1: a line where Remvo picked one of several products carries a
+  // second link, to that product on Amazon. Links cannot sit inside a
+  // link, so the row is then a box whose title link stretches over it,
+  // with the Amazon link above.
+  const check = finished && line.amazonUrl;
+  const host = check ? new URL(line.amazonUrl).hostname.replace(/^www\./, '') : null;
   const body = (
     <>
       <Thumb src={line.image} />
       <span className={s.rowMain}>
-        <span className={`${s.rowTitle} ${s.rowTitleClamp}`}><Breakable text={title} /></span>
+        <span className={`${s.rowTitle} ${s.rowTitleClamp}`}>
+          {check ? <Link to={listingPath(line.id)} className={b.lineLink}><Breakable text={title} /></Link> : <Breakable text={title} />}
+        </span>
         <span className={s.rowSub}>
           <StatusPill status={line.status} />
           <span className={b.lineRef}>{line.ref}</span>
@@ -298,6 +306,11 @@ const Line = memo(function Line({ line }) {
             </span>
           )}
           {line.picked && <span className={b.check}>Check: 1 of {line.picked.of} products</span>}
+          {check && (
+            <a className={b.lineAmazon} href={line.amazonUrl} target="_blank" rel="noopener noreferrer">
+              View on {host}<IconExternal size={13} /><span className="sr-only"> (opens in a new tab)</span>
+            </a>
+          )}
           {!line.picked && line.missing?.length > 0 && <span className={b.check}>Check: {line.missing.length} to fill in</span>}
         </span>
         {line.failure && <span className={s.rowSub}>{line.failure}</span>}
@@ -305,11 +318,12 @@ const Line = memo(function Line({ line }) {
       {finished && <span className={s.chevron}><IconChevronRight /></span>}
     </>
   );
+  if (check) return <div className={`${s.row} ${b.lineRow} ${b.lineStretch}`}>{body}</div>;
   return finished
     ? <Link to={listingPath(line.id)} className={`${s.row} ${b.lineRow}`}>{body}</Link>
     : <div className={`${s.row} ${b.lineRow}`}>{body}</div>;
 }, (a, z) => {
   const x = a.line; const y = z.line;
   return x.id === y.id && x.status === y.status && x.title === y.title && x.product === y.product && x.image === y.image
-    && x.price?.value === y.price?.value && x.profit?.value === y.profit?.value && x.failure === y.failure && Boolean(x.picked) === Boolean(y.picked) && (x.missing?.length ?? 0) === (y.missing?.length ?? 0);
+    && x.price?.value === y.price?.value && x.profit?.value === y.profit?.value && x.failure === y.failure && Boolean(x.picked) === Boolean(y.picked) && x.amazonUrl === y.amazonUrl && (x.missing?.length ?? 0) === (y.missing?.length ?? 0);
 });

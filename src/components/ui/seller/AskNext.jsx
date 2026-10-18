@@ -1,4 +1,5 @@
 import { useEffect, useId, useState } from 'react';
+import { useSellerSession } from '@context/SellerSession';
 import { useLocation } from 'react-router';
 import { IconCheck } from '@components/ui/seller/icons';
 import { sellerApi } from '@lib/sellerApi';
@@ -13,6 +14,10 @@ import A from '@styles/ui/seller/ask-next.module.css';
  * in their own words; it goes straight to Joseph, and the counts decide
  * what is built next. "Not now" puts it away for 30 days on this
  * device. Once answered it is not asked again.
+ *
+ * tidy1: before it, once, "What should we call you?", for a seller
+ * with no name yet (Joseph's emails then say "Hi Ada"). One question
+ * at a time: the name first, then what next.
  * ────────────────────────────────────────────────────────────────── */
 
 export const CHOICES = [
@@ -118,5 +123,82 @@ export function AskNext() {
         <button type="button" className={`${s.button} ${s.secondary}`} onClick={later}>Not now</button>
       </div>
     </section>
+  );
+}
+
+// ── tidy1: the name, once, then what next ─────────────────────────
+
+const NAME_LATER = 'remvo.askName.later';
+const nameLaterSet = () => { try { return Date.now() - Number(localStorage.getItem(NAME_LATER) ?? 0) < DAYS_30; } catch { return false; } };
+
+/** Under a finished listing or batch: the name if we have none, otherwise "What would you use next?". */
+export function NextQuestion() {
+  const { account } = useSellerSession();
+  const [askName, setAskName] = useState(() => Boolean(account) && !account.name && !nameLaterSet());
+  if (askName) return <NameAsk onDone={() => setAskName(false)} />;
+  return <AskNext />;
+}
+
+function NameAsk({ onDone }) {
+  const { signedIn } = useSellerSession();
+  const [name, setName] = useState('');
+  const [state, setState] = useState('ask');
+  const [error, setError] = useState('');
+  const ids = { title: useId(), input: useId(), error: useId() };
+
+  async function save(e) {
+    e.preventDefault();
+    if (!name.trim() || state === 'saving') return;
+    setState('saving');
+    setError('');
+    try {
+      const { account: updated } = await sellerApi.setName(name.trim());
+      signedIn(updated);
+      setState(updated.name);
+    } catch (err) {
+      setError(err.message);
+      setState('ask');
+    }
+  }
+
+  function later() {
+    try { localStorage.setItem(NAME_LATER, String(Date.now())); } catch { /* private mode: hidden for this visit */ }
+    onDone();
+  }
+
+  if (state !== 'ask' && state !== 'saving') {
+    return (
+      <section className={`${s.section} ${A.done}`} aria-live="polite">
+        <span className={A.doneMark} aria-hidden="true"><IconCheck size={18} /></span>
+        <p className={A.doneText}>Thanks, {state}. You can change it in Profile.</p>
+      </section>
+    );
+  }
+
+  return (
+    <form className={`${s.section} ${A.ask}`} aria-labelledby={ids.title} onSubmit={save} noValidate>
+      <h2 id={ids.title} className={A.title}>What should we call you?</h2>
+      <p className={A.sub}>Your first name, or whatever you would like. It is how Joseph writes to you.</p>
+      <label className="sr-only" htmlFor={ids.input}>Your name</label>
+      <input
+        id={ids.input}
+        className={`${s.input} ${s.inputPlain} ${A.otherInput}`}
+        type="text"
+        autoComplete="given-name"
+        maxLength={40}
+        placeholder="Your name"
+        value={name}
+        onChange={(e) => { setName(e.target.value); if (error) setError(''); }}
+        aria-describedby={error ? ids.error : undefined}
+        aria-invalid={error ? 'true' : undefined}
+      />
+      {error && <p id={ids.error} className={A.error} role="alert">{error}</p>}
+      <div className={A.actions}>
+        <button type="submit" className={`${s.button} ${s.primary}`} disabled={!name.trim() || state === 'saving'}>
+          {state === 'saving' ? 'Saving…' : 'Save'}
+        </button>
+        <button type="button" className={`${s.button} ${s.secondary}`} onClick={later}>Not now</button>
+      </div>
+    </form>
   );
 }

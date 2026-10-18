@@ -104,6 +104,14 @@ export function hostApp() {
 
 const APPS = { admin: AdminApp, checkout: CheckoutApp, seller: SellerApp, marketing: MarketingApp };
 
+/* tidy1: on my.remvo.app, anywhere but the signed-out pages, fetch the
+ * signed-in screens alongside the seller app rather than after it, so
+ * opening Home or a listing costs no extra wait. */
+const SIGNED_OUT = /^\/(sign-in|sign-up|emails-off)(\/|$)/;
+if (typeof window !== 'undefined' && hostApp() === 'seller' && !SIGNED_OUT.test(window.location.pathname)) {
+  import('./loadSellerPages').then((m) => m.loadSellerPages()).catch(() => {});
+}
+
 export function App() {
   const Chosen = APPS[hostApp()];
   const routerChunk = <Chosen />;
