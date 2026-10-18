@@ -3,7 +3,7 @@ title: How to bulk list on eBay from a spreadsheet
 description: Upload a spreadsheet of products to eBay as drafts with Seller Hub Reports: the template, the columns that matter, the upload, and how to publish.
 short: In Seller Hub, open Reports, then Upload, and download the "Create drafts" template. Fill in one row per product (only Action and Category ID are required), save it as a CSV and upload it. The drafts usually arrive within 15 minutes, ready for photos and a final check before you publish.
 published: 2026-10-18
-checked: 2026-10-18
+checked: 2026-10-19
 action: bulk
 topic: bulk
 sources:
@@ -11,6 +11,9 @@ sources:
   - eBay Help: Seller Hub Reports (eBay.co.uk) | https://www.ebay.co.uk/help/selling/selling-tools/seller-hub-reports?id=4096
   - eBay: Inventory onboarding guide, create listings in bulk | https://pages.ebay.com/sh/reports/help/create-listings-bulk/
   - eBay Developers: item condition IDs | https://developer.ebay.com/api-docs/sell/static/metadata/condition-id-values.html
+  - eBay Help: Creating a listing (drafts) | https://www.ebay.com/help/selling/listings/%E5%88%9B%E5%BB%BA%E7%89%A9%E5%93%81%E5%88%8A%E7%99%BB?id=4105
+related:
+  - how-to-publish-ebay-drafts-in-bulk
 ---
 
 ## What you need
@@ -59,7 +62,7 @@ When the upload is done, select **Complete listings** (also under **Recent uploa
 3. check postage and returns;
 4. publish.
 
-Drafts are deleted after 30 to 45 days, so publish them before then.
+Drafts expire 75 days after they were last edited, so publish them before then. For every step of finishing them, see [how to publish your eBay drafts](/guides/how-to-publish-ebay-drafts-in-bulk).
 
 ## The slow part, and how to skip it
 

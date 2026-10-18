@@ -176,10 +176,12 @@ export function GuidePage() {
         <div className={G.main}>
           <section className={G.ticket} aria-labelledby="in-short">
             <div className={`${G.ticketPaper} ${G.perforated}`}>
-              <h2 id="in-short" className={G.ticketLabel}>In short</h2>
+              <div className={G.ticketHead}>
+                <h2 id="in-short" className={G.ticketLabel}>In short</h2>
+                <Postmark className={G.postmark} top="CHECKED" bottom="REMVO" iso={guide.checked} />
+              </div>
               <p className={G.ticketText}>{guide.short}</p>
             </div>
-            <Postmark className={G.postmark} top="CHECKED" bottom="REMVO" iso={guide.checked} />
           </section>
 
           {withContents && <Contents headings={guide.headings} current={null} className={G.tocInline} labelId="on-this-page" />}

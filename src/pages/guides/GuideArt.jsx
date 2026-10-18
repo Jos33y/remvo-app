@@ -10,6 +10,8 @@ import A from '@styles/pages/marketing/guide-art.module.css';
  *
  * bulk    a spreadsheet whose rows become a sheet of stamps: each row a
  *         listing, the made ones perforated ivory, the rest waiting.
+ * drafts  a fanned stack of drafts, one field still missing, and a
+ *         postmark landing on the top one: LISTED.
  *
  * Motion: once, on arrival (the rows light, the stamps land in order);
  * none under reduced motion, where the finished picture is shown.
@@ -85,6 +87,56 @@ function Bulk() {
   );
 }
 
+/* drafts: a fanned stack of drafts, still marked DRAFT with a dashed
+ * edge, and a postmark coming down on the top one: LISTED. */
+function Drafts() {
+  const cards = [
+    { x: 92, y: 96, r: -9 },
+    { x: 118, y: 84, r: -3 },
+    { x: 146, y: 76, r: 3 },
+  ];
+  return (
+    <svg className={A.art} viewBox="0 0 520 340" aria-hidden="true" focusable="false">
+      {cards.map((c, i) => {
+        const top = i === cards.length - 1;
+        return (
+          <g key={i} transform={`rotate(${c.r} ${c.x + 110} ${c.y + 120})`} className={top ? A.draftTop : A.draftUnder}>
+            <rect x={c.x} y={c.y} width="220" height="240" rx="10" className={top ? A.draftPaper : A.draftPaperUnder} />
+            {top && (
+              <>
+                <rect x={c.x + 18} y={c.y + 20} width="64" height="64" rx="6" className={A.draftPhoto} />
+                <rect x={c.x + 96} y={c.y + 26} width="104" height="7" rx="3.5" className={A.line} />
+                <rect x={c.x + 96} y={c.y + 42} width="84" height="7" rx="3.5" className={A.line} />
+                <rect x={c.x + 96} y={c.y + 58} width="94" height="7" rx="3.5" className={A.lineSoft} />
+                {[0, 1, 2, 3].map((k) => (
+                  <g key={k}>
+                    <rect x={c.x + 18} y={c.y + 106 + k * 26} width="54" height="6" rx="3" className={A.lineSoft} />
+                    {k !== 1 && <rect x={c.x + 86} y={c.y + 106 + k * 26} width={70 + ((k * 13) % 40)} height="6" rx="3" className={A.line} />}
+                    {k === 1 && <rect x={c.x + 86} y={c.y + 103} width="70" height="12" rx="3" className={A.missing} />}
+                  </g>
+                ))}
+                <rect x={c.x + 18} y={c.y + 210} width="44" height="9" rx="4.5" className={A.price} />
+                <text x={c.x + 202} y={c.y + 218} textAnchor="end" className={A.draftWord}>DRAFT</text>
+              </>
+            )}
+          </g>
+        );
+      })}
+
+      {/* The postmark, landing on the top draft */}
+      <g className={A.stampDown}>
+        <g transform="rotate(-14 386 214)">
+          <circle cx="386" cy="214" r="62" className={A.markRing} />
+          <circle cx="386" cy="214" r="46" className={A.markRingInner} />
+          <text x="386" y="210" textAnchor="middle" className={A.markWord}>LISTED</text>
+          <text x="386" y="228" textAnchor="middle" className={A.markSmall}>REMVO</text>
+          <path d="M 300 196 h 26 M 300 206 h 26 M 300 216 h 26 M 446 196 h 26 M 446 206 h 26 M 446 216 h 26" className={A.markLines} />
+        </g>
+      </g>
+    </svg>
+  );
+}
+
 function Signature() {
   // A barcode whose stripes become the lines of a listing.
   const stripes = [0, 6, 10, 18, 22, 30, 34, 38, 46, 52, 56, 64, 70, 74, 82, 88];
@@ -105,6 +157,9 @@ function Signature() {
   );
 }
 
+const ART = { bulk: Bulk, drafts: Drafts };
+
 export function GuideArt({ topic }) {
-  return topic === 'bulk' ? <Bulk /> : <Signature />;
+  const Art = ART[topic] ?? Signature;
+  return <Art />;
 }

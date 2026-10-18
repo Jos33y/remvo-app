@@ -198,28 +198,42 @@
 .ticketText {
   max-width: 56ch;
   margin: 0;
-  padding-right: clamp(0px, 10vw, 84px);
   font-size: 1.125rem;
   line-height: 1.6;
   color: #141418;
 }
 
-/* The postmark in the topic's ink, across the corner. */
+/* The postmark in the topic's ink, on the paper's corner: beside the
+ * label on a phone, in the top corner on wider screens. */
+.ticketHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
 .postmark {
-  position: absolute;
-  top: -14px;
-  right: -6px;
-  width: 104px;
-  height: 104px;
+  flex: none;
+  width: 68px;
+  height: 68px;
+  margin: -10px -6px -6px 0;
   color: color-mix(in srgb, var(--topic) 85%, #141418);
-  opacity: 0.82;
+  opacity: 0.85;
   transform: rotate(-14deg);
   pointer-events: none;
 }
 
-@media (max-width: 520px) {
-  .postmark { top: -30px; right: -4px; width: 76px; height: 76px; }
-  .ticketText { padding-right: 0; }
+@media (min-width: 640px) {
+  .postmark {
+    position: absolute;
+    top: 16px;
+    right: 18px;
+    width: 96px;
+    height: 96px;
+    margin: 0;
+  }
+
+  .ticketText { padding-right: 112px; }
 }
 
 /* ── On this page ── */
