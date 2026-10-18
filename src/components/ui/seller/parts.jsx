@@ -2,10 +2,12 @@ import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { Sheet } from '@components/ui/seller/Sheet';
 import { useToast } from '@components/ui/seller/Toast';
-import { IconAlert, IconBarcode, IconCheck, IconCopy, IconEdit, IconLink } from '@components/ui/seller/icons';
+import { IconAlert, IconBarcode, IconCheck, IconCopy, IconEdit, IconLink, IconScan } from '@components/ui/seller/icons';
+import { ScanSheet } from '@components/ui/seller/ScanSheet';
 import { useSellerData } from '@context/SellerData';
 import { useClipboard } from '@hooks/useClipboard';
 import { CONDITION, CONDITIONS, readInput } from '@lib/sellerData';
+import { cameraPossible } from '@lib/scanner';
 import { count, num } from '@lib/plural';
 import { CURRENCIES, MARKETPLACE, money } from '@lib/market';
 import { PRICING, SELLER_ROUTES, creditsFor, listingsFor } from '@utils/constants';
@@ -269,7 +271,17 @@ export function TopUpSheet({ open, onClose, start = null }) {
 
 // ══════════════════════════════════════════════════════════════════
 //  Make a listing: the one input, and the product's condition
+//
+//  scan2: on a phone or tablet, a camera button at the end of the box
+//  reads the barcode on the box in hand. It fills the box and stops
+//  there: the seller still chooses the condition and taps Make, so
+//  nothing is spent by pointing a camera.
 // ══════════════════════════════════════════════════════════════════
+
+/* A camera worth offering: one this browser can open, on a touch
+ * screen. A laptop's webcam is a poor barcode reader; scanner guns
+ * type straight into the box. */
+const scanWorthOffering = () => cameraPossible() && typeof window !== 'undefined' && Boolean(window.matchMedia?.('(pointer: coarse)').matches);
 
 export function MakeListingForm({ autoFocus = false, hero = false }) {
   const navigate = useNavigate();
@@ -277,9 +289,15 @@ export function MakeListingForm({ autoFocus = false, hero = false }) {
   const [value, setValue] = useState('');
   const [condition, setCondition] = useState('new');
   const [error, setError] = useState('');
+  const [canScan] = useState(scanWorthOffering);
+  const [scanning, setScanning] = useState(false);
+  const [scanned, setScanned] = useState('');
+  const makeRef = useRef(null);
+  const scanRef = useRef(null);
   const id = useId();
   const errId = useId();
   const hintId = useId();
+  const scanId = useId();
   const looksLikeLink = /^(https?:|www\.|amazon\.)/i.test(value.trim());
   const site = MARKETPLACE[settings?.marketplace ?? 'US'];
 
@@ -293,6 +311,21 @@ export function MakeListingForm({ autoFocus = false, hero = false }) {
 
   const short = summary && summary.balance < LISTING;
 
+  // A read fills the box; back from the camera, focus goes to what comes next (Make), else to where it was opened.
+  const justRead = useRef(false);
+  function onScanned(code) {
+    justRead.current = true;
+    setValue(code);
+    setError('');
+    setScanned(code);
+  }
+  function closeScan() {
+    setScanning(false);
+    const target = justRead.current ? makeRef : scanRef;
+    justRead.current = false;
+    setTimeout(() => target.current?.focus(), 0);
+  }
+
   return (
     <form className={`${s.card} ${hero ? s.cardHero : ''}`} onSubmit={submit} noValidate>
       <label htmlFor={id} className={`${s.label} ${hero ? s.labelHero : ''}`}>Make a listing</label>
@@ -300,7 +333,7 @@ export function MakeListingForm({ autoFocus = false, hero = false }) {
         <span className={s.inputIcon}>{looksLikeLink ? <IconLink size={20} /> : <IconBarcode size={20} />}</span>
         <input
           id={id}
-          className={`${s.input} ${hero ? s.inputHero : ''}`}
+          className={`${s.input} ${hero ? s.inputHero : ''} ${canScan ? s.inputScan : ''}`}
           type="text"
           inputMode={looksLikeLink ? 'url' : 'text'}
           autoComplete="off"
@@ -308,15 +341,23 @@ export function MakeListingForm({ autoFocus = false, hero = false }) {
           autoCorrect="off"
           spellCheck={false}
           enterKeyHint="go"
-          placeholder="Barcode or product link"
+          placeholder={canScan ? 'Barcode or link' : 'Barcode or product link'}
           value={value}
-          onChange={(e) => { setValue(e.target.value); if (error) setError(''); }}
+          onChange={(e) => { setValue(e.target.value); if (error) setError(''); if (scanned) setScanned(''); }}
           aria-invalid={error ? 'true' : undefined}
-          aria-describedby={`${hintId}${error ? ` ${errId}` : ''}`}
+          aria-describedby={`${hintId}${error ? ` ${errId}` : ''}${scanned ? ` ${scanId}` : ''}`}
           autoFocus={autoFocus}
         />
+        {canScan && (
+          <button ref={scanRef} type="button" className={`${s.scanButton} ${hero ? s.scanButtonHero : ''}`} onClick={() => { setScanned(''); setScanning(true); }} aria-label="Scan the barcode with your camera">
+            <IconScan size={22} />
+          </button>
+        )}
       </div>
       {error && <p id={errId} className={s.fieldError} role="alert"><IconAlert size={16} />{error}</p>}
+      <p id={scanId} className={scanned ? `${s.hint} ${s.scanned}` : 'sr-only'} aria-live="polite">
+        {scanned && <><IconCheck size={14} /> Scanned. Choose the condition, then make the listing.</>}
+      </p>
       <p id={hintId} className={s.hint}>
         For {site.site}, in {site.lang}. <Link to={SELLER_ROUTES.PROFILE} className={s.inlineLink}>Change</Link>
       </p>
@@ -332,7 +373,7 @@ export function MakeListingForm({ autoFocus = false, hero = false }) {
       </div>
 
       <div className={s.cardActions}>
-        <button type="submit" className={`${s.button} ${s.primary} ${s.block}`}>
+        <button ref={makeRef} type="submit" className={`${s.button} ${s.primary} ${s.block}`}>
           Make listing, {LISTING} credits
         </button>
         <button type="button" className={s.textAction} onClick={(e) => submit(e, true)}>
@@ -340,6 +381,7 @@ export function MakeListingForm({ autoFocus = false, hero = false }) {
         </button>
       </div>
       {short && !hero && <p className={s.hint}>Your balance is under {LISTING} credits. You can still check the product first; top up before it runs.</p>}
+      {canScan && <ScanSheet open={scanning} onClose={closeScan} onCode={onScanned} single />}
     </form>
   );
 }

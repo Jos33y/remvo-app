@@ -13,12 +13,16 @@ import S from '@styles/ui/seller/scan-sheet.module.css';
  * on the sheet is said, not added twice. Done goes back to the sheet,
  * where Check reads them all as usual. The camera stops the moment it
  * closes. Nothing is sent anywhere: the picture is read on the phone.
+ *
+ * single (scan2): one barcode for one listing. The first good read
+ * goes into the box and the camera closes by itself; nothing is spent
+ * until the seller taps Make listing.
  * ────────────────────────────────────────────────────────────────── */
 
 const EVERY_MS = 120;
 const SAME_AGAIN_MS = 2500;
 
-export function ScanSheet({ open, onClose, onCode, already }) {
+export function ScanSheet({ open, onClose, onCode, already, single = false }) {
   const videoRef = useRef(null);
   const doneRef = useRef(null);
   const streamRef = useRef(null);
@@ -63,11 +67,12 @@ export function ScanSheet({ open, onClose, onCode, already }) {
       } catch (err) {
         if (!live) return;
         setState('error');
+        const typeIt = single ? 'type the barcode instead' : 'type the barcodes on the sheet';
         setError(err?.name === 'NotAllowedError' || err?.name === 'SecurityError'
-          ? 'The camera is blocked for Remvo. Allow it in your browser’s settings for this site, or type the barcodes on the sheet.'
+          ? `The camera is blocked for Remvo. Allow it in your browser’s settings for this site, or ${typeIt}.`
           : err?.name === 'NotFoundError' || err?.name === 'OverconstrainedError'
-            ? 'No camera was found on this device. Type the barcodes, or use a barcode scanner.'
-            : 'The camera did not start. Close this and try again, or type the barcodes on the sheet.');
+            ? `No camera was found on this device. ${single ? 'Type the barcode instead' : 'Type the barcodes, or use a barcode scanner'}.`
+            : `The camera did not start. Close this and try again, or ${typeIt}.`);
         return;
       }
 
@@ -81,6 +86,14 @@ export function ScanSheet({ open, onClose, onCode, already }) {
               const raw = String(f.rawValue ?? '').trim();
               if (!validGtin(raw)) continue;
               const code = canonical(raw);
+              if (single) {
+                navigator.vibrate?.(40);
+                live = false;
+                stop();
+                onCode(code);
+                onClose();
+                return;
+              }
               const now = Date.now();
               if (code === last.current.code && now - last.current.at < SAME_AGAIN_MS) continue;
               last.current = { code, at: now };
@@ -133,7 +146,7 @@ export function ScanSheet({ open, onClose, onCode, already }) {
       </div>
 
       <header className={S.top}>
-        <h2 id={titleId} className={S.title}>Scan barcodes</h2>
+        <h2 id={titleId} className={S.title}>{single ? 'Scan a barcode' : 'Scan barcodes'}</h2>
         <button type="button" className={S.close} onClick={onClose} aria-label="Close the camera"><IconClose size={22} /></button>
       </header>
 
@@ -141,7 +154,7 @@ export function ScanSheet({ open, onClose, onCode, already }) {
         <p className={S.status} aria-live="polite">
           {state === 'starting' && 'Starting the camera…'}
           {state === 'error' && error}
-          {state === 'scanning' && !said && 'Point at a barcode on the box. Each one goes onto your sheet.'}
+          {state === 'scanning' && !said && (single ? 'Point at the barcode on the box.' : 'Point at a barcode on the box. Each one goes onto your sheet.')}
           {state === 'scanning' && said?.kind === 'added' && (
             <><span className={S.tick} aria-hidden="true"><IconCheck size={16} /></span>Added <span className={S.code}>{said.code}</span></>
           )}
@@ -153,7 +166,7 @@ export function ScanSheet({ open, onClose, onCode, already }) {
             <button type="button" className={S.torch} aria-pressed={torch} onClick={flip}>{torch ? 'Light off' : 'Light on'}</button>
           )}
           <button ref={doneRef} type="button" className={S.done} onClick={onClose}>
-            {count ? `Done, ${count} scanned` : 'Done'}
+            {single ? 'Type it instead' : count ? `Done, ${count} scanned` : 'Done'}
           </button>
         </div>
       </div>

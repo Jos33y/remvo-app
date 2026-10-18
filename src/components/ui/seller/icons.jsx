@@ -54,6 +54,7 @@ export const IconCheck = ({ size = 20 }) => (<svg {...base(size)}><path d="m5 12
 export const IconDownload = ({ size = 20 }) => (<svg {...base(size)}><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19.5h14" /></svg>);
 export const IconTrash = ({ size = 20 }) => (<svg {...base(size)}><path d="M5 7h14M10 7V5h4v2M7 7l.8 12a1 1 0 0 0 1 .9h6.4a1 1 0 0 0 1-.9L17 7" /></svg>);
 export const IconBarcode = ({ size = 20 }) => (<svg {...base(size)}><path d="M4 6v12M7 6v12M10.5 6v12M13 6v12M16.5 6v12M20 6v12" /></svg>);
+export const IconScan = ({ size = 20 }) => (<svg {...base(size)}><path d="M4 8.5V6a2 2 0 0 1 2-2h2.5M15.5 4H18a2 2 0 0 1 2 2v2.5M20 15.5V18a2 2 0 0 1-2 2h-2.5M8.5 20H6a2 2 0 0 1-2-2v-2.5M7.5 12h9" /></svg>);
 export const IconLink = ({ size = 20 }) => (<svg {...base(size)}><path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1" /><path d="M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1" /></svg>);
 export const IconAlert = ({ size = 20 }) => (<svg {...base(size)}><circle cx="12" cy="12" r="8.5" /><path d="M12 7.5v5.5M12 16.2v.1" /></svg>);
 export const IconMail = ({ size = 20 }) => (<svg {...base(size)}><rect x="3.5" y="5.5" width="17" height="13" rx="2" /><path d="m4 7 8 6 8-6" /></svg>);

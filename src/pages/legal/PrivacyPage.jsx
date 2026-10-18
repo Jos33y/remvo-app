@@ -45,7 +45,7 @@ export function PrivacyPage() {
           <DefItem term="Your credits">Every top-up, every job that used credits, every refund and every expiry.</DefItem>
           <DefItem term="Technical records">Your IP address, browser type, and the time of each request, kept in our server logs.</DefItem>
           <DefItem term="Welcome credits">When your account is made, a keyed hash of your IP address: a scrambled form that cannot be turned back into the address. It lets us give welcome credits once a day per connection.</DefItem>
-          <DefItem term="Scanning with your camera">Nothing. When you scan barcodes in bulk listing, the camera's picture is read on your device and never sent to us or anyone else; only the barcode numbers go onto your sheet. The camera stops when you close the scanner.</DefItem>
+          <DefItem term="Scanning with your camera">Nothing. When you scan a barcode, for one listing or for bulk listing, the camera's picture is read on your device and never sent to us or anyone else; only the barcode numbers go into the box or onto your sheet. The camera stops when you close the scanner, or as soon as it has read the barcode for one listing.</DefItem>
           <DefItem term="Messages">What you send us in the chat or by email, the page you wrote from, and how you sell if you chose to tell us.</DefItem>
         </DefList>
       </Clause>
