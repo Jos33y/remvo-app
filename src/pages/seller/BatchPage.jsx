@@ -13,6 +13,7 @@ import { count, num } from '@lib/plural';
 import { SELLER_ROUTES, listingPath, supportPath } from '@utils/constants';
 import { Breakable } from '@components/ui/seller/Breakable';
 import s from '@styles/pages/seller/app.module.css';
+import { AskNext } from '@components/ui/seller/AskNext';
 import b from '@styles/pages/seller/bulk.module.css';
 
 /* ──────────────────────────────────────────────────────────────────
@@ -270,6 +271,8 @@ export function BatchPage() {
             </div>
           </section>
         </div>
+        {/* ask1: once per seller, under a finished batch. */}
+        {!running && <AskNext />}
       </div>
     </>
   );

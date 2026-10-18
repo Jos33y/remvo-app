@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router';
 import { PageHeader } from '@components/ui/seller/PageHeader';
 import { NotHere } from '@components/ui/seller/NotHere';
+import { AskNext } from '@components/ui/seller/AskNext';
 import { useToast } from '@components/ui/seller/Toast';
 import { CopyField, EditableField, StatusPill } from '@components/ui/seller/parts';
 import { IconAlert, IconCheck, IconCopy, IconDownload, IconExternal, IconTrash } from '@components/ui/seller/icons';
@@ -467,6 +468,9 @@ export function ListingPage() {
               </div>
               <p className={s.groupNote}>Check it against your stock before you publish. Kept until {longDate(keptUntil)}.</p>
             </section>
+
+            {/* ask1: once per seller, under a finished listing. */}
+            <AskNext />
 
           </>
         )}

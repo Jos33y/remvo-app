@@ -324,9 +324,12 @@ export async function devAnswer(method, path, body, ApiError) {
     return { items: slice, next: from + PAGE < items.length ? slice.at(-1).id : null };
   };
 
+  if (method === 'PUT' && route === '/asks') return { asked: { picks: body.picks, other: body.other ?? null, at: new Date().toISOString() } };
   if (method === 'GET') {
     if (route === '/me') return d.me;
     if (route === '/me/passkeys') return { items: [] };
+    // ask1: never answered in the fixtures, so the question shows.
+    if (route === '/asks') return { asked: null };
     if (route === '/wallet') return d.wallet;
     if (route === '/wallet/history') return page(d.history);
     if (route === '/jobs') return page(d.jobs);

@@ -107,6 +107,9 @@ export const sellerApi = Object.freeze({
   wallet: () => call('GET', '/wallet'),
   history: (before) => call('GET', `/wallet/history${before ? `?before=${encodeURIComponent(before)}` : ''}`),
   updateSettings: (patch) => call('PATCH', '/settings', patch),
+  /** ask1: "What would you use next?" */
+  asked: () => call('GET', '/asks'),
+  ask: (body) => call('PUT', '/asks', body),
   /** emails1: turn Joseph's emails off from the link in one. No sign-in: the token is the proof. */
   emailsOff: async (a, t) => {
     let res;
