@@ -76,7 +76,7 @@ function head(path, meta) {
     `<meta property="og:image" content="${OG_IMAGE}" />`,
     '<meta property="og:image:width" content="1200" />',
     '<meta property="og:image:height" content="630" />',
-    '<meta property="og:image:alt" content="Paste a product. Get a finished eBay listing. A real Remvo listing for an Energizer speaker, $137.99." />',
+    '<meta property="og:image:alt" content="Stop typing eBay listings by hand. A real Remvo listing for an Energizer speaker, $137.99." />',
     '<meta property="og:type" content="website" />',
     `<meta property="og:title" content="${esc(meta.title)}" />`,
     `<meta property="og:description" content="${esc(meta.description)}" />`,

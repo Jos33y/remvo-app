@@ -5,7 +5,7 @@ import { MARKETPLACES, money } from '@lib/market';
 import { ROUTES, APP_LINKS, PRICING, creditsCost } from '@utils/constants';
 import styles from '@styles/pages/marketing/homepage.module.css';
 
-/* The hero says the job in the words of the Instagram post, says who
+/* The hero leads with the pain (typing listings by hand), says who
  * it is for (and who it is not for, so a vintage seller does not spend
  * money finding out), and puts the three reassurances a careful seller
  * looks for directly under the button. Beside it, a real listing. */
@@ -19,12 +19,11 @@ export function HomeHero() {
         <div className={styles.heroContent}>
           <p className={styles.heroFor}>For eBay sellers</p>
           <h1 id="hero-heading" className={styles.heroHeading}>
-            <span className={styles.line}>Paste a product.</span>{' '}
-            <span className={styles.line}>Get a finished eBay listing.</span>
+            Stop typing eBay listings by hand.
           </h1>
           <p className={styles.heroSub}>
-            A barcode or a product link in. The title, description, category, item specifics, parcel and
-            a price from live {site.site} listings out, in about 20 seconds.
+            Scan or paste a barcode, or paste a product link. The title, description, category, item
+            specifics, parcel and a price from live {site.site} listings come back in about 20 seconds.
           </p>
           <p className={styles.heroFit}>
             For resellers and dropshippers listing branded products. <strong>Not for vintage, handmade or one-off items.</strong>

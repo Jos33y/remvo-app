@@ -19,8 +19,8 @@ export const OG_IMAGE = `${SITE_ORIGIN}/og-remvo-1200x630.png`;
 
 export const PAGES = Object.freeze({
   [ROUTES.HOME]: {
-    title: 'Remvo | Finished eBay listings from a product',
-    description: 'Paste a barcode or a product link and get a finished eBay listing: title, description, category, item specifics, parcel and a price. $0.30 a listing.',
+    title: 'Remvo | eBay listings from a barcode in 20 seconds',
+    description: 'Stop typing eBay listings by hand. Scan or paste a barcode and get the title, description, category, item specifics, parcel and a price. $0.30 a listing.',
   },
   [ROUTES.HOW]: {
     title: 'How it works | Remvo',
