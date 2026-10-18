@@ -107,6 +107,17 @@ export const sellerApi = Object.freeze({
   wallet: () => call('GET', '/wallet'),
   history: (before) => call('GET', `/wallet/history${before ? `?before=${encodeURIComponent(before)}` : ''}`),
   updateSettings: (patch) => call('PATCH', '/settings', patch),
+  /** emails1: turn Joseph's emails off from the link in one. No sign-in: the token is the proof. */
+  emailsOff: async (a, t) => {
+    let res;
+    try {
+      res = await fetch(`${ROOT}/v1/emails/off`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ a, t }) });
+    } catch {
+      throw new SellerApiError(0, 'network', 'We could not reach Remvo. Check your connection and try again.');
+    }
+    if (res.ok) return true;
+    throw new SellerApiError(res.status, 'off', res.status === 404 || res.status === 400 ? 'This link no longer works.' : (FALLBACK[res.status] ?? 'Something went wrong on our side. Try again in a minute.'));
+  },
   /** { pack: 50|200|500 } or { amount: 37 }, with currency. Returns { checkoutId, url, credits }. */
   startTopUp: (body) => call('POST', '/topups', body),
   topUpStatus: (checkoutId) => call('GET', `/topups/${encodeURIComponent(checkoutId)}`),

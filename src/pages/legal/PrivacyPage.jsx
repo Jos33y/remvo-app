@@ -55,6 +55,7 @@ export function PrivacyPage() {
         <p>3.3. To keep the financial records tax law requires of us. This is a legal obligation.</p>
         <p>3.4. We do not use your data for advertising, we do not sell it, and we do not build a profile of you.</p>
         <p>3.5. To give welcome credits once: the hashed IP address in clause 2 stops one connection collecting them for many accounts. This is in our legitimate interest.</p>
+        <p>3.6. To send you a few short emails from Joseph at Remvo as you start, and when something new can help you list: no more than one every three days, and never while you are talking to us in the chat. This is in our legitimate interest. Every one has a link to turn them off, and so does Profile. Receipts, codes, your listings and credit reminders are part of the service and still come.</p>
       </Clause>
 
       <Clause id="share" heading="4. Who we share it with">
@@ -64,7 +65,7 @@ export function PrivacyPage() {
           <DefItem term="Anthropic">Writes the listing text from the product details. Receives the product details, not your account.</DefItem>
           <DefItem term="Apify">Reads the product page for the barcode or link you give. Receives the barcode or link only.</DefItem>
           <DefItem term="eBay">Its public category and listing information, looked up by product. Receives no information about you.</DefItem>
-          <DefItem term="Resend">Sends the codes that confirm your email and reset your password, receipts and reminders. Receives your email address.</DefItem>
+          <DefItem term="Resend">Sends the codes that confirm your email and reset your password, receipts, reminders and the emails in 3.6. Receives your email address.</DefItem>
           <DefItem term="Telegram">Brings chat messages to the person at Remvo who answers them. Receives your message, your email address and the page you wrote from.</DefItem>
           <DefItem term="Hostinger and Cloudflare">Host and protect our servers. Your data passes through them.</DefItem>
         </DefList>

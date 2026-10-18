@@ -52,6 +52,8 @@ export const SELLER_ROUTES = {
   VERIFY: '/sign-in/verify',
   /* From the set-or-reset password email: #t= in the fragment. */
   SET_PASSWORD: '/sign-in/password',
+  // emails1: where the link to turn Joseph's emails off lands (no sign-in).
+  EMAILS_OFF: '/emails-off',
   LISTINGS: '/listings',
   NEW_LISTING: '/listings/new',
   BULK: '/listings/bulk',
@@ -153,7 +155,7 @@ export function creditsFor(amount, currency) {
 }
 
 /* The date shown on every legal page, and its machine form. */
-export const LEGAL_UPDATED = { label: '17 October 2026', iso: '2026-10-17', version: 'v2.6' };
+export const LEGAL_UPDATED = { label: '18 October 2026', iso: '2026-10-18', version: 'v2.7' };
 
 /* ── Paused corridor: checkout and admin trees only ── */
 

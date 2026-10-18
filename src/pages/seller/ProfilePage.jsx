@@ -15,6 +15,7 @@ import { addPasskey, passkeysSupported } from '@lib/sellerPasskeys';
 import { BRAND, SELLER_ROUTES, siteUrl } from '@utils/constants';
 import s from '@styles/pages/seller/app.module.css';
 import P from '@styles/pages/seller/profile.module.css';
+import F from '@styles/pages/seller/profit.module.css';
 
 /* ──────────────────────────────────────────────────────────────────
  * Profile
@@ -204,8 +205,25 @@ export function ProfilePage() {
               <span className={s.rowValue}>{account?.hasPassword ? 'Change' : 'Set'}</span>
               <span className={s.chevron}><IconChevronRight /></span>
             </button>
+            {/* emails1: Joseph's emails, on or off. Service emails always come. */}
+            <div className={s.row}>
+              <span className={s.rowMain}>
+                <span id="emails-label" className={s.rowTitle}>Emails from Joseph</span>
+                <span className={s.rowSub}>A few short ones as you start, and what is new</span>
+              </span>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={settings?.emails !== false}
+                aria-labelledby="emails-label"
+                className={F.switch}
+                onClick={() => choose({ emails: settings?.emails === false }, settings?.emails === false ? 'Emails from Joseph on' : 'Emails from Joseph off', true)}
+              >
+                <span className={F.switchKnob} aria-hidden="true" />
+              </button>
+            </div>
           </div>
-          <p className={s.groupNote}>To change your email, write to us from the one you use now.</p>
+          <p className={s.groupNote}>To change your email, write to us from the one you use now. Receipts, codes, your listings and credit reminders always come.</p>
         </section>
 
         <section className={s.section} aria-labelledby="passkeys-heading">

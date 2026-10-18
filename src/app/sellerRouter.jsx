@@ -5,6 +5,7 @@ import { SellerShell } from '@components/layout/seller/SellerShell';
 import { SignInPage } from '@pages/seller/SignInPage';
 import { VerifyLinkPage } from '@pages/seller/VerifyLinkPage';
 import { SetPasswordPage } from '@pages/seller/SetPasswordPage';
+import { EmailsOffPage } from '@pages/seller/EmailsOffPage';
 import { SellerHomePage } from '@pages/seller/SellerHomePage';
 import { ListingsPage } from '@pages/seller/ListingsPage';
 import { NewListingPage } from '@pages/seller/NewListingPage';
@@ -31,6 +32,7 @@ import { SELLER_ROUTES } from '@utils/constants';
  *   /batches/:id                 a bulk run: progress, lines, the eBay file (covers the tabs)
  *   /credits                     balance, top-up, history
  *   /profile                     account, help, legal, sign out, delete
+ *   /emails-off                  turn Joseph's emails off from the link in one (no sign-in)
  *   /billing                     the marketing site's Top up: credits with the sheet open
  *
  * Scroll: a new screen opens at its top; going back (the browser's,
@@ -50,6 +52,8 @@ export const sellerRouter = createBrowserRouter([
       { path: SELLER_ROUTES.SIGN_UP, element: <SignInPage /> },
       { path: SELLER_ROUTES.VERIFY, element: <VerifyLinkPage /> },
       { path: SELLER_ROUTES.SET_PASSWORD, element: <SetPasswordPage /> },
+      // emails1: the link in Joseph's emails; no sign-in needed.
+      { path: SELLER_ROUTES.EMAILS_OFF, element: <EmailsOffPage /> },
       {
         element: <RequireSeller />,
         children: [
