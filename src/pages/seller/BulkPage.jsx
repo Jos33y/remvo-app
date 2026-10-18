@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { PageHeader } from '@components/ui/seller/PageHeader';
 import { SegmentedChoice, TopUpSheet } from '@components/ui/seller/parts';
@@ -8,6 +8,8 @@ import { MARKETPLACE } from '@lib/market';
 import { count, num, plural } from '@lib/plural';
 import { CONDITIONS, CONDITION } from '@lib/sellerData';
 import { SELLER_ROUTES, batchPath } from '@utils/constants';
+import { ScanSheet } from '@components/ui/seller/ScanSheet';
+import { cameraPossible } from '@lib/scanner';
 import s from '@styles/pages/seller/app.module.css';
 import b from '@styles/pages/seller/bulk.module.css';
 
@@ -58,6 +60,8 @@ export function BulkPage() {
   const [error, setError] = useState('');
   const [topUp, setTopUp] = useState(false);
   const [scroll, setScroll] = useState(0);
+  const [scanning, setScanning] = useState(false);
+  const [canScan] = useState(cameraPossible);
   const fileRef = useRef(null);
   const boxRef = useRef(null);
   const boxId = useId();
@@ -70,6 +74,20 @@ export function BulkPage() {
   const flagged = useMemo(() => new Set((checked?.problems ?? []).map((p) => p.line)), [checked]);
 
   const changed = (fn) => (v) => { fn(v); setChecked(null); setError(''); };
+
+  /* scan1: each barcode from the camera goes on the sheet, one a line. False when the sheet is full. */
+  const textRef = useRef(text);
+  textRef.current = text;
+  const addScanned = useCallback((code) => {
+    const t = textRef.current;
+    if (t.split('\n').filter((l) => l.trim()).length >= MAX_ROWS) return false;
+    const next = `${t.replace(/\s+$/, '')}${t.trim() ? '\n' : ''}${code}\n`;
+    textRef.current = next;
+    setText(next);
+    setChecked(null); setError(''); setFileName(null);
+    return true;
+  }, []);
+  const scannedSoFar = useMemo(() => text.split('\n').map((l) => l.trim()).filter((l) => /^\d{8,14}$/.test(l)), [scanning]);
 
   async function readFile(e) {
     const f = e.target.files?.[0];
@@ -181,6 +199,9 @@ export function BulkPage() {
                   {filled === 0 ? 'Nothing pasted yet' : filled > MAX_ROWS ? `${num(filled)} lines. The first ${MAX_ROWS} are read.` : count(filled, 'line')}
                 </span>
                 <span className={b.fileBits}>
+                  {canScan && (
+                    <button type="button" className={b.fileButton} onClick={() => setScanning(true)}>Scan barcodes</button>
+                  )}
                   {fileName && <span className={b.fileName} title={fileName}>{fileName}</span>}
                   <button type="button" className={b.fileButton} onClick={() => fileRef.current?.click()}>
                     {fileName ? 'Another CSV' : 'Upload a CSV'}
@@ -191,6 +212,9 @@ export function BulkPage() {
             </div>
             <p className={b.spreadsheet}>
               From a spreadsheet: copy the column and paste it, or save the sheet as a CSV and upload it. A column named Condition is used when there is one, and a column named Cost gives each listing what you keep after eBay's fees.
+            </p>
+            <p className={b.spreadsheet}>
+              Boxes in front of you: {canScan ? 'Scan barcodes uses your phone\u2019s camera, or ' : ''}a barcode scanner works too. Click in the sheet and scan; each one lands on its own line.
             </p>
 
             <div className={b.condition}>
@@ -239,6 +263,7 @@ export function BulkPage() {
         </form>
       </div>
 
+      <ScanSheet open={scanning} onClose={() => setScanning(false)} onCode={addScanned} already={scannedSoFar} />
       <TopUpSheet open={topUp} onClose={() => { setTopUp(false); setChecked(null); }} />
     </>
   );

@@ -155,7 +155,7 @@ export function creditsFor(amount, currency) {
 }
 
 /* The date shown on every legal page, and its machine form. */
-export const LEGAL_UPDATED = { label: '18 October 2026', iso: '2026-10-18', version: 'v2.7' };
+export const LEGAL_UPDATED = { label: '18 October 2026', iso: '2026-10-18', version: 'v2.8' };
 
 /* ── Paused corridor: checkout and admin trees only ── */
 

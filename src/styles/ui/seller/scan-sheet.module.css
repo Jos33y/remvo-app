@@ -1,0 +1,182 @@
+/* ═══════════════════════════════════════
+   SCAN BARCODES (scan1)
+   The whole screen is the camera. A frame
+   in the middle, the rest dimmed, a thin
+   plum beam (bulk's colour) to say it is
+   looking. Words and buttons sit on a dark
+   band at the bottom, in thumb's reach,
+   readable over any picture.
+   ═══════════════════════════════════════ */
+
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background-color: #000;
+  color: var(--ivory);
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.shade {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+/* The frame: clear inside, everything around it dimmed by its own shadow. */
+.frame {
+  position: relative;
+  width: min(78vw, 360px);
+  height: min(42vw, 190px);
+  border-radius: 18px;
+  box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.55), inset 0 0 0 2px rgba(244, 239, 230, 0.9);
+  overflow: hidden;
+}
+
+.beam {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 50%;
+  height: 2px;
+  border-radius: 1px;
+  background-color: var(--app-plum-ink, #D7B3DA);
+  box-shadow: 0 0 12px var(--app-plum-ink, #D7B3DA);
+  animation: sweep 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes sweep {
+  from { transform: translateY(-60px); }
+  to { transform: translateY(60px); }
+}
+
+.top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(12px + env(safe-area-inset-top, 0px)) 12px 12px 20px;
+  background: linear-gradient(rgba(0, 0, 0, 0.6), transparent);
+}
+
+.title {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.close {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: var(--ivory);
+  background-color: rgba(0, 0, 0, 0.45);
+  touch-action: manipulation;
+}
+
+.bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 16px 20px calc(20px + env(safe-area-inset-bottom, 0px));
+  background-color: rgba(20, 20, 24, 0.92);
+  border-top: 0.5px solid rgba(244, 239, 230, 0.12);
+}
+
+.status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-height: 48px;
+  margin: 0 0 14px;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--ivory);
+}
+
+.tick {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  color: #141418;
+  background-color: var(--verdigris-ink);
+}
+
+.code {
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.torch,
+.done {
+  min-height: 50px;
+  padding: 0 18px;
+  border-radius: 14px;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  touch-action: manipulation;
+}
+
+.torch {
+  flex: none;
+  color: var(--ivory);
+  background-color: rgba(244, 239, 230, 0.12);
+}
+
+.torch[aria-pressed='true'] {
+  color: #141418;
+  background-color: var(--ivory);
+}
+
+.done {
+  flex: 1;
+  color: #141418;
+  background-color: var(--ivory);
+}
+
+.close:focus-visible,
+.torch:focus-visible,
+.done:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #141418, 0 0 0 4px var(--ivory);
+}
+
+@media (min-width: 700px) {
+  .bottom {
+    left: 50%;
+    right: auto;
+    bottom: 24px;
+    width: 440px;
+    transform: translateX(-50%);
+    border: 0.5px solid rgba(244, 239, 230, 0.12);
+    border-radius: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .beam { animation: none; }
+}

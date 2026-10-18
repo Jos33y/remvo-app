@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@simplewebauthn/browser": "^13.3.0",
+    "barcode-detector": "3.2.2",
     "motion": "^12.38.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
