@@ -5,6 +5,7 @@ short: In Seller Hub, open Reports, then Upload, and download the "Create drafts
 published: 2026-10-18
 checked: 2026-10-18
 action: bulk
+topic: bulk
 sources:
   - eBay Help: Seller Hub Reports (eBay.com) | https://www.ebay.com/help/selling/selling-tools/seller-hub-reports?id=4096
   - eBay Help: Seller Hub Reports (eBay.co.uk) | https://www.ebay.co.uk/help/selling/selling-tools/seller-hub-reports?id=4096

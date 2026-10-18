@@ -27,7 +27,9 @@
 import { basename } from 'node:path';
 import { Marked } from 'marked';
 
-const REQUIRED = ['title', 'description', 'short', 'published', 'checked', 'action'];
+const REQUIRED = ['title', 'description', 'short', 'published', 'checked', 'action', 'topic'];
+// The topic gives a guide its ink and its cover picture (pages/guides/GuideArt.jsx).
+export const TOPICS = ['bulk', 'drafts', 'listing', 'fees', 'postage', 'selling'];
 const ACTIONS = ['listing', 'bulk', 'scan', 'calculator', 'calculator-uk', 'chat'];
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -56,6 +58,7 @@ export function parseFrontMatter(source, file) {
   for (const key of REQUIRED) if (!meta[key]) throw new Error(`${file}: front matter needs "${key}"`);
   for (const key of ['published', 'checked']) if (!DATE.test(meta[key])) throw new Error(`${file}: ${key} must be YYYY-MM-DD`);
   if (!ACTIONS.includes(meta.action)) throw new Error(`${file}: action must be one of ${ACTIONS.join(', ')}`);
+  if (!TOPICS.includes(meta.topic)) throw new Error(`${file}: topic must be one of ${TOPICS.join(', ')}`);
   if (meta.description.length > 160) throw new Error(`${file}: description is ${meta.description.length} characters; keep it to 160`);
   if (/—/.test(source)) throw new Error(`${file}: has an em dash`);
   meta.sources = (meta.sources ?? []).map((s) => {
@@ -73,10 +76,15 @@ export function renderBody(body) {
   const marked = new Marked({
     gfm: true,
     renderer: {
+      // A step ("## 2. Fill in one row per product") gets its number set
+      // apart, for the big numeral and the route between steps; its text
+      // still reads "2. Fill in one row per product" to Google and AI tools.
       heading({ tokens, depth }) {
         const text = this.parser.parseInline(tokens);
         const id = headingId(text);
-        if (depth === 2) headings.push({ id, text: text.replace(/<[^>]+>/g, '') });
+        const step = depth === 2 ? /^(\d+)\.\s+(.*)$/.exec(text) : null;
+        if (depth === 2) headings.push({ id, n: step ? Number(step[1]) : null, text: (step ? step[2] : text).replace(/<[^>]+>/g, '') });
+        if (step) return `<h2 id="${id}" class="step"><span class="step-n">${step[1]}<span class="sr-only">.</span></span> <span class="step-t">${step[2]}</span></h2>\n`;
         return `<h${depth} id="${id}">${text}</h${depth}>\n`;
       },
       link({ href, title, tokens }) {

@@ -1,0 +1,108 @@
+/* ═══════════════════════════════════════
+   GUIDE COVERS (guides1b)
+   Drawn in the topic's ink (--topic-ink,
+   --topic, set on the guide). Ivory paper,
+   night surfaces, gold only on the price.
+   Motion once, on arrival, under 2 s and
+   never looping; none under reduced motion.
+   ═══════════════════════════════════════ */
+
+.art {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.sheet {
+  fill: var(--night-1);
+  stroke: rgba(244, 239, 230, 0.16);
+  stroke-width: 1;
+}
+
+.rule { stroke: rgba(244, 239, 230, 0.14); stroke-width: 1; }
+.ruleSoft { stroke: rgba(244, 239, 230, 0.07); stroke-width: 1; }
+
+.letter,
+.num {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  fill: rgba(244, 239, 230, 0.5);
+}
+
+.cell { fill: rgba(244, 239, 230, 0.22); }
+.cellStrong { fill: rgba(244, 239, 230, 0.5); }
+
+.route {
+  fill: none;
+  stroke: var(--topic-ink);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 0.1 7;
+}
+
+.arrow {
+  fill: none;
+  stroke: var(--topic-ink);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.backing {
+  fill: color-mix(in srgb, var(--topic) 55%, var(--night-0));
+}
+
+.paper { fill: var(--ivory); }
+
+/* Round holes along the edge: dots of the backing's colour, from a dashed round-capped stroke. */
+.holes {
+  fill: none;
+  stroke: color-mix(in srgb, var(--topic) 55%, var(--night-0));
+  stroke-width: 4.5;
+  stroke-linecap: round;
+  stroke-dasharray: 0.1 6;
+}
+
+.inner { fill: color-mix(in srgb, var(--topic) 28%, var(--ivory)); }
+.line { fill: rgba(20, 20, 24, 0.62); }
+.lineSoft { fill: rgba(20, 20, 24, 0.3); }
+.price { fill: #8C6A1C; }
+
+.making .inner { fill: color-mix(in srgb, var(--topic) 12%, var(--ivory)); }
+
+.waiting {
+  fill: none;
+  stroke: var(--topic-ink);
+  stroke-opacity: 0.45;
+  stroke-width: 1.2;
+  stroke-dasharray: 4 4;
+}
+
+.stripe { fill: rgba(244, 239, 230, 0.78); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .row .cellStrong {
+    animation: row-light 900ms ease-out both;
+    animation-delay: calc(200ms + var(--r) * 110ms);
+  }
+
+  .made,
+  .making {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: stamp-land 520ms cubic-bezier(0.2, 0.9, 0.25, 1.15) both;
+    animation-delay: calc(500ms + var(--i) * 90ms);
+  }
+}
+
+@keyframes row-light {
+  0% { fill: rgba(244, 239, 230, 0.5); }
+  35% { fill: var(--topic-ink); }
+  100% { fill: rgba(244, 239, 230, 0.5); }
+}
+
+@keyframes stamp-land {
+  from { opacity: 0; transform: translateY(-10px) scale(1.06) rotate(-3deg); }
+  to { opacity: 1; transform: none; }
+}
