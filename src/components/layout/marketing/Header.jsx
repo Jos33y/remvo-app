@@ -18,6 +18,8 @@ const NAV = [
   // on a phone; its name stays "Fee calculator", which contains it).
   { to: ROUTES.FEES_US, label: 'Fee calculator', short: 'Calculator', compact: true, also: [ROUTES.FEES_UK] },
   // Under 380px there is no room for both: Pricing stays in the footer.
+  // guides1: on wide screens; on a phone it is in the footer.
+  { to: ROUTES.GUIDES, label: 'Guides', compact: false, prefix: true },
   { to: ROUTES.PRICING, label: 'Pricing', compact: true, roomy: true },
   { to: ROUTES.CONTACT, label: 'Contact', compact: false },
 ];
@@ -31,8 +33,8 @@ export function Header() {
         <Logo variant="gold" size="default" />
         <div className={styles.right}>
           <nav className={styles.nav} aria-label="Primary navigation">
-            {NAV.map(({ to, label, short, compact, roomy = false, also = [] }) => {
-              const here = pathname === to || also.includes(pathname);
+            {NAV.map(({ to, label, short, compact, roomy = false, also = [], prefix = false }) => {
+              const here = pathname === to || also.includes(pathname) || (prefix && pathname.startsWith(`${to}/`));
               return (
                 <Link
                   key={to}

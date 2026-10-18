@@ -73,6 +73,18 @@ export function PricingPage() {
             </table>
           </Section>
 
+          <Section heading="What eBay takes">
+            <p>
+              Remvo’s price is all you pay us. eBay charges its own fees when an item sells, the same
+              whether you use Remvo or not.
+            </p>
+            <p>
+              See them, and what you keep after your item cost and postage, with the free{' '}
+              <Link to={ROUTES.FEES_US} className={styles.link}>eBay fee calculator</Link> or the{' '}
+              <Link to={ROUTES.FEES_UK} className={styles.link}>eBay UK one</Link>. No sign-up.
+            </p>
+          </Section>
+
           <Section heading="Currencies">
             <p>
               Pay in US dollars, euros or pounds. We suggest one from where you

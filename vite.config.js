@@ -1,9 +1,11 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
+import { guidesPlugin } from './vite-plugins/guides.js';
 
 export default defineConfig({
-  plugins: [react()],
+  // guides1: each src/content/guides/*.md becomes a page's data (vite-plugins/guides.js).
+  plugins: [react(), guidesPlugin()],
   // When the build was made: the Black Friday banner counts days from it
   // in the pre-rendered pages and in the browser's first render.
   define: {

@@ -13,6 +13,7 @@
  * ────────────────────────────────────────────────────────────────── */
 
 import { LEGAL_UPDATED, ROUTES } from '@utils/constants';
+import { GUIDES, guidePath } from '@lib/guides';
 
 export const SITE_ORIGIN = 'https://remvo.app';
 export const OG_IMAGE = `${SITE_ORIGIN}/og-remvo-1200x630.png`;
@@ -40,6 +41,18 @@ export const PAGES = Object.freeze({
     description: 'Free eBay.co.uk fee calculator. Private or business, with or without VAT, by category: see what eBay takes and what you keep after your costs. No account.',
     updated: '2026-10-17',
   },
+  [ROUTES.GUIDES]: {
+    title: 'Guides for eBay sellers | Remvo',
+    description: 'Short guides that each answer one question about selling on eBay: bulk listing, drafts, item specifics, fees. Checked against eBay’s own pages.',
+    updated: GUIDES[0]?.checked,
+  },
+  // guides1: one entry per guide, from its front matter.
+  ...Object.fromEntries(GUIDES.map((g) => [guidePath(g.slug), {
+    title: `${g.title} | Remvo`,
+    description: g.description,
+    updated: g.checked,
+    guide: true,
+  }])),
   [ROUTES.PRICING]: {
     title: 'Pricing | Remvo',
     description: '$0.30 a listing with prepaid credits. No subscription. Your first listing is on us, and a listing that fails gives its credits back.',

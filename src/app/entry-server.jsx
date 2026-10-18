@@ -6,8 +6,10 @@ import { LoaderDismisser } from './LoaderDismisser';
 import { BRAND, PRICING, ROUTES } from '@utils/constants';
 import { OG_IMAGE, SITE_ORIGIN } from '@lib/seo';
 import { FAQ } from '@pages/tools/FeeCalculatorPage';
+import { GUIDES, guideBySlug, guidePath } from '@lib/guides';
 
 export { PAGES, NOT_FOUND, SITE_ORIGIN, OG_IMAGE, canonical } from '@lib/seo';
+export { GUIDES } from '@lib/guides';
 
 /* ──────────────────────────────────────────────────────────────────
  * Server render of a marketing page, for the build only
@@ -78,6 +80,49 @@ export function structuredData(path) {
         url: `${SITE_ORIGIN}${ROUTES.PRICING}`,
       })),
     };
+  }
+  // guides1: the list of guides, and each guide as an article with its place under Guides.
+  if (path === ROUTES.GUIDES) {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      name: 'Guides for eBay sellers',
+      url: `${SITE_ORIGIN}${ROUTES.GUIDES}`,
+      mainEntity: {
+        '@type': 'ItemList',
+        itemListElement: GUIDES.map((g, i) => ({ '@type': 'ListItem', position: i + 1, url: `${SITE_ORIGIN}${guidePath(g.slug)}`, name: g.title })),
+      },
+    };
+  }
+  const guide = path.startsWith(`${ROUTES.GUIDES}/`) ? guideBySlug(path.slice(ROUTES.GUIDES.length + 1)) : null;
+  if (guide) {
+    const url = `${SITE_ORIGIN}${guidePath(guide.slug)}`;
+    return [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: guide.title,
+        description: guide.description,
+        abstract: guide.short,
+        url,
+        mainEntityOfPage: url,
+        image: OG_IMAGE,
+        datePublished: guide.published,
+        dateModified: guide.checked,
+        inLanguage: 'en-GB',
+        author: { '@type': 'Person', name: 'Joseph', jobTitle: 'Founder', worksFor: { '@type': 'Organization', name: BRAND.NAME, url: `${SITE_ORIGIN}/` } },
+        publisher: { '@type': 'Organization', name: BRAND.NAME, url: `${SITE_ORIGIN}/`, logo: { '@type': 'ImageObject', url: `${SITE_ORIGIN}/favicon/logo512.png` } },
+        citation: guide.sources.map((s) => s.url),
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Guides', item: `${SITE_ORIGIN}${ROUTES.GUIDES}` },
+          { '@type': 'ListItem', position: 2, name: guide.title, item: url },
+        ],
+      },
+    ];
   }
   // tools1: a free web tool, and its questions, as the page shows them.
   if (path === ROUTES.FEES_US || path === ROUTES.FEES_UK) {

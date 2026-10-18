@@ -64,7 +64,7 @@ const font = Object.values(manifest).flatMap((e) => e.assets ?? []).find((a) => 
 // drawn in it rather than swapped in after.
 const serif = Object.values(manifest).flatMap((e) => e.assets ?? []).find((a) => /instrument-serif-latin-400-normal-[\w-]+\.woff2$/.test(a));
 
-const { render, PAGES, NOT_FOUND, canonical, OG_IMAGE, structuredData } = await import(pathToFileURL(SSR).href);
+const { render, PAGES, NOT_FOUND, canonical, OG_IMAGE, structuredData, GUIDES } = await import(pathToFileURL(SSR).href);
 
 function head(path, meta) {
   const url = canonical(path);
@@ -128,7 +128,45 @@ const urls = Object.entries(PAGES).map(([path, meta]) =>
 writeFileSync(join(DIST, 'sitemap.xml'),
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`);
 
+// guides1: each guide as plain Markdown beside its page (/guides/<slug>.md),
+// for AI tools and agents, and llms.txt listing the site for them.
+const strip = (md) => md.replace(/^---[\s\S]*?\n---\r?\n?/, '').trim();
+for (const g of GUIDES) {
+  const source = join(ROOT, 'src', 'content', 'guides', `${g.slug}.md`);
+  if (!existsSync(source)) fail(`no source for guide ${g.slug}`);
+  const md = [
+    `# ${g.title}`,
+    '',
+    `In short: ${g.short}`,
+    '',
+    strip(readFileSync(source, 'utf8')),
+    '',
+    '## Sources',
+    '',
+    ...g.sources.map((x) => `- [${x.label}](${x.url})`),
+    '',
+    `Checked ${g.checked} by Joseph at Remvo. Page: ${canonical(`/guides/${g.slug}`)}`,
+    '',
+  ].join('\n');
+  writeFileSync(join(DIST, 'guides', `${g.slug}.md`), md);
+}
+const site = Object.entries(PAGES).filter(([path, m]) => !m.noindex && !m.guide);
+writeFileSync(join(DIST, 'llms.txt'), [
+  '# Remvo',
+  '',
+  '> Software that prepares eBay listings from a barcode or a product link: title, description, category, item specifics, parcel size and weight, and a price from live eBay listings, in about 20 seconds, or up to 500 at once with an eBay drafts file. Pay as you go: $0.30 (£0.24) a listing, no subscription. Remvo never asks for the eBay login; the seller publishes. Made by Remvo Labs Limited, Lagos, Nigeria. Not made or endorsed by eBay.',
+  '',
+  '## Pages',
+  '',
+  ...site.map(([path, m]) => `- [${m.title.replace(/ \| Remvo$/, '').replace(/^Remvo \| /, '')}](${canonical(path)}): ${m.description}`),
+  '',
+  '## Guides',
+  '',
+  ...GUIDES.map((g) => `- [${g.title}](${canonical(`/guides/${g.slug}`)}.md): ${g.short}`),
+  '',
+].join('\n'));
+
 // The manifest has done its job; it is not for the public site.
 rmSync(join(DIST, '.vite'), { recursive: true, force: true });
 
-console.log(`prerender: ${written.length} pages, app.html, sitemap.xml (${Object.keys(PAGES).length} URLs)`);
+console.log(`prerender: ${written.length} pages, app.html, sitemap.xml (${Object.keys(PAGES).length} URLs), llms.txt, ${GUIDES.length} guide${GUIDES.length === 1 ? '' : 's'} as Markdown`);

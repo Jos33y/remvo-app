@@ -1,0 +1,387 @@
+/* ═══════════════════════════════════════
+   GUIDES (guides1)
+   A reading column, not a dashboard: one
+   measure (about 68 characters), the
+   question as a serif headline, the short
+   answer in a raised box under it, steps
+   as headings. Hairlines between parts,
+   no colour of its own; gold stays on
+   money only.
+   ═══════════════════════════════════════ */
+
+.page {
+  padding: clamp(32px, 6vw, 72px) 0 clamp(64px, 9vw, 112px);
+}
+
+.inner {
+  max-width: calc(44rem + 2 * var(--site-gutter));
+  margin: 0 auto;
+  padding: 0 var(--site-gutter);
+}
+
+/* ── Breadcrumb ── */
+.crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 28px;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+  color: var(--site-text-3);
+}
+
+.crumbs li {
+  min-width: 0;
+}
+
+.crumbs li + li::before {
+  content: '/';
+  margin-right: 6px;
+  color: var(--site-text-3);
+}
+
+.crumbs li[aria-current='page'] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 60vw;
+}
+
+.crumbs a {
+  color: var(--site-text-2);
+  text-decoration: underline;
+  text-decoration-color: var(--site-line-strong);
+  text-underline-offset: 4px;
+}
+
+/* ── Head ── */
+.title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 6vw, 3.75rem);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  color: var(--site-text);
+  text-wrap: balance;
+}
+
+.lede {
+  max-width: 56ch;
+  margin: 18px 0 0;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--site-text-2);
+}
+
+.byline {
+  margin: 16px 0 0;
+  font-size: 0.9375rem;
+  color: var(--site-text-3);
+}
+
+/* ── In short: the answer, first ── */
+.short {
+  margin: 32px 0 0;
+  padding: 22px 24px;
+  border-radius: 16px;
+  background: var(--site-raised);
+  box-shadow: inset 0 0 0 1px var(--site-line-strong);
+}
+
+.shortLabel,
+.tocLabel,
+.smallHeading {
+  margin: 0 0 8px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--site-text-3);
+}
+
+.short p {
+  margin: 0;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--site-text);
+}
+
+/* ── On this page ── */
+.toc {
+  margin: 28px 0 0;
+}
+
+.toc ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.toc li {
+  padding: 3px 0;
+}
+
+.toc a {
+  color: var(--site-text-2);
+  text-decoration: underline;
+  text-decoration-color: var(--site-line-strong);
+  text-underline-offset: 4px;
+}
+
+/* ── The body, from Markdown ── */
+.body {
+  margin-top: 8px;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--site-text-2);
+}
+
+.body h2 {
+  margin: 48px 0 12px;
+  font-family: var(--font-serif);
+  font-size: clamp(1.75rem, 3.6vw, 2.125rem);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--site-text);
+  scroll-margin-top: 96px;
+}
+
+.body h3 {
+  margin: 32px 0 8px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--site-text);
+  scroll-margin-top: 96px;
+}
+
+.body p {
+  margin: 0 0 16px;
+}
+
+.body strong {
+  font-weight: 600;
+  color: var(--site-text);
+}
+
+.body ul,
+.body ol {
+  margin: 0 0 16px;
+  padding-left: 1.4em;
+}
+
+/* The site's reset removes list markers; a guide needs them back. */
+.body ul {
+  list-style: disc;
+}
+
+.body ol {
+  list-style: decimal;
+}
+
+.body li {
+  padding: 3px 0;
+}
+
+.body li::marker {
+  color: var(--site-text-3);
+}
+
+.body a {
+  color: var(--site-text);
+  text-decoration: underline;
+  text-decoration-color: var(--site-line-strong);
+  text-underline-offset: 4px;
+}
+
+.body code {
+  padding: 1px 6px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  color: var(--site-text);
+  background: var(--site-raised-2);
+}
+
+.body img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 24px 0;
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px var(--site-line);
+}
+
+.body :global(.table-scroll) {
+  margin: 8px 0 20px;
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px var(--site-line);
+}
+
+.body :global(.table-scroll):focus-visible {
+  outline: 2px solid var(--site-text);
+  outline-offset: 2px;
+}
+
+.body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.body th,
+.body td {
+  padding: 11px 16px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--site-line);
+}
+
+.body tr:last-child th,
+.body tr:last-child td {
+  border-bottom: none;
+}
+
+.body thead th {
+  font-weight: 600;
+  font-size: 0.8125rem;
+  color: var(--site-text-3);
+}
+
+.body tbody th {
+  width: 34%;
+  font-weight: 600;
+  color: var(--site-text);
+}
+
+@media (max-width: 480px) {
+  .body th,
+  .body td {
+    padding: 10px 12px;
+  }
+}
+
+/* ── One action ── */
+.action {
+  margin: 48px 0 0;
+  padding: clamp(24px, 4vw, 36px);
+  border-radius: 20px;
+  background: var(--site-raised);
+  box-shadow: inset 0 0 0 1px var(--site-line-strong);
+}
+
+.actionHeading {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(1.75rem, 3.6vw, 2.125rem);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--site-text);
+}
+
+.actionText {
+  max-width: 52ch;
+  margin: 10px 0 22px;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--site-text-2);
+}
+
+.actionTalk.actionTalk {
+  margin-top: 18px;
+}
+
+/* ── Sources and more ── */
+.sources,
+.more {
+  margin: 40px 0 0;
+  padding-top: 28px;
+  border-top: 1px solid var(--site-line);
+}
+
+.sources ul,
+.moreList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sources li,
+.moreList li {
+  padding: 5px 0;
+}
+
+.sources a,
+.moreList a,
+.note a {
+  color: var(--site-text-2);
+  text-decoration: underline;
+  text-decoration-color: var(--site-line-strong);
+  text-underline-offset: 4px;
+}
+
+.moreList a {
+  color: var(--site-text);
+  font-size: 1.0625rem;
+}
+
+.note {
+  margin: 12px 0 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--site-text-3);
+}
+
+/* ── The list of guides ── */
+.list {
+  margin: 40px 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--site-line);
+}
+
+.item {
+  padding: 28px 0;
+  border-bottom: 1px solid var(--site-line);
+}
+
+.itemTitle {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(1.625rem, 3.4vw, 2rem);
+  font-weight: 400;
+  line-height: 1.12;
+}
+
+.itemTitle a {
+  color: var(--site-text);
+  text-decoration: none;
+}
+
+.itemTitle a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--site-line-strong);
+  text-underline-offset: 6px;
+}
+
+.itemShort {
+  max-width: 62ch;
+  margin: 10px 0 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--site-text-2);
+}
+
+.itemMeta {
+  margin: 10px 0 0;
+  font-size: 0.875rem;
+  color: var(--site-text-3);
+}
+
+.listTalk.listTalk {
+  margin-top: 32px;
+}

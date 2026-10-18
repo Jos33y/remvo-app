@@ -19,6 +19,7 @@ export const ROUTES = {
   /* tools1: the free eBay fee calculators. */
   FEES_US: '/ebay-fee-calculator',
   FEES_UK: '/ebay-fee-calculator-uk',
+  GUIDES: '/guides',
 };
 
 /* The seller app. Its own host, chosen by App.jsx, so nothing from it

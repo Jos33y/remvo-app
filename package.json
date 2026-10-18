@@ -24,6 +24,7 @@
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.0",
     "eslint": "^9.0.0",
+    "marked": "18.0.14",
     "vite": "^6.0.0"
   }
 }

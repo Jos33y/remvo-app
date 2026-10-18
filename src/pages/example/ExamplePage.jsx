@@ -167,6 +167,10 @@ export function ExamplePage() {
                   <li>Adds their own photos and publishes it. Remvo never touches the eBay account.</li>
                 </ul>
                 <p className={`${info.muted} ${info.after}`}>
+                  What would they keep if it sells at that price? Work it out with the free{' '}
+                  <Link to={ROUTES.FEES_US} className={info.link}>eBay fee calculator</Link>.
+                </p>
+                <p className={`${info.muted} ${info.after}`}>
                   More on what Remvo reads and writes: <Link to={ROUTES.HOW} className={info.link}>how it works</Link>.
                 </p>
               </div>

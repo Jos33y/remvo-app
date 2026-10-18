@@ -2,6 +2,7 @@ import { HomeHero } from './sections/HomeHero';
 import { HomeFeatures } from './sections/HomeFeatures';
 import { HomeBulk } from './sections/HomeBulk';
 import { HomePricing } from './sections/HomePricing';
+import { HomeFees } from './sections/HomeFees';
 import { HomeCTA } from './sections/HomeCTA';
 import { ChatInvite } from '@components/ui/marketing/ChatInvite';
 
@@ -17,6 +18,7 @@ export function HomePage() {
       <HomeFeatures />
       <HomeBulk />
       <HomePricing />
+      <HomeFees />
       <ChatInvite />
       <HomeCTA />
     </>
