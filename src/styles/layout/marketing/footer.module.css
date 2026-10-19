@@ -1,17 +1,20 @@
 /* ═══════════════════════════════════════
-   FOOTER
-   Three columns on obsidian, then the
-   merchant-of-record and independence
-   notes, then the logo bar.
+   FOOTER (social1, redrawn)
+   The sign-off and Remvo's accounts as
+   postage stamps, cancelled by a postmark
+   from Lagos; then four even columns of
+   links; then the merchant-of-record and
+   independence notes.
 
-   October 2026: secondary text raised to
-   0.62 and meta text to 0.5 white. The
-   earlier 0.25 and 0.2 read at about 2:1
-   on #1A1A1A, under the 4.5:1 AA floor.
+   Text contrast as before: secondary text
+   0.62 and meta text --ivory-3, both over
+   4.5:1 on --night-0.
    ═══════════════════════════════════════ */
 
 .footer {
-  background-color: var(--night-0);
+  background:
+    radial-gradient(60% 120% at 100% 0%, rgba(201, 168, 76, 0.045), transparent 60%),
+    var(--night-0);
   border-top: var(--border-subtle);
   margin-top: auto;
 }
@@ -19,88 +22,219 @@
 .inner {
   max-width: var(--site-width);
   margin: 0 auto;
-  padding: var(--space-12) var(--site-gutter) var(--space-8);
+  padding: clamp(48px, 7vw, 72px) var(--site-gutter) var(--space-8);
 }
 
+/* ── The sign-off and the stamps ── */
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px 48px;
+  padding-bottom: clamp(36px, 5vw, 48px);
+  border-bottom: 0.5px solid rgba(244, 239, 230, 0.08);
+}
+
+.line {
+  margin: 22px 0 0;
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--ivory);
+}
+
+.lineSub {
+  margin: 10px 0 0;
+  font-size: 0.9375rem;
+  color: rgba(244, 239, 230, 0.62);
+}
+
+.follow {
+  position: relative;
+}
+
+.stamps {
+  display: flex;
+  gap: 14px;
+  margin: 0;
+  padding: 6px 0 0;
+  list-style: none;
+}
+
+/* A stamp: perforated edge in its ink, its own drawing, the network's
+ * name and Remvo's handle. The whole stamp is the link. */
+.stamp {
+  --ink: #2C4A8A;
+  --ink-light: #9BB4EC;
+  position: relative;
+  width: 124px;
+  background-color: color-mix(in srgb, var(--ink) 62%, var(--night-1));
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.stamp[data-ink='claret'] { --ink: #7A2E3A; --ink-light: #E5A3AE; }
+.stamp[data-ink='lapis'] { --ink: #2C4A8A; --ink-light: #9BB4EC; }
+.stamp[data-ink='pine'] { --ink: #2D5A43; --ink-light: #9CCBB0; }
+
+.stamp:nth-child(1) { transform: rotate(-3deg); }
+.stamp:nth-child(2) { transform: rotate(1.5deg) translateY(-6px); }
+.stamp:nth-child(3) { transform: rotate(-1deg); }
+
+@media (hover: hover) and (pointer: fine) {
+  .stamp:hover { transform: rotate(0deg) translateY(-6px); }
+}
+
+/* The same round, whole-number perforation as the guides' stamps. */
+.perforated {
+  --r: 3.5px;
+  padding: calc(2 * var(--r));
+  -webkit-mask:
+    radial-gradient(var(--r), #0000 98%, #000) round calc(-1.5 * var(--r)) calc(-1.5 * var(--r)) / calc(3 * var(--r)) calc(3 * var(--r)),
+    linear-gradient(#000 0 0) no-repeat 50% / calc(100% - 3 * var(--r)) calc(100% - 3 * var(--r));
+  mask:
+    radial-gradient(var(--r), #0000 98%, #000) round calc(-1.5 * var(--r)) calc(-1.5 * var(--r)) / calc(3 * var(--r)) calc(3 * var(--r)),
+    linear-gradient(#000 0 0) no-repeat 50% / calc(100% - 3 * var(--r)) calc(100% - 3 * var(--r));
+}
+
+.stampFace {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 12px 12px 12px;
+  background:
+    radial-gradient(90% 70% at 100% 0%, color-mix(in srgb, var(--ink) 45%, transparent), transparent 70%),
+    var(--night-1);
+}
+
+.stampArt {
+  display: block;
+  color: var(--ink-light);
+}
+
+.stampArt svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.stampName {
+  margin-top: 12px;
+  font-family: var(--font-serif);
+  font-size: 1.375rem;
+  line-height: 1;
+  color: var(--ivory);
+  text-decoration: none;
+}
+
+/* The whole stamp is the link's target. */
+.stampName::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.stampName:focus-visible { outline: none; }
+.stamp:has(a:focus-visible) .stampFace { box-shadow: inset 0 0 0 2px var(--ivory); }
+
+.stampHandle {
+  margin-top: 5px;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--ink-light);
+}
+
+/* The postmark, struck across the first two stamps. */
+.postmark {
+  position: absolute;
+  z-index: 1;
+  top: 40px;
+  left: 82px;
+  width: 92px;
+  height: 92px;
+  color: var(--ivory);
+  opacity: 0.5;
+  transform: rotate(-14deg);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stamp { transition: none; }
+}
+
+/* ── Links ── */
 .grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: var(--space-10);
-  padding-bottom: var(--space-8);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-8) var(--space-10);
+  padding: clamp(32px, 5vw, 44px) 0;
   border-bottom: 0.5px solid rgba(244, 239, 230, 0.08);
 }
 
 .col {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .colTitle {
-  font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 0.8125rem;
+  margin: 0 0 var(--space-4);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--ivory-3);
-  margin-bottom: var(--space-4);
 }
 
 .colLink {
   display: block;
+  padding: 6px 0;
   font-size: var(--text-sm);
   color: rgba(244, 239, 230, 0.62);
   text-decoration: none;
-  padding: 6px 0;
+  overflow-wrap: anywhere;
   transition: color var(--transition-fast);
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .colLink:hover {
-    color: var(--ivory);
-  }
-}
-
-.companyInfo {
-  display: flex;
-  flex-direction: column;
+  .colLink:hover { color: var(--ivory); }
 }
 
 .companyName {
+  margin: 0;
+  padding: 6px 0;
   font-size: var(--text-sm);
   color: rgba(244, 239, 230, 0.62);
-  padding: 6px 0;
 }
 
 .companyMeta {
+  margin: 0;
+  padding: 2px 0 6px;
   font-family: var(--font-mono);
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   color: var(--ivory-3);
-  padding: 6px 0;
 }
 
 /* ── Notes ── */
-
 .notes {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-10);
   padding: var(--space-6) 0;
-  border-bottom: 0.5px solid rgba(244, 239, 230, 0.08);
-  margin-bottom: var(--space-6);
 }
 
 .note {
+  max-width: 420px;
   font-size: 0.8125rem;
   line-height: var(--leading-relaxed);
   color: var(--ivory-3);
-  max-width: 420px;
-}
-
-/* ── Bottom bar ── */
-
-.bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-6);
 }
 
 .copy {
@@ -110,23 +244,19 @@
 }
 
 @media (prefers-contrast: more) {
-  .colLink, .companyName, .companyMeta, .note, .copy, .colTitle { color: var(--ivory); }
-  .grid, .notes { border-bottom-color: rgba(244, 239, 230, 0.4); }
+  .top, .grid { border-bottom-color: rgba(244, 239, 230, 0.4); }
 }
 
 /* ═══════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════ */
 
-@media (max-width: 640px) {
-  .inner {
-    padding: var(--space-10) var(--site-gutter) var(--space-6);
-  }
+@media (max-width: 900px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 
-  .grid {
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-8);
-  }
+@media (max-width: 640px) {
+  .top { align-items: flex-start; }
 
   .notes {
     grid-template-columns: 1fr;
@@ -134,15 +264,10 @@
   }
 }
 
-@media (max-width: 400px) {
-  .grid {
-    grid-template-columns: 1fr;
-    gap: var(--space-6);
-  }
-
-  .bottom {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-3);
-  }
+/* Small phones: the stamps share the width. */
+@media (max-width: 420px) {
+  .follow { width: 100%; }
+  .stamps { gap: 10px; }
+  .stamp { flex: 1 1 0; width: auto; min-width: 0; }
+  .postmark { top: 38px; left: 22%; width: 80px; height: 80px; }
 }

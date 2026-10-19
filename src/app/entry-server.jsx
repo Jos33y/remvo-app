@@ -61,6 +61,7 @@ export function structuredData(path) {
         logo: `${SITE_ORIGIN}/favicon/logo512.png`,
         email: BRAND.EMAIL,
         address: { '@type': 'PostalAddress', addressLocality: 'Lagos', addressCountry: 'NG' },
+        sameAs: BRAND.SOCIAL.map((s) => s.url),
       },
       { '@context': 'https://schema.org', '@type': 'WebSite', name: BRAND.NAME, url: `${SITE_ORIGIN}/` },
     ];

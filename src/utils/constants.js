@@ -98,6 +98,14 @@ export const BRAND = {
    * it to the team inbox. */
   EMAIL: 'support@remvo.app',
   LEGAL_EMAIL: 'support@remvo.app',
+
+  /* social1: Remvo's own accounts (Joseph, 19 October 2026). In the
+   * footer, and in the home page's Organization data as sameAs. */
+  SOCIAL: [
+    { name: 'YouTube', url: 'https://www.youtube.com/@remvoapp' },
+    { name: 'Instagram', url: 'https://www.instagram.com/remvo.app/' },
+    { name: 'Threads', url: 'https://www.threads.com/@remvo.app' },
+  ],
 };
 
 /* ──────────────────────────────────────────────────────────────────
