@@ -12,6 +12,8 @@ import A from '@styles/pages/marketing/guide-art.module.css';
  *         listing, the made ones perforated ivory, the rest waiting.
  * drafts  a fanned stack of drafts, one field still missing, and a
  *         postmark landing on the top one: LISTED.
+ * barcode the signature: a barcode label becoming a listing, its lines
+ *         drawing in one after another.
  * pallet  a returns pallet in isometric, boxes coming off it into three
  *         graded stacks (NEW, OPEN BOX, PARTS), a route from the barcode.
  *
@@ -211,6 +213,50 @@ function Pallet() {
   );
 }
 
+/* barcode: the signature. A barcode label, its number under it, and
+ * a dotted route to the listing it becomes: photo, title lines, the
+ * specifics as chips, a parcel, the price. The listing's lines draw in
+ * from the left, one after another, as if read off the stripes. */
+const STRIPES = [0, 3, 5, 9, 11, 15, 18, 20, 24, 27, 29, 33, 36, 38, 42, 45, 47, 51, 54, 56, 60, 63, 66, 69, 71, 75];
+const WIDE = new Set([0, 9, 24, 36, 51, 66, 75]);
+
+function Barcode() {
+  return (
+    <svg className={A.art} viewBox="0 0 520 340" aria-hidden="true" focusable="false">
+      {/* The label, slightly turned, as on a box */}
+      <g transform="rotate(-6 110 170)">
+        <rect x="26" y="96" width="172" height="148" rx="10" className={A.labelCard} />
+        {STRIPES.map((x) => (
+          <rect key={x} x={46 + x * 1.75} y="116" width={WIDE.has(x) ? 3.4 : 1.8} height={WIDE.has(x) ? 86 : 78} className={A.bars} />
+        ))}
+        <text x="112" y="224" textAnchor="middle" className={A.digits}>8 42982 10809 7</text>
+      </g>
+
+      <path d="M 212 170 C 238 158, 256 158, 276 168" className={A.route} />
+      <path d="M 269 162 L 277 168 L 269 175" className={A.arrow} />
+
+      {/* The listing it becomes */}
+      <rect x="290" y="44" width="206" height="252" rx="12" className={A.draftPaper} />
+      <rect x="306" y="60" width="56" height="56" rx="6" className={A.draftPhoto} />
+      {[[372, 64, 104], [372, 78, 92], [372, 92, 98], [372, 106, 60]].map(([x, y, w], i) => (
+        <rect key={y} x={x} y={y} width={w} height="6" rx="3" className={`${i < 2 ? A.line : A.lineSoft} ${A.grow}`} style={{ '--i': i }} />
+      ))}
+      {[[306, 134, 52], [362, 134, 44], [410, 134, 70], [306, 156, 64], [374, 156, 50]].map(([x, y, w], i) => (
+        <rect key={`${x}${y}`} x={x} y={y} width={w} height="14" rx="7" className={`${A.chip} ${A.grow}`} style={{ '--i': 4 + i }} />
+      ))}
+      {/* parcel */}
+      <g className={A.grow} style={{ '--i': 9 }}>
+        <polygon points="320,206 340,196 360,206 340,216" className={A.parcelT} />
+        <polygon points="320,206 340,216 340,236 320,226" className={A.parcelL} />
+        <polygon points="340,216 360,206 360,226 340,236" className={A.parcelR} />
+      </g>
+      <rect x="372" y="208" width="80" height="6" rx="3" className={`${A.lineSoft} ${A.grow}`} style={{ '--i': 10 }} />
+      <rect x="372" y="222" width="58" height="6" rx="3" className={`${A.lineSoft} ${A.grow}`} style={{ '--i': 11 }} />
+      <rect x="306" y="258" width="64" height="12" rx="6" className={`${A.price} ${A.grow}`} style={{ '--i': 12 }} />
+    </svg>
+  );
+}
+
 function Signature() {
   // A barcode whose stripes become the lines of a listing.
   const stripes = [0, 6, 10, 18, 22, 30, 34, 38, 46, 52, 56, 64, 70, 74, 82, 88];
@@ -231,7 +277,7 @@ function Signature() {
   );
 }
 
-const ART = { bulk: Bulk, drafts: Drafts, pallet: Pallet };
+const ART = { bulk: Bulk, drafts: Drafts, pallet: Pallet, barcode: Barcode };
 
 export function GuideArt({ art }) {
   const Art = ART[art] ?? Signature;

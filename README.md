@@ -14,7 +14,8 @@ The seller enters a barcode or a product link, or scans the barcode with the pho
 
 - **Bulk listing** takes up to 500 products at once: pasted, uploaded as a CSV, typed with a barcode scanner or scanned with the camera. The result is an eBay drafts file plus a full CSV.
 - **More eBay sites:** one product can be listed on up to seven eBay sites at once, each in that site's language, with a local price and parcel and a comparison of where it brings in most.
-- **Free fee calculators** for eBay.com and eBay.co.uk live on the public site.
+- **Free fee calculators** for eBay.com and eBay.co.uk live on the public site, linked from the home page and pricing.
+- **Guides** at [remvo.app/guides](https://remvo.app/guides): short answers to one seller question each (bulk listing from a spreadsheet, publishing drafts, listing a returns pallet, listing from a barcode), checked against eBay's own pages.
 - **Live chat** with a person, inside the app and on the site.
 
 There is no subscription. Sellers buy credits: a listing costs 3, and seven sites cost 15. Payments go through Polar, so Remvo never handles card details and never asks for the seller's eBay login.
@@ -28,6 +29,8 @@ There is no subscription. Sellers buy credits: a listing costs 3, and seven site
 ![The app on a phone: Home, a listing and Credits](docs/screenshots/phone.png)
 
 ![Credits](docs/screenshots/credits.png)
+
+![A guide](docs/screenshots/guide.png)
 
 ## How it is built
 
@@ -62,9 +65,11 @@ Inside the seller app, every signed-in screen sits in one chunk. It starts loadi
 
 **A back button that knows where you came from.** The app records which path sits at each position in the tab's history, using React Router's own history index. If the screen a back button names is the one just behind, it goes back in history and the list returns to where it was scrolled. If the seller arrived from a shared link, the button opens that screen fresh instead of leaving the app.
 
+**Guides as Markdown files.** A guide is one file in `src/content/guides/`, named by its address. A Vite plugin (`vite-plugins/guides.js`) reads its front matter and renders the body with marked, at build. The front matter has the question, a 160-character description, the short answer, dates, topic, cover, sources and related guides. The plugin is strict: a missing field, a bad date, an em dash, a source that is not a link or an image without a size stops the build, with the file and line. Step headings (`## 2. Fill in one row`) get their numerals set apart for the page's design, but still read as plain text to search engines. The body goes into the prerendered HTML only: the browser's script carries just the list of guides, and the page reads its body back from the HTML it arrived in, so the bundle does not grow with every guide. Each guide gets Article and BreadcrumbList structured data, a sitemap date from when it was last checked, and a plain Markdown copy at `/guides/<slug>.md` listed in `/llms.txt` for AI tools and agents. The covers are hand-drawn SVG, one per guide, inked by topic.
+
 ## Stack
 
-- **Front end:** React 19, Vite 6, React Router 7, CSS Modules, Motion, SimpleWebAuthn (passkeys), barcode-detector (ZXing in WebAssembly)
+- **Front end:** React 19, Vite 6, React Router 7, CSS Modules, Motion, marked (guides), SimpleWebAuthn (passkeys), barcode-detector (ZXing in WebAssembly)
 - **Sign-in:** email and password, emailed codes and passkeys, including passkeys suggested in the email field
 - **Serving:** Caddy 2 on self-hosted Coolify, behind Cloudflare
 - **Back end (separate repository):** Node.js, Express, PostgreSQL
@@ -80,6 +85,8 @@ npm run dev            # http://localhost:5173 is the website
                        # http://localhost:5173/?my is the seller app (?site goes back)
 ```
 
+A new guide is a new file in `src/content/guides/`; `npm run dev` shows it at `/guides/<file name>`. The writing rules are in `remvo_guides_pattern.md` in the project docs.
+
 The seller app also runs without the API, on built-in sample data:
 
 ```
@@ -90,7 +97,7 @@ The seller app also runs without the API, on built-in sample data:
 /?data=real    back to the real API
 ```
 
-Production build, including the prerendered pages:
+Production build, including the prerendered pages, the guides, `sitemap.xml` and `llms.txt`:
 
 ```bash
 npm run build
