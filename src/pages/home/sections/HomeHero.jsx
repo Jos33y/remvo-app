@@ -22,7 +22,7 @@ export function HomeHero() {
             Stop typing eBay listings by hand.
           </h1>
           <p className={styles.heroSub}>
-            Scan or paste a barcode, or paste a product link. The title, description, category, item
+            Paste a product link, or scan or paste a barcode. The title, description, category, item
             specifics, parcel and a price from live {site.site} listings come back in about 20 seconds.
           </p>
           <p className={styles.heroFit}>
@@ -51,7 +51,7 @@ export function HomeHero() {
       <div className={styles.trustBar}>
         <dl className={styles.trustBarInner}>
           <div className={styles.trustItem}>
-            <dt className={styles.trustLabel}>A listing</dt>
+            <dt className={styles.trustLabel}>A finished listing</dt>
             <dd className={`${styles.trustValue} ${styles.trustMoney}`}>{perListing}</dd>
           </div>
           <div className={styles.trustItem}>

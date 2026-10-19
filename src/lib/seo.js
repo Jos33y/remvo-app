@@ -21,8 +21,8 @@ export const OG_IMAGE = `${SITE_ORIGIN}/og-remvo-1200x630.png`;
 
 export const PAGES = Object.freeze({
   [ROUTES.HOME]: {
-    title: 'Remvo | eBay listings from a barcode in 20 seconds',
-    description: 'Stop typing eBay listings by hand. Scan or paste a barcode and get the title, description, category, item specifics, parcel and a price. $0.30 a listing.',
+    title: 'Remvo | eBay listings done for you in 20 seconds',
+    description: 'Stop typing eBay listings by hand. Paste a product link or a barcode: title, description, category, item specifics, parcel and price. $0.30 a finished listing.',
   },
   [ROUTES.HOW]: {
     title: 'How it works | Remvo',
@@ -68,7 +68,7 @@ export const PAGES = Object.freeze({
   }])),
   [ROUTES.PRICING]: {
     title: 'Pricing | Remvo',
-    description: '$0.30 a listing with prepaid credits. No subscription. Your first listing is on us, and a listing that fails gives its credits back.',
+    description: '$0.30 a finished listing with prepaid credits. No subscription. Your first listing is on us, and a listing that fails gives its credits back.',
   },
   [ROUTES.CONTACT]: {
     title: 'Contact | Remvo',

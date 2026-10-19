@@ -71,7 +71,7 @@ export function structuredData(path) {
       '@context': 'https://schema.org',
       '@type': 'Product',
       name: 'Remvo listing credits',
-      description: `Prepaid credits for Remvo, software that prepares eBay listings from a barcode. A listing uses ${PRICING.JOBS.LISTING.credits} credits.`,
+      description: `Prepaid credits for Remvo, software that prepares eBay listings from a product link or a barcode. A listing uses ${PRICING.JOBS.LISTING.credits} credits.`,
       image: OG_IMAGE,
       brand: { '@type': 'Brand', name: BRAND.NAME },
       offers: PRICING.PACKS.map((p) => ({

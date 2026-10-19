@@ -13,7 +13,7 @@ export function HomePricing() {
     <section className={styles.pricing} aria-labelledby="pricing-heading">
       <div className={styles.inner}>
         <h2 id="pricing-heading" className={styles.h2}>
-          <span className={styles.money}>{each}</span> a listing. Pay only for what you list.
+          <span className={styles.money}>{each}</span> a finished listing. Pay only for what you list.
         </h2>
         <p className={styles.lede}>
           A listing uses {listing.credits} credits. A listing that fails gives its credits back on its own, and

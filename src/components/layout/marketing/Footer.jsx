@@ -7,7 +7,7 @@ import styles from '@styles/layout/marketing/footer.module.css';
 /* ──────────────────────────────────────────────────────────────────
  * Marketing footer (social1, redrawn)
  *
- *   REMVO  eBay listings from a barcode.          [stamp][stamp][stamp]
+ *   REMVO  eBay listings, done for you.           [stamp][stamp][stamp]
  *          Made in Lagos for sellers everywhere.     postmarked LAGOS
  *   ─────────────────────────────────────────────────────────────────
  *   Product        Learn             Company            Legal
@@ -93,7 +93,7 @@ export function Footer() {
         <div className={styles.top}>
           <div className={styles.signoff}>
             <Logo variant="gold" size="default" />
-            <p className={styles.line}>eBay listings from a barcode.</p>
+            <p className={styles.line}>eBay listings, done for you.</p>
             <p className={styles.lineSub}>Made in Lagos, for sellers everywhere.</p>
           </div>
 
