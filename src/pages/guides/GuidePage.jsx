@@ -30,9 +30,9 @@ import G from '@styles/pages/marketing/guides.module.css';
 const BODY_ID = 'guide-body';
 
 const ACTIONS = {
-  bulk: { heading: 'Skip the slow part', text: 'Paste or scan your barcodes, or upload the spreadsheet. Remvo fills in every row, up to 500 at a time. Your first listing is free.', label: 'List in bulk', href: APP_LINKS.BULK },
-  listing: { heading: 'Let Remvo write it', text: 'Scan or paste a barcode and get the title, category, item specifics, parcel and price in about 20 seconds. Your first listing is free.', label: 'Make your first listing', href: APP_LINKS.SIGN_UP },
-  scan: { heading: 'Scan a box, get the listing', text: 'Point your phone at the barcode. Remvo writes the listing in about 20 seconds. Your first listing is free.', label: 'Make your first listing', href: APP_LINKS.SIGN_UP },
+  bulk: { heading: 'Skip the slow part', text: 'Paste your product links or barcodes, or upload the spreadsheet. Remvo fills in every row, up to 500 at a time. Your first listing is free.', label: 'List in bulk', href: APP_LINKS.BULK },
+  listing: { heading: 'Stop typing it by hand', text: 'Paste a product link or a barcode and get the title, category, item specifics, parcel and price in about 20 seconds. Your first listing is free.', label: 'Make your first listing', href: APP_LINKS.SIGN_UP },
+  scan: { heading: 'From the box to the listing', text: 'Point your phone at the barcode, and every eBay field is done in about 20 seconds. Your first listing is free.', label: 'Make your first listing', href: APP_LINKS.SIGN_UP },
   calculator: { heading: 'Work it out for your sale', text: 'Type the price and your costs to see what eBay.com takes and what you keep. Free, no sign-up.', label: 'Open the fee calculator', href: ROUTES.FEES_US },
   'calculator-uk': { heading: 'Work it out for your sale', text: 'Private or business, with or without VAT: see what eBay.co.uk takes and what you keep. Free, no sign-up.', label: 'Open the UK fee calculator', href: ROUTES.FEES_UK },
   chat: { heading: 'Ask a person', text: 'Tell us what you sell and where you are stuck. A person answers, usually the same day.', label: null },

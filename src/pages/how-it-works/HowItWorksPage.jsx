@@ -41,7 +41,7 @@ function faq(currency) {
     },
     {
       q: 'Does it add photos?',
-      a: 'No. You add your own photos in eBay, as you do now. Remvo writes everything else.',
+      a: 'No. You add your own photos in eBay, as you do now. Remvo fills in everything else.',
     },
     {
       q: 'Can it publish to eBay for me?',

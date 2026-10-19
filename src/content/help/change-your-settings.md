@@ -1,6 +1,6 @@
 ---
 title: Change your eBay site, currency and account
-description: Choose which eBay site and language Remvo writes for, the currency you pay in, private or business seller, your name, password, passkeys and emails.
+description: Choose which eBay site and language your listings are made for, the currency you pay in, private or business seller, your name, password, passkeys and emails.
 short: Open Profile. Under Selling, choose your eBay site (it sets the language and prices of new listings), your currency and whether you sell as private or business. Under Account, change your name, password, passkeys and emails.
 section: account
 order: 2

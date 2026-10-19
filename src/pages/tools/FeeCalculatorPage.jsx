@@ -286,7 +286,7 @@ export function FeeCalculatorPage({ site }) {
           <div>
             <h2 id="fees-close" className={info.closeHeading}>Make the listing too.</h2>
             <p className={T.closeText}>
-              Remvo writes the whole eBay listing from a barcode or a product link, with this sum on every one. Your first listing is on us.
+              Remvo fills in the whole eBay listing from a product link or a barcode, with this sum on every one. Your first listing is on us.
             </p>
           </div>
           <Button href={APP_LINKS.SIGN_UP} variant="ivory" size="large">Make your first listing</Button>
