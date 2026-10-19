@@ -232,7 +232,7 @@ export function BatchPage() {
               <ol className={b.howTo}>
                 <li>Download the eBay file{running && c.ready ? ' (it has the ones ready so far)' : ''}.</li>
                 <li>In Seller Hub, open Reports, then Uploads, and upload it. Each listing becomes a draft.</li>
-                <li>In your drafts, add your photos, copy the item specifics across from Remvo, and publish. eBay keeps drafts for about 30 days.</li>
+                <li>In your drafts, add your photos, copy the item specifics across from Remvo, and publish. eBay keeps a draft for 75 days after its last edit.</li>
               </ol>
               <div className={`${b.buttons} ${s.cardActions}`}>
                 <button type="button" className={`${s.button} ${s.primary} ${s.block}`} disabled={!c.ready || saving === 'ebay'} onClick={() => save('ebay')}>

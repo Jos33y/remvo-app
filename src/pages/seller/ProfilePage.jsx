@@ -267,6 +267,8 @@ export function ProfilePage() {
                 <span className={s.rowSub}>{BRAND.EMAIL}, answered within 48 hours</span>
               </span>
             </a>
+            <Row href={siteUrl('/help')} external>Step-by-step help</Row>
+            <Row href={siteUrl('/guides')} external>Guides for eBay sellers</Row>
             <Row href={siteUrl('/how-it-works')} external>How Remvo works</Row>
             <Row href={siteUrl('/pricing')} external>Pricing</Row>
           </div>

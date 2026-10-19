@@ -20,6 +20,7 @@ export const ROUTES = {
   FEES_US: '/ebay-fee-calculator',
   FEES_UK: '/ebay-fee-calculator-uk',
   GUIDES: '/guides',
+  HELP: '/help',
 };
 
 /* The seller app. Its own host, chosen by App.jsx, so nothing from it
@@ -156,7 +157,7 @@ export function creditsFor(amount, currency) {
 }
 
 /* The date shown on every legal page, and its machine form. */
-export const LEGAL_UPDATED = { label: '18 October 2026', iso: '2026-10-18', version: 'v2.9' };
+export const LEGAL_UPDATED = { label: '19 October 2026', iso: '2026-10-19', version: 'v2.10' };
 
 /* ── Paused corridor: checkout and admin trees only ── */
 

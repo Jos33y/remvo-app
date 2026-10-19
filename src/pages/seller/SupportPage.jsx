@@ -5,7 +5,7 @@ import { ChatThread } from '@components/ui/support/ChatThread';
 import { useSellerSession } from '@context/SellerSession';
 import { useChat } from '@hooks/useChat';
 import { appChat } from '@lib/supportApi';
-import { SELLER_ROUTES } from '@utils/constants';
+import { SELLER_ROUTES, siteUrl } from '@utils/constants';
 import s from '@styles/pages/seller/support.module.css';
 
 /* ──────────────────────────────────────────────────────────────────
@@ -84,6 +84,10 @@ export function SupportPage() {
           </li>
         ))}
       </ul>
+      {/* help1: the written steps, for a question the help pages answer at once. */}
+      <p className={s.introHelp}>
+        Or see <a href={siteUrl('/help')} target="_blank" rel="noopener">step-by-step help<span className="sr-only"> (opens in a new tab)</span></a> for every task in Remvo.
+      </p>
     </div>
   );
 

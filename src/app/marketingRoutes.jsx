@@ -11,6 +11,8 @@ import { ExamplePage } from '@pages/example/ExamplePage';
 import { FeeCalculatorUsPage, FeeCalculatorUkPage } from '@pages/tools/FeeCalculatorPage';
 import { GuidesPage } from '@pages/guides/GuidesPage';
 import { GuidePage } from '@pages/guides/GuidePage';
+import { HelpPage } from '@pages/help/HelpPage';
+import { HelpArticlePage } from '@pages/help/HelpArticlePage';
 import { NotFoundPage } from '@pages/not-found/NotFoundPage';
 import { ROUTES } from '@utils/constants';
 
@@ -39,6 +41,8 @@ export const marketingRoutes = [
       { path: ROUTES.FEES_UK, element: <FeeCalculatorUkPage /> },
       { path: ROUTES.GUIDES, element: <GuidesPage /> },
       { path: `${ROUTES.GUIDES}/:slug`, element: <GuidePage /> },
+      { path: ROUTES.HELP, element: <HelpPage /> },
+      { path: `${ROUTES.HELP}/:slug`, element: <HelpArticlePage /> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },

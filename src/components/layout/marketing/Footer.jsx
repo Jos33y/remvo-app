@@ -30,6 +30,7 @@ export function Footer() {
               <Link to={ROUTES.FEES_US} className={styles.colLink}>eBay fee calculator</Link>
               <Link to={ROUTES.FEES_UK} className={styles.colLink}>eBay UK fee calculator</Link>
               <Link to={ROUTES.GUIDES} className={styles.colLink}>Guides</Link>
+              <Link to={ROUTES.HELP} className={styles.colLink}>Help</Link>
               <Link to={ROUTES.CREDITS} className={styles.colLink}>Credit terms</Link>
               <Link to={ROUTES.CONTACT} className={styles.colLink}>Contact</Link>
             </nav>

@@ -7,8 +7,8 @@ import styles from '@styles/layout/marketing/header.module.css';
 /* Marketing header.
  *
  * The destinations a first-time visitor needs: what it does, the free
- * fee calculator, what it costs, who to write to. Sign in sits apart as the one action. Under
- * 640px How it works and Contact drop out of the bar; both stay in the
+ * fee calculator, the guides, what it costs, and help. Sign in sits apart as the one action. Under
+ * 640px How it works and Help drop out of the bar; both stay in the
  * footer, and Pricing stays because it is the question people arrive
  * with.
  */
@@ -21,7 +21,9 @@ const NAV = [
   // guides1: on wide screens; on a phone it is in the footer.
   { to: ROUTES.GUIDES, label: 'Guides', compact: false, prefix: true },
   { to: ROUTES.PRICING, label: 'Pricing', compact: true, roomy: true },
-  { to: ROUTES.CONTACT, label: 'Contact', compact: false },
+  // help1: Help takes Contact's place; the help pages and the footer
+  // both lead to Contact, and Help answers more of what people came for.
+  { to: ROUTES.HELP, label: 'Help', compact: false, prefix: true },
 ];
 
 export function Header() {

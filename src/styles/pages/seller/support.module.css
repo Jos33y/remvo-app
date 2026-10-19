@@ -44,6 +44,18 @@
   color: var(--app-text-2);
 }
 
+.introHelp {
+  margin: 18px auto 0;
+  font-size: 0.875rem;
+  color: var(--app-text-3);
+}
+
+.introHelp a {
+  color: var(--app-text-2);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 /* The four things sellers write about: a tap starts the message. */
 .topics {
   display: flex;

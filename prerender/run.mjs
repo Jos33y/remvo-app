@@ -64,7 +64,7 @@ const font = Object.values(manifest).flatMap((e) => e.assets ?? []).find((a) => 
 // drawn in it rather than swapped in after.
 const serif = Object.values(manifest).flatMap((e) => e.assets ?? []).find((a) => /instrument-serif-latin-400-normal-[\w-]+\.woff2$/.test(a));
 
-const { render, PAGES, NOT_FOUND, canonical, OG_IMAGE, structuredData, GUIDES } = await import(pathToFileURL(SSR).href);
+const { render, PAGES, NOT_FOUND, canonical, OG_IMAGE, structuredData, GUIDES, HELP } = await import(pathToFileURL(SSR).href);
 
 function head(path, meta) {
   const url = canonical(path);
@@ -150,7 +150,24 @@ for (const g of GUIDES) {
   ].join('\n');
   writeFileSync(join(DIST, 'guides', `${g.slug}.md`), md);
 }
-const site = Object.entries(PAGES).filter(([path, m]) => !m.noindex && !m.guide);
+// help1: the same for help pages (/help/<slug>.md).
+for (const h of HELP) {
+  const source = join(ROOT, 'src', 'content', 'help', `${h.slug}.md`);
+  if (!existsSync(source)) fail(`no source for help page ${h.slug}`);
+  const md = [
+    `# ${h.title}`,
+    '',
+    `In short: ${h.short}`,
+    '',
+    ...(h.video ? [`Video (${h.duration}): https://www.youtube.com/watch?v=${h.video}`, ''] : []),
+    strip(readFileSync(source, 'utf8')),
+    '',
+    `Checked against Remvo on ${h.checked}. Page: ${canonical(`/help/${h.slug}`)}`,
+    '',
+  ].join('\n');
+  writeFileSync(join(DIST, 'help', `${h.slug}.md`), md);
+}
+const site = Object.entries(PAGES).filter(([path, m]) => !m.noindex && !m.guide && !m.help);
 writeFileSync(join(DIST, 'llms.txt'), [
   '# Remvo',
   '',
@@ -164,9 +181,13 @@ writeFileSync(join(DIST, 'llms.txt'), [
   '',
   ...GUIDES.map((g) => `- [${g.title}](${canonical(`/guides/${g.slug}`)}.md): ${g.short}`),
   '',
+  '## Help: using Remvo',
+  '',
+  ...HELP.map((h) => `- [${h.title}](${canonical(`/help/${h.slug}`)}.md): ${h.short}`),
+  '',
 ].join('\n'));
 
 // The manifest has done its job; it is not for the public site.
 rmSync(join(DIST, '.vite'), { recursive: true, force: true });
 
-console.log(`prerender: ${written.length} pages, app.html, sitemap.xml (${Object.keys(PAGES).length} URLs), llms.txt, ${GUIDES.length} guide${GUIDES.length === 1 ? '' : 's'} as Markdown`);
+console.log(`prerender: ${written.length} pages, app.html, sitemap.xml (${Object.keys(PAGES).length} URLs), llms.txt, ${GUIDES.length} guide${GUIDES.length === 1 ? '' : 's'} and ${HELP.length} help page${HELP.length === 1 ? '' : 's'} as Markdown`);

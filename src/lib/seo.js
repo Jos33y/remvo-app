@@ -14,6 +14,7 @@
 
 import { LEGAL_UPDATED, ROUTES } from '@utils/constants';
 import { GUIDES, guidePath } from '@lib/guides';
+import { HELP, helpPath } from '@lib/help';
 
 export const SITE_ORIGIN = 'https://remvo.app';
 export const OG_IMAGE = `${SITE_ORIGIN}/og-remvo-1200x630.png`;
@@ -52,6 +53,18 @@ export const PAGES = Object.freeze({
     description: g.description,
     updated: g.checked,
     guide: true,
+  }])),
+  // help1: the help pages, one task in the app each.
+  [ROUTES.HELP]: {
+    title: 'Remvo help: every task, step by step',
+    description: 'How to do everything in Remvo, one task at a time: make a listing, scan a barcode, list in bulk, buy credits and talk to a person.',
+    updated: HELP.map((h) => h.uploaded ?? h.checked).sort().at(-1),
+  },
+  ...Object.fromEntries(HELP.map((h) => [helpPath(h.slug), {
+    title: `${h.title} | Remvo Help`,
+    description: h.description,
+    updated: [h.checked, h.uploaded].filter(Boolean).sort().at(-1),
+    help: true,
   }])),
   [ROUTES.PRICING]: {
     title: 'Pricing | Remvo',

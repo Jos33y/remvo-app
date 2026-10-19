@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useStaticBody } from '@hooks/useStaticBody';
 import { Link, useParams } from 'react-router';
 import { Button } from '@components/ui/shared/Button';
 import { ChatLine } from '@components/ui/marketing/ChatInvite';
@@ -22,10 +23,8 @@ import G from '@styles/pages/marketing/guides.module.css';
  * checked; big numerals down a dotted route for the steps; on a wide
  * screen the contents ride beside the text and mark where you are.
  *
- * The body is HTML from the Markdown file. It arrives in the page; in
- * the browser it is read back from the page rather than shipped in the
- * script (lib/guides.js). Reached without a reload (Back after leaving
- * for another page), it is fetched from the guide's own address.
+ * The body is HTML from the Markdown file, read back from the page
+ * (hooks/useStaticBody.js).
  * ────────────────────────────────────────────────────────────────── */
 
 const BODY_ID = 'guide-body';
@@ -38,29 +37,6 @@ const ACTIONS = {
   'calculator-uk': { heading: 'Work it out for your sale', text: 'Private or business, with or without VAT: see what eBay.co.uk takes and what you keep. Free, no sign-up.', label: 'Open the UK fee calculator', href: ROUTES.FEES_UK },
   chat: { heading: 'Ask a person', text: 'Tell us what you sell and where you are stuck. A person answers, usually the same day.', label: null },
 };
-
-function bodyFromPage(slug) {
-  if (typeof document === 'undefined') return '';
-  const el = document.getElementById(BODY_ID);
-  return el && el.dataset.slug === slug ? el.innerHTML : '';
-}
-
-function useBody(guide) {
-  const [html, setHtml] = useState(() => guide?.html || bodyFromPage(guide?.slug));
-  useEffect(() => {
-    if (!guide || html) return undefined;
-    let live = true;
-    fetch(guidePath(guide.slug))
-      .then((r) => (r.ok ? r.text() : ''))
-      .then((page) => {
-        const found = new DOMParser().parseFromString(page, 'text/html').getElementById(BODY_ID);
-        if (live) setHtml(found?.innerHTML ?? '');
-      })
-      .catch(() => {});
-    return () => { live = false; };
-  }, [guide, html]);
-  return html;
-}
 
 /* Which part of the guide is being read: the last heading that has
  * reached a line just under the site's header (where a jump puts it). Only for the rail beside the text;
@@ -138,7 +114,7 @@ function Contents({ headings, current, className, labelId }) {
 export function GuidePage() {
   const { slug } = useParams();
   const guide = guideBySlug(slug);
-  const html = useBody(guide);
+  const html = useStaticBody(BODY_ID, guide, guide ? guidePath(guide.slug) : '');
   const current = useReading(guide ? guide.headings.map((h) => h.id) : [], html);
   const wrapRef = useRef(null);
   const route = useRoute(html, wrapRef);

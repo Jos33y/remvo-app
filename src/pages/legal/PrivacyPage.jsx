@@ -71,6 +71,7 @@ export function PrivacyPage() {
           <DefItem term="Hostinger and Cloudflare">Host and protect our servers. Your data passes through them.</DefItem>
         </DefList>
         <p>4.2. We also disclose data where the law requires us to.</p>
+        <p>4.3. The videos on our help pages are hosted on YouTube. A video loads from youtube-nocookie.com only when you press play; until then the page sends nothing to YouTube. Once it plays, YouTube, a Google company, receives what any video it plays receives, such as your IP address, under Google's privacy policy.</p>
       </Clause>
 
       <Clause id="transfers" heading="5. Where it is processed">

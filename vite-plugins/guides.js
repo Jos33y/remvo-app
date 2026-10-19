@@ -18,13 +18,19 @@
  *                        site's script does not grow with every guide.
  *                        In development (vite dev) the browser gets it.
  *
+ * help1: the same for src/content/help/*.md, the pages at
+ * remvo.app/help/<slug>: one task in the app each, with its video (when
+ * it is on YouTube), a poster from the app, and the steps. Their front
+ * matter is checked by parseHelp below.
+ *
  * Front matter is a small, strict subset: `key: value` lines, and lists
  * as indented `- item` lines under a `key:` line. Anything else stops
  * the build with the file and line, rather than shipping a guide with a
  * field quietly missing.
  * ────────────────────────────────────────────────────────────────── */
 
-import { basename } from 'node:path';
+import { basename, join } from 'node:path';
+import { existsSync } from 'node:fs';
 import { Marked } from 'marked';
 
 const REQUIRED = ['title', 'description', 'short', 'published', 'checked', 'action', 'topic'];
@@ -40,7 +46,8 @@ const plain = (html) => html.replace(/<[^>]+>/g, '').replace(/&#39;/g, "'").repl
 
 const headingId = (text) => text.toLowerCase().replace(/<[^>]+>/g, '').replace(/&[a-z#0-9]+;/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
-export function parseFrontMatter(source, file) {
+/** The front matter's keys and lists, and the body, before any checks. */
+function readFrontMatter(source, file) {
   const m = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/.exec(source);
   if (!m) throw new Error(`${file}: no front matter (--- at the top)`);
   const meta = {};
@@ -58,6 +65,12 @@ export function parseFrontMatter(source, file) {
     const [, key, value] = kv;
     if (value === '') { meta[key] = []; list = key; } else { meta[key] = value.trim(); list = null; }
   });
+  if (/—/.test(source)) throw new Error(`${file}: has an em dash`);
+  return { meta, body: m[2] };
+}
+
+export function parseFrontMatter(source, file) {
+  const { meta, body } = readFrontMatter(source, file);
   for (const key of REQUIRED) if (!meta[key]) throw new Error(`${file}: front matter needs "${key}"`);
   for (const key of ['published', 'checked']) if (!DATE.test(meta[key])) throw new Error(`${file}: ${key} must be YYYY-MM-DD`);
   if (!ACTIONS.includes(meta.action)) throw new Error(`${file}: action must be one of ${ACTIONS.join(', ')}`);
@@ -66,14 +79,60 @@ export function parseFrontMatter(source, file) {
   if (meta.art && !/^[a-z]+$/.test(meta.art)) throw new Error(`${file}: art must be one word, such as pallet`);
   meta.art = meta.art ?? meta.topic;
   if (meta.description.length > 160) throw new Error(`${file}: description is ${meta.description.length} characters; keep it to 160`);
-  if (/—/.test(source)) throw new Error(`${file}: has an em dash`);
   meta.sources = (meta.sources ?? []).map((s) => {
     const [label, url] = s.split(' | ');
     if (!url || !/^https:\/\//.test(url)) throw new Error(`${file}: a source must be "Label | https://..."`);
     return { label: label.trim(), url: url.trim() };
   });
   meta.related = meta.related ?? [];
-  return { meta, body: m[2] };
+  return { meta, body };
+}
+
+/* ── help1 ── */
+const HELP_REQUIRED = ['title', 'description', 'short', 'section', 'order', 'checked', 'open'];
+export const HELP_SECTIONS = ['start', 'listing', 'bulk', 'account', 'tools', 'support'];
+const YOUTUBE_ID = /^[A-Za-z0-9_-]{11}$/;
+const DURATION = /^(\d{1,2}):([0-5]\d)$/;
+
+/**
+ * A help page's front matter:
+ *   title, description (160 or fewer), short (the one-line answer),
+ *   section (one of HELP_SECTIONS), order (its place in the section),
+ *   checked (YYYY-MM-DD, against the app as built),
+ *   open ("Label | app:/path" or "Label | site:/path": the one button),
+ *   related (help slugs), guide (a guide's slug), optional;
+ *   video, duration, uploaded: the YouTube id, "m:ss" and the day it went
+ *   up, all three or none. Without them the page shows its poster.
+ * The poster is public/help/<slug>.webp, 1280x720, and must exist.
+ */
+export function parseHelp(source, file, publicDir) {
+  const { meta, body } = readFrontMatter(source, file);
+  for (const key of HELP_REQUIRED) if (!meta[key]) throw new Error(`${file}: front matter needs "${key}"`);
+  if (!HELP_SECTIONS.includes(meta.section)) throw new Error(`${file}: section must be one of ${HELP_SECTIONS.join(', ')}`);
+  if (!/^\d+$/.test(meta.order)) throw new Error(`${file}: order must be a whole number`);
+  meta.order = Number(meta.order);
+  if (!DATE.test(meta.checked)) throw new Error(`${file}: checked must be YYYY-MM-DD`);
+  if (meta.description.length > 160) throw new Error(`${file}: description is ${meta.description.length} characters; keep it to 160`);
+  const open = /^(.+?) \| (app|site):(\/[^\s]*)$/.exec(meta.open);
+  if (!open) throw new Error(`${file}: open must be "Label | app:/path" or "Label | site:/path"`);
+  meta.open = { label: open[1].trim(), host: open[2], path: open[3] };
+  const video = ['video', 'duration', 'uploaded'].filter((k) => meta[k]);
+  if (video.length && video.length < 3) throw new Error(`${file}: a video needs video, duration and uploaded together`);
+  if (meta.video) {
+    if (!YOUTUBE_ID.test(meta.video)) throw new Error(`${file}: video must be the 11-character YouTube id`);
+    const d = DURATION.exec(meta.duration);
+    if (!d) throw new Error(`${file}: duration must be m:ss`);
+    meta.seconds = Number(d[1]) * 60 + Number(d[2]);
+    if (!DATE.test(meta.uploaded)) throw new Error(`${file}: uploaded must be YYYY-MM-DD`);
+  } else {
+    meta.video = null;
+  }
+  const slug = slugOf(file);
+  meta.poster = `/help/${slug}.webp`;
+  if (publicDir && !existsSync(join(publicDir, 'help', `${slug}.webp`))) throw new Error(`${file}: no poster at public${meta.poster}`);
+  meta.related = meta.related ?? [];
+  meta.guide = meta.guide ?? null;
+  return { meta, body };
 }
 
 /** The body as HTML: headings get ids, external links open in a new tab, images are lazy and sized. */
@@ -122,12 +181,14 @@ export function renderBody(body) {
 
 export function guidesPlugin() {
   let serve = false;
+  let publicDir = null;
   return {
     name: 'remvo-guides',
-    configResolved(config) { serve = config.command === 'serve'; },
+    configResolved(config) { serve = config.command === 'serve'; publicDir = config.publicDir; },
     transform(source, id, options) {
-      if (!/\/src\/content\/guides\/[^/]+\.md$/.test(id)) return null;
-      const { meta, body } = parseFrontMatter(source, id);
+      const kind = /\/src\/content\/(guides|help)\/[^/]+\.md$/.exec(id)?.[1];
+      if (!kind) return null;
+      const { meta, body } = kind === 'help' ? parseHelp(source, id, publicDir) : parseFrontMatter(source, id);
       const { html, headings, minutes } = renderBody(body);
       const full = { ...meta, slug: slugOf(id), headings, minutes };
       const ship = options?.ssr || serve ? html : '';

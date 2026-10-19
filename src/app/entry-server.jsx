@@ -7,9 +7,11 @@ import { BRAND, PRICING, ROUTES } from '@utils/constants';
 import { OG_IMAGE, SITE_ORIGIN } from '@lib/seo';
 import { FAQ } from '@pages/tools/FeeCalculatorPage';
 import { GUIDES, guideBySlug, guidePath } from '@lib/guides';
+import { HELP, helpBySlug, helpPath, isoDuration } from '@lib/help';
 
 export { PAGES, NOT_FOUND, SITE_ORIGIN, OG_IMAGE, canonical } from '@lib/seo';
 export { GUIDES } from '@lib/guides';
+export { HELP } from '@lib/help';
 
 /* ──────────────────────────────────────────────────────────────────
  * Server render of a marketing page, for the build only
@@ -120,6 +122,62 @@ export function structuredData(path) {
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Guides', item: `${SITE_ORIGIN}${ROUTES.GUIDES}` },
           { '@type': 'ListItem', position: 2, name: guide.title, item: url },
+        ],
+      },
+    ];
+  }
+  // help1: the help pages, and each as a how-to article with its video once it is up.
+  if (path === ROUTES.HELP) {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      name: 'Remvo help',
+      url: `${SITE_ORIGIN}${ROUTES.HELP}`,
+      mainEntity: {
+        '@type': 'ItemList',
+        itemListElement: HELP.map((h, i) => ({ '@type': 'ListItem', position: i + 1, url: `${SITE_ORIGIN}${helpPath(h.slug)}`, name: h.title })),
+      },
+    };
+  }
+  const help = path.startsWith(`${ROUTES.HELP}/`) ? helpBySlug(path.slice(ROUTES.HELP.length + 1)) : null;
+  if (help) {
+    const url = `${SITE_ORIGIN}${helpPath(help.slug)}`;
+    const poster = `${SITE_ORIGIN}${help.poster}`;
+    const org = { '@type': 'Organization', name: BRAND.NAME, url: `${SITE_ORIGIN}/`, logo: { '@type': 'ImageObject', url: `${SITE_ORIGIN}/favicon/logo512.png` } };
+    const video = help.video && {
+      '@type': 'VideoObject',
+      name: help.title,
+      description: help.description,
+      thumbnailUrl: [poster],
+      uploadDate: help.uploaded,
+      duration: isoDuration(help.seconds),
+      embedUrl: `https://www.youtube-nocookie.com/embed/${help.video}`,
+      contentUrl: `https://www.youtube.com/watch?v=${help.video}`,
+      publisher: org,
+      inLanguage: 'en-GB',
+    };
+    return [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'TechArticle',
+        headline: help.title,
+        description: help.description,
+        abstract: help.short,
+        url,
+        mainEntityOfPage: url,
+        image: poster,
+        dateModified: help.checked,
+        inLanguage: 'en-GB',
+        about: { '@type': 'SoftwareApplication', name: BRAND.NAME, applicationCategory: 'BusinessApplication', operatingSystem: 'Web', url: `${SITE_ORIGIN}/` },
+        publisher: org,
+        ...(video ? { video } : {}),
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Help', item: `${SITE_ORIGIN}${ROUTES.HELP}` },
+          { '@type': 'ListItem', position: 2, name: help.title, item: url },
         ],
       },
     ];
