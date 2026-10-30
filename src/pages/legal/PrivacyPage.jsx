@@ -47,6 +47,7 @@ export function PrivacyPage() {
           <DefItem term="Welcome credits">When your account is made, a keyed hash of your IP address: a scrambled form that cannot be turned back into the address. It lets us give welcome credits once a day per connection.</DefItem>
           <DefItem term="Scanning with your camera">Nothing. When you scan a barcode, for one listing or for bulk listing, the camera's picture is read on your device and never sent to us or anyone else; only the barcode numbers go into the box or onto your sheet. The camera stops when you close the scanner, or as soon as it has read the barcode for one listing.</DefItem>
           <DefItem term="Messages">What you send us in the chat or by email, the page you wrote from, and how you sell if you chose to tell us.</DefItem>
+          <DefItem term="Visits and app use">The pages you open on remvo.app and in the app, how long each stays on screen, the site or tagged link that brought you, your country (from the connection, not your address), whether you are on a phone, tablet or computer, and named steps such as using the fee calculator or copying a listing. Visits are counted with a scrambled code made from your IP address, browser type and a key that changes every day and is deleted two days later, so the same person cannot be followed from one day to the next. We set no cookie for this, store nothing on your device for it, and never store the IP address. If you are signed in, these records are linked to your account. If your browser sends Global Privacy Control or Do Not Track, we record nothing.</DefItem>
         </DefList>
       </Clause>
 
@@ -54,9 +55,10 @@ export function PrivacyPage() {
         <p>3.1. To run the service you signed up for: to sign you in, run your jobs, keep your credit balance, and send receipts and expiry reminders. This is necessary to perform our contract with you.</p>
         <p>3.2. To keep the service secure and working, and to stop fraud and abuse. This is in our legitimate interest and yours.</p>
         <p>3.3. To keep the financial records tax law requires of us. This is a legal obligation.</p>
-        <p>3.4. We do not use your data for advertising, we do not sell it, and we do not build a profile of you.</p>
+        <p>3.4. We do not use your data for advertising, we do not sell it, and we do not build an advertising profile of you.</p>
         <p>3.5. To give welcome credits once: the hashed IP address in clause 2 stops one connection collecting them for many accounts. This is in our legitimate interest.</p>
         <p>3.6. To send you a few short emails from Joseph at Remvo as you start, and when something new can help you list: no more than one every three days, and never while you are talking to us in the chat. This is in our legitimate interest. Every one has a link to turn them off, and so does Profile. Receipts, codes, your listings and credit reminders are part of the service and still come.</p>
+        <p>3.7. To see which pages and posts bring people to Remvo, where people get stuck, and to help you when you write to us: the visit and app records in clause 2. This is in our legitimate interest. Only the Remvo team sees them, and we never share or sell them.</p>
       </Clause>
 
       <Clause id="share" heading="4. Who we share it with">
@@ -86,12 +88,13 @@ export function PrivacyPage() {
           <DefItem term="Server logs">30 days.</DefItem>
           <DefItem term="Welcome credits">The hashed IP address: 30 days, then removed. That your account had welcome credits: as long as the account.</DefItem>
           <DefItem term="Messages">Two years from your last message.</DefItem>
+          <DefItem term="Visits and app use">400 days, then deleted automatically. The daily key behind the scrambled code: two days.</DefItem>
         </DefList>
       </Clause>
 
       <Clause id="cookies" heading="7. Cookies">
         <p>7.1. We set one cookie, to keep you signed in. It is needed for the service to work, so we do not ask before setting it.</p>
-        <p>7.2. We use no analytics, advertising or tracking cookies.</p>
+        <p>7.2. We use no analytics, advertising or tracking cookies. The visit counts in clause 2 need no cookie.</p>
       </Clause>
 
       <Clause id="rights" heading="8. Your rights">

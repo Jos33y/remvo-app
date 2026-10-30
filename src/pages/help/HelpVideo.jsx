@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { spokenDuration } from '@lib/help';
 import H from '@styles/pages/marketing/help.module.css';
+import { hit } from '@lib/hits';
 
 /* ──────────────────────────────────────────────────────────────────
  * A help page's video, on a strip of film (help1)
@@ -43,7 +44,7 @@ export function HelpVideo({ entry, priority = false }) {
         <div className={H.screen}>
         {!video && img}
         {video && !playing && (
-          <button type="button" className={H.play} onClick={() => setPlaying(true)} aria-label={`Play the video: ${title}, ${spokenDuration(seconds)}`}>
+          <button type="button" className={H.play} onClick={() => { setPlaying(true); hit('video_play', { video: String(title).slice(0, 80) }); }} aria-label={`Play the video: ${title}, ${spokenDuration(seconds)}`}>
             {img}
             <span className={H.playDisc} aria-hidden="true">
               <svg viewBox="0 0 24 24" focusable="false"><path d="M8 5.5v13l11-6.5z" /></svg>

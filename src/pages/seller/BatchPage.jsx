@@ -15,6 +15,7 @@ import { Breakable } from '@components/ui/seller/Breakable';
 import s from '@styles/pages/seller/app.module.css';
 import { NextQuestion } from '@components/ui/seller/AskNext';
 import b from '@styles/pages/seller/bulk.module.css';
+import { hit } from '@lib/hits';
 
 /* ──────────────────────────────────────────────────────────────────
  * A batch, /batches/:id
@@ -148,6 +149,7 @@ export function BatchPage() {
       a.click();
       a.remove();
       setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+      hit(format === 'ebay' ? 'download_drafts' : 'download_csv', { batch: true, lines: batch.total ?? 0 });
     } catch (err) {
       toast(err.message);
     } finally {

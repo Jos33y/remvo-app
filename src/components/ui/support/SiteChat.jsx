@@ -9,6 +9,7 @@ import { SELL_PATHS, pathById } from '@lib/sellPaths';
 import { ROUTES } from '@utils/constants';
 import theme from '@styles/layout/seller/app-theme.module.css';
 import s from '@styles/ui/support/site-chat.module.css';
+import { hit } from '@lib/hits';
 
 /* ──────────────────────────────────────────────────────────────────
  * SiteChat: the chat button on every page of remvo.app
@@ -99,6 +100,7 @@ export function SiteChat() {
       reason.current = path;
       setAsked({ path, hint: d.hint ?? null, key: Date.now() });
       setOpen(true);
+      hit('chat_open', { from: 'button' });
     };
     window.addEventListener(CHAT_EVENT, onAsk);
     return () => window.removeEventListener(CHAT_EVENT, onAsk);
@@ -175,7 +177,7 @@ export function SiteChat() {
         ref={launcher}
         type="button"
         className={`${s.launcher} ${open ? s.launcherOpen : ''} ${aside && !open ? s.launcherAside : ''}`}
-        onClick={() => (open ? close() : setOpen(true))}
+        onClick={() => { if (open) close(); else { setOpen(true); hit('chat_open', { from: 'launcher' }); } }}
         aria-expanded={open}
         aria-label={open ? 'Close chat' : chat.unread ? `Chat with us, ${chat.unread} new` : 'Chat with us'}
       >

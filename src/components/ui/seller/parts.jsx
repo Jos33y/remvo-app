@@ -12,6 +12,7 @@ import { count, num } from '@lib/plural';
 import { CURRENCIES, MARKETPLACE, money } from '@lib/market';
 import { PRICING, SELLER_ROUTES, creditsFor, listingsFor } from '@utils/constants';
 import s from '@styles/pages/seller/app.module.css';
+import { hit } from '@lib/hits';
 
 /* The pieces more than one screen uses. Each is small and reads its
  * data from useSellerData(), so a screen is a list of these. */
@@ -449,7 +450,7 @@ export function EditableField({ label, value, original, onSave, multiline = fals
 
   async function onCopy() {
     if (value == null || value === '') return;
-    if (await copy(String(value))) toast(`${label} copied`);
+    if (await copy(String(value))) { toast(`${label} copied`); hit('copy_field', { field: String(label) }); }
   }
 
   const Tag = multiline ? 'textarea' : 'input';
@@ -541,7 +542,7 @@ export function CopyField({ label, value, copyText, mono = false, count = null, 
   const [open, setOpen] = useState(!clamp);
 
   async function onCopy() {
-    if (await copy(copyText ?? value)) toast(`${label} copied`);
+    if (await copy(copyText ?? value)) { toast(`${label} copied`); hit('copy_field', { field: String(label) }); }
   }
 
   return (

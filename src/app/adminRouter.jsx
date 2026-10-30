@@ -31,6 +31,16 @@ import { AnalyticsOverviewPage } from '@pages/admin/AnalyticsOverviewPage';
 import { AnalyticsFunnelPage } from '@pages/admin/AnalyticsFunnelPage';
 import { AnalyticsPlatformsPage } from '@pages/admin/AnalyticsPlatformsPage';
 
+/* analytics1: Remvo's own analytics for the eBay listing tool, at /remvo. */
+import { RemvoLayout } from '@pages/admin/RemvoLayout';
+import { RemvoOverviewPage } from '@pages/admin/RemvoOverviewPage';
+import { RemvoSourcesPage } from '@pages/admin/RemvoSourcesPage';
+import { RemvoFunnelPage } from '@pages/admin/RemvoFunnelPage';
+import { RemvoPagesPage } from '@pages/admin/RemvoPagesPage';
+import { RemvoSellersPage } from '@pages/admin/RemvoSellersPage';
+import { RemvoSellerPage } from '@pages/admin/RemvoSellerPage';
+import { RemvoQualityPage } from '@pages/admin/RemvoQualityPage';
+
 /* Dev-only harness. */
 import { DevPrimitivesPage } from '@pages/admin/DevPrimitivesPage';
 
@@ -39,11 +49,25 @@ import { DevPrimitivesPage } from '@pages/admin/DevPrimitivesPage';
  * ────────────────────────────────────────────────────────────────── */
 
 const CATCH_ALL_TARGET = import.meta.env.DEV ? '/?admin' : '/';
-const DASHBOARD_ALIAS_TARGET = import.meta.env.DEV ? '/?admin' : '/';
+const REMVO_TARGET = import.meta.env.DEV ? '/remvo?admin' : '/remvo';
 
 const authenticatedChildren = [
-  { index: true,                          element: <DashboardPage /> },
-  { path: 'dashboard',                    element: <Navigate to={DASHBOARD_ALIAS_TARGET} replace /> },
+  /* analytics1: sign-in lands on Remvo; the paused corridor's dashboard moves to /dashboard, unchanged. */
+  { index: true,                          element: <Navigate to={REMVO_TARGET} replace /> },
+  { path: 'dashboard',                    element: <DashboardPage /> },
+  {
+    path: 'remvo',
+    element: <RemvoLayout />,
+    children: [
+      { index: true,           element: <RemvoOverviewPage /> },
+      { path: 'sources',       element: <RemvoSourcesPage /> },
+      { path: 'funnel',        element: <RemvoFunnelPage /> },
+      { path: 'pages',         element: <RemvoPagesPage /> },
+      { path: 'sellers',       element: <RemvoSellersPage /> },
+      { path: 'sellers/:id',   element: <RemvoSellerPage /> },
+      { path: 'quality',       element: <RemvoQualityPage /> },
+    ],
+  },
   { path: 'transactions',                 element: <TransactionsPage /> },
   { path: 'transactions/:id',             element: <TransactionDetailPage /> },
   { path: 'sessions',                     element: <SessionsPage /> },
@@ -102,11 +126,19 @@ export const adminRouter = createBrowserRouter([
  * ────────────────────────────────────────────────────────────────── */
 
 export const ADMIN_NAV_SECTIONS = [
+  /* analytics1: the eBay listing tool, first. */
+  {
+    key: 'remvo',
+    label: 'eBay listing tool',
+    items: [
+      { route: '/remvo',        label: 'Remvo',        icon: 'IconAnalytics' },
+    ],
+  },
   {
     key: 'operations',
     label: 'Operations',
     items: [
-      { route: '/',             label: 'Dashboard',    icon: 'IconHome' },
+      { route: '/dashboard',    label: 'Dashboard',    icon: 'IconHome' },
       { route: '/sessions',     label: 'Sessions',     icon: 'IconClock' },
       { route: '/transactions', label: 'Transactions', icon: 'IconLayers' },
       { route: '/settlements',  label: 'Settlements',  icon: 'IconSettlement' },

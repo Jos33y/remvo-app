@@ -2,6 +2,7 @@ import { Suspense, lazy, useEffect, useState } from 'react';
 import { RouterProvider } from 'react-router';
 import { makeSellerRouter } from './sellerRouter';
 import { loadSellerPages, sellerPages } from './loadSellerPages';
+import { startHits } from '@lib/hits';
 
 const SIGNED_OUT = /^\/(sign-in|sign-up|emails-off)(\/|$)/;
 
@@ -22,6 +23,8 @@ export default function SellerApp() {
     document.head.appendChild(meta);
     return () => meta.remove();
   }, []);
+  // analytics1: Remvo's own page views and app steps, no cookies (lib/hits.js).
+  useEffect(() => startHits('app', sellerRouter), [sellerRouter]);
 
   return (
     <>

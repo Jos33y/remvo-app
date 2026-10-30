@@ -10,6 +10,7 @@ import theme from '@styles/layout/seller/app-theme.module.css';
 import s from '@styles/pages/seller/app.module.css';
 import info from '@styles/pages/marketing/info-page.module.css';
 import T from '@styles/pages/marketing/fee-calculator.module.css';
+import { hit } from '@lib/hits';
 
 /* ──────────────────────────────────────────────────────────────────
  * The eBay fee calculator, free and with no account (tools1)
@@ -57,6 +58,8 @@ function useSum(site) {
   const [error, setError] = useState('');
   const ctrl = useRef(null);
   const first = useRef(true);
+  const counted = useRef(false);
+  const touched = useRef(false);
 
   useEffect(() => {
     // The opening answer is already in the page.
@@ -79,13 +82,20 @@ function useSum(site) {
       adRate: values.adRate ?? null,
       target: values.target ?? null,
     }, c.signal)
-      .then((p) => { setProfit(p); setError(''); })
+      .then((p) => {
+        setProfit(p); setError('');
+        // analytics1: once per page, that someone worked a sum out.
+        if (touched.current && !counted.current) { counted.current = true; hit('calc', { site }); }
+      })
       .catch((err) => { if (err?.name !== 'AbortError') setError(err.message); })
       .finally(() => { if (ctrl.current === c) setBusy(false); });
     return () => c.abort();
   }, [site, inputs, values]);
 
-  return { inputs, setInputs, values, setValues, profit, busy, error };
+  // analytics1: only a sum the person changed counts as using the calculator.
+  const setInputsByHand = (v) => { touched.current = true; setInputs(v); };
+  const setValuesByHand = (v) => { touched.current = true; setValues(v); };
+  return { inputs, setInputs: setInputsByHand, values, setValues: setValuesByHand, profit, busy, error };
 }
 
 /* The site, the account and the category, at the top of the one card. */

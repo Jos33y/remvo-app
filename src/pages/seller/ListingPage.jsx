@@ -18,6 +18,7 @@ import { ProfitCard } from '@components/ui/seller/ProfitCard';
 import { SellerTypeSheet } from '@components/ui/seller/SellerTypeSheet';
 import s from '@styles/pages/seller/app.module.css';
 import L from '@styles/pages/seller/listing.module.css';
+import { hit } from '@lib/hits';
 
 // Undo is offered for as long as its toast shows (eight seconds, longer
 // while it is pointed at or focused); this is only the longest wait.
@@ -293,10 +294,10 @@ export function ListingPage() {
               </dl>
 
               <div className={L.actions}>
-                <button type="button" className={`${s.button} ${s.primary} ${s.block}`} onClick={async () => { if (await copy(allText(job))) toast('Everything copied'); }}>
+                <button type="button" className={`${s.button} ${s.primary} ${s.block}`} onClick={async () => { if (await copy(allText(job))) { toast('Everything copied'); hit('copy_all'); } }}>
                   <IconCopy size={20} /> Copy everything
                 </button>
-                <button type="button" className={`${s.button} ${s.secondary} ${s.block}`} onClick={() => download(job)}>
+                <button type="button" className={`${s.button} ${s.secondary} ${s.block}`} onClick={() => { download(job); hit('download_csv'); }}>
                   <IconDownload size={20} /> Download CSV
                 </button>
               </div>
