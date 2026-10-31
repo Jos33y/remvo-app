@@ -1,5 +1,5 @@
-import { createContext, useContext, useMemo, useState } from 'react';
-import { NavLink, Outlet } from 'react-router';
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { NavLink, Outlet, useLocation } from 'react-router';
 import { AdminShell } from '@components/layout/admin/AdminShell';
 import { RangePicker } from '@components/ui/admin/RangePicker';
 import { adminPath } from '@app/adminRouter';
@@ -15,6 +15,10 @@ import own from '@styles/pages/admin/remvo.module.css';
  * tool. The same hero, range picker and tab bar as the paused
  * Analytics screens, so the admin reads as one product; the range is
  * shared by every tab through useRemvoRange().
+ *
+ * analytics1b: "Today", "7d" and "30d" end at now, and now moves. The
+ * range is worked out again on every tab change and whenever the
+ * admin comes back into view, so new visits show without a reload.
  * ────────────────────────────────────────────────────────────────── */
 
 const RangeContext = createContext(null);
@@ -36,7 +40,23 @@ const TABS = [
 
 export function RemvoLayout() {
   const [value, setValue] = useState({ key: RANGE_KEYS.WEEK, custom: null });
-  const range = useMemo(() => resolveRange(value.key, value.custom), [value.key, value.custom?.from, value.custom?.to]);
+  const [stamp, setStamp] = useState(0);
+  const { pathname } = useLocation();
+  const first = useRef(true);
+
+  useEffect(() => {
+    if (first.current) { first.current = false; return; }
+    setStamp(Date.now());
+  }, [pathname]);
+
+  useEffect(() => {
+    const onShow = () => { if (document.visibilityState === 'visible') setStamp(Date.now()); };
+    document.addEventListener('visibilitychange', onShow);
+    return () => document.removeEventListener('visibilitychange', onShow);
+  }, []);
+
+  // stamp is only a trigger: a new value means "work the range out again from now".
+  const range = useMemo(() => resolveRange(value.key, value.custom), [value.key, value.custom?.from, value.custom?.to, stamp]);
   const ctx = useMemo(() => ({ range, label: rangeLabel(value.key, value.custom) }), [range, value]);
 
   return (

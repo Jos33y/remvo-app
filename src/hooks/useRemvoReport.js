@@ -2,8 +2,9 @@
  * hooks/useRemvoReport.js (analytics1)
  *
  * One admin report for the current range: { data, loading, error,
- * reload }. Keeps the last answer on screen while the next loads, and
- * reads again when the operator comes back to the tab.
+ * reload }. Keeps the last answer on screen while the next loads.
+ * Coming back to the tab moves the range to now in RemvoLayout, which
+ * reads again from here.
  * ────────────────────────────────────────────────────────────────── */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -26,12 +27,6 @@ export function useRemvoReport(path, { from, to, all = false } = {}) {
   useEffect(() => {
     load();
     return () => ctrl.current?.abort();
-  }, [load]);
-
-  useEffect(() => {
-    const onFocus = () => { if (document.visibilityState === 'visible') load(); };
-    document.addEventListener('visibilitychange', onFocus);
-    return () => document.removeEventListener('visibilitychange', onFocus);
   }, [load]);
 
   return { ...state, reload: load };
