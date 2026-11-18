@@ -6,6 +6,23 @@
  * was indexed breaks. /aml is gone with the corridor.
  * ────────────────────────────────────────────────────────────────── */
 
+/* seo2: the person named on every guide and calculator. Public,
+ * verifiable facts only: no client names, no seller counts or revenue. */
+export const AUTHOR = Object.freeze({
+  NAME: 'Joseph Lagbalu',
+  ROLE: 'Founder of Remvo Labs',
+  BIO: Object.freeze([
+    'Joseph Lagbalu builds and runs Remvo, which prepares finished eBay listings from a product link, a barcode or a spreadsheet.',
+    'He built and runs an online store platform connected to eBay, where eBay sales and the shop’s own store run side by side, and has built payment systems, online stores and store backends for clients in Nigeria, the UK and Portugal since 2020.',
+    'He founded The Brick Dev Studios in 2023 and holds a B.Sc. in Computer Science from Kwara State University.',
+  ]),
+  LINKS: Object.freeze([
+    ['LinkedIn', 'https://www.linkedin.com/in/joseph-lagbalu/'],
+    ['GitHub', 'https://github.com/Jos33y'],
+    ['The Brick Dev Studios', 'https://thebrickdev.com'],
+  ]),
+});
+
 export const ROUTES = {
   HOME: '/',
   HOW: '/how-it-works',
@@ -19,6 +36,9 @@ export const ROUTES = {
   /* tools1: the free eBay fee calculators. */
   FEES_US: '/ebay-fee-calculator',
   FEES_UK: '/ebay-fee-calculator-uk',
+  /* seo2: Buyer Protection on its own page, and the author of the guides. */
+  BUYER_PROTECTION: '/ebay-buyer-protection-fee-calculator',
+  AUTHOR: '/about/joseph-lagbalu',
   GUIDES: '/guides',
   HELP: '/help',
 };

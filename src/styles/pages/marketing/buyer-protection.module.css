@@ -1,0 +1,127 @@
+/* ═══════════════════════════════════════
+   EBAY BUYER PROTECTION FEE CALCULATOR
+   (seo2) One card on the site's night:
+   what you know, the price, then the
+   answer in a sentence and the parts.
+   ═══════════════════════════════════════ */
+
+.card {
+  max-width: 720px;
+  padding: clamp(20px, 4vw, 32px);
+  background-color: var(--site-raised);
+  border: 1px solid var(--site-line);
+  border-radius: 20px;
+}
+
+.modes {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  margin-bottom: 20px;
+  border: 1px solid var(--site-line);
+  border-radius: 12px;
+}
+
+.mode {
+  flex: 1 1 0;
+  min-height: 44px;
+  padding: 8px 12px;
+  font: inherit;
+  font-size: 0.9375rem;
+  color: var(--site-text-2);
+  background: transparent;
+  border: 0;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.mode[aria-checked='true'] {
+  color: var(--site-text);
+  background-color: var(--site-raised-2);
+  box-shadow: 0 0 0 1px var(--site-line-strong);
+}
+
+.mode:focus-visible,
+.input:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9375rem;
+  color: var(--site-text-2);
+}
+
+.field {
+  position: relative;
+  max-width: 320px;
+}
+
+.currency {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  color: var(--site-text-3);
+  pointer-events: none;
+}
+
+.input {
+  width: 100%;
+  height: 56px;
+  padding: 0 16px 0 40px;
+  font-family: var(--font-mono);
+  font-size: 1.375rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--site-text);
+  background-color: var(--site-bg);
+  border: 1px solid var(--site-line-strong);
+  border-radius: 12px;
+}
+
+.answer {
+  margin-top: 24px;
+}
+
+.lead {
+  margin: 0;
+  font-size: clamp(1.125rem, 2.4vw, 1.375rem);
+  line-height: 1.45;
+  color: var(--site-text);
+}
+
+.lead strong,
+.keep strong {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-gold);
+  white-space: nowrap;
+}
+
+.keep {
+  margin: 12px 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--site-text-2);
+}
+
+.parts {
+  margin-top: 20px;
+}
+
+.totalRow th,
+.totalRow td {
+  font-weight: 600;
+  color: var(--site-text);
+}
+
+.note {
+  margin: 20px 0 0;
+  font-size: 0.875rem;
+  color: var(--site-text-3);
+}

@@ -3,9 +3,10 @@ import { renderToString } from 'react-dom/server';
 import { createStaticHandler, createStaticRouter, StaticRouterProvider } from 'react-router';
 import { marketingRoutes } from './marketingRoutes';
 import { LoaderDismisser } from './LoaderDismisser';
-import { BRAND, PRICING, ROUTES } from '@utils/constants';
+import { AUTHOR, BRAND, PRICING, ROUTES } from '@utils/constants';
 import { OG_IMAGE, SITE_ORIGIN } from '@lib/seo';
 import { FAQ } from '@pages/tools/FeeCalculatorPage';
+import { BP_FAQ } from '@pages/tools/BuyerProtectionPage';
 import { GUIDES, guideBySlug, guidePath } from '@lib/guides';
 import { HELP, helpBySlug, helpPath, isoDuration } from '@lib/help';
 
@@ -49,7 +50,40 @@ export async function render(path) {
  * Structured data for a page, as schema.org JSON-LD, or null. Only what
  * is true: who we are, and what the credits cost. No ratings, no reviews.
  */
+/* seo2: the author named on every guide, the same Person everywhere. */
+const PERSON = {
+  '@type': 'Person',
+  name: AUTHOR.NAME,
+  url: `${SITE_ORIGIN}${ROUTES.AUTHOR}`,
+  jobTitle: 'Founder',
+  worksFor: { '@type': 'Organization', name: 'Remvo Labs', url: `${SITE_ORIGIN}/` },
+  sameAs: AUTHOR.LINKS.map(([, href]) => href),
+};
+
 export function structuredData(path) {
+  if (path === ROUTES.AUTHOR) {
+    return [{ '@context': 'https://schema.org', '@type': 'ProfilePage', url: `${SITE_ORIGIN}${path}`, mainEntity: { ...PERSON, description: AUTHOR.BIO[0] } }];
+  }
+  if (path === ROUTES.BUYER_PROTECTION) {
+    return [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'WebApplication',
+        name: 'eBay Buyer Protection fee calculator',
+        url: `${SITE_ORIGIN}${path}`,
+        applicationCategory: 'BusinessApplication',
+        operatingSystem: 'Any',
+        isAccessibleForFree: true,
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'GBP' },
+        publisher: { '@type': 'Organization', name: BRAND.NAME, url: `${SITE_ORIGIN}/` },
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: BP_FAQ.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+      },
+    ];
+  }
   if (path === ROUTES.HOME) {
     return [
       {
@@ -113,7 +147,7 @@ export function structuredData(path) {
         datePublished: guide.published,
         dateModified: guide.checked,
         inLanguage: 'en-GB',
-        author: { '@type': 'Person', name: 'Joseph', jobTitle: 'Founder', worksFor: { '@type': 'Organization', name: BRAND.NAME, url: `${SITE_ORIGIN}/` } },
+        author: PERSON,
         publisher: { '@type': 'Organization', name: BRAND.NAME, url: `${SITE_ORIGIN}/`, logo: { '@type': 'ImageObject', url: `${SITE_ORIGIN}/favicon/logo512.png` } },
         citation: guide.sources.map((s) => s.url),
       },

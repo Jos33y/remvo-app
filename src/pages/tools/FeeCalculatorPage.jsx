@@ -255,7 +255,7 @@ export function FeeCalculatorPage({ site }) {
                 <h2 id="private-fees" className={info.sectionHeading}>Private sellers</h2>
                 <div className={info.sectionBody}>
                   <p>A UK private seller pays no final value fee and no regulatory operating fee when an item sells, in every category but vehicles. Posting to a buyer abroad adds a 3% international fee.</p>
-                  <p>The buyer pays a Buyer Protection fee on top of the item price, not the postage:</p>
+                  <p>The buyer pays a Buyer Protection fee on top of the item price, not the postage. Work it out, or the price to list at, with the <Link to={ROUTES.BUYER_PROTECTION} className={info.link}>Buyer Protection fee calculator</Link>.</p>
                   <table className={`${info.table} ${info.after}`}>
                     <thead><tr><th scope="col">Part of the item price</th><th scope="col" className={info.num}>Buyer pays</th></tr></thead>
                     <tbody>{UK_BUYER_PROTECTION.map(([a, b]) => <tr key={a}><th scope="row">{a}</th><td className={info.num}>{b}</td></tr>)}</tbody>

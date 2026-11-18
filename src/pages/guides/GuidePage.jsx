@@ -7,7 +7,7 @@ import { Postmark } from '@components/ui/marketing/Postmark';
 import { NotFoundPage } from '@pages/not-found/NotFoundPage';
 import { GuideArt } from '@pages/guides/GuideArt';
 import { GUIDES, guideBySlug, guidePath, longDate } from '@lib/guides';
-import { APP_LINKS, ROUTES } from '@utils/constants';
+import { APP_LINKS, AUTHOR, ROUTES } from '@utils/constants';
 import G from '@styles/pages/marketing/guides.module.css';
 
 /* ──────────────────────────────────────────────────────────────────
@@ -138,7 +138,7 @@ export function GuidePage() {
             </nav>
             <h1 id="guide-title" className={G.title}>{guide.title}</h1>
             <p className={G.byline}>
-              By Joseph at Remvo <span aria-hidden="true">·</span> Checked <time dateTime={guide.checked}>{longDate(guide.checked)}</time>{' '}
+              By <Link to={ROUTES.AUTHOR} rel="author">{AUTHOR.NAME}</Link> <span aria-hidden="true">·</span> Checked <time dateTime={guide.checked}>{longDate(guide.checked)}</time>{' '}
               <span aria-hidden="true">·</span> {guide.minutes} min read
             </p>
           </div>

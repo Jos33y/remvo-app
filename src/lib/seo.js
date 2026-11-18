@@ -30,17 +30,26 @@ export const PAGES = Object.freeze({
   },
   [ROUTES.EXAMPLE]: {
     title: 'A real eBay listing made from one barcode | Remvo',
-    description: 'Every field Remvo wrote for a JBL Flip 6 from its barcode: title, category, 9 item specifics, parcel, a price from live eBay.com listings.',
+    description: 'Every field Remvo filled in for a JBL Flip 6 from its barcode: title, category, 9 item specifics, parcel, a price from live eBay.com listings.',
   },
   [ROUTES.FEES_US]: {
-    title: 'eBay fee calculator: what eBay.com takes, what you keep | Remvo',
-    description: 'Free eBay.com fee calculator. Type the sale price and your costs to see the final value fee, the per-order fee, your profit, margin and break-even price. No account.',
-    updated: '2026-10-17',
+    title: 'eBay fee calculator: what eBay.com takes | Remvo',
+    description: 'eBay.com: 13.6% final value fee in most categories, plus $0.30 or $0.40 an order. See what eBay takes and what you keep after costs. Free, no account.',
+    updated: '2026-11-18',
   },
   [ROUTES.FEES_UK]: {
-    title: 'eBay UK fee calculator for private and business sellers | Remvo',
-    description: 'Free eBay.co.uk fee calculator. Private or business, with or without VAT, by category: see what eBay takes and what you keep after your costs. No account.',
-    updated: '2026-10-17',
+    title: 'eBay UK fee calculator: private and business | Remvo',
+    description: 'Private sellers pay no final value fee; the buyer pays Buyer Protection. Business: 6.9% to 14.9% by category, 30p or 40p an order, VAT. See what you keep.',
+    updated: '2026-11-18',
+  },
+  [ROUTES.BUYER_PROTECTION]: {
+    title: 'eBay Buyer Protection fee calculator (UK) | Remvo',
+    description: 'eBay.co.uk Buyer Protection: 10p, plus 7% of the price to £20, 4% to £300, 2% to £4,000. See the fee, or the price to list at for a round number.',
+    updated: '2026-11-18',
+  },
+  [ROUTES.AUTHOR]: {
+    title: 'Joseph Lagbalu, founder of Remvo Labs | Remvo',
+    description: 'Joseph Lagbalu builds and runs Remvo, and checks every fee and step on its eBay guides and calculators against eBay’s own pages.',
   },
   [ROUTES.GUIDES]: {
     title: 'Guides for eBay sellers | Remvo',

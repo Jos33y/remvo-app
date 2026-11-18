@@ -1,6 +1,6 @@
 ---
-title: Use the eBay fee calculator
-description: Work out what eBay takes from a sale and what you keep, on eBay.com or eBay.co.uk, with Remvo's free fee calculator. No account needed.
+title: Use Remvo's fee calculator, step by step
+description: How to use Remvo's free fee calculator: choose your eBay site and account, type the sale price, then add your costs to see what you keep.
 short: Open the fee calculator, choose eBay.com or eBay.co.uk, and type what it sold for. Add the postage you charge, your item cost and other costs to see what you keep, your margin and the price you break even at.
 section: tools
 order: 1

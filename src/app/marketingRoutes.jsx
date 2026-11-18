@@ -9,6 +9,8 @@ import { CreditsPage } from '@pages/legal/CreditsPage';
 import { ContactPage } from '@pages/contact/ContactPage';
 import { ExamplePage } from '@pages/example/ExamplePage';
 import { FeeCalculatorUsPage, FeeCalculatorUkPage } from '@pages/tools/FeeCalculatorPage';
+import { BuyerProtectionPage } from '@pages/tools/BuyerProtectionPage';
+import { AuthorPage } from '@pages/about/AuthorPage';
 import { GuidesPage } from '@pages/guides/GuidesPage';
 import { GuidePage } from '@pages/guides/GuidePage';
 import { HelpPage } from '@pages/help/HelpPage';
@@ -39,6 +41,8 @@ export const marketingRoutes = [
       { path: ROUTES.EXAMPLE, element: <ExamplePage /> },
       { path: ROUTES.FEES_US, element: <FeeCalculatorUsPage /> },
       { path: ROUTES.FEES_UK, element: <FeeCalculatorUkPage /> },
+      { path: ROUTES.BUYER_PROTECTION, element: <BuyerProtectionPage /> },
+      { path: ROUTES.AUTHOR, element: <AuthorPage /> },
       { path: ROUTES.GUIDES, element: <GuidesPage /> },
       { path: `${ROUTES.GUIDES}/:slug`, element: <GuidePage /> },
       { path: ROUTES.HELP, element: <HelpPage /> },

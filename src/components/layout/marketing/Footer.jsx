@@ -80,6 +80,7 @@ const COLUMNS = [
       { to: ROUTES.HELP, label: 'Help' },
       { to: ROUTES.FEES_US, label: 'eBay fee calculator' },
       { to: ROUTES.FEES_UK, label: 'eBay UK fee calculator' },
+      { to: ROUTES.BUYER_PROTECTION, label: 'Buyer Protection fee calculator' },
     ],
   },
 ];
